@@ -1,0 +1,8 @@
+You can login as an administrator and create a form
+You can view responses and some breakdowns of the responses
+
+People can then answer the form to apply to jobs
+
+An automated mail should be sent to the user who answered the form
+
+In the future there could be a cost per form so like get 10 forms for $1

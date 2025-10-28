@@ -1,0 +1,10 @@
+User-agent: AdsBot-Google
+Disallow: /auth/login
+
+User-agent: AdsBot-Google
+Disallow: /auth/logout
+
+User-agent: AdsBot-Google
+Disallow: /account
+
+Sitemap: https://aiportraitstudio.com/sitemap.xml
