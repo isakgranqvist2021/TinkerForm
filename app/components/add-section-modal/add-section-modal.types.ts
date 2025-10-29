@@ -8,7 +8,7 @@ export type BaseSection = z.infer<typeof baseSectionSchema>;
 export const baseSectionSchema = z.object({
   id: z.string(),
   index: z.number(),
-  title: z.string(),
+  title: z.string().min(1, 'Title is required'),
   description: z.string().optional(),
 });
 
