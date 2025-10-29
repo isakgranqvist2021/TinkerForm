@@ -1,28 +1,25 @@
 'use client';
 
 import React from 'react';
-import { Section, SectionType, sectionTypes } from './add-section-modal.types';
+import { SectionType, sectionTypes } from './add-section-modal.types';
 import { Forms } from './forms';
+
+import { useAddSectionContext } from './add-section-modal.context';
 import { getSectionDefaultValues } from './add-section-modal.utils';
 
-const modalName = 'add-section-modal';
-
 export function AddSectionModal() {
-  // @ts-expect-error
-  const openModal = () => document.getElementById(modalName).showModal();
-
-  const [selectedSectionType, setSelectedSectionType] =
-    React.useState<SectionType>('text');
-
-  const defaultValues = getSectionDefaultValues(
-    selectedSectionType,
-    crypto.randomUUID(),
-    0,
-  );
+  const addSectionContext = useAddSectionContext();
 
   return (
     <React.Fragment>
-      <button className="btn" onClick={openModal}>
+      <button
+        className="btn w-fit"
+        onClick={() => {
+          openModal();
+          addSectionContext.setMode('add');
+          addSectionContext.setDefaultValues(getSectionDefaultValues('text'));
+        }}
+      >
         Add section
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -42,16 +39,22 @@ export function AddSectionModal() {
 
       <dialog id={modalName} className="modal">
         <div className="modal-box flex flex-col w-8/12 max-w-5xl">
-          <h3 className="font-bold text-lg">Add section</h3>
+          <h3 className="font-bold text-lg">
+            {addSectionContext.mode === 'add'
+              ? 'Add new section'
+              : 'Edit section'}
+          </h3>
 
           <fieldset className="fieldset w-full">
             <legend className="fieldset-legend">Section type</legend>
 
             <select
-              value={selectedSectionType}
+              value={addSectionContext.defaultValues.type}
               className="select w-full"
               onChange={(e) =>
-                setSelectedSectionType(e.target.value as SectionType)
+                addSectionContext.setDefaultValues(
+                  getSectionDefaultValues(e.target.value as SectionType),
+                )
               }
             >
               <option disabled={true}>Section type</option>
@@ -63,9 +66,16 @@ export function AddSectionModal() {
             </select>
           </fieldset>
 
-          <Forms defaultValues={defaultValues} />
+          <Forms />
         </div>
       </dialog>
     </React.Fragment>
   );
 }
+
+const modalName = 'add-section-modal';
+
+// @ts-expect-error
+export const closeModal = () => document.getElementById(modalName).close();
+// @ts-expect-error
+export const openModal = () => document.getElementById(modalName).showModal();

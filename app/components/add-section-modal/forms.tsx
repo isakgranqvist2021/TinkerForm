@@ -12,25 +12,32 @@ import {
   ControlledTextarea,
 } from 'components/inputs';
 import { AddSectionModalFooter } from './add-section-modal-footer';
+import { useAddSectionContext } from './add-section-modal.context';
 
-interface FormsProps {
-  defaultValues: Section;
-}
-export function Forms(props: FormsProps) {
-  switch (props.defaultValues.type) {
+export function Forms() {
+  const addSectionContext = useAddSectionContext();
+
+  switch (addSectionContext.defaultValues.type) {
     case 'text':
-      return <TextForm defaultValues={props.defaultValues} />;
+      return <TextForm defaultValues={addSectionContext.defaultValues} />;
   }
 }
 
 function TextForm(props: { defaultValues: TextSection }) {
+  const addSectionContext = useAddSectionContext();
+
   const form = useForm<TextSection>({
     resolver: zodResolver(textSectionSchema),
     defaultValues: props.defaultValues,
   });
 
+  React.useEffect(() => {
+    form.reset(props.defaultValues);
+  }, [props.defaultValues, form]);
+
   const handleSubmit = form.handleSubmit((data) => {
-    console.log(data);
+    addSectionContext.addSection(data);
+    form.reset(props.defaultValues);
   });
 
   return (
