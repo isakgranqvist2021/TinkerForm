@@ -20,34 +20,42 @@ export default async function FormsPage() {
   const hasForms = Boolean(forms.length);
   return (
     <section className="container mx-auto px-2 py-8 gap-4 flex flex-col flex-grow">
-      {hasForms && (
-        <React.Fragment>
+      <div className="flex justify-between">
+        <div className="breadcrumbs text-sm">
+          <ul>
+            <li>
+              <Link href="/forms">Forms</Link>
+            </li>
+          </ul>
+        </div>
+
+        {hasForms && (
           <Link href="/forms/new" className="btn btn-primary mb-4 w-fit">
             Create New Form
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              strokeWidth={1.5}
+              stroke="currentColor"
+              className="size-6"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+              />
+            </svg>
           </Link>
+        )}
+      </div>
 
-          <div className="overflow-x-auto">
-            <table className="table">
-              <thead>
-                <tr>
-                  <th>#</th>
-                  <th>Created At</th>
-                  <th>Updated At</th>
-                </tr>
-              </thead>
-              <tbody>
-                {forms.map((form) => (
-                  <tr key={form.id}>
-                    <td>{form.id}</td>
-                    <td>{formatDate(form.created_at)}</td>
-                    <td>{formatDate(form.updated_at)}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </React.Fragment>
-      )}
+      {hasForms &&
+        forms.map((form) => (
+          <Link key={form.id} href={`/forms/${form.id}`}>
+            {form.id}
+          </Link>
+        ))}
 
       {!hasForms && (
         <div className="bg-base-200 text-center flex flex-col items-center p-6 rounded flex-grow justify-center">
