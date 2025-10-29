@@ -4,7 +4,7 @@ import Link from 'next/link';
 
 export function Drawer(props: React.PropsWithChildren) {
   return (
-    <div className="drawer">
+    <div className="drawer min-h-screen">
       <input id="my-drawer" type="checkbox" className="drawer-toggle" />
       <div className="drawer-content flex flex-col items-center">
         <Nav />

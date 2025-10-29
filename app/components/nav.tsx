@@ -30,23 +30,7 @@ export function Nav() {
         </div>
         <ul className="menu menu-horizontal px-1 flex items-center gap-2">
           <li>
-            <Link href="/form/new">
-              New Form
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                strokeWidth={1.5}
-                stroke="currentColor"
-                className="size-6"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
-                />
-              </svg>
-            </Link>
+            <Link href="/forms">My Forms</Link>
           </li>
 
           <NavDropdown />
@@ -95,7 +79,7 @@ async function NavDropdown() {
         className="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow"
       >
         <li>
-          <Link href="/account">Account</Link>
+          <Link href="/account">My Account</Link>
         </li>
         <li>
           <Link href="/auth/logout">Logout</Link>

@@ -1,41 +1,19 @@
 'use client';
 
 import React from 'react';
-import { SectionType, sectionTypes } from './add-section-modal.types';
+import { SectionType, sectionTypes } from 'models/form';
 import { Forms } from './forms';
 
 import { useAddSectionContext } from './add-section-modal.context';
 import { getSectionDefaultValues } from './add-section-modal.utils';
+import { AddSectionButton } from './add-section-button';
 
 export function AddSectionModal() {
   const addSectionContext = useAddSectionContext();
 
   return (
     <React.Fragment>
-      <button
-        className="btn w-fit"
-        onClick={() => {
-          openModal();
-          addSectionContext.setMode('add');
-          addSectionContext.setDefaultValues(getSectionDefaultValues('text'));
-        }}
-      >
-        Add section
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 24 24"
-          strokeWidth={1.5}
-          stroke="currentColor"
-          className="size-6"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
-          />
-        </svg>
-      </button>
+      {addSectionContext.sections.length > 0 && <AddSectionButton />}
 
       <dialog id={modalName} className="modal">
         <div className="modal-box flex flex-col w-8/12 max-w-5xl">

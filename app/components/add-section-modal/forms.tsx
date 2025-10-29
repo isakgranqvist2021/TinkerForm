@@ -1,9 +1,5 @@
 import React from 'react';
-import {
-  Section,
-  TextSection,
-  textSectionSchema,
-} from './add-section-modal.types';
+import { TextSection, textSectionSchema } from 'models/form';
 import { FormProvider, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import {

@@ -1,9 +1,10 @@
 'use client';
 
 import React from 'react';
-import { Section, SectionType } from './add-section-modal.types';
+import { Section } from 'models/form';
 import { getSectionDefaultValues } from './add-section-modal.utils';
 import { closeModal } from './add-section-modal';
+import { toast } from 'sonner';
 
 type Mode = 'edit' | 'add';
 const AddSectionContext = React.createContext<{
@@ -17,6 +18,9 @@ const AddSectionContext = React.createContext<{
 
   mode: Mode;
   setMode: React.Dispatch<React.SetStateAction<Mode>>;
+
+  submitForm: () => Promise<void>;
+  isLoading: boolean;
 }>({
   sections: [],
   addSection: () => {},
@@ -28,6 +32,9 @@ const AddSectionContext = React.createContext<{
 
   mode: 'add',
   setMode: () => {},
+
+  submitForm: async () => {},
+  isLoading: false,
 });
 
 interface AddSectionProviderProps {
@@ -36,13 +43,12 @@ interface AddSectionProviderProps {
 }
 
 export function AddSectionProvider(props: AddSectionProviderProps) {
+  const [isLoading, setIsLoading] = React.useState(false);
+  const [mode, setMode] = React.useState<Mode>('add');
   const [sections, setSections] = React.useState<Section[]>(props.defaultValue);
-
   const [defaultValues, setDefaultValues] = React.useState<Section>(
     getSectionDefaultValues('text'),
   );
-
-  const [mode, setMode] = React.useState<Mode>('add');
 
   const addSection = (section: Section) => {
     if (mode === 'edit') {
@@ -66,6 +72,29 @@ export function AddSectionProvider(props: AddSectionProviderProps) {
     setSections((prev) => prev.filter((s) => s.id !== id));
   };
 
+  const submitForm = async () => {
+    setIsLoading(true);
+    try {
+      const res = await fetch('/api/forms/new', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ sections }),
+      });
+
+      if (!res.ok) {
+        throw new Error('Failed to create form');
+      }
+
+      toast.success('Form created successfully!');
+    } catch (error) {
+      toast.error("Couldn't create form. Please try again.");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return (
     <AddSectionContext.Provider
       value={{
@@ -77,6 +106,8 @@ export function AddSectionProvider(props: AddSectionProviderProps) {
         setDefaultValues,
         mode,
         setMode,
+        submitForm,
+        isLoading,
       }}
     >
       {props.children}

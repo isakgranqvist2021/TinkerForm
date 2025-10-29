@@ -1,4 +1,4 @@
-import { Section, SectionType } from './add-section-modal.types';
+import { Section, SectionType } from 'models/form';
 
 export function getSectionDefaultValues(type: SectionType): Section {
   switch (type) {
