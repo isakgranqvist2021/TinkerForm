@@ -1,5 +1,5 @@
+import { AddSectionModal } from 'components/new-form/add-section-modal/add-section-modal';
 import React from 'react';
-import { AddSectionModal } from 'components/add-section-modal/add-section-modal';
 
 export const metadata = {
   title: 'New Form',
