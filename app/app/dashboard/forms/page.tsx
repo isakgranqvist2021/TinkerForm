@@ -19,8 +19,6 @@ export default async function Page() {
 
   const forms = await listFormsByEmail(session.user.email);
 
-  const hasForms = Boolean(forms.length);
-
   return (
     <MainContainer>
       <div className="flex justify-between">
@@ -31,46 +29,44 @@ export default async function Page() {
             </li>
           </ul>
         </div>
-
-        {hasForms && (
-          <Link
-            href="/dashboard/forms/new"
-            className="btn btn-primary mb-4 w-fit"
-          >
-            New Form
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              strokeWidth={1.5}
-              stroke="currentColor"
-              className="size-6"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
-              />
-            </svg>
-          </Link>
-        )}
       </div>
 
-      {hasForms && (
-        <ul className="list bg-base-100 rounded-box shadow-md">
-          {forms.map(renderFormListItem)}
-        </ul>
-      )}
+      <ul className="list bg-base-100 rounded-box shadow-md">
+        <li className="p-4 pb-2 text-xs opacity-60 tracking-wide">My forms</li>
 
-      {!hasForms && (
-        <div className="bg-base-200 text-center flex flex-col items-center p-6 rounded flex-grow justify-center">
-          <p className="mb-4 text-lg font-bold">You have no forms yet.</p>
-          <Link href="/dashboard/forms/new" className="btn btn-primary mb-4">
-            New Form
-          </Link>
-        </div>
-      )}
+        {forms.map(renderFormListItem)}
+
+        <AddFormListItem />
+      </ul>
     </MainContainer>
+  );
+}
+
+function AddFormListItem() {
+  return (
+    <li className="list-row cursor-pointer bg-base-200 rounded-tl-none rounded-tr-none hover:bg-base-300 p-0 flex justify-center items-center">
+      <Link
+        href="/dashboard/forms/new"
+        className="flex gap-2 justify-center items-center p-4 w-full"
+      >
+        <p className="text-center">Add Form</p>
+
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          strokeWidth={1.5}
+          stroke="currentColor"
+          className="size-6"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+          />
+        </svg>
+      </Link>
+    </li>
   );
 }
 

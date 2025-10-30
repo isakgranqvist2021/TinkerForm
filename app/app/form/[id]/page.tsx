@@ -25,6 +25,10 @@ export default async function Page(props: PageProps<{ id: string }>) {
     <MainContainer>
       <h1>{form.title}</h1>
       <p className="whitespace-pre-wrap">{form.description}</p>
+
+      {sections.map((section) => (
+        <p key={section.id}>{section.title}</p>
+      ))}
     </MainContainer>
   );
 }

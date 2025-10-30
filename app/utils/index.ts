@@ -6,5 +6,5 @@ export function formatCurrency(value: number) {
 }
 
 export function formatDate(date: Dayjs.ConfigType) {
-  return Dayjs(date).format('MMM DD YYYY HH:MM');
+  return Dayjs(date).format('MMM DD YYYY HH:mm');
 }

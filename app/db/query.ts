@@ -1,4 +1,5 @@
 import { and, eq } from 'drizzle-orm';
+import { inArray } from 'drizzle-orm';
 import { formTable, sectionTable } from './schema';
 import { db } from './db';
 import { Form, Section } from 'models/form';
@@ -89,12 +90,13 @@ export async function upsertSections(
   );
 
   if (sectionsToDelete.length > 0) {
+    const idsToDelete = sectionsToDelete.map((section) => section.id);
     await db
       .delete(sectionTable)
       .where(
         and(
           eq(sectionTable.fk_form_id, formId),
-          ...sectionsToDelete.map((section) => eq(sectionTable.id, section.id)),
+          inArray(sectionTable.id, idsToDelete),
         ),
       )
       .execute();
