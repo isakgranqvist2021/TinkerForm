@@ -31,14 +31,45 @@ export default async function Page() {
         </div>
       </div>
 
-      <ul className="list bg-base-100 rounded-box shadow-md">
-        <li className="p-4 pb-2 text-xs opacity-60 tracking-wide">My forms</li>
+      {forms.length ? (
+        <ul className="list bg-base-100 rounded-box shadow-md">
+          <li className="p-4 pb-2 text-xs opacity-60 tracking-wide">
+            My forms
+          </li>
 
-        {forms.map(renderFormListItem)}
+          {forms.map(renderFormListItem)}
 
-        <AddFormListItem />
-      </ul>
+          <AddFormListItem />
+        </ul>
+      ) : (
+        <EmptyState />
+      )}
     </MainContainer>
+  );
+}
+
+function EmptyState() {
+  return (
+    <div className="flex flex-col items-center justify-center gap-4 mt-16">
+      <p className="text-center text-lg">You have no forms yet.</p>
+      <Link href="/dashboard/forms/new" className="btn btn-primary mb-4">
+        New Form
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          strokeWidth={1.5}
+          stroke="currentColor"
+          className="size-6"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+          />
+        </svg>
+      </Link>
+    </div>
   );
 }
 

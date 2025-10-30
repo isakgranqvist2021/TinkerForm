@@ -31,8 +31,6 @@ export function insertManySections(form: Form, formId: string) {
         index: section.index,
         description: section.description,
         required: section.required,
-        min_length: Number(section.minLength || 0),
-        max_length: Number(section.maxLength || 0),
       })),
     )
     .execute();
@@ -119,8 +117,6 @@ export async function upsertSections(
         index: section.index,
         description: section.description,
         required: section.required,
-        min_length: Number(section.minLength || 0),
-        max_length: Number(section.maxLength || 0),
         updated_at: new Date(),
       })
       .where(
@@ -143,8 +139,6 @@ export async function upsertSections(
           index: section.index,
           description: section.description,
           required: section.required,
-          min_length: Number(section.minLength || 0),
-          max_length: Number(section.maxLength || 0),
         })),
       )
       .execute();

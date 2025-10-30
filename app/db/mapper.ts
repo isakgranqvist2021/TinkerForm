@@ -1,19 +1,22 @@
 import { InferSelectModel } from 'drizzle-orm';
 import { sectionTable } from './schema';
-import { Section } from 'models/form';
+import { Section, SectionType } from 'models/form';
 
 export function sectionMapper(
   section: InferSelectModel<typeof sectionTable>,
 ): Section {
-  switch (section.type) {
+  const type = section.type as SectionType;
+
+  switch (type) {
     case 'text':
+    case 'email':
+    case 'link':
+    case 'phone':
       return {
-        type: 'text',
+        type,
         description: section.description || undefined,
         id: section.id,
         index: section.index,
-        maxLength: section.max_length?.toString(),
-        minLength: section.min_length?.toString(),
         required: Boolean(section.required),
         title: section.title,
       };

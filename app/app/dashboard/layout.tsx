@@ -1,6 +1,12 @@
-import { Drawer } from 'components/drawer';
+import { Nav } from 'components/nav';
 import React from 'react';
 
 export default function AdminLayout(props: React.PropsWithChildren) {
-  return <Drawer>{props.children}</Drawer>;
+  return (
+    <React.Fragment>
+      <Nav />
+
+      {props.children}
+    </React.Fragment>
+  );
 }

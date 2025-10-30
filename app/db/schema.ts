@@ -13,7 +13,7 @@ export const formTable = pgTable('form', {
   updated_at: timestamp('updated_at').defaultNow(),
   email: varchar('email', { length: 255 }).notNull(),
   title: varchar('title', { length: 255 }).notNull(),
-  description: varchar('description', { length: 1000 }),
+  description: varchar('description', { length: 1000 }).notNull(),
 });
 
 export const sectionTable = pgTable('section', {
@@ -26,8 +26,6 @@ export const sectionTable = pgTable('section', {
   type: varchar('type', { length: 50 }).notNull(),
   title: varchar('title', { length: 255 }).notNull(),
   index: integer('index').notNull(),
-  description: varchar('description', { length: 1000 }),
+  description: varchar('description', { length: 1000 }).notNull(),
   required: boolean('required').default(false),
-  min_length: integer('min_length').default(0),
-  max_length: integer('max_length').default(0),
 });

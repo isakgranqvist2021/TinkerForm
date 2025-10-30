@@ -16,11 +16,13 @@ export function FormDetails() {
         name="title"
         label="Title"
         disabled={formState.isSubmitting}
+        placeholder="Sales Representative"
       />
       <ControlledTextarea
         name="description"
         label="Description"
         disabled={formState.isSubmitting}
+        placeholder="We're looking for a skilled sales representative to join our team and help drive revenue growth through effective client engagement and relationship management."
       />
     </div>
   );

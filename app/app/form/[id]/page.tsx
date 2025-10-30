@@ -25,27 +25,54 @@ export default async function Page(props: PageProps<{ id: string }>) {
 
   return (
     <MainContainer>
-      <h1>{form.title}</h1>
-      <p className="whitespace-pre-wrap">{form.description}</p>
+      <div>
+        <h1 className="m-0 text-lg font-bold">{form.title}</h1>
+        <p className="m-0 whitespace-pre-wrap max-w-prose">
+          {form.description}
+        </p>
+      </div>
 
       {mappedSections.map((section) => {
         switch (section.type) {
           case 'text':
+          case 'link':
             return (
-              <section key={section.id}>
-                <h2 className="font-bold mb-2">{section.title}</h2>
-
+              <fieldset className="fieldset">
+                <legend className="fieldset-legend">{section.title}</legend>
                 <input
-                  required={section.required}
-                  key={section.id}
-                  className="input input-bordered w-full mb-4"
+                  placeholder="Your answer"
+                  type="text"
+                  className="input"
                 />
-              </section>
+                <p className="label">{section.description}</p>
+              </fieldset>
+            );
+
+          case 'email':
+            return (
+              <fieldset className="fieldset">
+                <legend className="fieldset-legend">{section.title}</legend>
+                <input
+                  placeholder="Your answer"
+                  type="email"
+                  className="input"
+                />
+                <p className="label">{section.description}</p>
+              </fieldset>
+            );
+
+          case 'phone':
+            return (
+              <fieldset className="fieldset">
+                <legend className="fieldset-legend">{section.title}</legend>
+                <input placeholder="Your answer" type="tel" className="input" />
+                <p className="label">{section.description}</p>
+              </fieldset>
             );
         }
       })}
 
-      <button className="btn btn-primary">Submit</button>
+      <button className="btn btn-primary w-fit">Submit</button>
     </MainContainer>
   );
 }

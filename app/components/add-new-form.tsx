@@ -12,7 +12,40 @@ import { useRouter } from 'next/navigation';
 const defaultValues: Form = {
   title: '',
   description: '',
-  sections: [],
+  sections: [
+    {
+      id: crypto.randomUUID(),
+      type: 'text',
+      index: 0,
+      description: 'Please enter your legal name.',
+      title: 'Your name',
+      required: true,
+    },
+    {
+      id: crypto.randomUUID(),
+      type: 'email',
+      index: 1,
+      description: 'Please enter your personal email address.',
+      title: 'Your email',
+      required: true,
+    },
+    {
+      id: crypto.randomUUID(),
+      type: 'phone',
+      index: 2,
+      description: 'Please enter your phone number.',
+      title: 'Your phone number',
+      required: false,
+    },
+    {
+      id: crypto.randomUUID(),
+      type: 'link',
+      index: 3,
+      description: 'Please enter the link to your LinkedIn profile.',
+      title: 'LinkedIn profile',
+      required: true,
+    },
+  ],
 };
 
 export function AddNewForm() {
@@ -24,7 +57,6 @@ export function AddNewForm() {
   });
 
   const submitForm = form.handleSubmit(async (data) => {
-    console.log(data);
     try {
       const res = await fetch('/api/forms/new', {
         method: 'POST',

@@ -202,7 +202,7 @@ function ListItem(props: ListItemProps) {
           {props.index + 1}. {props.section.title}
         </div>
         <div className="text-xs uppercase font-semibold opacity-60">
-          {props.section.type}
+          {props.section.description}
         </div>
       </div>
 
