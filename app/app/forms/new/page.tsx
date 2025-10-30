@@ -1,6 +1,8 @@
 import { AddNewForm } from 'components/add-new-form';
 import { MainContainer } from 'containers/main-container';
+import { auth0 } from 'lib/auth0';
 import Link from 'next/link';
+import { redirect } from 'next/navigation';
 import React from 'react';
 
 export const metadata = {
@@ -8,6 +10,11 @@ export const metadata = {
 };
 
 export default async function Page() {
+  const session = await auth0.getSession();
+  if (!session?.user.email) {
+    return redirect('/auth/login');
+  }
+
   return (
     <MainContainer>
       <div className="breadcrumbs text-sm">

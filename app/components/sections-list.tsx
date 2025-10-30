@@ -46,51 +46,65 @@ export function SectionsList() {
   };
 
   return (
-    <div className="flex-grow">
-      <ul className="list bg-base-100 rounded-box shadow-md">
-        <li
-          onClick={() => {
-            openAddSectionModal();
-            sectionFormContext.setMode('add');
-            sectionFormContext.setDefaultValues(
-              getSectionDefaultValues('text'),
-            );
-          }}
-          className="list-row justify-center flex cursor-pointer bg-base-200 gap-2 rounded-bl-none rounded-br-none hover:bg-base-300"
-        >
-          <p className="text-center">Add section</p>
+    <div>
+      <div className="mb-4">
+        <h3 className="text-lg font-bold">2. Sections</h3>
+        <p>Add sections to your form that the user can fill out.</p>
+      </div>
 
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            strokeWidth={1.5}
-            stroke="currentColor"
-            className="size-6"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
-            />
-          </svg>
-        </li>
+      <div className="flex-grow">
+        <ul className="list bg-base-100 rounded-box shadow-md">
+          <li
+            onClick={() => {
+              if (formContext.formState.isSubmitting) return;
 
-        <DndContext
-          sensors={sensors}
-          collisionDetection={closestCenter}
-          onDragEnd={handleDragEnd}
-        >
-          <SortableContext
-            items={sections}
-            strategy={verticalListSortingStrategy}
+              openAddSectionModal();
+              sectionFormContext.setMode('add');
+              sectionFormContext.setDefaultValues(
+                getSectionDefaultValues('text'),
+              );
+            }}
+            className={
+              'list-row justify-center flex cursor-pointer bg-base-200 gap-2 rounded-bl-none rounded-br-none hover:bg-base-300' +
+              (formContext.formState.isSubmitting
+                ? ' pointer-events-none opacity-50'
+                : '')
+            }
           >
-            {sections.map((section, index) => (
-              <ListItem key={section.id} section={section} index={index} />
-            ))}
-          </SortableContext>
-        </DndContext>
-      </ul>
+            <p className="text-center">Add section</p>
+
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              strokeWidth={1.5}
+              stroke="currentColor"
+              className="size-6"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+              />
+            </svg>
+          </li>
+
+          <DndContext
+            sensors={sensors}
+            collisionDetection={closestCenter}
+            onDragEnd={handleDragEnd}
+          >
+            <SortableContext
+              items={sections}
+              strategy={verticalListSortingStrategy}
+            >
+              {sections.map((section, index) => (
+                <ListItem key={section.id} section={section} index={index} />
+              ))}
+            </SortableContext>
+          </DndContext>
+        </ul>
+      </div>
     </div>
   );
 }
@@ -139,6 +153,7 @@ function ListItem(props: ListItemProps) {
       <div className="flex">
         <div className="tooltip" data-tip="Move">
           <button
+            disabled={formContext.formState.isSubmitting}
             className={
               'btn btn-square btn-ghost ' + (isDragging ? 'cursor-grab' : '')
             }
@@ -163,6 +178,7 @@ function ListItem(props: ListItemProps) {
 
         <div className="tooltip" data-tip="Duplicate">
           <button
+            disabled={formContext.formState.isSubmitting}
             className="btn btn-square btn-ghost"
             onClick={() => {
               formContext.setValue('sections', [
@@ -193,6 +209,7 @@ function ListItem(props: ListItemProps) {
         </div>
         <div className="tooltip" data-tip="Edit">
           <button
+            disabled={formContext.formState.isSubmitting}
             className="btn btn-square btn-ghost"
             onClick={() => {
               sectionFormContext.setDefaultValues(props.section);
@@ -219,6 +236,7 @@ function ListItem(props: ListItemProps) {
 
         <div className="tooltip" data-tip="Delete">
           <button
+            disabled={formContext.formState.isSubmitting}
             className="btn btn-square btn-ghost"
             onClick={() => {
               formContext.setValue(

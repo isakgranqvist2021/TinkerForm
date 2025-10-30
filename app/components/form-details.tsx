@@ -1,26 +1,27 @@
 import React from 'react';
 import { ControlledInput, ControlledTextarea } from './inputs';
-import { SectionsList } from './sections-list';
+import { useFormState } from 'react-hook-form';
 
 export function FormDetails() {
+  const formState = useFormState();
+
   return (
-    <React.Fragment>
-      <div>
-        <h3 className="text-lg font-bold mb-2">1. Form Details</h3>
-        <ControlledInput name="title" label="Title" />
-        <ControlledTextarea name="description" label="Description" />
+    <div>
+      <div className="mb-2">
+        <h3 className="text-lg font-bold">1. Form Details</h3>
+        <p>Describe your form so users know what to expect.</p>
       </div>
 
-      <div>
-        <div className="mb-4">
-          <h3 className="text-lg font-bold">2. Sections</h3>
-          <p>
-            Add sections to your form, and drag to reorder them as you like.
-          </p>
-        </div>
-
-        <SectionsList />
-      </div>
-    </React.Fragment>
+      <ControlledInput
+        name="title"
+        label="Title"
+        disabled={formState.isSubmitting}
+      />
+      <ControlledTextarea
+        name="description"
+        label="Description"
+        disabled={formState.isSubmitting}
+      />
+    </div>
   );
 }

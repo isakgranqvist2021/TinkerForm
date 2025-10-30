@@ -2,20 +2,27 @@ import { EditForm } from 'components/edit-form';
 import { MainContainer } from 'containers/main-container';
 import { sectionMapper } from 'db/mapper';
 import { findFormById, listSectionsByFormId } from 'db/query';
+import { auth0 } from 'lib/auth0';
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
 import React from 'react';
 import { PageProps } from 'types/page';
+
 export const metadata = {
-  title: 'New Form',
+  title: 'Edit Form',
 };
 
 export default async function Page(props: PageProps<{ id: string }>) {
+  const session = await auth0.getSession();
+  if (!session?.user.email) {
+    return redirect('/auth/login');
+  }
+
   const params = await props.params;
 
   const form = await findFormById(params.id);
 
-  if (!form) {
+  if (!form || form.email !== session.user.email) {
     return redirect('/404');
   }
 

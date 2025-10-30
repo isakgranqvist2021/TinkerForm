@@ -7,6 +7,7 @@ import { FormProvider, useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { FormDetails } from './form-details';
+import { SectionsList } from './sections-list';
 
 const defaultValues: Form = {
   title: '',
@@ -46,6 +47,8 @@ export function AddNewForm() {
     <FormProvider {...form}>
       <SectionFormProvider>
         <FormDetails />
+
+        <SectionsList />
 
         <button
           disabled={!sections || form.formState.isSubmitting}

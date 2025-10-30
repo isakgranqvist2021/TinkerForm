@@ -4,11 +4,16 @@ import React from 'react';
 import { MainContainer } from 'containers/main-container';
 import { listFormsByEmail } from 'db/query';
 import { formatDate } from 'utils';
+import { redirect } from 'next/navigation';
+
+export const metadata = {
+  title: 'My Forms',
+};
 
 export default async function Page() {
   const session = await auth0.getSession();
   if (!session?.user.email) {
-    return <p>Please log in to view your forms.</p>;
+    return redirect('/auth/login');
   }
 
   const forms = await listFormsByEmail(session.user.email);

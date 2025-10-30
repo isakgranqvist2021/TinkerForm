@@ -40,15 +40,26 @@ function TextForm(props: { defaultValues: TextSection }) {
   return (
     <FormProvider {...form}>
       <form onSubmit={handleSubmit}>
-        <ControlledInput name="title" label="Section Title" />
+        <ControlledInput name="title" label="Section Title *" />
         <ControlledTextarea name="description" label="Describe your section" />
 
         <div className="flex gap-4">
-          <ControlledInput type="number" name="minLength" label="Min length" />
-          <ControlledInput type="number" name="maxLength" label="Max length" />
+          <ControlledInput
+            type="number"
+            name="minLength"
+            label="Answer minimum length"
+          />
+          <ControlledInput
+            type="number"
+            name="maxLength"
+            label="Answer maximum length"
+          />
         </div>
 
-        <ControlledCheckbox name="required" label="Is required?" />
+        <ControlledCheckbox
+          name="required"
+          label="This question must be answered"
+        />
 
         <SectionFormModalFooter />
       </form>
