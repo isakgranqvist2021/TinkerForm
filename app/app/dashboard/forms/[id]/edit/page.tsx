@@ -34,13 +34,13 @@ export default async function Page(props: PageProps<{ id: string }>) {
       <div className="breadcrumbs text-sm">
         <ul>
           <li>
-            <Link href="/forms">Forms</Link>
+            <Link href="/dashboard/forms">Forms</Link>
           </li>
           <li>
-            <Link href={`/forms/${params.id}`}>{form.title}</Link>
+            <Link href={`/dashboard/forms/${params.id}`}>{form.title}</Link>
           </li>
           <li>
-            <Link href={`/forms/${params.id}/edit`}>Edit</Link>
+            <Link href={`/dashboard/forms/${params.id}/edit`}>Edit</Link>
           </li>
         </ul>
       </div>

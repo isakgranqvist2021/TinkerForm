@@ -1,12 +1,16 @@
 'use client';
 
 import React from 'react';
-import { SectionType, sectionTypes } from 'models/form';
+import { Section, SectionType, sectionTypes } from 'models/form';
 import { Forms } from './forms';
 import { useSectionFormContext } from './section-form-modal.context';
 import { getSectionDefaultValues } from './section-form-modal.utils';
 
-export function SectionFormModal() {
+export interface SectionFormModalProps {
+  onSubmit: (data: Section) => void;
+}
+
+export function SectionFormModal(props: SectionFormModalProps) {
   const addSectionContext = useSectionFormContext();
 
   return (
@@ -39,7 +43,7 @@ export function SectionFormModal() {
           </select>
         </fieldset>
 
-        <Forms />
+        <Forms onSubmit={props.onSubmit} />
       </div>
     </dialog>
   );

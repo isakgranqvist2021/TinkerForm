@@ -1,5 +1,5 @@
 import React from 'react';
-import { TextSection, textSectionSchema } from 'models/form';
+import { Section, TextSection, textSectionSchema } from 'models/form';
 import { FormProvider, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import {
@@ -8,21 +8,30 @@ import {
   ControlledTextarea,
 } from 'components/inputs';
 import { useSectionFormContext } from './section-form-modal.context';
-import { useAddSection } from './section-form-modal.utils';
-import { closeAddSectionModal } from './section-form-modal';
+import {
+  closeAddSectionModal,
+  SectionFormModalProps,
+} from './section-form-modal';
 
-export function Forms() {
+interface FormSectionProps extends SectionFormModalProps {
+  defaultValues: TextSection;
+}
+
+export function Forms(props: SectionFormModalProps) {
   const addSectionContext = useSectionFormContext();
 
   switch (addSectionContext.defaultValues.type) {
     case 'text':
-      return <TextForm defaultValues={addSectionContext.defaultValues} />;
+      return (
+        <TextForm
+          defaultValues={addSectionContext.defaultValues}
+          onSubmit={props.onSubmit}
+        />
+      );
   }
 }
 
-function TextForm(props: { defaultValues: TextSection }) {
-  const addSection = useAddSection();
-
+function TextForm(props: FormSectionProps) {
   const form = useForm<TextSection>({
     resolver: zodResolver(textSectionSchema),
     defaultValues: props.defaultValues,
@@ -33,7 +42,7 @@ function TextForm(props: { defaultValues: TextSection }) {
   }, [props.defaultValues, form]);
 
   const handleSubmit = form.handleSubmit((data) => {
-    addSection(data);
+    props.onSubmit(data);
     form.reset(props.defaultValues);
   });
 

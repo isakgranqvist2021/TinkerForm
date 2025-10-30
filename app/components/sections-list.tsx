@@ -12,21 +12,29 @@ import {
 import { useSectionFormContext } from './section-form-modal/section-form-modal.context';
 import { CSS } from '@dnd-kit/utilities';
 import {
-  arrayMove,
   SortableContext,
   sortableKeyboardCoordinates,
   useSortable,
   verticalListSortingStrategy,
 } from '@dnd-kit/sortable';
-import { openAddSectionModal } from './section-form-modal/section-form-modal';
+import {
+  closeAddSectionModal,
+  openAddSectionModal,
+  SectionFormModal,
+} from './section-form-modal/section-form-modal';
 import { Form, Section } from 'models/form';
-import { useFormContext } from 'react-hook-form';
+import { useFieldArray, useFormContext } from 'react-hook-form';
 import { getSectionDefaultValues } from 'components/section-form-modal/section-form-modal.utils';
+import React from 'react';
 
 export function SectionsList() {
-  const sectionFormContext = useSectionFormContext();
+  const addSectionContext = useSectionFormContext();
   const formContext = useFormContext<Form>();
-  const sections = formContext.watch('sections');
+  const fieldArray = useFieldArray<Form>({
+    name: 'sections',
+  });
+
+  const sections = fieldArray.fields;
 
   const sensors = useSensors(
     useSensor(PointerSensor),
@@ -41,77 +49,125 @@ export function SectionsList() {
     if (active.id !== over?.id) {
       const oldIndex = sections.findIndex((item) => item.id === active.id);
       const newIndex = sections.findIndex((item) => item.id === over?.id);
-      formContext.setValue('sections', arrayMove(sections, oldIndex, newIndex));
+
+      fieldArray.move(oldIndex, newIndex);
     }
   };
 
+  const handleSubmit = (section: Section) => {
+    if (addSectionContext.mode === 'add') {
+      fieldArray.append({
+        ...section,
+        id: crypto.randomUUID(),
+      });
+    } else {
+      const index = fieldArray.fields.findIndex(
+        (s) => s.id === addSectionContext.defaultValues.id,
+      );
+      fieldArray.update(index, section);
+    }
+
+    closeAddSectionModal();
+  };
+
   return (
-    <div>
-      <div className="mb-4">
-        <h3 className="text-lg font-bold">2. Sections</h3>
-        <p>Add sections to your form that the user can fill out.</p>
-      </div>
+    <React.Fragment>
+      <SectionFormModal onSubmit={handleSubmit} />
 
-      <div className="flex-grow">
-        <ul className="list bg-base-100 rounded-box shadow-md">
-          <li
-            onClick={() => {
-              if (formContext.formState.isSubmitting) return;
+      <div>
+        <div className="mb-4">
+          <h3 className="text-lg font-bold">2. Sections</h3>
+          <p>Add sections to your form that the user can fill out.</p>
 
-              openAddSectionModal();
-              sectionFormContext.setMode('add');
-              sectionFormContext.setDefaultValues(
-                getSectionDefaultValues('text'),
-              );
-            }}
-            className={
-              'list-row justify-center flex cursor-pointer bg-base-200 gap-2 rounded-bl-none rounded-br-none hover:bg-base-300' +
-              (formContext.formState.isSubmitting
-                ? ' pointer-events-none opacity-50'
-                : '')
-            }
-          >
-            <p className="text-center">Add section</p>
+          {formContext.formState.errors.sections && (
+            <p className="text-sm text-error mt-2">
+              {formContext.formState.errors.sections.message}
+            </p>
+          )}
+        </div>
 
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              strokeWidth={1.5}
-              stroke="currentColor"
-              className="size-6"
+        <div className="flex-grow">
+          <ul className="list bg-base-100 rounded-box shadow-md">
+            <AddSectionListItem />
+
+            <DndContext
+              sensors={sensors}
+              collisionDetection={closestCenter}
+              onDragEnd={handleDragEnd}
             >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
-              />
-            </svg>
-          </li>
-
-          <DndContext
-            sensors={sensors}
-            collisionDetection={closestCenter}
-            onDragEnd={handleDragEnd}
-          >
-            <SortableContext
-              items={sections}
-              strategy={verticalListSortingStrategy}
-            >
-              {sections.map((section, index) => (
-                <ListItem key={section.id} section={section} index={index} />
-              ))}
-            </SortableContext>
-          </DndContext>
-        </ul>
+              <SortableContext
+                items={sections}
+                strategy={verticalListSortingStrategy}
+              >
+                {sections.map((section, index) => (
+                  <ListItem
+                    key={section.id}
+                    section={section}
+                    index={index}
+                    onDelete={() => fieldArray.remove(index)}
+                    onDuplicate={() =>
+                      fieldArray.append({
+                        ...section,
+                        title: 'Copy of ' + section.title,
+                        id: crypto.randomUUID(),
+                      })
+                    }
+                  />
+                ))}
+              </SortableContext>
+            </DndContext>
+          </ul>
+        </div>
       </div>
-    </div>
+    </React.Fragment>
+  );
+}
+
+function AddSectionListItem() {
+  const sectionFormContext = useSectionFormContext();
+  const formContext = useFormContext<Form>();
+
+  return (
+    <li
+      onClick={() => {
+        if (formContext.formState.isSubmitting) return;
+
+        openAddSectionModal();
+        sectionFormContext.setMode('add');
+        sectionFormContext.setDefaultValues(getSectionDefaultValues('text'));
+      }}
+      className={
+        'list-row justify-center flex cursor-pointer bg-base-200 gap-2 rounded-bl-none rounded-br-none hover:bg-base-300' +
+        (formContext.formState.isSubmitting
+          ? ' pointer-events-none opacity-50'
+          : '')
+      }
+    >
+      <p className="text-center">Add section</p>
+
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        fill="none"
+        viewBox="0 0 24 24"
+        strokeWidth={1.5}
+        stroke="currentColor"
+        className="size-6"
+      >
+        <path
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+        />
+      </svg>
+    </li>
   );
 }
 
 interface ListItemProps {
   section: Section;
   index: number;
+  onDelete: () => void;
+  onDuplicate: () => void;
 }
 function ListItem(props: ListItemProps) {
   const sectionFormContext = useSectionFormContext();
@@ -180,16 +236,7 @@ function ListItem(props: ListItemProps) {
           <button
             disabled={formContext.formState.isSubmitting}
             className="btn btn-square btn-ghost"
-            onClick={() => {
-              formContext.setValue('sections', [
-                ...formContext.getValues('sections'),
-                {
-                  ...props.section,
-                  title: 'Copy of ' + props.section.title,
-                  id: crypto.randomUUID(),
-                },
-              ]);
-            }}
+            onClick={props.onDuplicate}
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -238,14 +285,7 @@ function ListItem(props: ListItemProps) {
           <button
             disabled={formContext.formState.isSubmitting}
             className="btn btn-square btn-ghost"
-            onClick={() => {
-              formContext.setValue(
-                'sections',
-                formContext
-                  .getValues('sections')
-                  .filter((section) => section.id !== props.section.id),
-              );
-            }}
+            onClick={props.onDelete}
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"

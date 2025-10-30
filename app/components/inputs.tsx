@@ -24,7 +24,7 @@ export function ControlledInput(
         {...controller.field}
       />
 
-      <p className="error">{controller.fieldState.error?.message}</p>
+      <p className="text-error">{controller.fieldState.error?.message}</p>
     </fieldset>
   );
 }
@@ -44,7 +44,7 @@ export function ControlledTextarea(
         {...rest}
         {...controller.field}
       ></textarea>
-      <p className="error">{controller.fieldState.error?.message}</p>
+      <p className="text-error">{controller.fieldState.error?.message}</p>
     </fieldset>
   );
 }

@@ -21,7 +21,7 @@ export async function POST(req: Request) {
     const res = await insertOneForm(form, session.user.email);
     await insertManySections(form, res[0].id);
 
-    return new Response('', { status: 201 });
+    return new Response(JSON.stringify(res[0]), { status: 201 });
   } catch (err) {
     console.log(err);
 

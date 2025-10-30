@@ -1,6 +1,5 @@
 'use client';
 
-import { SectionFormModal } from 'components/section-form-modal/section-form-modal';
 import { SectionFormProvider } from 'components/section-form-modal/section-form-modal.context';
 import { Form, formSchema } from 'models/form';
 import { FormProvider, useForm } from 'react-hook-form';
@@ -8,6 +7,7 @@ import { toast } from 'sonner';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { FormDetails } from './form-details';
 import { SectionsList } from './sections-list';
+import { useRouter } from 'next/navigation';
 
 const defaultValues: Form = {
   title: '',
@@ -16,14 +16,15 @@ const defaultValues: Form = {
 };
 
 export function AddNewForm() {
+  const router = useRouter();
+
   const form = useForm<Form>({
     defaultValues,
     resolver: zodResolver(formSchema),
   });
 
-  const sections = form.watch('sections.0');
-
   const submitForm = form.handleSubmit(async (data) => {
+    console.log(data);
     try {
       const res = await fetch('/api/forms/new', {
         method: 'POST',
@@ -36,6 +37,10 @@ export function AddNewForm() {
       if (!res.ok) {
         throw new Error('Failed to create form');
       }
+
+      const createdForm = await res.json();
+
+      router.push(`/dashboard/forms/${createdForm.id}`);
 
       toast.success('Form created successfully!');
     } catch (error) {
@@ -51,14 +56,12 @@ export function AddNewForm() {
         <SectionsList />
 
         <button
-          disabled={!sections || form.formState.isSubmitting}
+          disabled={form.formState.isSubmitting}
           className="btn btn-primary ml-auto"
           onClick={submitForm}
         >
           Create Form
         </button>
-
-        <SectionFormModal />
       </SectionFormProvider>
     </FormProvider>
   );
