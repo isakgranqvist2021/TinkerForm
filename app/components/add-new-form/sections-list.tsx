@@ -9,7 +9,7 @@ import {
   useSensors,
   DragEndEvent,
 } from '@dnd-kit/core';
-import { useAddSectionContext } from './add-section-modal.context';
+import { useSectionFormContext } from '../section-form-modal/section-form-modal.context';
 import { CSS } from '@dnd-kit/utilities';
 import {
   arrayMove,
@@ -18,12 +18,13 @@ import {
   useSortable,
   verticalListSortingStrategy,
 } from '@dnd-kit/sortable';
-import { openModal } from './add-section-modal';
-import { AddSectionButton } from './add-section-button';
-import { Section } from 'models/form';
+import { openAddSectionModal } from '../section-form-modal/section-form-modal';
+import { Form, Section } from 'models/form';
+import { useFormContext } from 'react-hook-form';
 
 export function SectionsList() {
-  const addSectionsContext = useAddSectionContext();
+  const formContext = useFormContext<Form>();
+  const sections = formContext.watch('sections');
 
   const sensors = useSensors(
     useSensor(PointerSensor),
@@ -32,25 +33,13 @@ export function SectionsList() {
     }),
   );
 
-  if (!addSectionsContext.sections.length) {
-    return (
-      <div className="bg-base-200 text-center flex flex-col items-center p-6 rounded flex-grow justify-center">
-        <p className="mb-4 text-lg font-bold">No sections added yet.</p>
-        <AddSectionButton className="btn btn-secondary" />
-      </div>
-    );
-  }
-
   const handleDragEnd = (event: DragEndEvent) => {
     const { active, over } = event;
 
     if (active.id !== over?.id) {
-      addSectionsContext.setSections((items) => {
-        const oldIndex = items.findIndex((item) => item.id === active.id);
-        const newIndex = items.findIndex((item) => item.id === over?.id);
-
-        return arrayMove(items, oldIndex, newIndex);
-      });
+      const oldIndex = sections.findIndex((item) => item.id === active.id);
+      const newIndex = sections.findIndex((item) => item.id === over?.id);
+      formContext.setValue('sections', arrayMove(sections, oldIndex, newIndex));
     }
   };
 
@@ -63,10 +52,10 @@ export function SectionsList() {
           onDragEnd={handleDragEnd}
         >
           <SortableContext
-            items={addSectionsContext.sections}
+            items={sections}
             strategy={verticalListSortingStrategy}
           >
-            {addSectionsContext.sections.map((section, index) => (
+            {sections.map((section, index) => (
               <ListItem key={section.id} section={section} index={index} />
             ))}
           </SortableContext>
@@ -81,7 +70,8 @@ interface ListItemProps {
   index: number;
 }
 function ListItem(props: ListItemProps) {
-  const addSectionsContext = useAddSectionContext();
+  const sectionFormContext = useSectionFormContext();
+  const formContext = useFormContext<Form>();
 
   const {
     attributes,
@@ -142,11 +132,14 @@ function ListItem(props: ListItemProps) {
           <button
             className="btn btn-square btn-ghost"
             onClick={() => {
-              addSectionsContext.addSection({
-                ...props.section,
-                title: 'Copy of ' + props.section.title,
-                id: crypto.randomUUID(),
-              });
+              formContext.setValue('sections', [
+                ...formContext.getValues('sections'),
+                {
+                  ...props.section,
+                  title: 'Copy of ' + props.section.title,
+                  id: crypto.randomUUID(),
+                },
+              ]);
             }}
           >
             <svg
@@ -169,9 +162,9 @@ function ListItem(props: ListItemProps) {
           <button
             className="btn btn-square btn-ghost"
             onClick={() => {
-              addSectionsContext.setDefaultValues(props.section);
-              addSectionsContext.setMode('edit');
-              openModal();
+              sectionFormContext.setDefaultValues(props.section);
+              sectionFormContext.setMode('edit');
+              openAddSectionModal();
             }}
           >
             <svg
@@ -194,7 +187,14 @@ function ListItem(props: ListItemProps) {
         <div className="tooltip" data-tip="Delete">
           <button
             className="btn btn-square btn-ghost"
-            onClick={() => addSectionsContext.removeSection(props.section.id)}
+            onClick={() => {
+              formContext.setValue(
+                'sections',
+                formContext
+                  .getValues('sections')
+                  .filter((section) => section.id !== props.section.id),
+              );
+            }}
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"

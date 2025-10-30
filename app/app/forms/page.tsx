@@ -4,7 +4,7 @@ import { db } from 'db/db';
 import { formTable } from 'db/schema';
 import { eq } from 'drizzle-orm';
 import React from 'react';
-import { formatDate } from 'utils';
+import { MainContainer } from 'containers/main-container';
 
 export default async function FormsPage() {
   const session = await auth0.getSession();
@@ -18,8 +18,9 @@ export default async function FormsPage() {
     .where(eq(formTable.email, session.user.email));
 
   const hasForms = Boolean(forms.length);
+
   return (
-    <section className="container mx-auto px-2 py-8 gap-4 flex flex-col flex-grow">
+    <MainContainer>
       <div className="flex justify-between">
         <div className="breadcrumbs text-sm">
           <ul>
@@ -31,7 +32,7 @@ export default async function FormsPage() {
 
         {hasForms && (
           <Link href="/forms/new" className="btn btn-primary mb-4 w-fit">
-            Create New Form
+            New Form
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
@@ -52,8 +53,8 @@ export default async function FormsPage() {
 
       {hasForms &&
         forms.map((form) => (
-          <Link key={form.id} href={`/forms/${form.id}`}>
-            {form.id}
+          <Link className="link" key={form.id} href={`/forms/${form.id}`}>
+            {form.title}
           </Link>
         ))}
 
@@ -61,10 +62,10 @@ export default async function FormsPage() {
         <div className="bg-base-200 text-center flex flex-col items-center p-6 rounded flex-grow justify-center">
           <p className="mb-4 text-lg font-bold">You have no forms yet.</p>
           <Link href="/forms/new" className="btn btn-primary mb-4">
-            Create New Form
+            New Form
           </Link>
         </div>
       )}
-    </section>
+    </MainContainer>
   );
 }

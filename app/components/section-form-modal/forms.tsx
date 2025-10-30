@@ -7,11 +7,12 @@ import {
   ControlledInput,
   ControlledTextarea,
 } from 'components/inputs';
-import { AddSectionModalFooter } from './add-section-modal-footer';
-import { useAddSectionContext } from './add-section-modal.context';
+import { useSectionFormContext } from './section-form-modal.context';
+import { useAddSection } from './section-form-modal.utils';
+import { closeAddSectionModal } from './section-form-modal';
 
 export function Forms() {
-  const addSectionContext = useAddSectionContext();
+  const addSectionContext = useSectionFormContext();
 
   switch (addSectionContext.defaultValues.type) {
     case 'text':
@@ -20,7 +21,7 @@ export function Forms() {
 }
 
 function TextForm(props: { defaultValues: TextSection }) {
-  const addSectionContext = useAddSectionContext();
+  const addSection = useAddSection();
 
   const form = useForm<TextSection>({
     resolver: zodResolver(textSectionSchema),
@@ -32,7 +33,7 @@ function TextForm(props: { defaultValues: TextSection }) {
   }, [props.defaultValues, form]);
 
   const handleSubmit = form.handleSubmit((data) => {
-    addSectionContext.addSection(data);
+    addSection(data);
     form.reset(props.defaultValues);
   });
 
@@ -49,8 +50,22 @@ function TextForm(props: { defaultValues: TextSection }) {
 
         <ControlledCheckbox name="required" label="Is required?" />
 
-        <AddSectionModalFooter />
+        <SectionFormModalFooter />
       </form>
     </FormProvider>
+  );
+}
+
+function SectionFormModalFooter() {
+  return (
+    <div className="modal-action">
+      <button type="button" className="btn" onClick={closeAddSectionModal}>
+        Close
+      </button>
+
+      <button type="submit" className="btn btn-primary">
+        Save
+      </button>
+    </div>
   );
 }

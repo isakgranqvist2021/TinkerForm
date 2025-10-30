@@ -21,7 +21,11 @@ export async function POST(req: Request) {
 
     const res = await db
       .insert(formTable)
-      .values({ email: session.user.email })
+      .values({
+        email: session.user.email,
+        title: form.title,
+        description: form.description,
+      })
       .returning()
       .execute();
 

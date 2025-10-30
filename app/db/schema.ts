@@ -12,6 +12,8 @@ export const formTable = pgTable('form', {
   created_at: timestamp('created_at').defaultNow(),
   updated_at: timestamp('updated_at').defaultNow(),
   email: varchar('email', { length: 255 }).notNull(),
+  title: varchar('title', { length: 255 }).notNull(),
+  description: varchar('description', { length: 1000 }),
 });
 
 export const sectionTable = pgTable('section', {

@@ -1,4 +1,5 @@
 import { AddNewForm } from 'components/add-new-form/add-new-form';
+import { MainContainer } from 'containers/main-container';
 import Link from 'next/link';
 import React from 'react';
 
@@ -8,7 +9,7 @@ export const metadata = {
 
 export default async function NewForm() {
   return (
-    <section className="container mx-auto px-2 py-8 gap-4 flex flex-col flex-grow">
+    <MainContainer>
       <div className="breadcrumbs text-sm">
         <ul>
           <li>
@@ -20,7 +21,13 @@ export default async function NewForm() {
         </ul>
       </div>
 
-      <AddNewForm defaultValue={[]} />
-    </section>
+      <AddNewForm
+        defaultValues={{
+          title: '',
+          description: '',
+          sections: [],
+        }}
+      />
+    </MainContainer>
   );
 }

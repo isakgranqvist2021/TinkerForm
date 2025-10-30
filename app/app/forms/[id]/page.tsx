@@ -1,5 +1,9 @@
-import { AddNewForm } from 'components/add-new-form/add-new-form';
+import { MainContainer } from 'containers/main-container';
+import { db } from 'db/db';
+import { formTable } from 'db/schema';
+import { eq } from 'drizzle-orm';
 import Link from 'next/link';
+import { redirect } from 'next/navigation';
 import React from 'react';
 import { PageProps } from 'types/page';
 
@@ -10,8 +14,18 @@ export const metadata = {
 export default async function NewForm(props: PageProps<{ id: string }>) {
   const params = await props.params;
 
+  const form = await db
+    .select()
+    .from(formTable)
+    .where(eq(formTable.id, params.id));
+
+  const formData = form[0];
+  if (!formData) {
+    return redirect('/404');
+  }
+
   return (
-    <section className="container mx-auto px-2 py-8 gap-4 flex flex-col flex-grow">
+    <MainContainer>
       <div className="flex justify-between">
         <div className="breadcrumbs text-sm">
           <ul>
@@ -19,7 +33,7 @@ export default async function NewForm(props: PageProps<{ id: string }>) {
               <Link href="/forms">Forms</Link>
             </li>
             <li>
-              <Link href={`/forms/${params.id}`}>{params.id}</Link>
+              <Link href={`/forms/${params.id}`}>{formData.title}</Link>
             </li>
           </ul>
         </div>
@@ -229,6 +243,6 @@ export default async function NewForm(props: PageProps<{ id: string }>) {
           </tbody>
         </table>
       </div>
-    </section>
+    </MainContainer>
   );
 }
