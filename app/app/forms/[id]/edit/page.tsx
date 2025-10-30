@@ -1,4 +1,4 @@
-import { AddNewForm } from 'components/add-new-form/add-new-form';
+import { EditForm } from 'components/edit-form';
 import { MainContainer } from 'containers/main-container';
 import { sectionMapper } from 'db/mapper';
 import { findFormById, listSectionsByFormId } from 'db/query';
@@ -38,7 +38,8 @@ export default async function Page(props: PageProps<{ id: string }>) {
         </ul>
       </div>
 
-      <AddNewForm
+      <EditForm
+        formId={params.id}
         defaultValues={{
           title: form.title,
           description: form.description ?? '',

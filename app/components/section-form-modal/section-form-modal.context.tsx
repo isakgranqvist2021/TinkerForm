@@ -1,9 +1,8 @@
 'use client';
 
 import React from 'react';
-import { Section } from 'models/form';
+import { Form, Section } from 'models/form';
 import { getSectionDefaultValues } from './section-form-modal.utils';
-import { AddNewFormProps } from 'components/add-new-form/add-new-form';
 
 export type FormMode = 'edit' | 'add';
 
@@ -21,11 +20,7 @@ const SectionFormContext = React.createContext<{
   setMode: () => {},
 });
 
-interface SectionFormProviderProps extends AddNewFormProps {
-  children: React.ReactNode;
-}
-
-export function SectionFormProvider(props: SectionFormProviderProps) {
+export function SectionFormProvider(props: React.PropsWithChildren) {
   const [mode, setMode] = React.useState<FormMode>('add');
   const [defaultValues, setDefaultValues] = React.useState<Section>(
     getSectionDefaultValues('text'),

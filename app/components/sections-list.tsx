@@ -9,7 +9,7 @@ import {
   useSensors,
   DragEndEvent,
 } from '@dnd-kit/core';
-import { useSectionFormContext } from '../section-form-modal/section-form-modal.context';
+import { useSectionFormContext } from './section-form-modal/section-form-modal.context';
 import { CSS } from '@dnd-kit/utilities';
 import {
   arrayMove,
@@ -18,11 +18,13 @@ import {
   useSortable,
   verticalListSortingStrategy,
 } from '@dnd-kit/sortable';
-import { openAddSectionModal } from '../section-form-modal/section-form-modal';
+import { openAddSectionModal } from './section-form-modal/section-form-modal';
 import { Form, Section } from 'models/form';
 import { useFormContext } from 'react-hook-form';
+import { getSectionDefaultValues } from 'components/section-form-modal/section-form-modal.utils';
 
 export function SectionsList() {
+  const sectionFormContext = useSectionFormContext();
   const formContext = useFormContext<Form>();
   const sections = formContext.watch('sections');
 
@@ -46,6 +48,34 @@ export function SectionsList() {
   return (
     <div className="flex-grow">
       <ul className="list bg-base-100 rounded-box shadow-md">
+        <li
+          onClick={() => {
+            openAddSectionModal();
+            sectionFormContext.setMode('add');
+            sectionFormContext.setDefaultValues(
+              getSectionDefaultValues('text'),
+            );
+          }}
+          className="list-row justify-center flex cursor-pointer bg-base-200 gap-2 rounded-bl-none rounded-br-none hover:bg-base-300"
+        >
+          <p className="text-center">Add section</p>
+
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            strokeWidth={1.5}
+            stroke="currentColor"
+            className="size-6"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+            />
+          </svg>
+        </li>
+
         <DndContext
           sensors={sensors}
           collisionDetection={closestCenter}
@@ -80,7 +110,9 @@ function ListItem(props: ListItemProps) {
     transform,
     transition,
     isDragging,
-  } = useSortable({ id: props.section.id });
+  } = useSortable({
+    id: props.section.id,
+  });
 
   const style = {
     transform: CSS.Transform.toString(transform),
@@ -93,6 +125,7 @@ function ListItem(props: ListItemProps) {
       ref={setNodeRef}
       style={style}
       {...attributes}
+      aria-describedby="Draggable"
     >
       <div>
         <div>

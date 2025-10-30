@@ -1,4 +1,4 @@
-import { AddNewForm } from 'components/add-new-form/add-new-form';
+import { AddNewForm } from 'components/add-new-form';
 import { MainContainer } from 'containers/main-container';
 import Link from 'next/link';
 import React from 'react';
@@ -21,13 +21,7 @@ export default async function Page() {
         </ul>
       </div>
 
-      <AddNewForm
-        defaultValues={{
-          title: '',
-          description: '',
-          sections: [],
-        }}
-      />
+      <AddNewForm />
     </MainContainer>
   );
 }
