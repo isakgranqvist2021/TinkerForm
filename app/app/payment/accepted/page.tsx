@@ -6,7 +6,7 @@ export const metadata = {
   title: 'Payment Accepted',
 };
 
-export default async function Accepted(
+export default async function Page(
   props: PageProps<undefined, { checkoutSessionId: string }>,
 ) {
   const searchParams = await props.searchParams;

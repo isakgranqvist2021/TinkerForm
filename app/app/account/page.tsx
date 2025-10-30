@@ -4,7 +4,7 @@ export const metadata = {
   title: 'Account',
 };
 
-export default async function Account() {
+export default async function Page() {
   return (
     <section className="container mx-auto px-2 py-8">
       <h1>Account</h1>

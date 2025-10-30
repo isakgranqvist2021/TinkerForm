@@ -4,6 +4,6 @@ export const metadata = {
   title: 'Payment Rejected',
 };
 
-export default function Rejected() {
+export default function Page() {
   return <p>payment rejected</p>;
 }

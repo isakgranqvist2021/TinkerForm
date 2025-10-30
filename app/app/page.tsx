@@ -7,7 +7,7 @@ export const metadata = {
   title: 'Home',
 };
 
-export default function Home() {
+export default function Page() {
   return (
     <section className="container mx-auto px-2 py-8">
       <div className="grid gap-4 grid-cols-[repeat(auto-fit,minmax(300px,1fr))]">

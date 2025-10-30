@@ -1,5 +1,4 @@
 import { env } from 'config';
-import { createPayment, getPaymentByCheckoutSessionId } from 'database/payment';
 import Stripe from 'stripe';
 
 export const stripe = new Stripe(env.STRIPE_SECRET_KEY, {
@@ -7,28 +6,10 @@ export const stripe = new Stripe(env.STRIPE_SECRET_KEY, {
 });
 
 export async function verifyAndCompletePayment(checkoutSessionId: string) {
-  const paymentDocument =
-    await getPaymentByCheckoutSessionId(checkoutSessionId);
-  if (paymentDocument) return;
-
   const checkoutSession =
     await stripe.checkout.sessions.retrieve(checkoutSessionId);
   if (checkoutSession.payment_status !== 'paid') {
     throw new Error('Payment not completed');
-  }
-
-  const email =
-    checkoutSession.customer_email ??
-    checkoutSession.customer_details?.email ??
-    null;
-  const createPaymentDocumentResult = await createPayment({
-    checkoutSessionId,
-    email,
-    amount: checkoutSession.amount_total ?? 0,
-  });
-
-  if (!createPaymentDocumentResult?.acknowledged) {
-    throw new Error('Payment document not created');
   }
 }
 

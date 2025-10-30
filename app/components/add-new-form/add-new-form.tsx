@@ -26,7 +26,7 @@ export function AddNewForm(props: AddNewFormProps) {
     resolver: zodResolver(formSchema),
   });
 
-  const sections = form.watch('sections');
+  const sections = form.watch('sections.0');
 
   return (
     <FormProvider {...form}>
@@ -34,7 +34,7 @@ export function AddNewForm(props: AddNewFormProps) {
         <ControlledInput name="title" label="Title" />
         <ControlledTextarea name="description" label="Description" />
 
-        {sections.length > 0 ? (
+        {sections ? (
           <AddSectionButton className="btn btn-secondary ml-auto" />
         ) : (
           <div className="bg-base-200 text-center flex flex-col items-center p-6 rounded flex-grow justify-center">

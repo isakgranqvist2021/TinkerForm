@@ -1,8 +1,7 @@
 import { AddNewForm } from 'components/add-new-form/add-new-form';
 import { MainContainer } from 'containers/main-container';
-import { db } from 'db/db';
-import { formTable, sectionTable } from 'db/schema';
-import { eq } from 'drizzle-orm';
+import { sectionMapper } from 'db/mapper';
+import { findFormById, listSectionsByFormId } from 'db/query';
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
 import React from 'react';
@@ -11,23 +10,17 @@ export const metadata = {
   title: 'New Form',
 };
 
-export default async function NewForm(props: PageProps<{ id: string }>) {
+export default async function Page(props: PageProps<{ id: string }>) {
   const params = await props.params;
 
-  const form = await db
-    .select()
-    .from(formTable)
-    .where(eq(formTable.id, params.id));
+  const form = await findFormById(params.id);
 
-  const formData = form[0];
-  if (!formData) {
+  if (!form) {
     return redirect('/404');
   }
 
-  const sections = await db
-    .select()
-    .from(sectionTable)
-    .where(eq(sectionTable.fk_form_id, formData.id));
+  const sections = await listSectionsByFormId(form.id);
+  const mappedSections = sections.map(sectionMapper);
 
   return (
     <MainContainer>
@@ -37,7 +30,7 @@ export default async function NewForm(props: PageProps<{ id: string }>) {
             <Link href="/forms">Forms</Link>
           </li>
           <li>
-            <Link href={`/forms/${params.id}`}>{formData.title}</Link>
+            <Link href={`/forms/${params.id}`}>{form.title}</Link>
           </li>
           <li>
             <Link href={`/forms/${params.id}/edit`}>Edit</Link>
@@ -47,9 +40,9 @@ export default async function NewForm(props: PageProps<{ id: string }>) {
 
       <AddNewForm
         defaultValues={{
-          title: formData.title,
-          description: formData.description ?? '',
-          sections,
+          title: form.title,
+          description: form.description ?? '',
+          sections: mappedSections,
         }}
       />
     </MainContainer>

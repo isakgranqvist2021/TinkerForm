@@ -5,7 +5,7 @@ import { Toaster } from 'sonner';
 
 export default function RootLayout(props: React.PropsWithChildren) {
   return (
-    <html data-theme="emerald" lang="en">
+    <html data-theme="light" lang="en">
       <body className="min-h-screen">
         <Drawer>{props.children}</Drawer>
         <Toaster richColors />

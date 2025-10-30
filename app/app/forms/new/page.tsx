@@ -7,7 +7,7 @@ export const metadata = {
   title: 'New Form',
 };
 
-export default async function NewForm() {
+export default async function Page() {
   return (
     <MainContainer>
       <div className="breadcrumbs text-sm">

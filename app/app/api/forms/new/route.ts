@@ -1,7 +1,6 @@
 import { getSession } from 'lib/auth0';
 import { formSchema } from 'models/form';
-import { db } from 'db/db';
-import { formTable, sectionTable } from 'db/schema';
+import { insertManySections, insertOneForm } from 'db/query';
 
 export async function POST(req: Request) {
   try {
@@ -19,31 +18,8 @@ export async function POST(req: Request) {
     const body = await req.json();
     const form = formSchema.parse(body);
 
-    const res = await db
-      .insert(formTable)
-      .values({
-        email: session.user.email,
-        title: form.title,
-        description: form.description,
-      })
-      .returning()
-      .execute();
-
-    await db
-      .insert(sectionTable)
-      .values(
-        form.sections.map((section) => ({
-          fk_form_id: res[0].id,
-          type: section.type,
-          title: section.title,
-          index: section.index,
-          description: section.description,
-          required: section.required,
-          min_length: Number(section.minLength || 0),
-          max_length: Number(section.maxLength || 0),
-        })),
-      )
-      .execute();
+    const res = await insertOneForm(form, session.user.email);
+    await insertManySections(form, res[0].id);
 
     return new Response('', { status: 201 });
   } catch (err) {
