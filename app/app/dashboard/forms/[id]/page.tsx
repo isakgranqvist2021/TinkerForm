@@ -1,7 +1,7 @@
 import { CopyFormLink } from 'components/copy-form-link';
 import { DeleteFormIconButton } from 'components/delete-form-button';
 import { MainContainer } from 'containers/main-container';
-import { findFormById } from 'db/query';
+import { findFormById, listResponsesByFormId } from 'db/query';
 import { auth0 } from 'lib/auth0';
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
@@ -24,6 +24,26 @@ export default async function Page(props: PageProps<{ id: string }>) {
   if (!form || form.email !== session.user.email) {
     return redirect('/404');
   }
+
+  const responses = await listResponsesByFormId(params.id);
+  const groupedByResponseId = responses.reduce(
+    (acc, answer) => {
+      const existing = acc.find(
+        (group) => group.responseId === answer.response_id,
+      );
+      if (existing) {
+        existing.answers.push(answer);
+      } else {
+        acc.push({
+          responseId: answer.response_id,
+          answers: [answer],
+        });
+      }
+
+      return acc;
+    },
+    [] as { responseId: string; answers: typeof responses }[],
+  );
 
   return (
     <MainContainer>
@@ -72,7 +92,7 @@ export default async function Page(props: PageProps<{ id: string }>) {
         <div className="card card-border bg-base-100 w-96">
           <div className="card-body">
             <h2 className="card-title">Responses</h2>
-            <p>316</p>
+            <p>{groupedByResponseId.length}</p>
           </div>
         </div>
 

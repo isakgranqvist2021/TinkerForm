@@ -17,8 +17,7 @@ export const baseSectionSchema = z.object({
   description: z
     .string()
     .min(1, 'Description is required')
-    .max(1000, 'Description is too long')
-    .optional(),
+    .max(1000, 'Description is too long'),
 });
 
 export type TextSection = z.infer<typeof textSectionSchema>;

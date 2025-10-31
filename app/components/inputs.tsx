@@ -4,6 +4,7 @@ interface ControlledComponentProps {
   label: string;
   placeholder?: string;
   name: string;
+  description?: string;
 }
 
 export function ControlledInput(
@@ -12,6 +13,8 @@ export function ControlledInput(
   const { name, label, ...rest } = props;
 
   const controller = useController({ name });
+
+  const error = controller.fieldState.error?.message;
 
   return (
     <fieldset className="fieldset w-full">
@@ -24,7 +27,11 @@ export function ControlledInput(
         {...controller.field}
       />
 
-      <p className="text-error">{controller.fieldState.error?.message}</p>
+      {error ? (
+        <p className="text-error">{error}</p>
+      ) : (
+        <p className="label">{props.description}</p>
+      )}
     </fieldset>
   );
 }
@@ -36,6 +43,8 @@ export function ControlledTextarea(
 
   const controller = useController({ name });
 
+  const error = controller.fieldState.error?.message;
+
   return (
     <fieldset className="fieldset w-full">
       <legend className="fieldset-legend">{props.label}</legend>
@@ -44,7 +53,12 @@ export function ControlledTextarea(
         {...rest}
         {...controller.field}
       ></textarea>
-      <p className="text-error">{controller.fieldState.error?.message}</p>
+
+      {error ? (
+        <p className="text-error">{error}</p>
+      ) : (
+        <p className="label">{props.description}</p>
+      )}
     </fieldset>
   );
 }

@@ -22,14 +22,40 @@ export default async function Page() {
 
   return (
     <MainContainer>
-      <div className="flex justify-between">
-        <div className="breadcrumbs text-sm">
-          <ul>
-            <li>
-              <Link href="/dashboard/forms">Forms</Link>
-            </li>
-          </ul>
+      <div className="flex gap-4 justify-between">
+        <div className="flex justify-between">
+          <div className="breadcrumbs text-sm">
+            <ul>
+              <li>
+                <Link href="/dashboard/forms">Forms</Link>
+              </li>
+            </ul>
+          </div>
         </div>
+
+        {forms.length > 0 && (
+          <div className="tooltip" data-tip="New Form">
+            <Link
+              href="/dashboard/forms/new"
+              className="btn btn-primary btn-circle"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth={1.5}
+                stroke="currentColor"
+                className="size-6"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+                />
+              </svg>
+            </Link>
+          </div>
+        )}
       </div>
 
       {forms.length ? (

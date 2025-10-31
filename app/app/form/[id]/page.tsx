@@ -1,3 +1,4 @@
+import { AnswerForm } from 'components/answer-form';
 import { MainContainer } from 'containers/main-container';
 import { sectionMapper } from 'db/mapper';
 import { findFormById, listSectionsByFormId } from 'db/query';
@@ -32,47 +33,7 @@ export default async function Page(props: PageProps<{ id: string }>) {
         </p>
       </div>
 
-      {mappedSections.map((section) => {
-        switch (section.type) {
-          case 'text':
-          case 'link':
-            return (
-              <fieldset className="fieldset">
-                <legend className="fieldset-legend">{section.title}</legend>
-                <input
-                  placeholder="Your answer"
-                  type="text"
-                  className="input"
-                />
-                <p className="label">{section.description}</p>
-              </fieldset>
-            );
-
-          case 'email':
-            return (
-              <fieldset className="fieldset">
-                <legend className="fieldset-legend">{section.title}</legend>
-                <input
-                  placeholder="Your answer"
-                  type="email"
-                  className="input"
-                />
-                <p className="label">{section.description}</p>
-              </fieldset>
-            );
-
-          case 'phone':
-            return (
-              <fieldset className="fieldset">
-                <legend className="fieldset-legend">{section.title}</legend>
-                <input placeholder="Your answer" type="tel" className="input" />
-                <p className="label">{section.description}</p>
-              </fieldset>
-            );
-        }
-      })}
-
-      <button className="btn btn-primary w-fit">Submit</button>
+      <AnswerForm sections={mappedSections} formId={params.id} />
     </MainContainer>
   );
 }

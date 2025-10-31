@@ -1,9 +1,94 @@
 {
-  "id": "7f417a94-92a1-4792-818e-c0f2681cf02f",
+  "id": "3503c278-a553-4f34-9694-0e60ac4a8ee7",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
+    "public.answer": {
+      "name": "answer",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "now()"
+        },
+        "response_id": {
+          "name": "response_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "fk_form_id": {
+          "name": "fk_form_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "fk_section_id": {
+          "name": "fk_section_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "answer": {
+          "name": "answer",
+          "type": "varchar(2000)",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "answer_fk_form_id_form_id_fk": {
+          "name": "answer_fk_form_id_form_id_fk",
+          "tableFrom": "answer",
+          "tableTo": "form",
+          "columnsFrom": [
+            "fk_form_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "answer_fk_section_id_section_id_fk": {
+          "name": "answer_fk_section_id_section_id_fk",
+          "tableFrom": "answer",
+          "tableTo": "section",
+          "columnsFrom": [
+            "fk_section_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
     "public.form": {
       "name": "form",
       "schema": "",
@@ -45,7 +130,7 @@
           "name": "description",
           "type": "varchar(1000)",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         }
       },
       "indexes": {},
@@ -109,7 +194,7 @@
           "name": "description",
           "type": "varchar(1000)",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
         "required": {
           "name": "required",
@@ -117,20 +202,6 @@
           "primaryKey": false,
           "notNull": false,
           "default": false
-        },
-        "min_length": {
-          "name": "min_length",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": false,
-          "default": 0
-        },
-        "max_length": {
-          "name": "max_length",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": false,
-          "default": 0
         }
       },
       "indexes": {},

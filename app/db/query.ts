@@ -1,6 +1,6 @@
 import { and, eq } from 'drizzle-orm';
 import { inArray } from 'drizzle-orm';
-import { formTable, sectionTable } from './schema';
+import { Answer, answerTable, formTable, sectionTable } from './schema';
 import { db } from './db';
 import { Form, Section } from 'models/form';
 
@@ -68,10 +68,14 @@ export function updateFormById(formId: string, form: Omit<Form, 'sections'>) {
     .execute();
 }
 
-export async function upsertSections(
-  formId: string,
-  sections: Form['sections'],
-) {
+export function listResponsesByFormId(formId: string) {
+  return db
+    .select()
+    .from(answerTable)
+    .where(eq(answerTable.fk_form_id, formId));
+}
+
+export async function upsertSections(formId: string, sections: Section[]) {
   const currentSections = await listSectionsByFormId(formId);
 
   const currentSectionIds = new Set(
@@ -143,6 +147,21 @@ export async function upsertSections(
       )
       .execute();
   }
+}
+
+export function insertAnswers(
+  formId: string,
+  responseId: string,
+  answers: [string, Answer][],
+) {
+  const values = answers.map(([sectionId, answer]) => ({
+    fk_form_id: formId,
+    fk_section_id: sectionId,
+    answer,
+    response_id: responseId,
+  }));
+
+  return db.insert(answerTable).values(values).execute();
 }
 
 export async function isFormOwner(formId: string, email: string) {
