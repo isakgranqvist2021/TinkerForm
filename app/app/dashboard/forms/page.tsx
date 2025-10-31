@@ -6,6 +6,7 @@ import { listFormsByEmail } from 'db/query';
 import { formatDate } from 'utils';
 import { redirect } from 'next/navigation';
 import { DeleteFormIconButton } from 'components/delete-form-button';
+import { EmptyState } from 'components/empty-state';
 
 export const metadata = {
   title: 'My Forms',
@@ -38,66 +39,32 @@ export default async function Page() {
           </li>
 
           {forms.map(renderFormListItem)}
-
-          <AddFormListItem />
         </ul>
       ) : (
-        <EmptyState />
+        <EmptyState
+          title="You have no forms yet."
+          cta={
+            <Link href="/dashboard/forms/new" className="btn btn-primary mb-4">
+              New Form
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth={1.5}
+                stroke="currentColor"
+                className="size-6"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+                />
+              </svg>
+            </Link>
+          }
+        />
       )}
     </MainContainer>
-  );
-}
-
-function EmptyState() {
-  return (
-    <div className="flex flex-col items-center justify-center gap-4 mt-16">
-      <p className="text-center text-lg">You have no forms yet.</p>
-      <Link href="/dashboard/forms/new" className="btn btn-primary mb-4">
-        New Form
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 24 24"
-          strokeWidth={1.5}
-          stroke="currentColor"
-          className="size-6"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
-          />
-        </svg>
-      </Link>
-    </div>
-  );
-}
-
-function AddFormListItem() {
-  return (
-    <li className="list-row cursor-pointer bg-base-200 rounded-tl-none rounded-tr-none hover:bg-base-300 p-0 flex justify-center items-center">
-      <Link
-        href="/dashboard/forms/new"
-        className="flex gap-2 justify-center items-center p-4 w-full"
-      >
-        <p className="text-center">Add Form</p>
-
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 24 24"
-          strokeWidth={1.5}
-          stroke="currentColor"
-          className="size-6"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
-          />
-        </svg>
-      </Link>
-    </li>
   );
 }
 

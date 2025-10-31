@@ -26,9 +26,10 @@ import { Form, Section } from 'models/form';
 import { useFieldArray, useFormContext } from 'react-hook-form';
 import { getSectionDefaultValues } from 'components/section-form-modal/section-form-modal.utils';
 import React from 'react';
+import { EmptyState } from './empty-state';
 
 export function SectionsList() {
-  const addSectionContext = useSectionFormContext();
+  const sectionFormContext = useSectionFormContext();
   const formContext = useFormContext<Form>();
   const fieldArray = useFieldArray<Form>({
     name: 'sections',
@@ -55,19 +56,27 @@ export function SectionsList() {
   };
 
   const handleSubmit = (section: Section) => {
-    if (addSectionContext.mode === 'add') {
+    if (sectionFormContext.mode === 'add') {
       fieldArray.append({
         ...section,
         id: crypto.randomUUID(),
       });
     } else {
       const index = fieldArray.fields.findIndex(
-        (s) => s.id === addSectionContext.defaultValues.id,
+        (s) => s.id === sectionFormContext.defaultValues.id,
       );
       fieldArray.update(index, section);
     }
 
     closeAddSectionModal();
+  };
+
+  const openAddSectionModalAndSetValues = () => {
+    if (formContext.formState.isSubmitting) return;
+
+    openAddSectionModal();
+    sectionFormContext.setMode('add');
+    sectionFormContext.setDefaultValues(getSectionDefaultValues('text'));
   };
 
   return (
@@ -76,8 +85,32 @@ export function SectionsList() {
 
       <div>
         <div className="mb-4">
-          <h3 className="text-lg font-bold">2. Sections</h3>
-          <p>Add sections to your form that the user can fill out.</p>
+          <div className="flex justify-between">
+            <div>
+              <h3 className="text-lg font-bold">2. Sections</h3>
+              <p>Add sections to your form that the user can fill out.</p>
+            </div>
+
+            <button
+              className="btn btn-circle btn-accent"
+              onClick={openAddSectionModalAndSetValues}
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth={1.5}
+                stroke="currentColor"
+                className="size-6"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+                />
+              </svg>
+            </button>
+          </div>
 
           {formContext.formState.errors.sections && (
             <p className="text-sm text-error mt-2">
@@ -86,80 +119,66 @@ export function SectionsList() {
           )}
         </div>
 
-        <div className="flex-grow">
-          <ul className="list bg-base-100 rounded-box shadow-md">
-            <AddSectionListItem />
-
-            <DndContext
-              sensors={sensors}
-              collisionDetection={closestCenter}
-              onDragEnd={handleDragEnd}
-            >
-              <SortableContext
-                items={sections}
-                strategy={verticalListSortingStrategy}
+        {sections.length > 0 ? (
+          <div className="flex-grow">
+            <ul className="list bg-base-100 rounded-box shadow-md">
+              <DndContext
+                sensors={sensors}
+                collisionDetection={closestCenter}
+                onDragEnd={handleDragEnd}
               >
-                {sections.map((section, index) => (
-                  <ListItem
-                    key={section.id}
-                    section={section}
-                    index={index}
-                    onDelete={() => fieldArray.remove(index)}
-                    onDuplicate={() =>
-                      fieldArray.append({
-                        ...section,
-                        title: 'Copy of ' + section.title,
-                        id: crypto.randomUUID(),
-                      })
-                    }
+                <SortableContext
+                  items={sections}
+                  strategy={verticalListSortingStrategy}
+                >
+                  {sections.map((section, index) => (
+                    <ListItem
+                      key={section.id}
+                      section={section}
+                      index={index}
+                      onDelete={() => fieldArray.remove(index)}
+                      onDuplicate={() =>
+                        fieldArray.append({
+                          ...section,
+                          title: 'Copy of ' + section.title,
+                          id: crypto.randomUUID(),
+                        })
+                      }
+                    />
+                  ))}
+                </SortableContext>
+              </DndContext>
+            </ul>
+          </div>
+        ) : (
+          <EmptyState
+            title="No sections added yet"
+            cta={
+              <button
+                className="btn btn-accent"
+                onClick={openAddSectionModalAndSetValues}
+              >
+                Add Section
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth={1.5}
+                  stroke="currentColor"
+                  className="size-6"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
                   />
-                ))}
-              </SortableContext>
-            </DndContext>
-          </ul>
-        </div>
+                </svg>
+              </button>
+            }
+          />
+        )}
       </div>
     </React.Fragment>
-  );
-}
-
-function AddSectionListItem() {
-  const sectionFormContext = useSectionFormContext();
-  const formContext = useFormContext<Form>();
-
-  return (
-    <li
-      onClick={() => {
-        if (formContext.formState.isSubmitting) return;
-
-        openAddSectionModal();
-        sectionFormContext.setMode('add');
-        sectionFormContext.setDefaultValues(getSectionDefaultValues('text'));
-      }}
-      className={
-        'list-row justify-center flex cursor-pointer bg-base-200 gap-2 rounded-bl-none rounded-br-none hover:bg-base-300' +
-        (formContext.formState.isSubmitting
-          ? ' pointer-events-none opacity-50'
-          : '')
-      }
-    >
-      <p className="text-center">Add section</p>
-
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        fill="none"
-        viewBox="0 0 24 24"
-        strokeWidth={1.5}
-        stroke="currentColor"
-        className="size-6"
-      >
-        <path
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
-        />
-      </svg>
-    </li>
   );
 }
 
