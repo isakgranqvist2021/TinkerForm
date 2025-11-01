@@ -10,7 +10,14 @@ import Link from 'next/link';
 import { redirect } from 'next/navigation';
 import React from 'react';
 import { PageProps } from 'types/page';
-import { formatDate } from 'utils';
+import {
+  calculateAverageCompletionTime,
+  calculateDuration,
+  formatDate,
+  formatDuration,
+  getCompletionRate,
+  getDurations,
+} from 'utils';
 
 export const metadata = {
   title: 'Form',
@@ -35,12 +42,12 @@ export default async function Page(props: PageProps<{ id: string }>) {
     params.id,
   );
 
-  const completionRate = (
-    (completedResponsesCount / responsesCount) *
-    100
-  ).toFixed(2);
-
-  const averageCompletionTime = 0;
+  const durations = getDurations(responses);
+  const averageCompletionTime = calculateAverageCompletionTime(durations);
+  const completionRate = getCompletionRate(
+    completedResponsesCount,
+    responsesCount,
+  );
 
   return (
     <MainContainer>
@@ -96,7 +103,7 @@ export default async function Page(props: PageProps<{ id: string }>) {
         <div className="card card-border bg-base-100 w-96">
           <div className="card-body">
             <h2 className="card-title">Average Completion Time</h2>
-            <p>{averageCompletionTime}</p>
+            <p>{averageCompletionTime ?? 'N/A'}</p>
           </div>
         </div>
 
@@ -110,7 +117,6 @@ export default async function Page(props: PageProps<{ id: string }>) {
 
       <div className="overflow-x-auto">
         <table className="table">
-          {/* head */}
           <thead>
             <tr>
               <th>#</th>
@@ -126,7 +132,10 @@ export default async function Page(props: PageProps<{ id: string }>) {
               );
 
               return (
-                <tr key={responses.id}>
+                <tr
+                  key={responses.id}
+                  className="hover:bg-base-200 cursor-pointer"
+                >
                   <td>{index + 1}</td>
                   <td>{formatDate(responses.created_at)}</td>
                   <td>{duration ? formatDuration(duration) : ''}</td>
@@ -138,36 +147,4 @@ export default async function Page(props: PageProps<{ id: string }>) {
       </div>
     </MainContainer>
   );
-}
-
-function calculateDuration(createdAt: Date, completedAt: Date | null) {
-  if (!completedAt) {
-    return null;
-  }
-
-  const duration = {
-    minutes: 0,
-    seconds: 0,
-  };
-
-  const diff = dayjs(completedAt).diff(dayjs(createdAt), 'second');
-
-  duration.minutes = Math.floor(diff / 60);
-  duration.seconds = diff % 60;
-
-  return duration;
-}
-
-function formatDuration(
-  duration: NonNullable<ReturnType<typeof calculateDuration>>,
-) {
-  if (duration.minutes === 0) {
-    return `${duration.seconds}s`;
-  }
-
-  if (duration.seconds === 0) {
-    return `${duration.minutes}m`;
-  }
-
-  return `${duration.minutes}m ${duration.seconds}s`;
 }
