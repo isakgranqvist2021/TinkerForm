@@ -7,23 +7,6 @@ export function Nav() {
     <div className="navbar bg-base-100 shadow-sm">
       <div className="container flex justify-between items-center mx-auto">
         <div className="flex-1 gap-2 flex">
-          <label htmlFor="my-drawer" className="btn btn-circle">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              strokeWidth={1.5}
-              stroke="currentColor"
-              className="size-8"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M3.75 6.75h16.5M3.75 12H12m-8.25 5.25h16.5"
-              />
-            </svg>
-          </label>
-
           <Link href="/" className="btn btn-ghost text-xl">
             Template
           </Link>
