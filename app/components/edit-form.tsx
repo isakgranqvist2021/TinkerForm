@@ -1,6 +1,6 @@
 'use client';
 
-import { SectionFormProvider } from 'components/section-form-modal/section-form-modal.context';
+import { SectionFormProvider } from './section-form-modal';
 import { Form, formSchema } from 'models/form';
 import { FormProvider, useForm } from 'react-hook-form';
 import { toast } from 'sonner';

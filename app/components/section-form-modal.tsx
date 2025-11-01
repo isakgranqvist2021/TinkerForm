@@ -3,8 +3,6 @@
 import React from 'react';
 import { Section, SectionType, sectionTypes } from 'models/form';
 import { Forms } from './forms';
-import { useSectionFormContext } from './section-form-modal.context';
-import { getSectionDefaultValues } from './section-form-modal.utils';
 
 export interface SectionFormModalProps {
   onSubmit: (data: Section) => void;
@@ -47,6 +45,63 @@ export function SectionFormModal(props: SectionFormModalProps) {
       </div>
     </dialog>
   );
+}
+
+export type FormMode = 'edit' | 'add';
+
+const SectionFormContext = React.createContext<{
+  defaultValues: Section;
+  setDefaultValues: (defaultValues: Section) => void;
+
+  mode: FormMode;
+  setMode: React.Dispatch<React.SetStateAction<FormMode>>;
+}>({
+  defaultValues: getSectionDefaultValues('text'),
+  setDefaultValues: (defaultValues: Section) => {},
+
+  mode: 'add',
+  setMode: () => {},
+});
+
+export function SectionFormProvider(props: React.PropsWithChildren) {
+  const [mode, setMode] = React.useState<FormMode>('add');
+  const [defaultValues, setDefaultValues] = React.useState<Section>(
+    getSectionDefaultValues('text'),
+  );
+
+  return (
+    <SectionFormContext.Provider
+      value={{
+        defaultValues,
+        setDefaultValues,
+        mode,
+        setMode,
+      }}
+    >
+      {props.children}
+    </SectionFormContext.Provider>
+  );
+}
+
+export function useSectionFormContext() {
+  return React.useContext(SectionFormContext);
+}
+
+export function getSectionDefaultValues(type: SectionType): Section {
+  switch (type) {
+    case 'text':
+    case 'link':
+    case 'email':
+    case 'phone':
+      return {
+        id: '',
+        index: 0,
+        description: '',
+        required: false,
+        title: '',
+        type,
+      };
+  }
 }
 
 const modalName = 'add-section-modal';

@@ -1,4 +1,4 @@
-import { InferInsertModel } from 'drizzle-orm';
+import { InferInsertModel, InferSelectModel } from 'drizzle-orm';
 import {
   integer,
   pgTable,
@@ -54,3 +54,4 @@ export const answerTable = pgTable('answer', {
 });
 
 export type Answer = InferInsertModel<typeof answerTable>['answer'];
+export type Response = InferSelectModel<typeof responseTable>;

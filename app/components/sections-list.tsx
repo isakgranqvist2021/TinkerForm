@@ -9,7 +9,6 @@ import {
   useSensors,
   DragEndEvent,
 } from '@dnd-kit/core';
-import { useSectionFormContext } from './section-form-modal/section-form-modal.context';
 import { CSS } from '@dnd-kit/utilities';
 import {
   SortableContext,
@@ -21,10 +20,13 @@ import {
   closeAddSectionModal,
   openAddSectionModal,
   SectionFormModal,
-} from './section-form-modal/section-form-modal';
+} from './section-form-modal';
 import { Form, Section } from 'models/form';
 import { useFieldArray, useFormContext } from 'react-hook-form';
-import { getSectionDefaultValues } from 'components/section-form-modal/section-form-modal.utils';
+import {
+  getSectionDefaultValues,
+  useSectionFormContext,
+} from './section-form-modal';
 import React from 'react';
 import { EmptyState } from './empty-state';
 

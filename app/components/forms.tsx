@@ -16,10 +16,10 @@ import {
   ControlledInput,
   ControlledTextarea,
 } from 'components/inputs';
-import { useSectionFormContext } from './section-form-modal.context';
 import {
   closeAddSectionModal,
   SectionFormModalProps,
+  useSectionFormContext,
 } from './section-form-modal';
 
 interface FormSectionProps<T> extends SectionFormModalProps {
