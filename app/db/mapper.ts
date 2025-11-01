@@ -22,6 +22,6 @@ export function sectionMapper(
       };
 
     default:
-      throw new Error(`Unknown section type: ${section.type}`);
+      throw new Error(`Unknown section type: ${type}`);
   }
 }

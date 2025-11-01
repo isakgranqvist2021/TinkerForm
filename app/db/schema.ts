@@ -14,9 +14,12 @@ const defaultColumns = {
   updated_at: timestamp('updated_at').notNull().defaultNow(),
 };
 
+const fk_form_id = uuid('fk_form_id')
+  .references(() => formTable.id, { onDelete: 'cascade' })
+  .notNull();
+
 export const formTable = pgTable('form', {
   ...defaultColumns,
-  updated_at: timestamp('updated_at').defaultNow(),
   email: varchar('email', { length: 255 }).notNull(),
   title: varchar('title', { length: 255 }).notNull(),
   description: varchar('description', { length: 1000 }).notNull(),
@@ -24,9 +27,7 @@ export const formTable = pgTable('form', {
 
 export const sectionTable = pgTable('section', {
   ...defaultColumns,
-  fk_form_id: uuid('fk_form_id')
-    .references(() => formTable.id, { onDelete: 'cascade' })
-    .notNull(),
+  fk_form_id,
   type: varchar('type', { length: 50 }).notNull(),
   title: varchar('title', { length: 255 }).notNull(),
   index: integer('index').notNull(),
@@ -36,19 +37,15 @@ export const sectionTable = pgTable('section', {
 
 export const responseTable = pgTable('response', {
   ...defaultColumns,
-  fk_form_id: uuid('fk_form_id')
-    .references(() => formTable.id, { onDelete: 'cascade' })
-    .notNull(),
+  fk_form_id,
   completed_at: timestamp('completed_at'),
 });
 
 export const answerTable = pgTable('answer', {
   ...defaultColumns,
+  fk_form_id,
   fk_response_id: uuid('fk_response_id')
     .references(() => responseTable.id, { onDelete: 'cascade' })
-    .notNull(),
-  fk_form_id: uuid('fk_form_id')
-    .references(() => formTable.id, { onDelete: 'cascade' })
     .notNull(),
   fk_section_id: uuid('fk_section_id')
     .references(() => sectionTable.id, { onDelete: 'cascade' })
