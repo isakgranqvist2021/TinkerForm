@@ -1,8 +1,10 @@
 'use client';
 
-import { Response } from 'db/schema';
+import { SelectedResponse } from 'db/schema';
 import React from 'react';
 import { calculateDuration, formatDate, formatDuration } from 'utils';
+import useSWR from 'swr';
+import { responseMapper } from 'db/mapper';
 
 function ResponseModal() {
   const responseContext = useResponseContext();
@@ -14,11 +16,7 @@ function ResponseModal() {
           response={responseContext.response}
           onClose={() => {
             closeResponseModal();
-
-            // Delay clearing the responseId to allow the modal close animation to finish
-            window.setTimeout(() => {
-              responseContext.setResponse(null);
-            }, 300);
+            responseContext.setResponse(null);
           }}
         />
       )}
@@ -27,22 +25,98 @@ function ResponseModal() {
 }
 
 interface ResponseModalContentProps {
-  response: Response;
+  response: SelectedResponse;
   onClose: () => void;
 }
 
 function ResponseModalContent(props: ResponseModalContentProps) {
+  const { data, error, isLoading } = useSWR(
+    `/api/response/${props.response.id}`,
+    async () => {
+      const res = await fetch(`/api/response/${props.response.id}`);
+      if (!res.ok) {
+        throw new Error('Failed to fetch response details');
+      }
+
+      return (await res.json()) as ReturnType<typeof responseMapper>;
+    },
+  );
+
   const duration = calculateDuration(
     props.response.created_at,
     props.response.completed_at,
   );
 
+  const hasAnswers = Boolean(data?.items.length);
+
   return (
     <React.Fragment>
       <div className="modal-box">
-        <h3 className="font-bold text-lg">Response</h3>
-        <p>Date: {formatDate(props.response.created_at)}</p>
-        <p>Completion time: {duration ? formatDuration(duration) : 'N/A'}</p>
+        <h3 className="font-bold text-xl mb-4">Response</h3>
+        <div></div>
+
+        <div>
+          <div>
+            <p className="mb-2 text-sm">
+              <strong>Date:</strong> {formatDate(props.response.created_at)}
+            </p>
+
+            <p className="mb-2 text-sm">
+              <strong>Completion time:</strong>{' '}
+              {duration ? formatDuration(duration) : 'N/A'}
+            </p>
+
+            {hasAnswers &&
+              !isLoading &&
+              data?.items.map((item: any, index: number) => (
+                <p key={index} className="mb-2 text-sm">
+                  <strong>{item.section.title}:</strong> {item.answer.answer}
+                </p>
+              ))}
+
+            {!hasAnswers && !isLoading && (
+              <div role="alert" className="alert alert-warning mt-4">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-6 w-6 shrink-0 stroke-current"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
+                  />
+                </svg>
+                <span>No answers available.</span>
+              </div>
+            )}
+
+            {isLoading && (
+              <span className="loading loading-dots loading-md"></span>
+            )}
+
+            {error && (
+              <div role="alert" className="alert alert-error mb-4">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-6 w-6 shrink-0 stroke-current"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"
+                  />
+                </svg>
+                <span>Failed to load answers.</span>
+              </div>
+            )}
+          </div>
+        </div>
       </div>
       <div className="modal-backdrop">
         <button onClick={props.onClose}>close</button>
@@ -52,8 +126,8 @@ function ResponseModalContent(props: ResponseModalContentProps) {
 }
 
 const ResponseContext = React.createContext<{
-  response: Response | null;
-  setResponse: React.Dispatch<React.SetStateAction<Response | null>>;
+  response: SelectedResponse | null;
+  setResponse: React.Dispatch<React.SetStateAction<SelectedResponse | null>>;
 }>({
   response: null,
   setResponse: () => {},
@@ -62,7 +136,7 @@ const ResponseContext = React.createContext<{
 export const ResponseConsumer = ResponseContext.Consumer;
 
 export function ResponseProvider(props: React.PropsWithChildren) {
-  const [response, setResponse] = React.useState<Response | null>(null);
+  const [response, setResponse] = React.useState<SelectedResponse | null>(null);
 
   return (
     <ResponseContext.Provider value={{ response, setResponse }}>

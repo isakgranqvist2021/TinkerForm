@@ -53,5 +53,7 @@ export const answerTable = pgTable('answer', {
   answer: varchar('answer', { length: 2000 }),
 });
 
-export type Answer = InferInsertModel<typeof answerTable>['answer'];
-export type Response = InferSelectModel<typeof responseTable>;
+export type InsertAnswer = InferInsertModel<typeof answerTable>;
+export type SelectedAnswer = InferSelectModel<typeof answerTable>;
+export type SelectedResponse = InferSelectModel<typeof responseTable>;
+export type SelectedSection = InferSelectModel<typeof sectionTable>;

@@ -1,11 +1,11 @@
 'use client';
 
-import { Response } from 'db/schema';
+import { SelectedResponse } from 'db/schema';
 import { openResponseModal, ResponseConsumer } from './response-modal';
 import { calculateDuration, formatDate, formatDuration } from 'utils';
 
 interface ResponseTableRowProps {
-  response: Response;
+  response: SelectedResponse;
   index: number;
 }
 

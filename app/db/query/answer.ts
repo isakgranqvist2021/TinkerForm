@@ -1,10 +1,11 @@
 import { db } from 'db/db';
-import { Answer, answerTable } from 'db/schema';
+import { InsertAnswer, answerTable, sectionTable } from 'db/schema';
+import { eq } from 'drizzle-orm';
 
 function insertMany(
   formId: string,
   responseId: string,
-  answers: [string, Answer][],
+  answers: [string, InsertAnswer['answer']][],
 ) {
   const values = answers.map(([sectionId, answer]) => ({
     fk_form_id: formId,
@@ -16,6 +17,15 @@ function insertMany(
   return db.insert(answerTable).values(values).execute();
 }
 
+function findByResponseId(responseId: string) {
+  return db
+    .select()
+    .from(answerTable)
+    .where(eq(answerTable.fk_response_id, responseId))
+    .leftJoin(sectionTable, eq(answerTable.fk_section_id, sectionTable.id));
+}
+
 export const AnswersTable = {
   insertMany,
+  findByResponseId,
 };
