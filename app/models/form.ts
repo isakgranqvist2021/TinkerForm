@@ -58,7 +58,7 @@ export const formSchema = z.object({
   description: z
     .string()
     .min(1, 'Description is required')
-    .max(1000, 'Description is too long'),
+    .max(5000, 'Description is too long'),
   sections: sectionSchema.array().min(1, 'At least one section is required'),
 });
 

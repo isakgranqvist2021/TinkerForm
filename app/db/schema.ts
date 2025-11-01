@@ -22,7 +22,7 @@ export const formTable = pgTable('form', {
   ...defaultColumns,
   email: varchar('email', { length: 255 }).notNull(),
   title: varchar('title', { length: 255 }).notNull(),
-  description: varchar('description', { length: 1000 }).notNull(),
+  description: varchar('description', { length: 5000 }).notNull(),
 });
 
 export const sectionTable = pgTable('section', {
