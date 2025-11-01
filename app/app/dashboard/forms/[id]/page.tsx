@@ -113,8 +113,8 @@ export default async function Page(props: PageProps<{ id: string }>) {
           <thead>
             <tr>
               <th>#</th>
-              <th>Start date</th>
-              <th>Duration</th>
+              <th>Date</th>
+              <th>Completion Time</th>
             </tr>
           </thead>
           <tbody>
