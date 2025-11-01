@@ -24,15 +24,16 @@ export default async function Page(props: PageProps<{ id: string }>) {
     return redirect('/auth/login');
   }
 
-  const form = await FormTable.findFormById(params.id);
+  const form = await FormTable.findById(params.id);
   if (!form || form.email !== session.user.email) {
     return redirect('/404');
   }
 
-  const responses = await ResponseTable.listResponsesByFormId(params.id);
-  const responsesCount = await ResponseTable.countResponsesByFormId(params.id);
-  const completedResponsesCount =
-    await ResponseTable.countCompletedResponsesByFormId(params.id);
+  const responses = await ResponseTable.listByFormId(params.id);
+  const responsesCount = await ResponseTable.countByFormId(params.id);
+  const completedResponsesCount = await ResponseTable.countCompletedByFormId(
+    params.id,
+  );
 
   const completionRate = (
     (completedResponsesCount / responsesCount) *

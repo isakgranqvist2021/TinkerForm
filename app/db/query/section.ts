@@ -3,8 +3,8 @@ import { sectionTable } from 'db/schema';
 import { and, eq, inArray } from 'drizzle-orm';
 import { Form, Section } from 'models/form';
 
-async function upsertSections(formId: string, sections: Section[]) {
-  const currentSections = await listSectionsByFormId(formId);
+async function upsertMany(formId: string, sections: Section[]) {
+  const currentSections = await listByFormId(formId);
 
   const currentSectionIds = new Set(
     currentSections.map((section) => section.id),
@@ -77,14 +77,14 @@ async function upsertSections(formId: string, sections: Section[]) {
   }
 }
 
-function listSectionsByFormId(formId: string) {
+function listByFormId(formId: string) {
   return db
     .select()
     .from(sectionTable)
     .where(eq(sectionTable.fk_form_id, formId));
 }
 
-function insertManySections(form: Form, formId: string) {
+function insertMany(form: Form, formId: string) {
   return db
     .insert(sectionTable)
     .values(
@@ -101,7 +101,7 @@ function insertManySections(form: Form, formId: string) {
 }
 
 export const SectionTable = {
-  insertManySections,
-  listSectionsByFormId,
-  upsertSections,
+  insertMany,
+  listByFormId,
+  upsertMany,
 };

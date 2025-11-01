@@ -22,7 +22,7 @@ export async function POST(req: Request, ctx: RouteContext<'/api/form/[id]'>) {
       );
     }
 
-    const form = await FormTable.findFormById(id);
+    const form = await FormTable.findById(id);
     if (!form) {
       return new Response(
         JSON.stringify({ statusCode: 404, message: 'Form not found' }),
@@ -31,7 +31,7 @@ export async function POST(req: Request, ctx: RouteContext<'/api/form/[id]'>) {
     }
 
     const body = await req.json();
-    const response = await ResponseTable.findResponseById(body.responseId);
+    const response = await ResponseTable.findById(body.responseId);
     if (!response || response.fk_form_id !== form.id) {
       return new Response(
         JSON.stringify({ statusCode: 404, message: 'Response not found' }),
@@ -39,15 +39,15 @@ export async function POST(req: Request, ctx: RouteContext<'/api/form/[id]'>) {
       );
     }
 
-    const sections = await SectionTable.listSectionsByFormId(id);
+    const sections = await SectionTable.listByFormId(id);
     const mappedSections = sections.map(sectionMapper);
     const schema = constructSchema(mappedSections);
 
     const parsedBody = schema.parse(body.answers);
     const entries = Object.entries(parsedBody);
 
-    await AnswersTable.insertAnswers(id, response.id, entries);
-    await ResponseTable.updateResponseCompletedAt(response.id);
+    await AnswersTable.insertMany(id, response.id, entries);
+    await ResponseTable.updateCompletedAt(response.id);
 
     return new Response('', { status: 201 });
   } catch (err) {

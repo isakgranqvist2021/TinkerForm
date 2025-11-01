@@ -18,7 +18,7 @@ export default async function Page() {
     return redirect('/auth/login');
   }
 
-  const forms = await FormTable.listFormsByEmail(session.user.email);
+  const forms = await FormTable.listByEmail(session.user.email);
 
   return (
     <MainContainer>
@@ -95,7 +95,7 @@ export default async function Page() {
 }
 
 function renderFormListItem(
-  form: Awaited<ReturnType<typeof FormTable.listFormsByEmail>>[number],
+  form: Awaited<ReturnType<typeof FormTable.listByEmail>>[number],
 ) {
   return (
     <li key={form.id} className="list-row justify-between flex w-full p-0">

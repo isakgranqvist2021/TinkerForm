@@ -3,7 +3,7 @@ import { formTable } from 'db/schema';
 import { and, eq } from 'drizzle-orm';
 import { Form } from 'models/form';
 
-async function isFormOwner(formId: string, email: string) {
+async function isOwner(formId: string, email: string) {
   const forms = await db
     .select()
     .from(formTable)
@@ -16,11 +16,11 @@ async function isFormOwner(formId: string, email: string) {
   return true;
 }
 
-function deleteFormById(formId: string) {
+function deleteById(formId: string) {
   return db.delete(formTable).where(eq(formTable.id, formId)).execute();
 }
 
-function updateFormById(formId: string, form: Omit<Form, 'sections'>) {
+function updateById(formId: string, form: Omit<Form, 'sections'>) {
   return db
     .update(formTable)
     .set({
@@ -32,7 +32,7 @@ function updateFormById(formId: string, form: Omit<Form, 'sections'>) {
     .execute();
 }
 
-async function findFormById(formId: string) {
+async function findById(formId: string) {
   const forms = await db
     .select()
     .from(formTable)
@@ -41,11 +41,11 @@ async function findFormById(formId: string) {
   return forms[0];
 }
 
-function listFormsByEmail(email: string) {
+function listByEmail(email: string) {
   return db.select().from(formTable).where(eq(formTable.email, email));
 }
 
-function insertOneForm(form: Form, email: string) {
+function insertOne(form: Form, email: string) {
   return db
     .insert(formTable)
     .values({
@@ -58,10 +58,10 @@ function insertOneForm(form: Form, email: string) {
 }
 
 export const FormTable = {
-  insertOneForm,
-  listFormsByEmail,
-  findFormById,
-  updateFormById,
-  deleteFormById,
-  isFormOwner,
+  insertOne,
+  listByEmail,
+  findById,
+  updateById,
+  deleteById,
+  isOwner,
 };

@@ -19,8 +19,8 @@ export async function POST(req: Request) {
     const body = await req.json();
     const form = formSchema.parse(body);
 
-    const res = await FormTable.insertOneForm(form, session.user.email);
-    await SectionTable.insertManySections(form, res[0].id);
+    const res = await FormTable.insertOne(form, session.user.email);
+    await SectionTable.insertMany(form, res[0].id);
 
     return new Response(JSON.stringify(res[0]), { status: 201 });
   } catch (err) {

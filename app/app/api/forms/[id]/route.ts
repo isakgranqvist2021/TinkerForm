@@ -24,7 +24,7 @@ export async function PATCH(
     const body = await req.json();
     const form = formSchema.parse(body);
 
-    const canContinue = await FormTable.isFormOwner(id, session.user.email);
+    const canContinue = await FormTable.isOwner(id, session.user.email);
     if (!canContinue) {
       return new Response(
         JSON.stringify({ statusCode: 403, message: 'Forbidden' }),
@@ -32,8 +32,8 @@ export async function PATCH(
       );
     }
 
-    await FormTable.updateFormById(id, form);
-    await SectionTable.upsertSections(id, form.sections);
+    await FormTable.updateById(id, form);
+    await SectionTable.upsertMany(id, form.sections);
 
     return new Response('', { status: 200 });
   } catch (err) {
@@ -67,7 +67,7 @@ export async function DELETE(
       );
     }
 
-    const canContinue = await FormTable.isFormOwner(id, session.user.email);
+    const canContinue = await FormTable.isOwner(id, session.user.email);
     if (!canContinue) {
       return new Response(
         JSON.stringify({ statusCode: 403, message: 'Forbidden' }),
@@ -75,7 +75,7 @@ export async function DELETE(
       );
     }
 
-    await FormTable.deleteFormById(id);
+    await FormTable.deleteById(id);
 
     return new Response('', { status: 200 });
   } catch (err) {

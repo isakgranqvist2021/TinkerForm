@@ -2,7 +2,7 @@ import { db } from 'db/db';
 import { responseTable } from 'db/schema';
 import { and, count, eq, isNotNull } from 'drizzle-orm';
 
-async function insertReponse(formId: string) {
+async function insertOne(formId: string) {
   const responses = await db
     .insert(responseTable)
     .values({
@@ -14,7 +14,7 @@ async function insertReponse(formId: string) {
   return responses[0];
 }
 
-async function findResponseById(responseId: string) {
+async function findById(responseId: string) {
   const responses = await db
     .select()
     .from(responseTable)
@@ -23,7 +23,7 @@ async function findResponseById(responseId: string) {
   return responses[0];
 }
 
-async function updateResponseCompletedAt(responseId: string) {
+async function updateCompletedAt(responseId: string) {
   return db
     .update(responseTable)
     .set({ completed_at: new Date() })
@@ -31,7 +31,7 @@ async function updateResponseCompletedAt(responseId: string) {
     .execute();
 }
 
-async function countResponsesByFormId(formId: string) {
+async function countByFormId(formId: string) {
   const result = await db
     .select({ count: count(responseTable.id) })
     .from(responseTable)
@@ -40,7 +40,7 @@ async function countResponsesByFormId(formId: string) {
   return Number(result[0].count);
 }
 
-async function countCompletedResponsesByFormId(formId: string) {
+async function countCompletedByFormId(formId: string) {
   const result = await db
     .select({ count: count(responseTable.id) })
     .from(responseTable)
@@ -54,7 +54,7 @@ async function countCompletedResponsesByFormId(formId: string) {
   return Number(result[0].count);
 }
 
-function listResponsesByFormId(formId: string) {
+function listByFormId(formId: string) {
   return db
     .select()
     .from(responseTable)
@@ -62,10 +62,10 @@ function listResponsesByFormId(formId: string) {
 }
 
 export const ResponseTable = {
-  insertReponse,
-  findResponseById,
-  updateResponseCompletedAt,
-  countResponsesByFormId,
-  countCompletedResponsesByFormId,
-  listResponsesByFormId,
+  insertOne,
+  findById,
+  updateCompletedAt,
+  countByFormId,
+  countCompletedByFormId,
+  listByFormId,
 };

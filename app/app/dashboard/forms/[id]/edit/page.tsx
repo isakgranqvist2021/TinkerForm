@@ -21,13 +21,13 @@ export default async function Page(props: PageProps<{ id: string }>) {
 
   const params = await props.params;
 
-  const form = await FormTable.findFormById(params.id);
+  const form = await FormTable.findById(params.id);
 
   if (!form || form.email !== session.user.email) {
     return redirect('/404');
   }
 
-  const sections = await SectionTable.listSectionsByFormId(form.id);
+  const sections = await SectionTable.listByFormId(form.id);
   const mappedSections = sections.map(sectionMapper);
 
   return (

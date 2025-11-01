@@ -8,7 +8,7 @@ import { PageProps } from 'types/page';
 
 export async function generateMetadata(props: PageProps<{ id: string }>) {
   const params = await props.params;
-  const form = await FormTable.findFormById(params.id);
+  const form = await FormTable.findById(params.id);
 
   return {
     title: form ? form.title : 'Form',
@@ -18,14 +18,14 @@ export async function generateMetadata(props: PageProps<{ id: string }>) {
 export default async function Page(props: PageProps<{ id: string }>) {
   const params = await props.params;
 
-  const form = await FormTable.findFormById(params.id);
+  const form = await FormTable.findById(params.id);
   if (!form) {
     return <MainContainer>Form not found</MainContainer>;
   }
 
-  const response = await ResponseTable.insertReponse(form.id);
+  const response = await ResponseTable.insertOne(form.id);
 
-  const sections = await SectionTable.listSectionsByFormId(form.id);
+  const sections = await SectionTable.listByFormId(form.id);
   const mappedSections = sections.map(sectionMapper);
 
   return (

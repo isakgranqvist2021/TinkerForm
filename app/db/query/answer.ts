@@ -1,7 +1,7 @@
 import { db } from 'db/db';
 import { Answer, answerTable } from 'db/schema';
 
-function insertAnswers(
+function insertMany(
   formId: string,
   responseId: string,
   answers: [string, Answer][],
@@ -17,5 +17,5 @@ function insertAnswers(
 }
 
 export const AnswersTable = {
-  insertAnswers,
+  insertMany,
 };
