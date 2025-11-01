@@ -112,7 +112,7 @@ export default async function Page(props: PageProps<{ id: string }>) {
                 />
               </svg>
             </div>
-            <div className="stat-title">Responses</div>
+            <div className="stat-title">Views</div>
             <div className="stat-value text-secondary">{responsesCount}</div>
           </div>
 
