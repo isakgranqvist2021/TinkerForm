@@ -8,9 +8,14 @@ import {
   uuid,
 } from 'drizzle-orm/pg-core';
 
-export const formTable = pgTable('form', {
+const defaultColumns = {
   id: uuid('id').primaryKey().defaultRandom(),
-  created_at: timestamp('created_at').defaultNow(),
+  created_at: timestamp('created_at').notNull().defaultNow(),
+  updated_at: timestamp('updated_at').notNull().defaultNow(),
+};
+
+export const formTable = pgTable('form', {
+  ...defaultColumns,
   updated_at: timestamp('updated_at').defaultNow(),
   email: varchar('email', { length: 255 }).notNull(),
   title: varchar('title', { length: 255 }).notNull(),
@@ -18,9 +23,7 @@ export const formTable = pgTable('form', {
 });
 
 export const sectionTable = pgTable('section', {
-  id: uuid('id').primaryKey().defaultRandom(),
-  created_at: timestamp('created_at').defaultNow(),
-  updated_at: timestamp('updated_at').defaultNow(),
+  ...defaultColumns,
   fk_form_id: uuid('fk_form_id')
     .references(() => formTable.id, { onDelete: 'cascade' })
     .notNull(),
@@ -32,9 +35,7 @@ export const sectionTable = pgTable('section', {
 });
 
 export const responseTable = pgTable('response', {
-  id: uuid('id').primaryKey().defaultRandom(),
-  created_at: timestamp('created_at').defaultNow(),
-  updated_at: timestamp('updated_at').defaultNow(),
+  ...defaultColumns,
   fk_form_id: uuid('fk_form_id')
     .references(() => formTable.id, { onDelete: 'cascade' })
     .notNull(),
@@ -42,9 +43,7 @@ export const responseTable = pgTable('response', {
 });
 
 export const answerTable = pgTable('answer', {
-  id: uuid('id').primaryKey().defaultRandom(),
-  created_at: timestamp('created_at').defaultNow(),
-  updated_at: timestamp('updated_at').defaultNow(),
+  ...defaultColumns,
   fk_response_id: uuid('fk_response_id')
     .references(() => responseTable.id, { onDelete: 'cascade' })
     .notNull(),

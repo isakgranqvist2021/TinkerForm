@@ -2,11 +2,11 @@ import { auth0 } from 'lib/auth0';
 import Link from 'next/link';
 import React from 'react';
 import { MainContainer } from 'containers/main-container';
-import { listFormsByEmail } from 'db/query';
 import { formatDate } from 'utils';
 import { redirect } from 'next/navigation';
 import { DeleteFormIconButton } from 'components/delete-form-button';
 import { EmptyState } from 'components/empty-state';
+import { FormTable } from 'db/query/form';
 
 export const metadata = {
   title: 'My Forms',
@@ -18,7 +18,7 @@ export default async function Page() {
     return redirect('/auth/login');
   }
 
-  const forms = await listFormsByEmail(session.user.email);
+  const forms = await FormTable.listFormsByEmail(session.user.email);
 
   return (
     <MainContainer>
@@ -95,7 +95,7 @@ export default async function Page() {
 }
 
 function renderFormListItem(
-  form: Awaited<ReturnType<typeof listFormsByEmail>>[number],
+  form: Awaited<ReturnType<typeof FormTable.listFormsByEmail>>[number],
 ) {
   return (
     <li key={form.id} className="list-row justify-between flex w-full p-0">

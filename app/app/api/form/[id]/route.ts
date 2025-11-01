@@ -1,11 +1,9 @@
 import { sectionMapper } from 'db/mapper';
-import {
-  findFormById,
-  findResponseById,
-  insertAnswers,
-  listSectionsByFormId,
-  updateResponseCompletedAt,
-} from 'db/query';
+import { AnswersTable } from 'db/query/answer';
+import { FormTable } from 'db/query/form';
+import { ResponseTable } from 'db/query/response';
+import { SectionTable } from 'db/query/section';
+
 import { getSession } from 'lib/auth0';
 import { constructSchema } from 'models/answer-form';
 
@@ -24,7 +22,7 @@ export async function POST(req: Request, ctx: RouteContext<'/api/form/[id]'>) {
       );
     }
 
-    const form = await findFormById(id);
+    const form = await FormTable.findFormById(id);
     if (!form) {
       return new Response(
         JSON.stringify({ statusCode: 404, message: 'Form not found' }),
@@ -33,7 +31,7 @@ export async function POST(req: Request, ctx: RouteContext<'/api/form/[id]'>) {
     }
 
     const body = await req.json();
-    const response = await findResponseById(body.responseId);
+    const response = await ResponseTable.findResponseById(body.responseId);
     if (!response || response.fk_form_id !== form.id) {
       return new Response(
         JSON.stringify({ statusCode: 404, message: 'Response not found' }),
@@ -41,15 +39,15 @@ export async function POST(req: Request, ctx: RouteContext<'/api/form/[id]'>) {
       );
     }
 
-    const sections = await listSectionsByFormId(id);
+    const sections = await SectionTable.listSectionsByFormId(id);
     const mappedSections = sections.map(sectionMapper);
     const schema = constructSchema(mappedSections);
 
     const parsedBody = schema.parse(body.answers);
     const entries = Object.entries(parsedBody);
 
-    await insertAnswers(id, response.id, entries);
-    await updateResponseCompletedAt(response.id);
+    await AnswersTable.insertAnswers(id, response.id, entries);
+    await ResponseTable.updateResponseCompletedAt(response.id);
 
     return new Response('', { status: 201 });
   } catch (err) {

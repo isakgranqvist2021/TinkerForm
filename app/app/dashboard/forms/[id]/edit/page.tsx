@@ -1,7 +1,8 @@
 import { EditForm } from 'components/edit-form';
 import { MainContainer } from 'containers/main-container';
 import { sectionMapper } from 'db/mapper';
-import { findFormById, listSectionsByFormId } from 'db/query';
+import { FormTable } from 'db/query/form';
+import { SectionTable } from 'db/query/section';
 import { auth0 } from 'lib/auth0';
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
@@ -20,13 +21,13 @@ export default async function Page(props: PageProps<{ id: string }>) {
 
   const params = await props.params;
 
-  const form = await findFormById(params.id);
+  const form = await FormTable.findFormById(params.id);
 
   if (!form || form.email !== session.user.email) {
     return redirect('/404');
   }
 
-  const sections = await listSectionsByFormId(form.id);
+  const sections = await SectionTable.listSectionsByFormId(form.id);
   const mappedSections = sections.map(sectionMapper);
 
   return (

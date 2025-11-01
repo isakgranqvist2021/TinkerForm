@@ -2,11 +2,9 @@ import { CopyFormLink } from 'components/copy-form-link';
 import { DeleteFormIconButton } from 'components/delete-form-button';
 import { MainContainer } from 'containers/main-container';
 import dayjs from 'dayjs';
-import {
-  countResponsesByFormId,
-  findFormById,
-  listResponsesByFormId,
-} from 'db/query';
+
+import { FormTable } from 'db/query/form';
+import { ResponseTable } from 'db/query/response';
 import { auth0 } from 'lib/auth0';
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
@@ -26,17 +24,20 @@ export default async function Page(props: PageProps<{ id: string }>) {
     return redirect('/auth/login');
   }
 
-  const form = await findFormById(params.id);
+  const form = await FormTable.findFormById(params.id);
   if (!form || form.email !== session.user.email) {
     return redirect('/404');
   }
 
-  const responses = await listResponsesByFormId(params.id);
-  const count = await countResponsesByFormId(params.id);
+  const responses = await ResponseTable.listResponsesByFormId(params.id);
+  const responsesCount = await ResponseTable.countResponsesByFormId(params.id);
+  const completedResponsesCount =
+    await ResponseTable.countCompletedResponsesByFormId(params.id);
 
-  const completedResponses = responses.filter((r) => r.completed_at !== null);
-  const completionRate =
-    count > 0 ? ((completedResponses.length / count) * 100).toFixed(2) : 0;
+  const completionRate = (
+    (completedResponsesCount / responsesCount) *
+    100
+  ).toFixed(2);
 
   const averageCompletionTime = 0;
 
@@ -87,7 +88,7 @@ export default async function Page(props: PageProps<{ id: string }>) {
         <div className="card card-border bg-base-100 w-96">
           <div className="card-body">
             <h2 className="card-title">Responses</h2>
-            <p>{count}</p>
+            <p>{responsesCount}</p>
           </div>
         </div>
 
@@ -112,25 +113,60 @@ export default async function Page(props: PageProps<{ id: string }>) {
           <thead>
             <tr>
               <th>#</th>
-              <th>Started</th>
-              <th>Completed</th>
+              <th>Start date</th>
+              <th>Duration</th>
             </tr>
           </thead>
           <tbody>
-            {responses.map((responses, index) => (
-              <tr key={responses.id}>
-                <td>{index}</td>
-                <td>{formatDate(responses.created_at)}</td>
-                <td>
-                  {responses.completed_at
-                    ? formatDate(responses.completed_at)
-                    : 'N/A'}
-                </td>
-              </tr>
-            ))}
+            {responses.map((responses, index) => {
+              const duration = calculateDuration(
+                responses.created_at,
+                responses.completed_at,
+              );
+
+              return (
+                <tr key={responses.id}>
+                  <td>{index + 1}</td>
+                  <td>{formatDate(responses.created_at)}</td>
+                  <td>{duration ? formatDuration(duration) : ''}</td>
+                </tr>
+              );
+            })}
           </tbody>
         </table>
       </div>
     </MainContainer>
   );
+}
+
+function calculateDuration(createdAt: Date, completedAt: Date | null) {
+  if (!completedAt) {
+    return null;
+  }
+
+  const duration = {
+    minutes: 0,
+    seconds: 0,
+  };
+
+  const diff = dayjs(completedAt).diff(dayjs(createdAt), 'second');
+
+  duration.minutes = Math.floor(diff / 60);
+  duration.seconds = diff % 60;
+
+  return duration;
+}
+
+function formatDuration(
+  duration: NonNullable<ReturnType<typeof calculateDuration>>,
+) {
+  if (duration.minutes === 0) {
+    return `${duration.seconds}s`;
+  }
+
+  if (duration.seconds === 0) {
+    return `${duration.minutes}m`;
+  }
+
+  return `${duration.minutes}m ${duration.seconds}s`;
 }

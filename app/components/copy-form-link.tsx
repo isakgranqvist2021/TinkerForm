@@ -8,7 +8,10 @@ interface CopyFormLinkProps {
 }
 
 export function CopyFormLink(props: CopyFormLinkProps) {
-  const link = `${window.location.origin}/form/${props.formId}`;
+  const link =
+    typeof window !== 'undefined'
+      ? `${window.location.origin}/form/${props.formId}`
+      : '';
 
   const copyToClipboard = async () => {
     try {

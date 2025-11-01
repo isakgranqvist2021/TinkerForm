@@ -1,9 +1,5 @@
-import {
-  deleteFormById,
-  isFormOwner,
-  updateFormById,
-  upsertSections,
-} from 'db/query';
+import { FormTable } from 'db/query/form';
+import { SectionTable } from 'db/query/section';
 import { getSession } from 'lib/auth0';
 import { formSchema } from 'models/form';
 
@@ -28,7 +24,7 @@ export async function PATCH(
     const body = await req.json();
     const form = formSchema.parse(body);
 
-    const canContinue = await isFormOwner(id, session.user.email);
+    const canContinue = await FormTable.isFormOwner(id, session.user.email);
     if (!canContinue) {
       return new Response(
         JSON.stringify({ statusCode: 403, message: 'Forbidden' }),
@@ -36,8 +32,8 @@ export async function PATCH(
       );
     }
 
-    await updateFormById(id, form);
-    await upsertSections(id, form.sections);
+    await FormTable.updateFormById(id, form);
+    await SectionTable.upsertSections(id, form.sections);
 
     return new Response('', { status: 200 });
   } catch (err) {
@@ -71,7 +67,7 @@ export async function DELETE(
       );
     }
 
-    const canContinue = await isFormOwner(id, session.user.email);
+    const canContinue = await FormTable.isFormOwner(id, session.user.email);
     if (!canContinue) {
       return new Response(
         JSON.stringify({ statusCode: 403, message: 'Forbidden' }),
@@ -79,7 +75,7 @@ export async function DELETE(
       );
     }
 
-    await deleteFormById(id);
+    await FormTable.deleteFormById(id);
 
     return new Response('', { status: 200 });
   } catch (err) {

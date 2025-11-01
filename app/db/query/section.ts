@@ -1,0 +1,107 @@
+import { db } from 'db/db';
+import { sectionTable } from 'db/schema';
+import { and, eq, inArray } from 'drizzle-orm';
+import { Form, Section } from 'models/form';
+
+async function upsertSections(formId: string, sections: Section[]) {
+  const currentSections = await listSectionsByFormId(formId);
+
+  const currentSectionIds = new Set(
+    currentSections.map((section) => section.id),
+  );
+
+  const incomingSectionIds = new Set(sections.map((section) => section.id));
+
+  const sectionsToCreate: Section[] = [];
+  const sectionsToUpdate: Section[] = [];
+
+  const sectionsToDelete = currentSections.filter(
+    (current) => !incomingSectionIds.has(current.id),
+  );
+
+  if (sectionsToDelete.length > 0) {
+    const idsToDelete = sectionsToDelete.map((section) => section.id);
+    await db
+      .delete(sectionTable)
+      .where(
+        and(
+          eq(sectionTable.fk_form_id, formId),
+          inArray(sectionTable.id, idsToDelete),
+        ),
+      )
+      .execute();
+  }
+
+  for (const section of sections) {
+    if (section.id && currentSectionIds.has(section.id)) {
+      sectionsToUpdate.push(section);
+    } else {
+      sectionsToCreate.push(section);
+    }
+  }
+
+  for (const section of sectionsToUpdate) {
+    await db
+      .update(sectionTable)
+      .set({
+        type: section.type,
+        title: section.title,
+        index: section.index,
+        description: section.description,
+        required: section.required,
+        updated_at: new Date(),
+      })
+      .where(
+        and(
+          eq(sectionTable.id, section.id),
+          eq(sectionTable.fk_form_id, formId),
+        ),
+      )
+      .execute();
+  }
+
+  if (sectionsToCreate.length > 0) {
+    await db
+      .insert(sectionTable)
+      .values(
+        sectionsToCreate.map((section) => ({
+          fk_form_id: formId,
+          type: section.type,
+          title: section.title,
+          index: section.index,
+          description: section.description,
+          required: section.required,
+        })),
+      )
+      .execute();
+  }
+}
+
+function listSectionsByFormId(formId: string) {
+  return db
+    .select()
+    .from(sectionTable)
+    .where(eq(sectionTable.fk_form_id, formId));
+}
+
+function insertManySections(form: Form, formId: string) {
+  return db
+    .insert(sectionTable)
+    .values(
+      form.sections.map((section) => ({
+        fk_form_id: formId,
+        type: section.type,
+        title: section.title,
+        index: section.index,
+        description: section.description,
+        required: section.required,
+      })),
+    )
+    .execute();
+}
+
+export const SectionTable = {
+  insertManySections,
+  listSectionsByFormId,
+  upsertSections,
+};
