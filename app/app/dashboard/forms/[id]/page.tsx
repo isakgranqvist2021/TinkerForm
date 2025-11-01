@@ -1,12 +1,18 @@
 import { CopyFormLink } from 'components/copy-form-link';
 import { DeleteFormIconButton } from 'components/delete-form-button';
 import { MainContainer } from 'containers/main-container';
-import { findFormById, listResponsesByFormId } from 'db/query';
+import dayjs from 'dayjs';
+import {
+  countResponsesByFormId,
+  findFormById,
+  listResponsesByFormId,
+} from 'db/query';
 import { auth0 } from 'lib/auth0';
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
 import React from 'react';
 import { PageProps } from 'types/page';
+import { formatDate } from 'utils';
 
 export const metadata = {
   title: 'Form',
@@ -26,24 +32,13 @@ export default async function Page(props: PageProps<{ id: string }>) {
   }
 
   const responses = await listResponsesByFormId(params.id);
-  const groupedByResponseId = responses.reduce(
-    (acc, answer) => {
-      const existing = acc.find(
-        (group) => group.responseId === answer.response_id,
-      );
-      if (existing) {
-        existing.answers.push(answer);
-      } else {
-        acc.push({
-          responseId: answer.response_id,
-          answers: [answer],
-        });
-      }
+  const count = await countResponsesByFormId(params.id);
 
-      return acc;
-    },
-    [] as { responseId: string; answers: typeof responses }[],
-  );
+  const completedResponses = responses.filter((r) => r.completed_at !== null);
+  const completionRate =
+    count > 0 ? ((completedResponses.length / count) * 100).toFixed(2) : 0;
+
+  const averageCompletionTime = 0;
 
   return (
     <MainContainer>
@@ -92,21 +87,21 @@ export default async function Page(props: PageProps<{ id: string }>) {
         <div className="card card-border bg-base-100 w-96">
           <div className="card-body">
             <h2 className="card-title">Responses</h2>
-            <p>{groupedByResponseId.length}</p>
+            <p>{count}</p>
           </div>
         </div>
 
         <div className="card card-border bg-base-100 w-96">
           <div className="card-body">
             <h2 className="card-title">Average Completion Time</h2>
-            <p>4 minutes</p>
+            <p>{averageCompletionTime}</p>
           </div>
         </div>
 
         <div className="card card-border bg-base-100 w-96">
           <div className="card-body">
             <h2 className="card-title">Completion Rate</h2>
-            <p>87.56%</p>
+            <p>{completionRate}%</p>
           </div>
         </div>
       </div>
@@ -116,158 +111,23 @@ export default async function Page(props: PageProps<{ id: string }>) {
           {/* head */}
           <thead>
             <tr>
-              <th>
-                <label>
-                  <input type="checkbox" className="checkbox" />
-                </label>
-              </th>
-              <th>Name</th>
-              <th>Job</th>
-              <th>Favorite Color</th>
-              <th></th>
+              <th>#</th>
+              <th>Started</th>
+              <th>Completed</th>
             </tr>
           </thead>
           <tbody>
-            {/* row 1 */}
-            <tr>
-              <th>
-                <label>
-                  <input type="checkbox" className="checkbox" />
-                </label>
-              </th>
-              <td>
-                <div className="flex items-center gap-3">
-                  <div className="avatar">
-                    <div className="mask mask-squircle h-12 w-12">
-                      <img
-                        src="https://img.daisyui.com/images/profile/demo/2@94.webp"
-                        alt="Avatar Tailwind CSS Component"
-                      />
-                    </div>
-                  </div>
-                  <div>
-                    <div className="font-bold">Hart Hagerty</div>
-                    <div className="text-sm opacity-50">United States</div>
-                  </div>
-                </div>
-              </td>
-              <td>
-                Zemlak, Daniel and Leannon
-                <br />
-                <span className="badge badge-ghost badge-sm">
-                  Desktop Support Technician
-                </span>
-              </td>
-              <td>Purple</td>
-              <th>
-                <button className="btn btn-ghost btn-xs">details</button>
-              </th>
-            </tr>
-            {/* row 2 */}
-            <tr>
-              <th>
-                <label>
-                  <input type="checkbox" className="checkbox" />
-                </label>
-              </th>
-              <td>
-                <div className="flex items-center gap-3">
-                  <div className="avatar">
-                    <div className="mask mask-squircle h-12 w-12">
-                      <img
-                        src="https://img.daisyui.com/images/profile/demo/3@94.webp"
-                        alt="Avatar Tailwind CSS Component"
-                      />
-                    </div>
-                  </div>
-                  <div>
-                    <div className="font-bold">Brice Swyre</div>
-                    <div className="text-sm opacity-50">China</div>
-                  </div>
-                </div>
-              </td>
-              <td>
-                Carroll Group
-                <br />
-                <span className="badge badge-ghost badge-sm">
-                  Tax Accountant
-                </span>
-              </td>
-              <td>Red</td>
-              <th>
-                <button className="btn btn-ghost btn-xs">details</button>
-              </th>
-            </tr>
-            {/* row 3 */}
-            <tr>
-              <th>
-                <label>
-                  <input type="checkbox" className="checkbox" />
-                </label>
-              </th>
-              <td>
-                <div className="flex items-center gap-3">
-                  <div className="avatar">
-                    <div className="mask mask-squircle h-12 w-12">
-                      <img
-                        src="https://img.daisyui.com/images/profile/demo/4@94.webp"
-                        alt="Avatar Tailwind CSS Component"
-                      />
-                    </div>
-                  </div>
-                  <div>
-                    <div className="font-bold">Marjy Ferencz</div>
-                    <div className="text-sm opacity-50">Russia</div>
-                  </div>
-                </div>
-              </td>
-              <td>
-                Rowe-Schoen
-                <br />
-                <span className="badge badge-ghost badge-sm">
-                  Office Assistant I
-                </span>
-              </td>
-              <td>Crimson</td>
-              <th>
-                <button className="btn btn-ghost btn-xs">details</button>
-              </th>
-            </tr>
-            {/* row 4 */}
-            <tr>
-              <th>
-                <label>
-                  <input type="checkbox" className="checkbox" />
-                </label>
-              </th>
-              <td>
-                <div className="flex items-center gap-3">
-                  <div className="avatar">
-                    <div className="mask mask-squircle h-12 w-12">
-                      <img
-                        src="https://img.daisyui.com/images/profile/demo/5@94.webp"
-                        alt="Avatar Tailwind CSS Component"
-                      />
-                    </div>
-                  </div>
-                  <div>
-                    <div className="font-bold">Yancy Tear</div>
-                    <div className="text-sm opacity-50">Brazil</div>
-                  </div>
-                </div>
-              </td>
-              <td>
-                Wyman-Ledner
-                <br />
-                <span className="badge badge-ghost badge-sm">
-                  Community Outreach Specialist
-                </span>
-              </td>
-              <td>Indigo</td>
-              <th>
-                <button className="btn btn-ghost btn-xs">details</button>
-              </th>
-            </tr>
+            {responses.map((responses, index) => (
+              <tr key={responses.id}>
+                <td>{index}</td>
+                <td>{formatDate(responses.created_at)}</td>
+                <td>
+                  {responses.completed_at
+                    ? formatDate(responses.completed_at)
+                    : 'N/A'}
+                </td>
+              </tr>
+            ))}
           </tbody>
         </table>
       </div>

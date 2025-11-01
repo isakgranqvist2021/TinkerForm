@@ -14,7 +14,7 @@ export function sectionMapper(
     case 'phone':
       return {
         type,
-        description: section.description || undefined,
+        description: section.description,
         id: section.id,
         index: section.index,
         required: Boolean(section.required),

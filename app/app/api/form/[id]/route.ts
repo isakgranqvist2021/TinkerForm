@@ -1,5 +1,11 @@
 import { sectionMapper } from 'db/mapper';
-import { findFormById, insertAnswers, listSectionsByFormId } from 'db/query';
+import {
+  findFormById,
+  findResponseById,
+  insertAnswers,
+  listSectionsByFormId,
+  updateResponseCompletedAt,
+} from 'db/query';
 import { getSession } from 'lib/auth0';
 import { constructSchema } from 'models/answer-form';
 
@@ -27,17 +33,23 @@ export async function POST(req: Request, ctx: RouteContext<'/api/form/[id]'>) {
     }
 
     const body = await req.json();
+    const response = await findResponseById(body.responseId);
+    if (!response || response.fk_form_id !== form.id) {
+      return new Response(
+        JSON.stringify({ statusCode: 404, message: 'Response not found' }),
+        { status: 404 },
+      );
+    }
 
     const sections = await listSectionsByFormId(id);
     const mappedSections = sections.map(sectionMapper);
     const schema = constructSchema(mappedSections);
 
-    const parsedBody = schema.parse(body);
+    const parsedBody = schema.parse(body.answers);
     const entries = Object.entries(parsedBody);
 
-    const responseId = crypto.randomUUID();
-
-    await insertAnswers(id, responseId, entries);
+    await insertAnswers(id, response.id, entries);
+    await updateResponseCompletedAt(response.id);
 
     return new Response('', { status: 201 });
   } catch (err) {

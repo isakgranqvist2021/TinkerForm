@@ -1,7 +1,7 @@
 import { AnswerForm } from 'components/answer-form';
 import { MainContainer } from 'containers/main-container';
 import { sectionMapper } from 'db/mapper';
-import { findFormById, listSectionsByFormId } from 'db/query';
+import { findFormById, insertReponse, listSectionsByFormId } from 'db/query';
 import { PageProps } from 'types/page';
 
 export async function generateMetadata(props: PageProps<{ id: string }>) {
@@ -21,6 +21,8 @@ export default async function Page(props: PageProps<{ id: string }>) {
     return <MainContainer>Form not found</MainContainer>;
   }
 
+  const response = await insertReponse(form.id);
+
   const sections = await listSectionsByFormId(form.id);
   const mappedSections = sections.map(sectionMapper);
 
@@ -33,7 +35,11 @@ export default async function Page(props: PageProps<{ id: string }>) {
         </p>
       </div>
 
-      <AnswerForm sections={mappedSections} formId={params.id} />
+      <AnswerForm
+        responseId={response.id}
+        sections={mappedSections}
+        formId={params.id}
+      />
     </MainContainer>
   );
 }

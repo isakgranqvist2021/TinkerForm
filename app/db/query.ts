@@ -1,6 +1,12 @@
-import { and, eq } from 'drizzle-orm';
+import { and, count, eq, isNotNull, isNull } from 'drizzle-orm';
 import { inArray } from 'drizzle-orm';
-import { Answer, answerTable, formTable, sectionTable } from './schema';
+import {
+  Answer,
+  answerTable,
+  formTable,
+  responseTable,
+  sectionTable,
+} from './schema';
 import { db } from './db';
 import { Form, Section } from 'models/form';
 
@@ -71,8 +77,8 @@ export function updateFormById(formId: string, form: Omit<Form, 'sections'>) {
 export function listResponsesByFormId(formId: string) {
   return db
     .select()
-    .from(answerTable)
-    .where(eq(answerTable.fk_form_id, formId));
+    .from(responseTable)
+    .where(eq(responseTable.fk_form_id, formId));
 }
 
 export async function upsertSections(formId: string, sections: Section[]) {
@@ -158,10 +164,48 @@ export function insertAnswers(
     fk_form_id: formId,
     fk_section_id: sectionId,
     answer,
-    response_id: responseId,
+    fk_response_id: responseId,
   }));
 
   return db.insert(answerTable).values(values).execute();
+}
+
+export async function insertReponse(formId: string) {
+  const responses = await db
+    .insert(responseTable)
+    .values({
+      fk_form_id: formId,
+    })
+    .returning()
+    .execute();
+
+  return responses[0];
+}
+
+export async function findResponseById(responseId: string) {
+  const responses = await db
+    .select()
+    .from(responseTable)
+    .where(eq(responseTable.id, responseId));
+
+  return responses[0];
+}
+
+export async function updateResponseCompletedAt(responseId: string) {
+  return db
+    .update(responseTable)
+    .set({ completed_at: new Date() })
+    .where(eq(responseTable.id, responseId))
+    .execute();
+}
+
+export async function countResponsesByFormId(formId: string) {
+  const result = await db
+    .select({ count: count(responseTable.id) })
+    .from(responseTable)
+    .where(eq(responseTable.fk_form_id, formId));
+
+  return Number(result[0].count);
 }
 
 export async function isFormOwner(formId: string, email: string) {

@@ -31,11 +31,23 @@ export const sectionTable = pgTable('section', {
   required: boolean('required').default(false),
 });
 
+export const responseTable = pgTable('response', {
+  id: uuid('id').primaryKey().defaultRandom(),
+  created_at: timestamp('created_at').defaultNow(),
+  updated_at: timestamp('updated_at').defaultNow(),
+  fk_form_id: uuid('fk_form_id')
+    .references(() => formTable.id, { onDelete: 'cascade' })
+    .notNull(),
+  completed_at: timestamp('completed_at'),
+});
+
 export const answerTable = pgTable('answer', {
   id: uuid('id').primaryKey().defaultRandom(),
   created_at: timestamp('created_at').defaultNow(),
   updated_at: timestamp('updated_at').defaultNow(),
-  response_id: uuid('response_id').notNull(),
+  fk_response_id: uuid('fk_response_id')
+    .references(() => responseTable.id, { onDelete: 'cascade' })
+    .notNull(),
   fk_form_id: uuid('fk_form_id')
     .references(() => formTable.id, { onDelete: 'cascade' })
     .notNull(),

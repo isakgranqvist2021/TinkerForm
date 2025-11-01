@@ -15,6 +15,7 @@ import React from 'react';
 interface AnswerFormProps {
   sections: Section[];
   formId: string;
+  responseId: string;
 }
 export function AnswerForm(props: AnswerFormProps) {
   const form = useForm<ConstructedSchema>({
@@ -37,7 +38,10 @@ export function AnswerForm(props: AnswerFormProps) {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(data),
+        body: JSON.stringify({
+          answers: data,
+          responseId: props.responseId,
+        }),
       });
 
       if (!res.ok) {
