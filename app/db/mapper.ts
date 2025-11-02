@@ -1,15 +1,12 @@
-import { InferSelectModel } from 'drizzle-orm';
 import {
+  InsertSection,
   SelectedAnswer,
   SelectedResponse,
   SelectedSection,
-  sectionTable,
 } from './schema';
 import { Section, SectionType } from 'models/form';
 
-export function sectionMapper(
-  section: InferSelectModel<typeof sectionTable>,
-): Section {
+export function sectionMapper(section: InsertSection): Section {
   const type = section.type as SectionType;
 
   switch (type) {

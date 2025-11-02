@@ -4,18 +4,13 @@ import React from 'react';
 import { toast } from 'sonner';
 
 interface CopyFormLinkProps {
-  formId: string;
+  href: string;
 }
 
 export function CopyFormLink(props: CopyFormLinkProps) {
-  const link =
-    typeof window !== 'undefined'
-      ? `${window.location.origin}/form/${props.formId}`
-      : '';
-
   const copyToClipboard = async () => {
     try {
-      await navigator.clipboard.writeText(link);
+      await navigator.clipboard.writeText(props.href);
       toast.success('Link copied to clipboard!');
     } catch (err) {
       console.error('Failed to copy: ', err);

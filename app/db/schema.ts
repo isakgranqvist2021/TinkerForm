@@ -25,6 +25,8 @@ export const formTable = pgTable('form', {
   description: varchar('description', { length: 5000 }).notNull(),
 });
 
+export type InsertSection = InferSelectModel<typeof sectionTable>;
+export type SelectedSection = InferSelectModel<typeof sectionTable>;
 export const sectionTable = pgTable('section', {
   ...defaultColumns,
   fk_form_id,
@@ -35,12 +37,15 @@ export const sectionTable = pgTable('section', {
   required: boolean('required').default(false),
 });
 
+export type SelectedResponse = InferSelectModel<typeof responseTable>;
 export const responseTable = pgTable('response', {
   ...defaultColumns,
   fk_form_id,
   completed_at: timestamp('completed_at'),
 });
 
+export type InsertAnswer = InferInsertModel<typeof answerTable>;
+export type SelectedAnswer = InferSelectModel<typeof answerTable>;
 export const answerTable = pgTable('answer', {
   ...defaultColumns,
   fk_form_id,
@@ -52,8 +57,3 @@ export const answerTable = pgTable('answer', {
     .notNull(),
   answer: varchar('answer', { length: 2000 }),
 });
-
-export type InsertAnswer = InferInsertModel<typeof answerTable>;
-export type SelectedAnswer = InferSelectModel<typeof answerTable>;
-export type SelectedResponse = InferSelectModel<typeof responseTable>;
-export type SelectedSection = InferSelectModel<typeof sectionTable>;

@@ -1,3 +1,9 @@
+import {
+  forbidden,
+  internalServerError,
+  ok,
+  unauthorized,
+} from 'app/api/utils';
 import { FormTable } from 'db/query/form';
 import { SectionTable } from 'db/query/section';
 import { getSession } from 'lib/auth0';
@@ -12,13 +18,7 @@ export async function PATCH(
 
     const session = await getSession();
     if (!session.user.email) {
-      return new Response(
-        JSON.stringify({
-          statusCode: 401,
-          message: 'Unauthorized',
-        }),
-        { status: 401 },
-      );
+      return unauthorized();
     }
 
     const body = await req.json();
@@ -26,26 +26,15 @@ export async function PATCH(
 
     const canContinue = await FormTable.isOwner(id, session.user.email);
     if (!canContinue) {
-      return new Response(
-        JSON.stringify({ statusCode: 403, message: 'Forbidden' }),
-        { status: 403 },
-      );
+      return forbidden();
     }
 
     await FormTable.updateById(id, form);
     await SectionTable.upsertMany(id, form.sections);
 
-    return new Response('', { status: 200 });
+    return ok();
   } catch (err) {
-    console.log(err);
-
-    return new Response(
-      JSON.stringify({
-        statusCode: 500,
-        message: err instanceof Error ? err.message : 'Internal server error',
-      }),
-      { status: 500 },
-    );
+    return internalServerError();
   }
 }
 
@@ -58,35 +47,18 @@ export async function DELETE(
 
     const session = await getSession();
     if (!session.user.email) {
-      return new Response(
-        JSON.stringify({
-          statusCode: 401,
-          message: 'Unauthorized',
-        }),
-        { status: 401 },
-      );
+      return unauthorized();
     }
 
     const canContinue = await FormTable.isOwner(id, session.user.email);
     if (!canContinue) {
-      return new Response(
-        JSON.stringify({ statusCode: 403, message: 'Forbidden' }),
-        { status: 403 },
-      );
+      return forbidden();
     }
 
     await FormTable.deleteById(id);
 
-    return new Response('', { status: 200 });
+    return ok();
   } catch (err) {
-    console.log(err);
-
-    return new Response(
-      JSON.stringify({
-        statusCode: 500,
-        message: err instanceof Error ? err.message : 'Internal server error',
-      }),
-      { status: 500 },
-    );
+    return internalServerError();
   }
 }
