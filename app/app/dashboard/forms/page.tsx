@@ -20,6 +20,8 @@ export default async function Page() {
 
   const forms = await FormTable.listByEmail(session.user.email);
 
+  console.log(forms);
+
   return (
     <MainContainer>
       <div className="flex gap-4 justify-between">
@@ -98,6 +100,7 @@ export default async function Page() {
 function renderFormListItem(
   form: Awaited<ReturnType<typeof FormTable.listByEmail>>[number],
 ) {
+  const responseCount = Number(form.response_count);
   return (
     <li key={form.id} className="list-row justify-between flex w-full p-0">
       <Link
@@ -107,7 +110,11 @@ function renderFormListItem(
         <div>
           <div>{form.title}</div>
           <div className="text-xs uppercase font-semibold opacity-60">
-            Last updated: {formatDate(form.updated_at)}
+            {responseCount === 0
+              ? 'No responses'
+              : responseCount === 1
+                ? '1 response'
+                : `${responseCount} responses`}
           </div>
         </div>
       </Link>

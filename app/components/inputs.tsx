@@ -1,5 +1,6 @@
 import React from 'react';
 import { useController } from 'react-hook-form';
+import { Editor } from 'primereact/editor';
 
 interface ControlledComponentProps {
   label: string;
@@ -38,9 +39,10 @@ export function ControlledInput(
 }
 
 export function ControlledTextarea(
-  props: ControlledComponentProps & React.ComponentProps<'textarea'>,
+  props: ControlledComponentProps &
+    React.ComponentProps<'textarea'> & { rich?: boolean },
 ) {
-  const { name, label, ...rest } = props;
+  const { name, label, rich, ...rest } = props;
 
   const controller = useController({ name });
 
@@ -49,11 +51,23 @@ export function ControlledTextarea(
   return (
     <fieldset className="fieldset w-full">
       <legend className="fieldset-legend">{props.label}</legend>
-      <textarea
-        className="textarea w-full"
-        {...rest}
-        {...controller.field}
-      ></textarea>
+
+      {rich ? (
+        <Editor
+          ref={controller.field.ref}
+          value={controller.field.value}
+          onTextChange={(e) => controller.field.onChange(e.htmlValue || '')}
+          style={{
+            height: '320px',
+          }}
+        />
+      ) : (
+        <textarea
+          className="textarea w-full"
+          {...rest}
+          {...controller.field}
+        ></textarea>
+      )}
 
       {error ? (
         <p className="text-error">{error}</p>

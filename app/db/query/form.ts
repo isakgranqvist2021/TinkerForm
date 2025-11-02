@@ -1,6 +1,6 @@
 import { db } from 'db/db';
-import { formTable } from 'db/schema';
-import { and, eq } from 'drizzle-orm';
+import { formTable, responseTable } from 'db/schema';
+import { and, count, eq } from 'drizzle-orm';
 import { Form } from 'models/form';
 
 async function isOwner(formId: string, email: string) {
@@ -42,7 +42,21 @@ async function findById(formId: string) {
 }
 
 function listByEmail(email: string) {
-  return db.select().from(formTable).where(eq(formTable.email, email));
+  return db
+    .select({
+      id: formTable.id,
+      email: formTable.email,
+      title: formTable.title,
+      description: formTable.description,
+      created_at: formTable.created_at,
+      updated_at: formTable.updated_at,
+      response_count: count(responseTable.completed_at).as('response_count'),
+    })
+    .from(formTable)
+    .leftJoin(responseTable, eq(formTable.id, responseTable.fk_form_id))
+    .where(eq(formTable.email, email))
+    .groupBy(formTable.id)
+    .orderBy(formTable.created_at);
 }
 
 function insertOne(form: Form, email: string) {

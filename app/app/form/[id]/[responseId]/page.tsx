@@ -5,6 +5,7 @@ import { FormTable } from 'db/query/form';
 import { ResponseTable } from 'db/query/response';
 import { SectionTable } from 'db/query/section';
 import { redirect } from 'next/navigation';
+import React from 'react';
 import { PageProps } from 'types/page';
 
 export async function generateMetadata(props: PageProps<{ id: string }>) {
@@ -37,15 +38,16 @@ export default async function Page(
 
   return (
     <MainContainer>
-      <div className="flex flex-wrap gap-16">
+      <div className="w-[760px] mx-auto max-w-full gap-8 flex-col flex">
         <div>
           <h1 className="m-0 mb-2 text-lg font-bold">{form.title}</h1>
-          <p className="m-0 whitespace-pre-wrap max-w-prose">
-            {form.description}
-          </p>
+          <p
+            className="m-0 whitespace-pre-wrap"
+            dangerouslySetInnerHTML={{ __html: form.description }}
+          ></p>
         </div>
 
-        <div className="flex-grow sticky top-20">
+        <div>
           <AnswerForm
             responseId={response.id}
             sections={mappedSections}

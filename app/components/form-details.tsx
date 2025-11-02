@@ -21,6 +21,7 @@ export function FormDetails() {
         name="description"
         label="Description"
         disabled={formState.isSubmitting}
+        rich
       />
     </div>
   );
