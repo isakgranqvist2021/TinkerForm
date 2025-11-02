@@ -18,11 +18,13 @@ const fk_form_id = uuid('fk_form_id')
   .references(() => formTable.id, { onDelete: 'cascade' })
   .notNull();
 
+export type SelectedForm = InferSelectModel<typeof formTable>;
 export const formTable = pgTable('form', {
   ...defaultColumns,
   email: varchar('email', { length: 255 }).notNull(),
   title: varchar('title', { length: 255 }).notNull(),
-  description: varchar('description', { length: 5000 }).notNull(),
+  description: varchar('description', { length: 10000 }).notNull(),
+  location: varchar('location', { length: 500 }).notNull(),
 });
 
 export type InsertSection = InferSelectModel<typeof sectionTable>;

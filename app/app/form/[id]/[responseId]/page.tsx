@@ -38,24 +38,7 @@ export default async function Page(
 
   return (
     <MainContainer>
-      <div className="w-[760px] mx-auto max-w-full gap-8 flex-col flex">
-        <div>
-          <h1 className="m-0 mb-2 text-lg font-bold">{form.title}</h1>
-          <p
-            className="m-0 whitespace-pre-wrap"
-            dangerouslySetInnerHTML={{ __html: form.description }}
-          ></p>
-        </div>
-
-        <div>
-          <AnswerForm
-            responseId={response.id}
-            sections={mappedSections}
-            formId={params.id}
-            isCompleted={response.completed_at !== null}
-          />
-        </div>
-      </div>
+      <AnswerForm sections={mappedSections} response={response} form={form} />
     </MainContainer>
   );
 }

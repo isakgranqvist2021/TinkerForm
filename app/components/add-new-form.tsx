@@ -13,6 +13,7 @@ import React from 'react';
 const defaultValues: Form = {
   title: '',
   description: '',
+  location: '',
   sections: [
     {
       id: crypto.randomUUID(),
@@ -62,26 +63,31 @@ const placeholders = [
     title: 'Sales Representative',
     description:
       "We're looking for a skilled sales representative to join our team and help drive revenue growth through effective client engagement and relationship management.",
+    location: 'New York, NY',
   },
   {
     title: 'Customer Support Specialist',
     description:
       'Seeking a dedicated customer support specialist to provide exceptional service and resolve client issues efficiently, ensuring high customer satisfaction.',
+    location: 'Remote',
   },
   {
     title: 'Marketing Coordinator',
     description:
       'Hiring a creative marketing coordinator to assist in the development and execution of marketing campaigns, social media management, and event planning.',
+    location: 'Los Angeles, CA',
   },
   {
     title: 'Software Engineer',
     description:
       'Looking for a talented software engineer to design, develop, and maintain high-quality software solutions that meet user needs and business goals.',
+    location: 'San Francisco, CA',
   },
   {
     title: 'Product Manager',
     description:
       'Seeking an experienced product manager to lead cross-functional teams in the development and launch of innovative products that drive business success.',
+    location: 'Remote',
   },
 ];
 

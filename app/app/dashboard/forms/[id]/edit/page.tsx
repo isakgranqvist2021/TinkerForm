@@ -50,7 +50,8 @@ export default async function Page(props: PageProps<{ id: string }>) {
         formId={params.id}
         defaultValues={{
           title: form.title,
-          description: form.description ?? '',
+          description: form.description,
+          location: form.location,
           sections: mappedSections.sort((a, b) => a.index - b.index),
         }}
       />

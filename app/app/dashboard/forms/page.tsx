@@ -37,10 +37,7 @@ export default async function Page() {
 
         {forms.length > 0 && (
           <div className="tooltip" data-tip="New Form">
-            <Link
-              href="/dashboard/forms/new"
-              className="btn btn-primary btn-circle"
-            >
+            <Link href="/dashboard/forms/new" className="btn btn-circle">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"

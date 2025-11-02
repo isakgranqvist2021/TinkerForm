@@ -17,6 +17,13 @@ export function FormDetails() {
         label="Title"
         disabled={formState.isSubmitting}
       />
+
+      <ControlledInput
+        name="location"
+        label="Location"
+        disabled={formState.isSubmitting}
+      />
+
       <ControlledTextarea
         name="description"
         label="Description"

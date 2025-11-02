@@ -62,8 +62,12 @@ export const formSchema = z.object({
   description: z
     .string()
     .min(1, 'Description is required')
-    .max(5000, 'Description is too long'),
+    .max(10000, 'Description is too long'),
   sections: sectionSchema.array().min(1, 'At least one section is required'),
+  location: z
+    .string()
+    .min(1, 'Location is required')
+    .max(500, 'Location is too long'),
 });
 
 function refineNumber(value: any) {

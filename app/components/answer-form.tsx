@@ -7,19 +7,93 @@ import { ControlledFileInput, ControlledInput } from './inputs';
 import {
   ConstructedSchema,
   constructSchema,
-  getAnswerSchema,
   getConstructedSchemaDefaultValues,
 } from 'models/answer-form';
 import { toast } from 'sonner';
 import React from 'react';
+import { SelectedResponse, SelectedForm } from 'db/schema';
 
 interface AnswerFormProps {
+  sections: Section[];
+  response: SelectedResponse;
+  form: SelectedForm;
+}
+
+export function AnswerForm(props: AnswerFormProps) {
+  const formRef = React.useRef<HTMLDivElement>(null);
+
+  return (
+    <div className="w-[760px] mx-auto max-w-full gap-8 flex-col flex">
+      <div>
+        <div className="flex justify-between">
+          <div className="mb-4">
+            <h1 className="m-0 mb-2 text-xl font-bold">{props.form.title}</h1>
+
+            <div className="flex gap-2 mb-4">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth={1.5}
+                stroke="currentColor"
+                className="size-6"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"
+                />
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0Z"
+                />
+              </svg>
+
+              <p>{props.form.location}</p>
+            </div>
+          </div>
+
+          {!props.response.completed_at && (
+            <button
+              onClick={() =>
+                formRef.current?.scrollIntoView({
+                  behavior: 'smooth',
+                })
+              }
+              className="btn btn-primary"
+            >
+              Apply Now
+            </button>
+          )}
+        </div>
+
+        <p
+          className="m-0 whitespace-pre-wrap"
+          dangerouslySetInnerHTML={{ __html: props.form.description }}
+        ></p>
+      </div>
+
+      <div ref={formRef}>
+        <AnswerFormContent
+          responseId={props.response.id}
+          sections={props.sections}
+          formId={props.form.id}
+          isCompleted={props.response.completed_at !== null}
+        />
+      </div>
+    </div>
+  );
+}
+
+interface AnswerFormContentProps {
   sections: Section[];
   formId: string;
   responseId: string;
   isCompleted: boolean;
 }
-export function AnswerForm(props: AnswerFormProps) {
+
+export function AnswerFormContent(props: AnswerFormContentProps) {
   const form = useForm<ConstructedSchema>({
     resolver: zodResolver(constructSchema(props.sections)),
     defaultValues: getConstructedSchemaDefaultValues(props.sections),
@@ -29,7 +103,24 @@ export function AnswerForm(props: AnswerFormProps) {
 
   if (hasResponded) {
     return (
-      <p className="text-green-600 font-medium">Thank you for your response!</p>
+      <div className="flex flex-col items-center justify-center gap-2 py-24 text-green-600">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          strokeWidth={1.5}
+          stroke="currentColor"
+          className="size-12"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+          />
+        </svg>
+
+        <p className="font-medium">Thank you for your response!</p>
+      </div>
     );
   }
 
@@ -53,6 +144,8 @@ export function AnswerForm(props: AnswerFormProps) {
       }
 
       setHasResponded(true);
+
+      window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
     } catch (error) {
       toast.error("Couldn't save form. Please try again.");
     }
@@ -129,10 +222,24 @@ export function AnswerForm(props: AnswerFormProps) {
           })}
 
         <button
-          className="btn btn-primary w-fit mt-4"
+          className="btn btn-primary w-fit mt-4 ml-auto block flex gap-2"
           disabled={form.formState.isSubmitting}
         >
           Send
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            strokeWidth={1.5}
+            stroke="currentColor"
+            className="size-6"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M6 12 3.269 3.125A59.769 59.769 0 0 1 21.485 12 59.768 59.768 0 0 1 3.27 20.875L5.999 12Zm0 0h7.5"
+            />
+          </svg>
         </button>
       </form>
     </FormProvider>

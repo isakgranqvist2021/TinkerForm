@@ -1,5 +1,5 @@
 {
-  "id": "322d787d-ef51-4b98-8541-d3954b00a452",
+  "id": "7b5b15a6-6792-4249-96b1-d4b1bf087a8a",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -19,24 +19,24 @@
           "name": "created_at",
           "type": "timestamp",
           "primaryKey": false,
-          "notNull": false,
+          "notNull": true,
           "default": "now()"
         },
         "updated_at": {
           "name": "updated_at",
           "type": "timestamp",
           "primaryKey": false,
-          "notNull": false,
+          "notNull": true,
           "default": "now()"
         },
-        "fk_response_id": {
-          "name": "fk_response_id",
+        "fk_form_id": {
+          "name": "fk_form_id",
           "type": "uuid",
           "primaryKey": false,
           "notNull": true
         },
-        "fk_form_id": {
-          "name": "fk_form_id",
+        "fk_response_id": {
+          "name": "fk_response_id",
           "type": "uuid",
           "primaryKey": false,
           "notNull": true
@@ -56,12 +56,12 @@
       },
       "indexes": {},
       "foreignKeys": {
-        "answer_fk_response_id_response_id_fk": {
-          "name": "answer_fk_response_id_response_id_fk",
+        "answer_fk_form_id_form_id_fk": {
+          "name": "answer_fk_form_id_form_id_fk",
           "tableFrom": "answer",
-          "tableTo": "response",
+          "tableTo": "form",
           "columnsFrom": [
-            "fk_response_id"
+            "fk_form_id"
           ],
           "columnsTo": [
             "id"
@@ -69,12 +69,12 @@
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
-        "answer_fk_form_id_form_id_fk": {
-          "name": "answer_fk_form_id_form_id_fk",
+        "answer_fk_response_id_response_id_fk": {
+          "name": "answer_fk_response_id_response_id_fk",
           "tableFrom": "answer",
-          "tableTo": "form",
+          "tableTo": "response",
           "columnsFrom": [
-            "fk_form_id"
+            "fk_response_id"
           ],
           "columnsTo": [
             "id"
@@ -117,14 +117,14 @@
           "name": "created_at",
           "type": "timestamp",
           "primaryKey": false,
-          "notNull": false,
+          "notNull": true,
           "default": "now()"
         },
         "updated_at": {
           "name": "updated_at",
           "type": "timestamp",
           "primaryKey": false,
-          "notNull": false,
+          "notNull": true,
           "default": "now()"
         },
         "email": {
@@ -141,9 +141,15 @@
         },
         "description": {
           "name": "description",
-          "type": "varchar(1000)",
+          "type": "varchar(10000)",
           "primaryKey": false,
           "notNull": true
+        },
+        "location": {
+          "name": "location",
+          "type": "varchar(500)",
+          "primaryKey": false,
+          "notNull": false
         }
       },
       "indexes": {},
@@ -169,14 +175,14 @@
           "name": "created_at",
           "type": "timestamp",
           "primaryKey": false,
-          "notNull": false,
+          "notNull": true,
           "default": "now()"
         },
         "updated_at": {
           "name": "updated_at",
           "type": "timestamp",
           "primaryKey": false,
-          "notNull": false,
+          "notNull": true,
           "default": "now()"
         },
         "fk_form_id": {
@@ -184,13 +190,6 @@
           "type": "uuid",
           "primaryKey": false,
           "notNull": true
-        },
-        "started_at": {
-          "name": "started_at",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": false,
-          "default": "now()"
         },
         "completed_at": {
           "name": "completed_at",
@@ -236,14 +235,14 @@
           "name": "created_at",
           "type": "timestamp",
           "primaryKey": false,
-          "notNull": false,
+          "notNull": true,
           "default": "now()"
         },
         "updated_at": {
           "name": "updated_at",
           "type": "timestamp",
           "primaryKey": false,
-          "notNull": false,
+          "notNull": true,
           "default": "now()"
         },
         "fk_form_id": {

@@ -66,6 +66,7 @@ function insertOne(form: Form, email: string) {
       email,
       title: form.title,
       description: form.description,
+      location: form.location,
     })
     .returning()
     .execute();
