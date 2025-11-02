@@ -17,6 +17,7 @@ import {
 } from 'utils';
 import { ResponseTableRow } from 'components/response-table-row';
 import { EmptyState } from 'components/empty-state';
+import { VisitFormLink } from 'components/view-form-link';
 
 export const metadata = {
   title: 'Form',
@@ -48,6 +49,8 @@ export default async function Page(props: PageProps<{ id: string }>) {
     responsesCount,
   );
 
+  const formLink = `${process.env.APP_BASE_URL}/form/${form.id}`;
+
   return (
     <ResponseProvider>
       <MainContainer>
@@ -64,7 +67,9 @@ export default async function Page(props: PageProps<{ id: string }>) {
           </div>
 
           <div className="flex gap-4">
-            <CopyFormLink formId={params.id} />
+            <VisitFormLink href={formLink} />
+
+            <CopyFormLink href={formLink} />
 
             <DeleteFormIconButton
               className="btn btn-circle"
