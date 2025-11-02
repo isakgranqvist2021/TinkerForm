@@ -86,7 +86,6 @@ export function SectionsList() {
     fieldArray.fields.forEach((section, index) => {
       fieldArray.update(index, { ...section, index });
     });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [fieldArray.fields.length]);
 
   return (
