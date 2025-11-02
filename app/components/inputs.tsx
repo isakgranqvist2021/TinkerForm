@@ -1,5 +1,5 @@
+import React from 'react';
 import { useController } from 'react-hook-form';
-import { toast } from 'sonner';
 
 interface ControlledComponentProps {
   label: string;
@@ -94,28 +94,6 @@ export function ControlledFileInput(
 
   const error = controller.fieldState.error?.message;
 
-  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files ? e.target.files[0] : null;
-    if (!file) {
-      toast.error('No file selected');
-      return;
-    }
-
-    const formData = new FormData();
-    formData.append('file', file);
-
-    const res = await fetch('/api/upload', {
-      method: 'POST',
-      body: formData,
-    });
-    if (!res.ok) {
-      toast.error('File upload failed');
-      return;
-    }
-    const data = await res.json();
-    controller.field.onChange(data.url);
-  };
-
   return (
     <fieldset className="fieldset">
       <legend className="fieldset-legend">Pick a file</legend>
@@ -123,7 +101,12 @@ export function ControlledFileInput(
       <input
         type="file"
         className="file-input"
-        onChange={handleFileChange}
+        multiple={false}
+        accept="pdf, doc, docx, png, jpg, jpeg, webp"
+        onChange={(e) => {
+          const file = e.target.files ? e.target.files[0] : null;
+          controller.field.onChange(file);
+        }}
         {...rest}
       />
 

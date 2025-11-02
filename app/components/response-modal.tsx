@@ -169,11 +169,11 @@ function AnswerListItem(props: AnswerListItemProps) {
 
     case 'file':
       return (
-        <li className="list-row">
-          <div>
+        <li className="list-row overflow-hidden">
+          <div className="max-w-full overflow-hidden text-ellipsis">
             <div>{props.question}</div>
             <Link
-              className="text-xs uppercase font-semibold opacity-60 hover:underline"
+              className="text-xs uppercase font-semibold opacity-60 hover:underline whitespace-nowrap"
               href={props.answer}
             >
               {props.answer}

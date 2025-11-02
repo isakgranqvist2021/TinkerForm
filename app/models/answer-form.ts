@@ -17,7 +17,7 @@ function getSchema(section: Section) {
   return section.required ? answerschema : answerschema.optional().nullable();
 }
 
-function getAnswerSchema(type: SectionType) {
+export function getAnswerSchema(type: SectionType) {
   switch (type) {
     case 'email':
       return z.email('Invalid email address');
@@ -34,6 +34,21 @@ function getAnswerSchema(type: SectionType) {
 
     case 'link':
       return z.url('Invalid URL');
+
+    case 'file':
+      return z
+        .union([
+          z
+            .instanceof(File, { message: 'File is required' })
+            .refine(
+              (file) => !file || file.size !== 0 || file.size <= 5000000,
+              { message: 'Max size exceeded' },
+            ),
+          z.string().optional(), // to hold default image
+        ])
+        .refine((value) => value instanceof File || typeof value === 'string', {
+          message: 'File is required',
+        });
 
     default:
       return z.string();

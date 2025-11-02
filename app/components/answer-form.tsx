@@ -7,6 +7,7 @@ import { ControlledFileInput, ControlledInput } from './inputs';
 import {
   ConstructedSchema,
   constructSchema,
+  getAnswerSchema,
   getConstructedSchemaDefaultValues,
 } from 'models/answer-form';
 import { toast } from 'sonner';
@@ -34,15 +35,17 @@ export function AnswerForm(props: AnswerFormProps) {
 
   const handleSubmit = form.handleSubmit(async (data) => {
     try {
-      const res = await fetch(`/api/form/${props.formId}`, {
+      const formData = new FormData();
+      for (const key in data) {
+        const value = data[key as keyof typeof data];
+        if (value) {
+          formData.append(key, value);
+        }
+      }
+
+      const res = await fetch(`/api/form/${props.formId}/${props.responseId}`, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          answers: data,
-          responseId: props.responseId,
-        }),
+        body: formData,
       });
 
       if (!res.ok) {
