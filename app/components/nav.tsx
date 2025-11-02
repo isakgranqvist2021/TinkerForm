@@ -8,7 +8,7 @@ export function Nav() {
       <div className="container flex justify-between items-center mx-auto">
         <div className="flex-1 gap-2 flex">
           <Link href="/" className="btn btn-ghost text-xl">
-            Template
+            Job App Thing
           </Link>
         </div>
         <ul className="menu menu-horizontal px-1 flex items-center gap-2">
