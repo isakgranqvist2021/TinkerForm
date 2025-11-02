@@ -26,7 +26,13 @@ export function EditForm(props: EditFormProps) {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(data),
+        body: JSON.stringify({
+          ...data,
+          sections: data.sections.map((section, i) => ({
+            ...section,
+            index: i,
+          })),
+        }),
       });
 
       if (!res.ok) {

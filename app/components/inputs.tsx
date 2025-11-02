@@ -75,7 +75,6 @@ export function ControlledCheckbox(props: ControlledComponentProps) {
       <label className="label">
         <input
           type="checkbox"
-          defaultChecked
           className="toggle"
           {...rest}
           {...controller.field}

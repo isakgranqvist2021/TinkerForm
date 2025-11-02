@@ -14,7 +14,9 @@ export function constructSchema(sections: Section[]) {
 function getSchema(section: Section) {
   const answerschema = getAnswerSchema(section.type);
 
-  return section.required ? answerschema : answerschema.optional().nullable();
+  return section.required
+    ? answerschema
+    : answerschema.optional().nullable().or(z.literal('')).or(z.undefined());
 }
 
 export function getAnswerSchema(type: SectionType) {
@@ -37,21 +39,13 @@ export function getAnswerSchema(type: SectionType) {
 
     case 'file':
       return z
-        .union([
-          z
-            .instanceof(File, { message: 'File is required' })
-            .refine(
-              (file) => !file || file.size !== 0 || file.size <= 5000000,
-              { message: 'Max size exceeded' },
-            ),
-          z.string().optional(), // to hold default image
-        ])
+        .instanceof(File, { message: 'File is required' })
+        .refine((file) => !file || file.size !== 0 || file.size <= 5000000, {
+          message: 'Max size exceeded',
+        })
         .refine((value) => value instanceof File || typeof value === 'string', {
           message: 'File is required',
         });
-
-    default:
-      return z.string();
   }
 }
 

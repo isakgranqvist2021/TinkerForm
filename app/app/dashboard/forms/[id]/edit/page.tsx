@@ -51,7 +51,7 @@ export default async function Page(props: PageProps<{ id: string }>) {
         defaultValues={{
           title: form.title,
           description: form.description ?? '',
-          sections: mappedSections,
+          sections: mappedSections.sort((a, b) => a.index - b.index),
         }}
       />
     </MainContainer>

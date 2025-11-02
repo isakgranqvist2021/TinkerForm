@@ -62,6 +62,7 @@ export function SectionsList() {
       fieldArray.append({
         ...section,
         id: crypto.randomUUID(),
+        index: fieldArray.fields.length,
       });
     } else {
       const index = fieldArray.fields.findIndex(
@@ -80,6 +81,12 @@ export function SectionsList() {
     sectionFormContext.setMode('add');
     sectionFormContext.setDefaultValues(getSectionDefaultValues('text'));
   };
+
+  React.useEffect(() => {
+    fieldArray.fields.forEach((section, index) => {
+      fieldArray.update(index, { ...section, index });
+    });
+  }, [fieldArray.fields.length]);
 
   return (
     <React.Fragment>
@@ -142,12 +149,15 @@ export function SectionsList() {
                       key={section.id}
                       section={section}
                       index={index}
-                      onDelete={() => fieldArray.remove(index)}
+                      onDelete={() => {
+                        fieldArray.remove(index);
+                      }}
                       onDuplicate={() =>
                         fieldArray.append({
                           ...section,
                           title: 'Copy of ' + section.title,
                           id: crypto.randomUUID(),
+                          index: fieldArray.fields.length,
                         })
                       }
                     />
@@ -225,7 +235,7 @@ function ListItem(props: ListItemProps) {
     >
       <div>
         <div>
-          {props.index + 1}. {props.section.title}
+          {props.index + 1}. {props.section.title} - {props.section.index}
         </div>
         <div className="text-xs uppercase font-semibold opacity-60">
           {props.section.description}

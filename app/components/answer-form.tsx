@@ -61,70 +61,72 @@ export function AnswerForm(props: AnswerFormProps) {
   return (
     <FormProvider {...form}>
       <form onSubmit={handleSubmit}>
-        {props.sections.map((section) => {
-          switch (section.type) {
-            case 'text':
-              return (
-                <ControlledInput
-                  name={section.id}
-                  label={section.title}
-                  placeholder="Your answer"
-                  description={section.description}
-                  key={section.id}
-                  disabled={form.formState.isSubmitting}
-                />
-              );
+        {props.sections
+          .sort((a, b) => a.index - b.index)
+          .map((section) => {
+            switch (section.type) {
+              case 'text':
+                return (
+                  <ControlledInput
+                    name={section.id}
+                    label={section.title}
+                    placeholder="Your answer"
+                    description={section.description}
+                    key={section.id}
+                    disabled={form.formState.isSubmitting}
+                  />
+                );
 
-            case 'link':
-              return (
-                <ControlledInput
-                  name={section.id}
-                  label={section.title}
-                  placeholder="Your answer"
-                  description={section.description}
-                  key={section.id}
-                  disabled={form.formState.isSubmitting}
-                />
-              );
+              case 'link':
+                return (
+                  <ControlledInput
+                    name={section.id}
+                    label={section.title}
+                    placeholder="Your answer"
+                    description={section.description}
+                    key={section.id}
+                    disabled={form.formState.isSubmitting}
+                  />
+                );
 
-            case 'email':
-              return (
-                <ControlledInput
-                  name={section.id}
-                  label={section.title}
-                  type="email"
-                  placeholder="Your answer"
-                  description={section.description}
-                  key={section.id}
-                  disabled={form.formState.isSubmitting}
-                />
-              );
+              case 'email':
+                return (
+                  <ControlledInput
+                    name={section.id}
+                    label={section.title}
+                    type="email"
+                    placeholder="Your answer"
+                    description={section.description}
+                    key={section.id}
+                    disabled={form.formState.isSubmitting}
+                  />
+                );
 
-            case 'phone':
-              return (
-                <ControlledInput
-                  name={section.id}
-                  label={section.title}
-                  type="tel"
-                  placeholder="Your answer"
-                  description={section.description}
-                  key={section.id}
-                  disabled={form.formState.isSubmitting}
-                />
-              );
+              case 'phone':
+                return (
+                  <ControlledInput
+                    name={section.id}
+                    label={section.title}
+                    type="tel"
+                    placeholder="Your answer"
+                    description={section.description}
+                    key={section.id}
+                    disabled={form.formState.isSubmitting}
+                  />
+                );
 
-            case 'file':
-              return (
-                <ControlledFileInput
-                  name={section.id}
-                  label={section.title}
-                  description={section.description}
-                  key={section.id}
-                  disabled={form.formState.isSubmitting}
-                />
-              );
-          }
-        })}
+              case 'file':
+                return (
+                  <ControlledFileInput
+                    name={section.id}
+                    label={section.title}
+                    description={section.description}
+                    key={section.id}
+                    disabled={form.formState.isSubmitting}
+                  />
+                );
+            }
+          })}
 
         <button
           className="btn btn-primary w-fit mt-4"
