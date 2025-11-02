@@ -69,8 +69,9 @@ export default async function Page() {
       ) : (
         <EmptyState
           title="You have no forms yet."
+          subtitle="Create your first form to start collecting responses."
           cta={
-            <Link href="/dashboard/forms/new" className="btn btn-primary mb-4">
+            <Link href="/dashboard/forms/new" className="btn btn-outline mb-4">
               New Form
               <svg
                 xmlns="http://www.w3.org/2000/svg"

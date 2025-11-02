@@ -159,9 +159,10 @@ export function SectionsList() {
         ) : (
           <EmptyState
             title="No sections added yet"
+            subtitle="Add sections to your form to start collecting information."
             cta={
               <button
-                className="btn btn-accent"
+                className="btn btn-outline"
                 onClick={openAddSectionModalAndSetValues}
               >
                 Add Section

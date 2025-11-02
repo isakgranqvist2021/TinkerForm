@@ -5,6 +5,7 @@ export const sectionTypes = [
   'link',
   'phone',
   'email',
+  'file',
 ] satisfies Section['type'][];
 
 export type SectionType = (typeof sectionTypes)[number];
@@ -18,30 +19,32 @@ export const baseSectionSchema = z.object({
     .string()
     .min(1, 'Description is required')
     .max(1000, 'Description is too long'),
+  required: z.boolean(),
 });
 
 export type TextSection = z.infer<typeof textSectionSchema>;
 export const textSectionSchema = baseSectionSchema.extend({
   type: z.literal('text'),
-  required: z.boolean(),
 });
 
 export type LinkSection = z.infer<typeof linkSectionSchema>;
 export const linkSectionSchema = baseSectionSchema.extend({
   type: z.literal('link'),
-  required: z.boolean(),
 });
 
 export type EmailSection = z.infer<typeof emailSectionSchema>;
 export const emailSectionSchema = baseSectionSchema.extend({
   type: z.literal('email'),
-  required: z.boolean(),
 });
 
 export type PhoneSection = z.infer<typeof phoneSectionSchema>;
 export const phoneSectionSchema = baseSectionSchema.extend({
   type: z.literal('phone'),
-  required: z.boolean(),
+});
+
+export type FileSection = z.infer<typeof fileSectionSchema>;
+export const fileSectionSchema = baseSectionSchema.extend({
+  type: z.literal('file'),
 });
 
 export const sectionSchema = z.discriminatedUnion('type', [
@@ -49,6 +52,7 @@ export const sectionSchema = z.discriminatedUnion('type', [
   linkSectionSchema,
   emailSectionSchema,
   phoneSectionSchema,
+  fileSectionSchema,
 ]);
 export type Section = z.infer<typeof sectionSchema>;
 

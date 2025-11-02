@@ -166,6 +166,21 @@ function AnswerListItem(props: AnswerListItemProps) {
           </div>
         </li>
       );
+
+    case 'file':
+      return (
+        <li className="list-row">
+          <div>
+            <div>{props.question}</div>
+            <Link
+              className="text-xs uppercase font-semibold opacity-60 hover:underline"
+              href={props.answer}
+            >
+              {props.answer}
+            </Link>
+          </div>
+        </li>
+      );
   }
 }
 

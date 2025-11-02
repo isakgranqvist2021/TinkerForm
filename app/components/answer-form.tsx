@@ -3,7 +3,7 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Section } from 'models/form';
 import { FormProvider, useForm } from 'react-hook-form';
-import { ControlledInput } from './inputs';
+import { ControlledFileInput, ControlledInput } from './inputs';
 import {
   ConstructedSchema,
   constructSchema,
@@ -16,6 +16,7 @@ interface AnswerFormProps {
   sections: Section[];
   formId: string;
   responseId: string;
+  isCompleted: boolean;
 }
 export function AnswerForm(props: AnswerFormProps) {
   const form = useForm<ConstructedSchema>({
@@ -23,7 +24,7 @@ export function AnswerForm(props: AnswerFormProps) {
     defaultValues: getConstructedSchemaDefaultValues(props.sections),
   });
 
-  const [hasResponded, setHasResponded] = React.useState(false);
+  const [hasResponded, setHasResponded] = React.useState(props.isCompleted);
 
   if (hasResponded) {
     return (
@@ -103,6 +104,17 @@ export function AnswerForm(props: AnswerFormProps) {
                   label={section.title}
                   type="tel"
                   placeholder="Your answer"
+                  description={section.description}
+                  key={section.id}
+                  disabled={form.formState.isSubmitting}
+                />
+              );
+
+            case 'file':
+              return (
+                <ControlledFileInput
+                  name={section.id}
+                  label={section.title}
                   description={section.description}
                   key={section.id}
                   disabled={form.formState.isSubmitting}

@@ -93,6 +93,7 @@ export function getSectionDefaultValues(type: SectionType): Section {
     case 'link':
     case 'email':
     case 'phone':
+    case 'file':
       return {
         id: '',
         index: 0,

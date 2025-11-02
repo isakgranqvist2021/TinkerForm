@@ -2,7 +2,7 @@ import React from 'react';
 import 'styles/globals.css';
 import { Toaster } from 'sonner';
 
-export default function RootLayout(props: React.PropsWithChildren) {
+export default async function RootLayout(props: React.PropsWithChildren) {
   return (
     <html data-theme="corporate" lang="en">
       <body className="min-h-screen">

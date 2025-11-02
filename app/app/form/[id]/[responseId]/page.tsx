@@ -50,6 +50,7 @@ export default async function Page(
             responseId={response.id}
             sections={mappedSections}
             formId={params.id}
+            isCompleted={response.completed_at !== null}
           />
         </div>
       </div>

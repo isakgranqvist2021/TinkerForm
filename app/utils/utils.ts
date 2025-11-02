@@ -60,5 +60,10 @@ export function getCompletionRate(
   completedResponsesCount: number,
   responsesCount: number,
 ) {
-  return ((completedResponsesCount / responsesCount) * 100).toFixed(2);
+  const completionRate = (
+    (completedResponsesCount / responsesCount) *
+    100
+  ).toFixed(2);
+
+  return isNaN(Number(completionRate)) ? '0.00' : completionRate;
 }

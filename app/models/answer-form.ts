@@ -51,6 +51,7 @@ export function getConstructedSchemaDefaultValues(sections: Section[]) {
       case 'link':
       case 'phone':
       case 'text':
+      case 'file':
         defaultValues[section.id] = '';
         break;
 

@@ -17,6 +17,7 @@ export function sectionMapper(
     case 'email':
     case 'link':
     case 'phone':
+    case 'file':
       return {
         type,
         description: section.description,

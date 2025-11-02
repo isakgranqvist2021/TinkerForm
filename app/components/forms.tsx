@@ -2,6 +2,8 @@ import React from 'react';
 import {
   EmailSection,
   emailSectionSchema,
+  FileSection,
+  fileSectionSchema,
   LinkSection,
   linkSectionSchema,
   PhoneSection,
@@ -61,7 +63,56 @@ export function Forms(props: SectionFormModalProps) {
           onSubmit={props.onSubmit}
         />
       );
+
+    case 'file':
+      return (
+        <FileForm
+          defaultValues={addSectionContext.defaultValues}
+          onSubmit={props.onSubmit}
+        />
+      );
   }
+}
+
+function FileForm(props: FormSectionProps<FileSection>) {
+  const form = useForm<FileSection>({
+    resolver: zodResolver(fileSectionSchema),
+    defaultValues: props.defaultValues,
+  });
+
+  React.useEffect(() => {
+    form.reset(props.defaultValues);
+  }, [props.defaultValues, form]);
+
+  const handleSubmit = form.handleSubmit((data) => {
+    props.onSubmit(data);
+    form.reset(props.defaultValues);
+  });
+
+  return (
+    <FormProvider {...form}>
+      <form onSubmit={handleSubmit}>
+        <ControlledInput
+          name="title"
+          label="Section Title"
+          placeholder="Upload your resume"
+        />
+
+        <ControlledTextarea
+          name="description"
+          label="Describe your section"
+          placeholder="Please upload your resume in PDF format."
+        />
+
+        <ControlledCheckbox
+          name="required"
+          label="This question must be answered"
+        />
+
+        <SectionFormModalFooter />
+      </form>
+    </FormProvider>
+  );
 }
 
 function TextForm(props: FormSectionProps<TextSection>) {

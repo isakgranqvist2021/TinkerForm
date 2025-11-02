@@ -1,4 +1,5 @@
 import { useController } from 'react-hook-form';
+import { toast } from 'sonner';
 
 interface ControlledComponentProps {
   label: string;
@@ -80,6 +81,57 @@ export function ControlledCheckbox(props: ControlledComponentProps) {
           {...controller.field}
         />
       </label>
+    </fieldset>
+  );
+}
+
+export function ControlledFileInput(
+  props: ControlledComponentProps & React.ComponentProps<'input'>,
+) {
+  const { name, label, ...rest } = props;
+
+  const controller = useController({ name });
+
+  const error = controller.fieldState.error?.message;
+
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files ? e.target.files[0] : null;
+    if (!file) {
+      toast.error('No file selected');
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append('file', file);
+
+    const res = await fetch('/api/upload', {
+      method: 'POST',
+      body: formData,
+    });
+    if (!res.ok) {
+      toast.error('File upload failed');
+      return;
+    }
+    const data = await res.json();
+    controller.field.onChange(data.url);
+  };
+
+  return (
+    <fieldset className="fieldset">
+      <legend className="fieldset-legend">Pick a file</legend>
+
+      <input
+        type="file"
+        className="file-input"
+        onChange={handleFileChange}
+        {...rest}
+      />
+
+      {error ? (
+        <p className="text-error">{error}</p>
+      ) : (
+        <p className="label">{props.description}</p>
+      )}
     </fieldset>
   );
 }
