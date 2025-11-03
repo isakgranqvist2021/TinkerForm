@@ -4,6 +4,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { Section } from 'models/form';
 import { FormProvider, useForm } from 'react-hook-form';
 import {
+  ControlledBooleanInput,
   ControlledCheckbox,
   ControlledFileInput,
   ControlledInput,
@@ -161,7 +162,7 @@ export function AnswerFormContent(props: AnswerFormContentProps) {
 
   return (
     <FormProvider {...form}>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} className="flex flex-col gap-6 pb-12">
         {props.sections
           .sort((a, b) => a.index - b.index)
           .map((section) => {
@@ -259,7 +260,7 @@ export function AnswerFormContent(props: AnswerFormContentProps) {
 
               case 'boolean':
                 return (
-                  <ControlledCheckbox
+                  <ControlledBooleanInput
                     name={section.id}
                     label={section.title}
                     description={section.description}

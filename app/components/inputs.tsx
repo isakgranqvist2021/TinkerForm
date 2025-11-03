@@ -118,8 +118,11 @@ export function ControlledCheckbox(
         <input
           type="checkbox"
           className="toggle"
+          onChange={controller.field.onChange}
+          checked={controller.field.value}
+          onBlur={controller.field.onBlur}
+          ref={controller.field.ref}
           {...rest}
-          {...controller.field}
         />
       </label>
     </fieldset>
@@ -187,6 +190,45 @@ export function ControlledRangeInput(
       ) : (
         <p className="label">{props.description}</p>
       )}
+    </fieldset>
+  );
+}
+
+export function ControlledBooleanInput(
+  props: ControlledComponentProps & React.ComponentProps<'input'>,
+) {
+  const { name, label, ...rest } = props;
+
+  const controller = useController({ name });
+
+  console.log(controller.field.value);
+
+  return (
+    <fieldset className="fieldset w-full">
+      <legend className="fieldset-legend">{label}</legend>
+
+      <div className="flex gap-2">
+        <button
+          type="button"
+          className={[
+            'btn',
+            !controller.field.value ? 'btn-neutral' : 'btn-outline',
+          ].join(' ')}
+          onClick={() => controller.field.onChange(false)}
+        >
+          No
+        </button>
+        <button
+          type="button"
+          className={[
+            'btn',
+            controller.field.value ? 'btn-neutral' : 'btn-outline',
+          ].join(' ')}
+          onClick={() => controller.field.onChange(true)}
+        >
+          Yes
+        </button>
+      </div>
     </fieldset>
   );
 }
