@@ -10,28 +10,52 @@ export default async function Page() {
   const session = await auth0.getSession();
 
   return (
-    <div className="hero min-h-screen">
-      <div className="hero-content text-neutral text-center">
-        <div className="max-w-md">
-          <img src="/art.svg" alt="" className="mb-10" />
-
-          <h1 className="mb-5 text-5xl font-bold">TinkerForm</h1>
-
-          <p className="mb-5">
-            Create and manage forms with ease. Sign up or log in to get started!
-          </p>
-
-          {session ? (
-            <Link href="/dashboard/forms" className="btn btn-primary">
-              My Forms
-            </Link>
-          ) : (
-            <a href="/auth/login" className="btn btn-primary">
+    <React.Fragment>
+      <div className="navbar bg-base-100 shadow-sm">
+        <div className="max-w-5xl mx-auto flex justify-between w-full">
+          <div className="navbar-start">
+            <a className="btn btn-ghost text-xl">TinkerForm</a>
+          </div>
+          <div className="navbar-center hidden lg:flex">
+            <ul className="menu menu-horizontal px-1">
+              <li>
+                <a>Product</a>
+              </li>
+              <li>
+                <a>Pricing</a>
+              </li>
+              <li>
+                <a>Features</a>
+              </li>
+            </ul>
+          </div>
+          <div className="navbar-end">
+            <a href="/dashboard/forms" className="btn btn-primary">
               Get Started
             </a>
-          )}
+          </div>
         </div>
       </div>
-    </div>
+
+      <div className="hero bg-base-200 min-h-screen p-4">
+        <div className="hero-content flex-col lg:flex-row max-w-5xl gap-12">
+          <div>
+            <h1 className="text-5xl font-bold max-w-prose">
+              Build beautiful forms, fast and easyly.
+            </h1>
+            <p className="py-6 max-w-prose">
+              TinkerForm is the easiest way to create and manage forms for your
+              website or application. Get started in minutes with our intuitive
+              drag-and-drop builder.
+            </p>
+            <a href="/dashboard/forms" className="btn btn-primary">
+              Get Started
+            </a>
+          </div>
+
+          <img src="/art.svg" className="max-w-sm" />
+        </div>
+      </div>
+    </React.Fragment>
   );
 }
