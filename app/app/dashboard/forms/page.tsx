@@ -2,7 +2,6 @@ import { auth0 } from 'lib/auth0';
 import Link from 'next/link';
 import React from 'react';
 import { MainContainer } from 'containers/main-container';
-import { formatDate } from 'utils';
 import { redirect } from 'next/navigation';
 import { DeleteFormIconButton } from 'components/delete-form-button';
 import { EmptyState } from 'components/empty-state';
@@ -96,6 +95,7 @@ function renderFormListItem(
   form: Awaited<ReturnType<typeof FormTable.listByEmail>>[number],
 ) {
   const responseCount = Number(form.response_count);
+
   return (
     <li key={form.id} className="list-row justify-between flex w-full p-0">
       <Link
