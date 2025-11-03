@@ -12,8 +12,8 @@ import { FormTable } from 'db/query/form';
 import { ResponseTable } from 'db/query/response';
 import { SectionTable } from 'db/query/section';
 import { InsertAnswer, SelectedSection } from 'db/schema';
+import { auth0 } from 'lib/auth0';
 
-import { getSession } from 'lib/auth0';
 import { constructSchema } from 'models/answer-form.server';
 import { SectionType } from 'models/form';
 
@@ -24,8 +24,8 @@ export async function POST(
   try {
     const { id, responseId } = await ctx.params;
 
-    const session = await getSession();
-    if (!session.user.email) {
+    const session = await auth0.getSession();
+    if (!session?.user.email) {
       return unauthorized();
     }
 

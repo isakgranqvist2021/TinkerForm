@@ -1,5 +1,5 @@
 import { products } from 'data/products';
-import { getSession } from 'lib/auth0';
+import { auth0 } from 'lib/auth0';
 import { createCheckoutSession } from 'services/payment';
 import Stripe from 'stripe';
 import type { Cart } from 'types/cart';
@@ -45,7 +45,7 @@ export async function POST(req: Request) {
   try {
     const cart: Cart = await req.json();
 
-    const session = await getSession();
+    const session = await auth0.getSession();
 
     const checkoutSessionParams = getStripeCheckoutParams(cart, {
       email: session?.user.email,

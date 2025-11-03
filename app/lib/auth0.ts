@@ -18,12 +18,3 @@ export const auth0 = new Auth0Client({
     audience: process.env.AUTH0_AUDIENCE,
   },
 });
-
-export async function getSession() {
-  const session = await auth0.getSession();
-  if (!session) {
-    return redirect('/auth/login');
-  }
-
-  return session;
-}

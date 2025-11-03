@@ -1,13 +1,13 @@
 import { created, internalServerError, unauthorized } from 'app/api/utils';
 import { FormTable } from 'db/query/form';
 import { SectionTable } from 'db/query/section';
-import { getSession } from 'lib/auth0';
+import { auth0 } from 'lib/auth0';
 import { formSchema } from 'models/form';
 
 export async function POST(req: Request) {
   try {
-    const session = await getSession();
-    if (!session.user.email) {
+    const session = await auth0.getSession();
+    if (!session?.user.email) {
       return unauthorized();
     }
 

@@ -6,7 +6,7 @@ import {
 } from 'app/api/utils';
 import { FormTable } from 'db/query/form';
 import { SectionTable } from 'db/query/section';
-import { getSession } from 'lib/auth0';
+import { auth0 } from 'lib/auth0';
 import { formSchema } from 'models/form';
 
 export async function PATCH(
@@ -16,8 +16,8 @@ export async function PATCH(
   try {
     const { id } = await ctx.params;
 
-    const session = await getSession();
-    if (!session.user.email) {
+    const session = await auth0.getSession();
+    if (!session?.user.email) {
       return unauthorized();
     }
 
@@ -45,8 +45,8 @@ export async function DELETE(
   try {
     const { id } = await ctx.params;
 
-    const session = await getSession();
-    if (!session.user.email) {
+    const session = await auth0.getSession();
+    if (!session?.user.email) {
       return unauthorized();
     }
 
