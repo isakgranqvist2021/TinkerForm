@@ -1,0 +1,76 @@
+import Link from 'next/link';
+import React from 'react';
+
+export function Drawer(props: React.PropsWithChildren) {
+  const links = (
+    <React.Fragment>
+      <li>
+        <Link href="/product">Product</Link>
+      </li>
+      <li>
+        <Link href="/pricing">Pricing</Link>
+      </li>
+      <li>
+        <Link href="/features">Features</Link>
+      </li>
+      <li>
+        <Link href="/company">Company</Link>
+      </li>
+    </React.Fragment>
+  );
+
+  return (
+    <div className="drawer">
+      <input id="my-drawer-1" type="checkbox" className="drawer-toggle" />
+      <div className="drawer-content">
+        <div className="navbar bg-base-100 shadow-sm">
+          <div className="max-w-5xl mx-auto flex justify-between w-full">
+            <div className="navbar-start">
+              <label
+                htmlFor="my-drawer-1"
+                className="btn btn-circle drawer-button mr-2 lg:hidden"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth={1.5}
+                  stroke="currentColor"
+                  className="size-6"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"
+                  />
+                </svg>
+              </label>
+
+              <Link className="btn btn-ghost text-xl" href="/">
+                TinkerForm
+              </Link>
+            </div>
+            <div className="navbar-center hidden lg:flex">
+              <ul className="menu menu-horizontal px-1">{links}</ul>
+            </div>
+            <div className="navbar-end">
+              <a href="/dashboard/forms" className="btn btn-primary">
+                Get Started
+              </a>
+            </div>
+          </div>
+        </div>
+
+        {props.children}
+      </div>
+      <div className="drawer-side">
+        <label
+          htmlFor="my-drawer-1"
+          aria-label="close sidebar"
+          className="drawer-overlay"
+        ></label>
+        <ul className="menu bg-base-200 min-h-full w-80 p-4">{links}</ul>
+      </div>
+    </div>
+  );
+}
