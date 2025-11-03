@@ -20,8 +20,6 @@ export default async function Page() {
 
   const forms = await FormTable.listByEmail(session.user.email);
 
-  console.log(forms);
-
   return (
     <MainContainer>
       <div className="flex gap-4 justify-between">

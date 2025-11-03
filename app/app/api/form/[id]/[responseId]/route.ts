@@ -155,7 +155,6 @@ async function validateAnswers(
 
     return insertAnswers;
   } catch (err) {
-    console.log(err);
     return null;
   }
 }

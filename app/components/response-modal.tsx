@@ -137,8 +137,6 @@ interface AnswerListItemProps {
   type: SectionType;
 }
 function AnswerListItem(props: AnswerListItemProps) {
-  console.log(props);
-
   switch (props.type) {
     case 'text':
     case 'email':
