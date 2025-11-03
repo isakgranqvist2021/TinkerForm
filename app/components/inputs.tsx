@@ -70,6 +70,7 @@ export function ControlledTextarea(
 
       {rich ? (
         <Editor
+          disabled={rest.disabled}
           ref={controller.field.ref}
           value={controller.field.value}
           onTextChange={(e) => controller.field.onChange(e.htmlValue || '')}

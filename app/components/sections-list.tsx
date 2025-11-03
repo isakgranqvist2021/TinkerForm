@@ -97,6 +97,7 @@ export function SectionsList() {
             {sections.length > 0 && (
               <div className="tooltip" data-tip="Add Section">
                 <button
+                  disabled={formContext.formState.isSubmitting}
                   className="btn btn-circle btn-accent"
                   onClick={openAddSectionModalAndSetValues}
                 >
