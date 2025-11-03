@@ -1,14 +1,15 @@
 import z from 'zod';
 
+export type SectionType = (typeof sectionTypes)[number];
 export const sectionTypes = [
   'text',
   'link',
   'phone',
   'email',
   'file',
+  'range',
+  'boolean',
 ] satisfies Section['type'][];
-
-export type SectionType = (typeof sectionTypes)[number];
 
 export type BaseSection = z.infer<typeof baseSectionSchema>;
 export const baseSectionSchema = z.object({
@@ -23,9 +24,16 @@ export const baseSectionSchema = z.object({
 });
 
 export type TextSection = z.infer<typeof textSectionSchema>;
-export const textSectionSchema = baseSectionSchema.extend({
-  type: z.literal('text'),
-});
+export const textSectionSchema = baseSectionSchema
+  .extend({
+    min: z.number().min(1),
+    max: z.number().min(1),
+    type: z.literal('text'),
+  })
+  .refine((data) => data.max > data.min, {
+    message: 'max must be greater than min',
+    path: ['max'],
+  });
 
 export type LinkSection = z.infer<typeof linkSectionSchema>;
 export const linkSectionSchema = baseSectionSchema.extend({
@@ -47,12 +55,31 @@ export const fileSectionSchema = baseSectionSchema.extend({
   type: z.literal('file'),
 });
 
+export type RangeSection = z.infer<typeof rangeSectionSchema>;
+export const rangeSectionSchema = baseSectionSchema
+  .extend({
+    type: z.literal('range'),
+    min: z.number().min(1),
+    max: z.number().min(1),
+  })
+  .refine((data) => data.max > data.min, {
+    message: 'max must be greater than min',
+    path: ['max'],
+  });
+
+export type BooleanSection = z.infer<typeof booleanSectionSchema>;
+export const booleanSectionSchema = baseSectionSchema.extend({
+  type: z.literal('boolean'),
+});
+
 export const sectionSchema = z.discriminatedUnion('type', [
   textSectionSchema,
   linkSectionSchema,
   emailSectionSchema,
   phoneSectionSchema,
   fileSectionSchema,
+  rangeSectionSchema,
+  booleanSectionSchema,
 ]);
 export type Section = z.infer<typeof sectionSchema>;
 

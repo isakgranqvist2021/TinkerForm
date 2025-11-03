@@ -88,21 +88,16 @@ export function useSectionFormContext() {
 }
 
 export function getSectionDefaultValues(type: SectionType): Section {
-  switch (type) {
-    case 'text':
-    case 'link':
-    case 'email':
-    case 'phone':
-    case 'file':
-      return {
-        id: '',
-        index: 0,
-        description: '',
-        required: false,
-        title: '',
-        type,
-      };
-  }
+  return {
+    id: '',
+    index: 0,
+    description: '',
+    required: false,
+    title: '',
+    type,
+    min: 0,
+    max: 0,
+  };
 }
 
 const modalName = 'add-section-modal';

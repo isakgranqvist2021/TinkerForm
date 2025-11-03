@@ -27,6 +27,13 @@ export function ControlledInput(
         className="input w-full"
         {...rest}
         {...controller.field}
+        onChange={(e) => {
+          if (rest.type == 'number') {
+            controller.field.onChange(e.target.valueAsNumber);
+          } else {
+            controller.field.onChange(e.target.value);
+          }
+        }}
       />
 
       {error ? (
@@ -78,7 +85,9 @@ export function ControlledTextarea(
   );
 }
 
-export function ControlledCheckbox(props: ControlledComponentProps) {
+export function ControlledCheckbox(
+  props: ControlledComponentProps & React.ComponentProps<'input'>,
+) {
   const { name, label, ...rest } = props;
 
   const controller = useController({ name });
@@ -123,6 +132,36 @@ export function ControlledFileInput(
         {...rest}
       />
 
+      {error ? (
+        <p className="text-error">{error}</p>
+      ) : (
+        <p className="label">{props.description}</p>
+      )}
+    </fieldset>
+  );
+}
+
+export function ControlledRangeInput(
+  props: ControlledComponentProps & React.ComponentProps<'input'>,
+) {
+  const { name, label, ...rest } = props;
+
+  const controller = useController({ name });
+
+  const error = controller.fieldState.error?.message;
+
+  return (
+    <fieldset className="fieldset w-full">
+      <legend className="fieldset-legend">{props.label}</legend>
+      <input
+        type="range"
+        className="range w-full"
+        {...rest}
+        {...controller.field}
+        onChange={(e) => {
+          controller.field.onChange(e.target.valueAsNumber);
+        }}
+      />
       {error ? (
         <p className="text-error">{error}</p>
       ) : (

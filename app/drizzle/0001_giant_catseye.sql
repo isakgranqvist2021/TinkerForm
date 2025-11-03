@@ -1,1 +1,0 @@
-ALTER TABLE "form" ALTER COLUMN "location" SET NOT NULL;

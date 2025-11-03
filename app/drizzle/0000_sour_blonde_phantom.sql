@@ -5,7 +5,10 @@ CREATE TABLE "answer" (
 	"fk_form_id" uuid NOT NULL,
 	"fk_response_id" uuid NOT NULL,
 	"fk_section_id" uuid NOT NULL,
-	"answer" varchar(2000)
+	"answer_text" varchar(2000),
+	"answer_number" integer,
+	"answer_boolean" boolean,
+	"answer_file" varchar(500)
 );
 --> statement-breakpoint
 CREATE TABLE "form" (
@@ -15,7 +18,7 @@ CREATE TABLE "form" (
 	"email" varchar(255) NOT NULL,
 	"title" varchar(255) NOT NULL,
 	"description" varchar(10000) NOT NULL,
-	"location" varchar(500)
+	"location" varchar(500) NOT NULL
 );
 --> statement-breakpoint
 CREATE TABLE "response" (

@@ -27,7 +27,7 @@ export const formTable = pgTable('form', {
   location: varchar('location', { length: 500 }).notNull(),
 });
 
-export type InsertSection = InferSelectModel<typeof sectionTable>;
+export type InsertSection = InferInsertModel<typeof sectionTable>;
 export type SelectedSection = InferSelectModel<typeof sectionTable>;
 export const sectionTable = pgTable('section', {
   ...defaultColumns,
@@ -37,6 +37,8 @@ export const sectionTable = pgTable('section', {
   index: integer('index').notNull(),
   description: varchar('description', { length: 1000 }).notNull(),
   required: boolean('required').default(false),
+  min: integer('min'),
+  max: integer('max'),
 });
 
 export type SelectedResponse = InferSelectModel<typeof responseTable>;
@@ -57,5 +59,9 @@ export const answerTable = pgTable('answer', {
   fk_section_id: uuid('fk_section_id')
     .references(() => sectionTable.id, { onDelete: 'cascade' })
     .notNull(),
-  answer: varchar('answer', { length: 2000 }),
+
+  answer_text: varchar('answer_text', { length: 2000 }),
+  answer_number: integer('answer_number'),
+  answer_boolean: boolean('answer_boolean'),
+  answer_file_url: varchar('answer_file', { length: 500 }),
 });

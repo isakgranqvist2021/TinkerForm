@@ -12,15 +12,15 @@ export function constructSchema(sections: Section[]) {
 }
 
 function getSchema(section: Section) {
-  const answerschema = getAnswerSchema(section.type);
+  const answerschema = getAnswerSchema(section);
 
   return section.required
     ? answerschema
     : answerschema.optional().nullable().or(z.literal('')).or(z.undefined());
 }
 
-export function getAnswerSchema(type: SectionType) {
-  switch (type) {
+export function getAnswerSchema(section: Section) {
+  switch (section.type) {
     case 'email':
       return z.email('Invalid email address');
 
@@ -32,7 +32,10 @@ export function getAnswerSchema(type: SectionType) {
         .regex(/^[\d+\-() ]+$/, 'Invalid phone number format');
 
     case 'text':
-      return z.string().min(1, 'This field is required');
+      return z
+        .string()
+        .min(section.min, 'This field is required')
+        .max(section.max, 'This field exceeds maximum length');
 
     case 'link':
       return z.url('Invalid URL');
@@ -46,6 +49,15 @@ export function getAnswerSchema(type: SectionType) {
         .refine((value) => value instanceof File || typeof value === 'string', {
           message: 'File is required',
         });
+
+    case 'boolean':
+      return z.boolean('This field must be true or false');
+
+    case 'range':
+      return z
+        .number('This field must be a number')
+        .min(section.min)
+        .max(section.max);
   }
 }
 
@@ -62,6 +74,14 @@ export function getConstructedSchemaDefaultValues(sections: Section[]) {
       case 'text':
       case 'file':
         defaultValues[section.id] = '';
+        break;
+
+      case 'boolean':
+        defaultValues[section.id] = false;
+        break;
+
+      case 'range':
+        defaultValues[section.id] = 0;
         break;
 
       default:

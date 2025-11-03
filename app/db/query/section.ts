@@ -1,5 +1,5 @@
 import { db } from 'db/db';
-import { sectionTable } from 'db/schema';
+import { InsertSection, sectionTable } from 'db/schema';
 import { and, eq, inArray } from 'drizzle-orm';
 import { Form, Section } from 'models/form';
 
@@ -43,14 +43,7 @@ async function upsertMany(formId: string, sections: Section[]) {
   for (const section of sectionsToUpdate) {
     await db
       .update(sectionTable)
-      .set({
-        type: section.type,
-        title: section.title,
-        index: section.index,
-        description: section.description,
-        required: section.required,
-        updated_at: new Date(),
-      })
+      .set(getSection(section, formId))
       .where(
         and(
           eq(sectionTable.id, section.id),
@@ -63,17 +56,42 @@ async function upsertMany(formId: string, sections: Section[]) {
   if (sectionsToCreate.length > 0) {
     await db
       .insert(sectionTable)
-      .values(
-        sectionsToCreate.map((section) => ({
-          fk_form_id: formId,
-          type: section.type,
-          title: section.title,
-          index: section.index,
-          description: section.description,
-          required: section.required,
-        })),
-      )
+      .values(sectionsToCreate.map((section) => getSection(section, formId)))
       .execute();
+  }
+}
+
+function getSection(section: Section, formId: string): InsertSection {
+  switch (section.type) {
+    case 'boolean':
+    case 'email':
+    case 'file':
+    case 'link':
+    case 'phone':
+      return {
+        fk_form_id: formId,
+        type: section.type,
+        title: section.title,
+        index: section.index,
+        description: section.description,
+        required: section.required,
+        updated_at: new Date(),
+        min: null,
+        max: null,
+      };
+
+    default:
+      return {
+        fk_form_id: formId,
+        type: section.type,
+        title: section.title,
+        index: section.index,
+        description: section.description,
+        required: section.required,
+        updated_at: new Date(),
+        min: section.min,
+        max: section.max,
+      };
   }
 }
 
@@ -88,14 +106,36 @@ function insertMany(form: Form, formId: string) {
   return db
     .insert(sectionTable)
     .values(
-      form.sections.map((section) => ({
-        fk_form_id: formId,
-        type: section.type,
-        title: section.title,
-        index: section.index,
-        description: section.description,
-        required: section.required,
-      })),
+      form.sections.map((section) => {
+        switch (section.type) {
+          case 'email':
+          case 'file':
+          case 'link':
+          case 'phone':
+          case 'boolean':
+            return {
+              fk_form_id: formId,
+              type: section.type,
+              title: section.title,
+              index: section.index,
+              description: section.description,
+              required: section.required,
+            };
+
+          case 'range':
+          case 'text':
+            return {
+              fk_form_id: formId,
+              type: section.type,
+              title: section.title,
+              index: section.index,
+              description: section.description,
+              required: section.required,
+              min: section.min,
+              max: section.max,
+            };
+        }
+      }),
     )
     .execute();
 }

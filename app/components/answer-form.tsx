@@ -3,7 +3,12 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Section } from 'models/form';
 import { FormProvider, useForm } from 'react-hook-form';
-import { ControlledFileInput, ControlledInput } from './inputs';
+import {
+  ControlledCheckbox,
+  ControlledFileInput,
+  ControlledInput,
+  ControlledRangeInput,
+} from './inputs';
 import {
   ConstructedSchema,
   constructSchema,
@@ -129,8 +134,10 @@ export function AnswerFormContent(props: AnswerFormContentProps) {
       const formData = new FormData();
       for (const key in data) {
         const value = data[key as keyof typeof data];
-        if (value) {
+        if (value instanceof File || typeof value === 'string') {
           formData.append(key, value);
+        } else {
+          formData.append(key, JSON.stringify(value));
         }
       }
 
@@ -167,6 +174,8 @@ export function AnswerFormContent(props: AnswerFormContentProps) {
                     description={section.description}
                     key={section.id}
                     disabled={form.formState.isSubmitting}
+                    min={section.min}
+                    max={section.max}
                   />
                 );
 
@@ -211,6 +220,30 @@ export function AnswerFormContent(props: AnswerFormContentProps) {
               case 'file':
                 return (
                   <ControlledFileInput
+                    name={section.id}
+                    label={section.title}
+                    description={section.description}
+                    key={section.id}
+                    disabled={form.formState.isSubmitting}
+                  />
+                );
+
+              case 'range':
+                return (
+                  <ControlledRangeInput
+                    name={section.id}
+                    label={section.title}
+                    description={section.description}
+                    key={section.id}
+                    disabled={form.formState.isSubmitting}
+                    min={section.min}
+                    max={section.max}
+                  />
+                );
+
+              case 'boolean':
+                return (
+                  <ControlledCheckbox
                     name={section.id}
                     label={section.title}
                     description={section.description}

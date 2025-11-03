@@ -11,10 +11,11 @@ import { AnswersTable } from 'db/query/answer';
 import { FormTable } from 'db/query/form';
 import { ResponseTable } from 'db/query/response';
 import { SectionTable } from 'db/query/section';
-import { InsertSection } from 'db/schema';
+import { InsertAnswer, SelectedSection } from 'db/schema';
 
 import { getSession } from 'lib/auth0';
 import { constructSchema } from 'models/answer-form.server';
+import { SectionType } from 'models/form';
 
 export async function POST(
   req: Request,
@@ -45,11 +46,23 @@ export async function POST(
     const sections = await SectionTable.listByFormId(id);
 
     const formData = await req.formData();
-    const answers = await mapAnswers(formData);
+    const values = await validateAnswers(
+      form.id,
+      response.id,
+      formData,
+      sections.reduce(
+        (acc, section) => {
+          acc[section.id] = section;
+          return acc;
+        },
+        {} as Record<string, SelectedSection>,
+      ),
+    );
+    if (!values) {
+      return badRequest('Invalid answers');
+    }
 
-    const entries = validateAnswers(answers, sections);
-
-    await AnswersTable.insertMany(id, response.id, entries);
+    await AnswersTable.insertMany(values);
     await ResponseTable.updateCompletedAt(response.id);
 
     return ok();
@@ -58,36 +71,91 @@ export async function POST(
   }
 }
 
-async function mapAnswers(formData: FormData) {
-  const answers: Record<string, string> = {};
+async function validateAnswers(
+  formId: string,
+  responseId: string,
+  formData: FormData,
+  sections: Record<string, SelectedSection>,
+): Promise<InsertAnswer[] | null> {
+  try {
+    const formDataObj: Record<string, any> = {};
+    for (const [key, value] of formData.entries()) {
+      const type = sections[key].type as SectionType;
 
-  for (const [key, value] of formData.entries()) {
-    if (typeof value === 'string') {
-      answers[key] = value;
-      continue;
+      switch (type) {
+        case 'text':
+        case 'link':
+        case 'email':
+        case 'phone':
+          formDataObj[key] = value;
+          break;
+
+        case 'boolean':
+          formDataObj[key] = value === 'true';
+          break;
+
+        case 'range':
+          formDataObj[key] = Number(value);
+          break;
+
+        case 'file':
+          const fileValue: File = value as File;
+          const { url } = await put(`files/${fileValue.name}`, fileValue, {
+            access: 'public',
+            addRandomSuffix: true,
+          });
+          formDataObj[key] = url;
+          break;
+      }
     }
 
-    if (value instanceof File) {
-      const { url } = await put(`files/${value.name}`, value, {
-        access: 'public',
-        addRandomSuffix: true,
-      });
+    const mappedSections = Object.values(sections).map(sectionMapper);
+    const schema = constructSchema(mappedSections);
 
-      answers[key] = url;
+    const insertAnswers: InsertAnswer[] = [];
+    const parsed = schema.parse(formDataObj);
+
+    for (const key in parsed) {
+      const section = sections[key];
+      const type = section.type as SectionType;
+
+      const insertAnswer: InsertAnswer = {
+        answer_boolean: null,
+        answer_file_url: null,
+        answer_number: null,
+        answer_text: null,
+        fk_form_id: formId,
+        fk_section_id: section.id,
+        fk_response_id: responseId,
+      };
+
+      switch (type) {
+        case 'text':
+        case 'email':
+        case 'link':
+        case 'phone':
+          insertAnswer.answer_text = parsed[key] as string;
+          break;
+
+        case 'boolean':
+          insertAnswer.answer_boolean = parsed[key] as boolean;
+          break;
+
+        case 'range':
+          insertAnswer.answer_number = parsed[key] as number;
+          break;
+
+        case 'file':
+          insertAnswer.answer_file_url = parsed[key] as string;
+          break;
+      }
+
+      insertAnswers.push(insertAnswer);
     }
+
+    return insertAnswers;
+  } catch (err) {
+    console.log(err);
+    return null;
   }
-
-  return answers;
-}
-
-function validateAnswers(
-  answers: Record<string, string>,
-  sections: InsertSection[],
-) {
-  const mappedSections = sections.map(sectionMapper);
-  const schema = constructSchema(mappedSections);
-
-  const parsedBody = schema.parse(answers);
-
-  return Object.entries(parsedBody);
 }

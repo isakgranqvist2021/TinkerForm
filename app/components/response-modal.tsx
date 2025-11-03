@@ -137,16 +137,31 @@ interface AnswerListItemProps {
   type: SectionType;
 }
 function AnswerListItem(props: AnswerListItemProps) {
+  console.log(props);
+
   switch (props.type) {
     case 'text':
     case 'email':
     case 'phone':
+    case 'range':
       return (
         <li className="list-row">
           <div>
             <div>{props.question}</div>
             <div className="text-xs uppercase font-semibold opacity-60">
               {props.answer}
+            </div>
+          </div>
+        </li>
+      );
+
+    case 'boolean':
+      return (
+        <li className="list-row">
+          <div>
+            <div>{props.question}</div>
+            <div className="text-xs uppercase font-semibold opacity-60">
+              {Boolean(props.answer) ? 'Yes' : 'No'}
             </div>
           </div>
         </li>
@@ -160,6 +175,7 @@ function AnswerListItem(props: AnswerListItemProps) {
             <Link
               className="text-xs uppercase font-semibold opacity-60 hover:underline"
               href={props.answer}
+              target="_blank"
             >
               {props.answer}
             </Link>
@@ -175,6 +191,7 @@ function AnswerListItem(props: AnswerListItemProps) {
             <Link
               className="text-xs uppercase font-semibold opacity-60 hover:underline whitespace-nowrap"
               href={props.answer}
+              target="_blank"
             >
               {props.answer}
             </Link>

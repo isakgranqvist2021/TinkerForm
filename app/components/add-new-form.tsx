@@ -22,6 +22,8 @@ const defaultValues: Form = {
       description: 'Please enter your legal name.',
       title: 'Your name',
       required: true,
+      min: 4,
+      max: 100,
     },
     {
       id: crypto.randomUUID(),
@@ -54,6 +56,25 @@ const defaultValues: Form = {
       description: 'Please upload your resume/CV.',
       title: 'Resume/CV',
       required: true,
+    },
+    {
+      id: crypto.randomUUID(),
+      type: 'boolean',
+      index: 5,
+      description: 'Do you agree to the terms and conditions?',
+      title: 'Terms and Conditions Agreement',
+      required: true,
+    },
+    {
+      id: crypto.randomUUID(),
+      type: 'range',
+      index: 6,
+      description:
+        'On a scale of 1 to 10, how would you rate your proficiency in JavaScript?',
+      title: 'JavaScript Proficiency',
+      required: true,
+      min: 1,
+      max: 10,
     },
   ],
 };

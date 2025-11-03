@@ -1,5 +1,5 @@
 {
-  "id": "7b5b15a6-6792-4249-96b1-d4b1bf087a8a",
+  "id": "8ad943e4-6224-4f3b-bf12-961d9c2abf21",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -47,9 +47,27 @@
           "primaryKey": false,
           "notNull": true
         },
-        "answer": {
-          "name": "answer",
+        "answer_text": {
+          "name": "answer_text",
           "type": "varchar(2000)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "answer_number": {
+          "name": "answer_number",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "answer_boolean": {
+          "name": "answer_boolean",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "answer_file": {
+          "name": "answer_file",
+          "type": "varchar(500)",
           "primaryKey": false,
           "notNull": false
         }
@@ -149,7 +167,7 @@
           "name": "location",
           "type": "varchar(500)",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         }
       },
       "indexes": {},

@@ -1,20 +1,28 @@
-import {
-  InsertSection,
-  SelectedAnswer,
-  SelectedResponse,
-  SelectedSection,
-} from './schema';
+import { SelectedAnswer, SelectedResponse, SelectedSection } from './schema';
 import { Section, SectionType } from 'models/form';
 
-export function sectionMapper(section: InsertSection): Section {
+export function sectionMapper(section: SelectedSection): Section {
   const type = section.type as SectionType;
 
   switch (type) {
     case 'text':
+    case 'range':
+      return {
+        type,
+        description: section.description,
+        id: section.id,
+        index: section.index,
+        required: Boolean(section.required),
+        title: section.title,
+        min: section.min ?? 0,
+        max: section.max ?? 0,
+      };
+
     case 'email':
     case 'link':
     case 'phone':
     case 'file':
+    case 'boolean':
       return {
         type,
         description: section.description,
@@ -36,7 +44,12 @@ function answerMapper(args: {
   return {
     answer: {
       id: args.answer.id,
-      answer: args.answer.answer,
+      answer:
+        args.answer.answer_text ??
+        args.answer.answer_number ??
+        args.answer.answer_boolean ??
+        args.answer.answer_file_url ??
+        null,
       createdAt: args.answer.created_at,
     },
     section: {
