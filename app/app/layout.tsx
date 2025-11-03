@@ -7,6 +7,7 @@ export default async function RootLayout(props: React.PropsWithChildren) {
     <html data-theme="corporate" lang="en">
       <body className="min-h-screen">
         {props.children}
+
         <Toaster richColors />
       </body>
     </html>
