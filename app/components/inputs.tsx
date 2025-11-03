@@ -36,11 +36,20 @@ export function ControlledInput(
         }}
       />
 
-      {error ? (
-        <p className="text-error">{error}</p>
-      ) : (
-        <p className="label">{props.description}</p>
-      )}
+      <div className="flex justify-between">
+        {error ? (
+          <p className="text-error">{error}</p>
+        ) : (
+          <p className="label">{props.description}</p>
+        )}
+
+        {props.maxLength && (
+          <div className="label">
+            {controller.field.value ? controller.field.value.length : 0} /{' '}
+            {props.maxLength}
+          </div>
+        )}
+      </div>
     </fieldset>
   );
 }
@@ -76,11 +85,20 @@ export function ControlledTextarea(
         ></textarea>
       )}
 
-      {error ? (
-        <p className="text-error">{error}</p>
-      ) : (
-        <p className="label">{props.description}</p>
-      )}
+      <div className="flex justify-between">
+        {error ? (
+          <p className="text-error">{error}</p>
+        ) : (
+          <p className="label">{props.description}</p>
+        )}
+
+        {props.maxLength && (
+          <div className="label">
+            {controller.field.value ? controller.field.value.length : 0} /{' '}
+            {props.maxLength}
+          </div>
+        )}
+      </div>
     </fieldset>
   );
 }
@@ -162,6 +180,7 @@ export function ControlledRangeInput(
           controller.field.onChange(e.target.valueAsNumber);
         }}
       />
+
       {error ? (
         <p className="text-error">{error}</p>
       ) : (

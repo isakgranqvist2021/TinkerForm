@@ -8,6 +8,7 @@ import {
   ControlledFileInput,
   ControlledInput,
   ControlledRangeInput,
+  ControlledTextarea,
 } from './inputs';
 import {
   ConstructedSchema,
@@ -104,6 +105,8 @@ export function AnswerFormContent(props: AnswerFormContentProps) {
     defaultValues: getConstructedSchemaDefaultValues(props.sections),
   });
 
+  console.log(props);
+
   const [hasResponded, setHasResponded] = React.useState(props.isCompleted);
 
   if (hasResponded) {
@@ -166,6 +169,21 @@ export function AnswerFormContent(props: AnswerFormContentProps) {
           .map((section) => {
             switch (section.type) {
               case 'text':
+                if (section.max > 200) {
+                  return (
+                    <ControlledTextarea
+                      name={section.id}
+                      label={section.title}
+                      placeholder="Your answer"
+                      description={section.description}
+                      key={section.id}
+                      disabled={form.formState.isSubmitting}
+                      minLength={section.min}
+                      maxLength={section.max}
+                    />
+                  );
+                }
+
                 return (
                   <ControlledInput
                     name={section.id}
@@ -174,8 +192,8 @@ export function AnswerFormContent(props: AnswerFormContentProps) {
                     description={section.description}
                     key={section.id}
                     disabled={form.formState.isSubmitting}
-                    min={section.min}
-                    max={section.max}
+                    minLength={section.min}
+                    maxLength={section.max}
                   />
                 );
 

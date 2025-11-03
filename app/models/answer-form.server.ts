@@ -14,7 +14,9 @@ export function constructSchema(sections: Section[]) {
 function getSchema(section: Section) {
   const answerschema = getAnswerSchema(section);
 
-  return section.required ? answerschema : answerschema.optional().nullable();
+  return section.required
+    ? answerschema
+    : answerschema.optional().nullable().or(z.literal('')).or(z.undefined());
 }
 
 export function getAnswerSchema(section: Section) {

@@ -11,7 +11,7 @@ export function constructSchema(sections: Section[]) {
   return z.object(schema);
 }
 
-function getSchema(section: Section) {
+export function getSchema(section: Section) {
   const answerschema = getAnswerSchema(section);
 
   return section.required
