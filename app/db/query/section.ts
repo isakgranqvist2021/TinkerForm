@@ -1,23 +1,34 @@
 import { db } from 'db/db';
-import { InsertSection, sectionTable } from 'db/schema';
+import { InsertSection, sectionTable, SelectedSection } from 'db/schema';
 import { and, eq, inArray } from 'drizzle-orm';
 import { Form, Section } from 'models/form';
 
 async function upsertMany(formId: string, sections: Section[]) {
   const currentSections = await listByFormId(formId);
 
-  const currentSectionIds = new Set(
-    currentSections.map((section) => section.id),
-  );
-
-  const incomingSectionIds = new Set(sections.map((section) => section.id));
+  // if a section is in sections but not in currentSections, create it
+  // if a section is in both, update it
+  // if a section is in currentSections but not in sections, delete it
 
   const sectionsToCreate: Section[] = [];
   const sectionsToUpdate: Section[] = [];
+  const sectionsToDelete: SelectedSection[] = [];
 
-  const sectionsToDelete = currentSections.filter(
-    (current) => !incomingSectionIds.has(current.id),
-  );
+  for (const section of sections) {
+    const existingSection = currentSections.find((s) => s.id === section.id);
+    if (existingSection) {
+      sectionsToUpdate.push(section);
+    } else {
+      sectionsToCreate.push(section);
+    }
+  }
+
+  for (const currentSection of currentSections) {
+    const exists = sections.find((s) => s.id === currentSection.id);
+    if (!exists) {
+      sectionsToDelete.push(currentSection);
+    }
+  }
 
   if (sectionsToDelete.length > 0) {
     const idsToDelete = sectionsToDelete.map((section) => section.id);
@@ -30,14 +41,6 @@ async function upsertMany(formId: string, sections: Section[]) {
         ),
       )
       .execute();
-  }
-
-  for (const section of sections) {
-    if (section.id && currentSectionIds.has(section.id)) {
-      sectionsToUpdate.push(section);
-    } else {
-      sectionsToCreate.push(section);
-    }
   }
 
   for (const section of sectionsToUpdate) {

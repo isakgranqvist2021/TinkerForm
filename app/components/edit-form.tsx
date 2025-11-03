@@ -19,36 +19,31 @@ export function EditForm(props: EditFormProps) {
     resolver: zodResolver(formSchema),
   });
 
-  const submitForm = form.handleSubmit(
-    async (data) => {
-      try {
-        const res = await fetch(`/api/forms/${props.formId}`, {
-          method: 'PATCH',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            ...data,
-            sections: data.sections.map((section, i) => ({
-              ...section,
-              index: i,
-            })),
-          }),
-        });
+  const submitForm = form.handleSubmit(async (data) => {
+    try {
+      const res = await fetch(`/api/forms/${props.formId}`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          ...data,
+          sections: data.sections.map((section, i) => ({
+            ...section,
+            index: i,
+          })),
+        }),
+      });
 
-        if (!res.ok) {
-          throw new Error('Failed to save form');
-        }
-
-        toast.success('Form saved successfully!');
-      } catch (error) {
-        toast.error("Couldn't save form. Please try again.");
+      if (!res.ok) {
+        throw new Error('Failed to save form');
       }
-    },
-    (err) => {
-      console.log(err);
-    },
-  );
+
+      toast.success('Form saved successfully!');
+    } catch (error) {
+      toast.error("Couldn't save form. Please try again.");
+    }
+  });
 
   return (
     <FormProvider {...form}>

@@ -82,12 +82,6 @@ export function SectionsList() {
     sectionFormContext.setDefaultValues(getSectionDefaultValues('text'));
   };
 
-  React.useEffect(() => {
-    fieldArray.fields.forEach((section, index) => {
-      fieldArray.update(index, { ...section, index });
-    });
-  }, [fieldArray.fields.length]);
-
   return (
     <React.Fragment>
       <SectionFormModal onSubmit={handleSubmit} />
