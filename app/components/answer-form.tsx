@@ -105,8 +105,6 @@ export function AnswerFormContent(props: AnswerFormContentProps) {
     defaultValues: getConstructedSchemaDefaultValues(props.sections),
   });
 
-  console.log(props);
-
   const [hasResponded, setHasResponded] = React.useState(props.isCompleted);
 
   if (hasResponded) {
