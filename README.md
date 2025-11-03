@@ -1,5 +1,5 @@
 
-# Job App
+# TinkerForm
 
 An application where you can publish a job and recieve applications.
 You can view stats like number of applications, completion rate, average completion time.
@@ -36,7 +36,7 @@ See app/.env.template
 `BLOB_READ_WRITE_TOKEN`
 ## Installation
 
-Install JobApp with npm
+Install TinkerForm with npm
 
 ```bash
   cd app
