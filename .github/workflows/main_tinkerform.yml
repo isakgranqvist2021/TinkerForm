@@ -7,6 +7,10 @@ on:
   push:
     branches:
       - main
+    paths:
+      - "api/**"
+      - ".github/workflows/main_tinkerform.yml"
+
   workflow_dispatch:
 
 jobs:
