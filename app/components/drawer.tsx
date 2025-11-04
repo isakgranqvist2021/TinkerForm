@@ -54,9 +54,9 @@ export function Drawer(props: React.PropsWithChildren) {
               <ul className="menu menu-horizontal px-1">{links}</ul>
             </div>
             <div className="navbar-end">
-              <a href="/dashboard/forms" className="btn btn-primary">
+              <Link href="/dashboard/forms" className="btn btn-primary">
                 Get Started
-              </a>
+              </Link>
             </div>
           </div>
         </div>
