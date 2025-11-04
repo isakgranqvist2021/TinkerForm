@@ -1,12 +1,13 @@
 using System.Net.Http;
 using System.Net.Http.Headers;
+using Newtonsoft.Json.Linq;
 
 namespace api.Middleware
 {
     public class Auth0UserInfoMiddleware(RequestDelegate next, IConfiguration config)
     {
         private readonly RequestDelegate _next = next;
-        private readonly string _auth0Domain = config["Auth0:Domain"];
+        private readonly string? _auth0Domain = config["Auth0:Domain"];
 
         public async Task InvokeAsync(HttpContext context)
         {
