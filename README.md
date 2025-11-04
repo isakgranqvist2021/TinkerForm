@@ -1,13 +1,11 @@
-
 # TinkerForm
 
 An application where you can publish a job and recieve applications.
 You can view stats like number of applications, completion rate, average completion time.
 
-
 ## Environment Variables
 
-To run this project, you will need to add the following environment variables to your .env file. 
+To run this project, you will need to add the following environment variables to your .env file.
 
 Create a .env file in the app directory and add these variables.
 
@@ -31,9 +29,14 @@ See app/.env.template
 
 `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY`
 
+`FILE_BASE_URL`
+
+`API_URL`
+
 `DATABASE_URL`
 
 `BLOB_READ_WRITE_TOKEN`
+
 ## Installation
 
 Install TinkerForm with npm
@@ -42,7 +45,7 @@ Install TinkerForm with npm
   cd app
   npm install
 ```
-    
+
 ## Running Tests
 
 To run tests, run the following command
@@ -52,10 +55,8 @@ To run tests, run the following command
   npm run test
 ```
 
-
 ## Tech Stack
 
-**Tech:** React (Next.js), Vercel, Auth0, Stripe, Drizzle (PSQL), Neon (Serverless PSQL)
+**Tech:** React (Next.js), .NET, Azure, Vercel, Auth0, Stripe, Drizzle (PSQL), Neon (Serverless PSQL)
 
 **Styling:** TailwindCSS (DaisyUI)
-
