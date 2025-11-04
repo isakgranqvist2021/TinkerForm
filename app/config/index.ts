@@ -23,4 +23,6 @@ if (errors.length) {
   throw new Error('\n' + errors.join(''));
 }
 
+console.log('exporting', env);
+
 export { env };
