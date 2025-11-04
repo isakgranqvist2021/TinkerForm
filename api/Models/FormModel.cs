@@ -1,4 +1,6 @@
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace api.Models
 {
@@ -15,5 +17,9 @@ namespace api.Models
 
         [Required]
         public string location { get; set; } = string.Empty;
+
+        [NotMapped]
+        [JsonPropertyName("responseCount")]
+        public int response_count { get; set; } = 0;
     }
 }

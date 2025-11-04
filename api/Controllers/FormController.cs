@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using api.Context;
+using api.Models;
 
 namespace api.Controllers
 {
@@ -19,28 +20,32 @@ namespace api.Controllers
 
         [HttpGet]
         [Authorize]
-        public IActionResult Get()
+        public ActionResult<List<FormModel>> Get()
         {
-            var forms = _context.form.ToList();
-            var sections = _context.section.ToList();
-            var responses = _context.response.ToList();
-            var answers = _context.answer.ToList();
-
-            // Try to get user info from middleware
-            // var email = HttpContext.Items["Email"];
-            // if (email == null)
-            // {
-            //     return Unauthorized();
-            // }
-
-            return Ok(new
+            var email = HttpContext.Items["Email"];
+            if (email == null)
             {
-                Forms = forms,
-                Sections = sections,
-                Responses = responses,
-                Answers = answers
-            });
+                return Unauthorized();
+            }
+
+            var forms = _context.form
+                .Where(f => f.email == email.ToString())
+                .Select(f => new FormModel
+                {
+                    id = f.id,
+                    email = f.email,
+                    title = f.title,
+                    description = f.description,
+                    location = f.location,
+                    created_at = f.created_at,
+                    updated_at = f.updated_at,
+                    response_count = _context.response.Count(r => r.fk_form_id == f.id && r.completed_at != null),
+                })
+                .ToList();
+
+            return Ok(forms);
         }
+
     }
 }
 
