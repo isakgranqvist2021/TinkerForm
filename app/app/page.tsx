@@ -1,4 +1,5 @@
 import { Drawer } from 'components/drawer';
+import { auth0 } from 'lib/auth0';
 import Link from 'next/link';
 import React from 'react';
 
@@ -7,6 +8,25 @@ export const metadata = {
 };
 
 export default async function Page() {
+  const token = await auth0.getAccessToken();
+
+  try {
+    const res = await fetch(`http://localhost:5275/form`, {
+      headers: {
+        Authorization: `Bearer ${token.token}`,
+      },
+    });
+
+    if (!res.ok) {
+      throw new Error('Failed to fetch forms');
+    }
+
+    const data = await res.json();
+    console.log('Fetched forms:', data);
+  } catch (error) {
+    console.error('Error fetching forms:', error);
+  }
+
   return (
     <Drawer>
       <div

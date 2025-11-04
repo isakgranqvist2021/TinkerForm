@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using api.Context;
 
 namespace api.Controllers
 {
@@ -8,17 +9,19 @@ namespace api.Controllers
     public class FormController : ControllerBase
     {
         private readonly ILogger<FormController> _logger;
+        private readonly AppDbContext _context;
 
-        public FormController(ILogger<FormController> logger)
+        public FormController(ILogger<FormController> logger, AppDbContext context)
         {
             _logger = logger;
+            _context = context;
         }
 
         [HttpGet]
         [Authorize]
         public IActionResult Get()
         {
-            // Try to get user info from middleware
+
             var email = HttpContext.Items["Email"];
             if (email == null)
             {
@@ -27,7 +30,7 @@ namespace api.Controllers
 
             return Ok(new
             {
-                email
+                Message = "Hello, your email is " + email
             });
         }
     }

@@ -121,7 +121,7 @@ async function validateAnswers(
 
       const insertAnswer: InsertAnswer = {
         answer_boolean: null,
-        answer_file_url: null,
+        answer_file: null,
         answer_number: null,
         answer_text: null,
         fk_form_id: formId,
@@ -146,7 +146,7 @@ async function validateAnswers(
           break;
 
         case 'file':
-          insertAnswer.answer_file_url = parsed[key] as string;
+          insertAnswer.answer_file = parsed[key] as string;
           break;
       }
 

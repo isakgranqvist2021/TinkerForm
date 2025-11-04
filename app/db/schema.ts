@@ -63,5 +63,5 @@ export const answerTable = pgTable('answer', {
   answer_text: varchar('answer_text', { length: 2000 }),
   answer_number: integer('answer_number'),
   answer_boolean: boolean('answer_boolean'),
-  answer_file_url: varchar('answer_file', { length: 500 }),
+  answer_file: varchar('answer_file', { length: 500 }),
 });

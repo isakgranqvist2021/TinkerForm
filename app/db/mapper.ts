@@ -48,7 +48,7 @@ function answerMapper(args: {
         args.answer.answer_text ??
         args.answer.answer_number ??
         args.answer.answer_boolean ??
-        args.answer.answer_file_url ??
+        args.answer.answer_file ??
         null,
       createdAt: args.answer.created_at,
     },
