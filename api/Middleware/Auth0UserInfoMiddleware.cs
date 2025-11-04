@@ -4,10 +4,10 @@ using Newtonsoft.Json.Linq;
 
 namespace api.Middleware
 {
-    public class Auth0UserInfoMiddleware(RequestDelegate next, IConfiguration config)
+    public class Auth0UserInfoMiddleware(RequestDelegate next)
     {
         private readonly RequestDelegate _next = next;
-        private readonly string? _auth0Domain = config["Auth0:Domain"];
+        private readonly string? _auth0Domain = Environment.GetEnvironmentVariable("AUTH0_DOMAIN");
 
         public async Task InvokeAsync(HttpContext context)
         {

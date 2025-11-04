@@ -2,24 +2,28 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using api.Context;
+using DotNetEnv;
 
 var builder = WebApplication.CreateBuilder(args);
+
+Env.Load();
+
+var DATABASE_URL = Environment.GetEnvironmentVariable("DATABASE_URL");
+var AUTH0_DOMAIN = Environment.GetEnvironmentVariable("AUTH0_DOMAIN");
+var AUTH0_AUDIENCE = Environment.GetEnvironmentVariable("AUTH0_AUDIENCE");
+var domain = $"https://{AUTH0_DOMAIN}/";
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddDbContext<AppDbContext>(options => options.UseNpgsql(DATABASE_URL));
+builder.Services.AddSingleton<IAuthorizationHandler, HasScopeHandler>();
 
 
-var conn = builder.Configuration.GetConnectionString("DefaultConnection");
-builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseNpgsql(conn));
-
-var domain = $"https://{builder.Configuration["Auth0:Domain"]}/";
-builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-.AddJwtBearer(options =>
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
 {
     options.Authority = domain;
-    options.Audience = builder.Configuration["Auth0:Audience"];
+    options.Audience = AUTH0_AUDIENCE;
 });
 
 builder.Services.AddAuthorization(options =>
@@ -27,11 +31,9 @@ builder.Services.AddAuthorization(options =>
     options.AddPolicy("read:messages", policy => policy.Requirements.Add(new HasScopeRequirement("read:messages", domain)));
 });
 
-builder.Services.AddSingleton<IAuthorizationHandler, HasScopeHandler>();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -39,12 +41,9 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
-
 app.UseAuthentication();
 app.UseMiddleware<api.Middleware.Auth0UserInfoMiddleware>();
 app.UseAuthorization();
-
 app.MapControllers();
 
 app.Run();
