@@ -22,3 +22,5 @@ if (errors.length) {
 }
 
 export { env };
+
+export const USE_EXTERNAL_API = Boolean(process.env.USE_EXTERNAL_API);

@@ -8,7 +8,6 @@ import {
 } from 'app/api/utils';
 import { sectionMapper } from 'db/mapper';
 import { AnswersTable } from 'db/query/answer';
-import { FormTable } from 'db/query/form';
 import { ResponseTable } from 'db/query/response';
 import { SectionTable } from 'db/query/section';
 import { InsertAnswer, SelectedSection } from 'db/schema';
@@ -16,6 +15,7 @@ import { auth0 } from 'lib/auth0';
 
 import { constructSchema } from 'models/answer-form.server';
 import { SectionType } from 'models/form';
+import { getFormById } from 'services/api/forms';
 
 export async function POST(
   req: Request,
@@ -29,7 +29,7 @@ export async function POST(
       return unauthorized();
     }
 
-    const form = await FormTable.findById(id);
+    const form = await getFormById(id);
     if (!form) {
       return notFound();
     }

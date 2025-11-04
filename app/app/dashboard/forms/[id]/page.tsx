@@ -3,7 +3,6 @@ import { CopyFormLink } from 'components/copy-form-link';
 import { DeleteFormIconButton } from 'components/delete-form-button';
 import { MainContainer } from 'containers/main-container';
 
-import { FormTable } from 'db/query/form';
 import { ResponseTable } from 'db/query/response';
 import { auth0 } from 'lib/auth0';
 import Link from 'next/link';
@@ -18,6 +17,7 @@ import {
 import { ResponseTableRow } from 'components/response-table-row';
 import { EmptyState } from 'components/empty-state';
 import { VisitFormLink } from 'components/view-form-link';
+import { getFormById } from 'services/api/forms';
 
 export const metadata = {
   title: 'Form',
@@ -31,7 +31,7 @@ export default async function Page(props: PageProps<{ id: string }>) {
     return redirect('/auth/login');
   }
 
-  const form = await FormTable.findById(params.id);
+  const form = await getFormById(params.id);
   if (!form || form.email !== session.user.email) {
     return redirect('/404');
   }

@@ -46,6 +46,40 @@ namespace api.Controllers
             return Ok(forms);
         }
 
+
+        [HttpGet("{id}")]
+        [Authorize]
+        public ActionResult<FormModel> GetById(Guid id)
+        {
+            var email = HttpContext.Items["Email"];
+            if (email == null)
+            {
+                return Unauthorized();
+            }
+
+            var form = _context.form
+                .Where(f => f.id == id && f.email == email.ToString())
+                .Select(f => new FormModel
+                {
+                    id = f.id,
+                    email = f.email,
+                    title = f.title,
+                    description = f.description,
+                    location = f.location,
+                    created_at = f.created_at,
+                    updated_at = f.updated_at,
+                    response_count = _context.response.Count(r => r.fk_form_id == f.id && r.completed_at != null),
+                })
+                .FirstOrDefault();
+
+            if (form == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(form);
+        }
+
     }
 }
 

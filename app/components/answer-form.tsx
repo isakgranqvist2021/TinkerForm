@@ -18,12 +18,13 @@ import {
 } from 'models/answer-form';
 import { toast } from 'sonner';
 import React from 'react';
-import { SelectedResponse, SelectedForm } from 'db/schema';
+import { SelectedResponse } from 'db/schema';
+import { FormDto } from 'services/api/forms';
 
 interface AnswerFormProps {
   sections: Section[];
   response: SelectedResponse;
-  form: SelectedForm;
+  form: FormDto;
 }
 
 export function AnswerForm(props: AnswerFormProps) {

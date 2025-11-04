@@ -34,9 +34,19 @@ function updateById(formId: string, form: Omit<Form, 'sections'>) {
 
 async function findById(formId: string) {
   const forms = await db
-    .select()
+    .select({
+      id: formTable.id,
+      email: formTable.email,
+      title: formTable.title,
+      description: formTable.description,
+      created_at: formTable.created_at,
+      updated_at: formTable.updated_at,
+      response_count: count(responseTable.completed_at).as('response_count'),
+      location: formTable.location,
+    })
     .from(formTable)
-    .where(eq(formTable.id, formId));
+    .where(eq(formTable.id, formId))
+    .leftJoin(responseTable, eq(formTable.id, responseTable.fk_form_id));
 
   return forms[0];
 }
@@ -51,6 +61,7 @@ function listByEmail(email: string) {
       created_at: formTable.created_at,
       updated_at: formTable.updated_at,
       response_count: count(responseTable.completed_at).as('response_count'),
+      location: formTable.location,
     })
     .from(formTable)
     .leftJoin(responseTable, eq(formTable.id, responseTable.fk_form_id))

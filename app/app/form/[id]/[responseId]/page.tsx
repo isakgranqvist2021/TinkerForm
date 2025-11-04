@@ -6,11 +6,12 @@ import { ResponseTable } from 'db/query/response';
 import { SectionTable } from 'db/query/section';
 import { redirect } from 'next/navigation';
 import React from 'react';
+import { getFormById } from 'services/api/forms';
 import { PageProps } from 'types/page';
 
 export async function generateMetadata(props: PageProps<{ id: string }>) {
   const params = await props.params;
-  const form = await FormTable.findById(params.id);
+  const form = await getFormById(params.id);
 
   return {
     title: form ? form.title : 'Form',
@@ -23,7 +24,7 @@ export default async function Page(
 ) {
   const params = await props.params;
 
-  const form = await FormTable.findById(params.id);
+  const form = await getFormById(params.id);
   if (!form) {
     return redirect('/404');
   }

@@ -1,12 +1,12 @@
 import { EditForm } from 'components/edit-form';
 import { MainContainer } from 'containers/main-container';
 import { sectionMapper } from 'db/mapper';
-import { FormTable } from 'db/query/form';
 import { SectionTable } from 'db/query/section';
 import { auth0 } from 'lib/auth0';
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
 import React from 'react';
+import { getFormById } from 'services/api/forms';
 import { PageProps } from 'types/page';
 
 export const metadata = {
@@ -21,7 +21,7 @@ export default async function Page(props: PageProps<{ id: string }>) {
 
   const params = await props.params;
 
-  const form = await FormTable.findById(params.id);
+  const form = await getFormById(params.id);
 
   if (!form || form.email !== session.user.email) {
     return redirect('/404');
