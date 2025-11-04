@@ -1,4 +1,5 @@
 import { Drawer } from 'components/drawer';
+import Link from 'next/link';
 import React from 'react';
 
 export const metadata = {
@@ -26,9 +27,9 @@ export default async function Page() {
             </p>
 
             <div className="flex gap-6">
-              <a href="/dashboard/forms" className="btn btn-primary">
+              <Link href="/dashboard/forms" className="btn btn-primary">
                 Get Started
-              </a>
+              </Link>
 
               <a
                 href="https://github.com/isakgranqvist2021/TinkerForm"
