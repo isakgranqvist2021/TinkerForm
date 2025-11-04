@@ -21,16 +21,24 @@ namespace api.Controllers
         [Authorize]
         public IActionResult Get()
         {
+            var forms = _context.form.ToList();
+            var sections = _context.section.ToList();
+            var responses = _context.response.ToList();
+            var answers = _context.answer.ToList();
 
-            var email = HttpContext.Items["Email"];
-            if (email == null)
-            {
-                return Unauthorized();
-            }
+            // Try to get user info from middleware
+            // var email = HttpContext.Items["Email"];
+            // if (email == null)
+            // {
+            //     return Unauthorized();
+            // }
 
             return Ok(new
             {
-                Message = "Hello, your email is " + email
+                Forms = forms,
+                Sections = sections,
+                Responses = responses,
+                Answers = answers
             });
         }
     }

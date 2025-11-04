@@ -1,13 +1,11 @@
+using System.Text.Json.Serialization;
+
 namespace api.Models
 {
-    public class SectionModel
+    public class SectionModel : BaseModel
     {
-        public Guid id { get; set; }
+        [JsonPropertyName("formId")]
         public Guid fk_form_id { get; set; }
-
-        public DateTime created_at { get; set; }
-        public DateTime updated_at { get; set; }
-
         public string type { get; set; } = string.Empty;
         public string title { get; set; } = string.Empty;
         public int index { get; set; }

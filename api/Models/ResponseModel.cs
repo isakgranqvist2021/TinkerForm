@@ -1,14 +1,16 @@
+using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
+
 namespace api.Models
 {
 
-    public class ResponseModel
+    public class ResponseModel : BaseModel
     {
-        public Guid id { get; set; }
+        [Required]
+        [JsonPropertyName("formId")]
         public Guid fk_form_id { get; set; }
 
-        public DateTime created_at { get; set; }
-        public DateTime updated_at { get; set; }
-
+        [JsonPropertyName("completedAt")]
         public DateTime? completed_at { get; set; }
     }
 }
