@@ -16,9 +16,19 @@ namespace api.Controllers
 
         [HttpGet]
         [Authorize]
-        public string Get()
+        public IActionResult Get()
         {
-            return "ok";
+            // Try to get user info from middleware
+            var email = HttpContext.Items["Email"];
+            if (email == null)
+            {
+                return Unauthorized();
+            }
+
+            return Ok(new
+            {
+                email
+            });
         }
     }
 }

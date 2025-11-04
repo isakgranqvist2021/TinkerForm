@@ -1,5 +1,4 @@
 import { Drawer } from 'components/drawer';
-import { auth0 } from 'lib/auth0';
 import React from 'react';
 
 export const metadata = {
@@ -7,30 +6,6 @@ export const metadata = {
 };
 
 export default async function Page() {
-  try {
-    const accessToken = await auth0.getAccessToken();
-
-    console.log('Access Token:', accessToken);
-
-    await fetch('http://localhost:5275/form', {
-      headers: {
-        Authorization: `Bearer ${accessToken.token}`,
-      },
-    })
-      .then((res) => {
-        console.log(res);
-        return res.text();
-      })
-      .then((data) => {
-        console.log('API Response:', data);
-      })
-      .catch((err) => {
-        console.error('API Error:', err);
-      });
-  } catch (error) {
-    console.error('Error fetching access token or calling API:', error);
-  }
-
   return (
     <Drawer>
       <div

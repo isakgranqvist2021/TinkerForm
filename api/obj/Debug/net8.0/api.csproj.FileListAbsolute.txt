@@ -82,3 +82,6 @@ C:\Users\Isak\Development\tinkerform\api\obj\Debug\net8.0\refint\api.dll
 C:\Users\Isak\Development\tinkerform\api\obj\Debug\net8.0\api.pdb
 C:\Users\Isak\Development\tinkerform\api\obj\Debug\net8.0\api.genruntimeconfig.cache
 C:\Users\Isak\Development\tinkerform\api\obj\Debug\net8.0\ref\api.dll
+C:\Users\Isak\Development\tinkerform\api\bin\Debug\net8.0\System.Net.Http.Formatting.dll
+C:\Users\Isak\Development\tinkerform\api\bin\Debug\net8.0\Newtonsoft.Json.dll
+C:\Users\Isak\Development\tinkerform\api\bin\Debug\net8.0\Newtonsoft.Json.Bson.dll
