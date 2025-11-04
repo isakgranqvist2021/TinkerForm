@@ -1,5 +1,5 @@
 import { db } from 'db/db';
-import { answerTable, responseTable } from 'db/schema';
+import { responseTable } from 'db/schema';
 import { and, count, eq, isNotNull } from 'drizzle-orm';
 
 async function insertOne(formId: string) {

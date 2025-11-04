@@ -1,6 +1,6 @@
 import { db } from 'db/db';
-import { formTable, responseTable } from 'db/schema';
-import { and, count, eq } from 'drizzle-orm';
+import { formTable } from 'db/schema';
+import { and, eq } from 'drizzle-orm';
 import { Form } from 'models/form';
 
 async function isOwner(formId: string, email: string) {
@@ -32,44 +32,6 @@ function updateById(formId: string, form: Omit<Form, 'sections'>) {
     .execute();
 }
 
-async function findById(formId: string) {
-  const forms = await db
-    .select({
-      id: formTable.id,
-      email: formTable.email,
-      title: formTable.title,
-      description: formTable.description,
-      created_at: formTable.created_at,
-      updated_at: formTable.updated_at,
-      response_count: count(responseTable.completed_at).as('response_count'),
-      location: formTable.location,
-    })
-    .from(formTable)
-    .where(eq(formTable.id, formId))
-    .leftJoin(responseTable, eq(formTable.id, responseTable.fk_form_id));
-
-  return forms[0];
-}
-
-function listByEmail(email: string) {
-  return db
-    .select({
-      id: formTable.id,
-      email: formTable.email,
-      title: formTable.title,
-      description: formTable.description,
-      created_at: formTable.created_at,
-      updated_at: formTable.updated_at,
-      response_count: count(responseTable.completed_at).as('response_count'),
-      location: formTable.location,
-    })
-    .from(formTable)
-    .leftJoin(responseTable, eq(formTable.id, responseTable.fk_form_id))
-    .where(eq(formTable.email, email))
-    .groupBy(formTable.id)
-    .orderBy(formTable.created_at);
-}
-
 function insertOne(form: Form, email: string) {
   return db
     .insert(formTable)
@@ -85,8 +47,6 @@ function insertOne(form: Form, email: string) {
 
 export const FormTable = {
   insertOne,
-  listByEmail,
-  findById,
   updateById,
   deleteById,
   isOwner,

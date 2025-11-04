@@ -1,5 +1,3 @@
-import { USE_EXTERNAL_API } from 'config';
-import { FormTable } from 'db/query/form';
 import { auth0 } from 'lib/auth0';
 
 export interface FormDto {
@@ -19,26 +17,11 @@ export async function getForms(): Promise<FormDto[]> {
     return [];
   }
 
-  if (USE_EXTERNAL_API) {
-    return fetch(`${process.env.API_URL}/form`, {
-      headers: {
-        Authorization: `Bearer ${session.tokenSet.accessToken}`,
-      },
-    }).then((res) => res.json());
-  }
-
-  const forms = await FormTable.listByEmail(session.user.email);
-
-  return forms.map((form) => ({
-    id: form.id,
-    email: form.email,
-    title: form.title,
-    description: form.description,
-    createdAt: form.created_at.toISOString(),
-    updatedAt: form.updated_at.toISOString(),
-    responseCount: Number(form.response_count),
-    location: form.location,
-  }));
+  return fetch(`${process.env.API_URL}/form`, {
+    headers: {
+      Authorization: `Bearer ${session.tokenSet.accessToken}`,
+    },
+  }).then((res) => res.json());
 }
 
 export async function getFormById(formId: string): Promise<FormDto | null> {
@@ -47,27 +30,9 @@ export async function getFormById(formId: string): Promise<FormDto | null> {
     return null;
   }
 
-  if (USE_EXTERNAL_API) {
-    return fetch(`${process.env.API_URL}/form/${formId}`, {
-      headers: {
-        Authorization: `Bearer ${session.tokenSet.accessToken}`,
-      },
-    }).then((res) => res.json());
-  }
-
-  const form = await FormTable.findById(formId);
-  if (!form) {
-    return null;
-  }
-
-  return {
-    id: form.id,
-    email: form.email,
-    title: form.title,
-    description: form.description,
-    createdAt: form.created_at.toISOString(),
-    updatedAt: form.updated_at.toISOString(),
-    responseCount: Number(form.response_count),
-    location: form.location,
-  };
+  return fetch(`${process.env.API_URL}/form/${formId}`, {
+    headers: {
+      Authorization: `Bearer ${session.tokenSet.accessToken}`,
+    },
+  }).then((res) => res.json());
 }
