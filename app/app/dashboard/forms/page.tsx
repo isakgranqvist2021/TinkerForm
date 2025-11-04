@@ -23,7 +23,13 @@ export default async function Page() {
       Authorization: `Bearer ${session.tokenSet.accessToken}`,
     },
   })
-    .then((res) => res.json())
+    .then(async (res) => {
+      const data = await res.json();
+
+      console.log('Fetched forms:', data);
+
+      return data;
+    })
     .catch((err) => {
       console.error(err);
       return [];
