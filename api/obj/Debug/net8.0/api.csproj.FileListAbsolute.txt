@@ -40,6 +40,7 @@ C:\Users\Isakg\Development\tinkerform\api\bin\Debug\net8.0\Microsoft.IdentityMod
 C:\Users\Isakg\Development\tinkerform\api\bin\Debug\net8.0\Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
 C:\Users\Isakg\Development\tinkerform\api\bin\Debug\net8.0\Microsoft.IdentityModel.Tokens.dll
 C:\Users\Isakg\Development\tinkerform\api\bin\Debug\net8.0\System.IdentityModel.Tokens.Jwt.dll
+<<<<<<< HEAD
 C:\Users\Isak\Development\tinkerform\api\bin\Debug\net8.0\appsettings.Development.json
 C:\Users\Isak\Development\tinkerform\api\bin\Debug\net8.0\appsettings.json
 C:\Users\Isak\Development\tinkerform\api\bin\Debug\net8.0\api.staticwebassets.endpoints.json
@@ -85,3 +86,5 @@ C:\Users\Isak\Development\tinkerform\api\obj\Debug\net8.0\ref\api.dll
 C:\Users\Isak\Development\tinkerform\api\bin\Debug\net8.0\System.Net.Http.Formatting.dll
 C:\Users\Isak\Development\tinkerform\api\bin\Debug\net8.0\Newtonsoft.Json.dll
 C:\Users\Isak\Development\tinkerform\api\bin\Debug\net8.0\Newtonsoft.Json.Bson.dll
+=======
+>>>>>>> ae51e71737a9b004de938a112a7504db1afef049
