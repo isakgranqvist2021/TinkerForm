@@ -21,7 +21,12 @@ export async function getForms(): Promise<FormDto[]> {
     headers: {
       Authorization: `Bearer ${session.tokenSet.accessToken}`,
     },
-  }).then((res) => res.json());
+  })
+    .then((res) => res.json())
+    .catch((err) => {
+      console.error(err);
+      return [];
+    });
 }
 
 export async function getFormById(formId: string): Promise<FormDto | null> {
@@ -34,5 +39,10 @@ export async function getFormById(formId: string): Promise<FormDto | null> {
     headers: {
       Authorization: `Bearer ${session.tokenSet.accessToken}`,
     },
-  }).then((res) => res.json());
+  })
+    .then((res) => res.json())
+    .catch((err) => {
+      console.error(err);
+      return null;
+    });
 }
