@@ -6,7 +6,6 @@ import { redirect } from 'next/navigation';
 import { DeleteFormIconButton } from 'components/delete-form-button';
 import { EmptyState } from 'components/empty-state';
 import { FormTable } from 'db/query/form';
-import { getForms } from 'services/api/form';
 
 export const metadata = {
   title: 'My Forms',
