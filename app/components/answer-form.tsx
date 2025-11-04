@@ -5,7 +5,6 @@ import { Section } from 'models/form';
 import { FormProvider, useForm } from 'react-hook-form';
 import {
   ControlledBooleanInput,
-  ControlledCheckbox,
   ControlledFileInput,
   ControlledInput,
   ControlledRangeInput,
@@ -19,7 +18,7 @@ import {
 import { toast } from 'sonner';
 import React from 'react';
 import { SelectedResponse } from 'db/schema';
-import { FormDto } from 'services/api/forms';
+import { type FormDto } from 'services/api/forms.server';
 
 interface AnswerFormProps {
   sections: Section[];

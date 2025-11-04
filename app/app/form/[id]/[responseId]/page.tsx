@@ -1,12 +1,11 @@
 import { AnswerForm } from 'components/answer-form';
 import { MainContainer } from 'containers/main-container';
 import { sectionMapper } from 'db/mapper';
-import { FormTable } from 'db/query/form';
 import { ResponseTable } from 'db/query/response';
 import { SectionTable } from 'db/query/section';
 import { redirect } from 'next/navigation';
 import React from 'react';
-import { getFormById } from 'services/api/forms';
+import { getFormById } from 'services/api/forms.server';
 import { PageProps } from 'types/page';
 
 export async function generateMetadata(props: PageProps<{ id: string }>) {

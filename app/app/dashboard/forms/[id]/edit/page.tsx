@@ -6,7 +6,7 @@ import { auth0 } from 'lib/auth0';
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
 import React from 'react';
-import { getFormById } from 'services/api/forms';
+import { getFormById } from 'services/api/forms.server';
 import { PageProps } from 'types/page';
 
 export const metadata = {

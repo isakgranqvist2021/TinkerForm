@@ -12,10 +12,9 @@ import { ResponseTable } from 'db/query/response';
 import { SectionTable } from 'db/query/section';
 import { InsertAnswer, SelectedSection } from 'db/schema';
 import { auth0 } from 'lib/auth0';
-
 import { constructSchema } from 'models/answer-form.server';
 import { SectionType } from 'models/form';
-import { getFormById } from 'services/api/forms';
+import { getFormById } from 'services/api/forms.server';
 
 export async function POST(
   req: Request,

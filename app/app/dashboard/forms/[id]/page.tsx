@@ -2,7 +2,6 @@ import { ResponseProvider } from 'components/response-modal';
 import { CopyFormLink } from 'components/copy-form-link';
 import { DeleteFormIconButton } from 'components/delete-form-button';
 import { MainContainer } from 'containers/main-container';
-
 import { ResponseTable } from 'db/query/response';
 import { auth0 } from 'lib/auth0';
 import Link from 'next/link';
@@ -17,7 +16,7 @@ import {
 import { ResponseTableRow } from 'components/response-table-row';
 import { EmptyState } from 'components/empty-state';
 import { VisitFormLink } from 'components/view-form-link';
-import { getFormById } from 'services/api/forms';
+import { getFormById } from 'services/api/forms.server';
 
 export const metadata = {
   title: 'Form',
