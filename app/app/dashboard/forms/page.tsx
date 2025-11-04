@@ -5,8 +5,7 @@ import { MainContainer } from 'containers/main-container';
 import { redirect } from 'next/navigation';
 import { DeleteFormIconButton } from 'components/delete-form-button';
 import { EmptyState } from 'components/empty-state';
-import { type FormDto } from 'services/api/forms.server';
-import { env } from 'config';
+import { getForms, type FormDto } from 'services/api/forms.server';
 
 export const metadata = {
   title: 'My Forms',
@@ -18,36 +17,7 @@ export default async function Page() {
     return redirect('/auth/login');
   }
 
-  const url = `${env.API_URL}/form`;
-  const headers = {
-    Authorization: `Bearer ${session.tokenSet.accessToken}`,
-  };
-
-  let forms: FormDto[] = [];
-  try {
-    const res = await fetch(url, {
-      headers,
-    });
-
-    try {
-      forms = await res.json();
-    } catch (err) {
-      console.error({
-        error: err,
-        url,
-        headers,
-        res,
-        status: res.status,
-        statusText: res.statusText,
-      });
-    }
-  } catch (err) {
-    console.error({
-      error: err,
-      url,
-      headers,
-    });
-  }
+  const forms = await getForms();
 
   return (
     <MainContainer>
