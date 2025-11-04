@@ -16,10 +16,6 @@ async function isOwner(formId: string, email: string) {
   return true;
 }
 
-function deleteById(formId: string) {
-  return db.delete(formTable).where(eq(formTable.id, formId)).execute();
-}
-
 function updateById(formId: string, form: Omit<Form, 'sections'>) {
   return db
     .update(formTable)
@@ -48,6 +44,5 @@ function insertOne(form: Form, email: string) {
 export const FormTable = {
   insertOne,
   updateById,
-  deleteById,
   isOwner,
 };

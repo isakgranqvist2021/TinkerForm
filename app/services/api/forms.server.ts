@@ -47,3 +47,22 @@ export async function getFormById(formId: string): Promise<FormDto | null> {
       return null;
     });
 }
+
+export async function deleteFormById(formId: string): Promise<boolean> {
+  const session = await auth0.getSession();
+  if (!session?.user.email) {
+    return false;
+  }
+
+  return fetch(`${env.API_URL}/form/${formId}`, {
+    method: 'DELETE',
+    headers: {
+      Authorization: `Bearer ${session.tokenSet.accessToken}`,
+    },
+  })
+    .then((res) => res.ok)
+    .catch((err) => {
+      console.error(err);
+      return false;
+    });
+}

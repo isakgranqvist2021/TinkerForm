@@ -8,6 +8,7 @@ import { FormTable } from 'db/query/form';
 import { SectionTable } from 'db/query/section';
 import { auth0 } from 'lib/auth0';
 import { formSchema } from 'models/form';
+import { deleteFormById } from 'services/api/forms.server';
 
 export async function PATCH(
   req: Request,
@@ -55,7 +56,7 @@ export async function DELETE(
       return forbidden();
     }
 
-    await FormTable.deleteById(id);
+    await deleteFormById(id);
 
     return ok();
   } catch (err) {
