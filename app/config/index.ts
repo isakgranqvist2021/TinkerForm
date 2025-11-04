@@ -7,6 +7,8 @@ const env = {
 
   FILE_BASE_URL: 'https://flvrzldfcxnf78xl.public.blob.vercel-storage.com',
   BLOB_READ_WRITE_TOKEN: process.env.BLOB_READ_WRITE_TOKEN as string,
+
+  API_URL: process.env.API_URL as string,
 };
 
 const errors = [];

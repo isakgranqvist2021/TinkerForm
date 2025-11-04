@@ -1,3 +1,4 @@
+import { env } from 'config';
 import { auth0 } from 'lib/auth0';
 
 export interface FormDto {
@@ -17,7 +18,7 @@ export async function getForms(): Promise<FormDto[]> {
     return [];
   }
 
-  return fetch(`${process.env.API_URL}/form`, {
+  return fetch(`${env.API_URL}/form`, {
     headers: {
       Authorization: `Bearer ${session.tokenSet.accessToken}`,
     },
@@ -35,7 +36,7 @@ export async function getFormById(formId: string): Promise<FormDto | null> {
     return null;
   }
 
-  return fetch(`${process.env.API_URL}/form/${formId}`, {
+  return fetch(`${env.API_URL}/form/${formId}`, {
     headers: {
       Authorization: `Bearer ${session.tokenSet.accessToken}`,
     },
