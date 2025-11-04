@@ -21,6 +21,7 @@ export default async function Page() {
   const forms = (await fetch(`${env.API_URL}/form`, {
     headers: {
       Authorization: `Bearer ${session.tokenSet.accessToken}`,
+      Accept: 'application/json',
     },
   })
     .then(async (res) => {
