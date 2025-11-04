@@ -1,14 +1,20 @@
+export function requireEnv(variableName: string): string {
+  const value = process.env[variableName];
+
+  if (!value) {
+    throw new Error(`Missing env variable: ${variableName}`);
+  }
+
+  return value;
+}
+
 const env = {
-  NODE_ENV: process.env.NODE_ENV as string,
-
-  STRIPE_SECRET_KEY: process.env.STRIPE_SECRET_KEY as string,
-
-  DATABASE_URL: process.env.DATABASE_URL as string,
-
-  FILE_BASE_URL: 'https://flvrzldfcxnf78xl.public.blob.vercel-storage.com',
-  BLOB_READ_WRITE_TOKEN: process.env.BLOB_READ_WRITE_TOKEN as string,
-
-  API_URL: process.env.API_URL as string,
+  NODE_ENV: requireEnv('NODE_ENV'),
+  STRIPE_SECRET_KEY: requireEnv('STRIPE_SECRET_KEY'),
+  DATABASE_URL: requireEnv('DATABASE_URL'),
+  FILE_BASE_URL: requireEnv('FILE_BASE_URL'),
+  BLOB_READ_WRITE_TOKEN: requireEnv('BLOB_READ_WRITE_TOKEN'),
+  API_URL: requireEnv('API_URL'),
 };
 
 const errors = [];
