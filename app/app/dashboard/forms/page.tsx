@@ -5,7 +5,8 @@ import { MainContainer } from 'containers/main-container';
 import { redirect } from 'next/navigation';
 import { DeleteFormIconButton } from 'components/delete-form-button';
 import { EmptyState } from 'components/empty-state';
-import { FormDto, getForms } from 'services/api/form';
+import { FormTable } from 'db/query/form';
+import { getForms } from 'services/api/form';
 
 export const metadata = {
   title: 'My Forms',
@@ -17,9 +18,7 @@ export default async function Page() {
     return redirect('/auth/login');
   }
 
-  const forms = await getForms();
-
-  console.log(forms);
+  const forms = await FormTable.listByEmail(session.user.email);
 
   return (
     <MainContainer>
@@ -93,8 +92,10 @@ export default async function Page() {
   );
 }
 
-function renderFormListItem(form: FormDto) {
-  const responseCount = Number(form.responseCount);
+function renderFormListItem(
+  form: Awaited<ReturnType<typeof FormTable.listByEmail>>[number],
+) {
+  const responseCount = Number(form.response_count);
 
   return (
     <li key={form.id} className="list-row justify-between flex w-full p-0">
