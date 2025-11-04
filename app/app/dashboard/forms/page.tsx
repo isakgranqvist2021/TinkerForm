@@ -18,22 +18,36 @@ export default async function Page() {
     return redirect('/auth/login');
   }
 
-  const forms = (await fetch(`${env.API_URL}/form`, {
-    headers: {
-      Authorization: `Bearer ${session.tokenSet.accessToken}`,
-    },
-  })
-    .then(async (res) => {
-      const data = await res.json();
+  const url = `${env.API_URL}/form`;
+  const headers = {
+    Authorization: `Bearer ${session.tokenSet.accessToken}`,
+  };
 
-      console.log('Fetched forms:', data);
+  let forms: FormDto[] = [];
+  try {
+    const res = await fetch(url, {
+      headers,
+    });
 
-      return data;
-    })
-    .catch((err) => {
-      console.error(err);
-      return [];
-    })) as FormDto[];
+    try {
+      forms = await res.json();
+    } catch (err) {
+      console.error({
+        error: err,
+        url,
+        headers,
+        res,
+        status: res.status,
+        statusText: res.statusText,
+      });
+    }
+  } catch (err) {
+    console.error({
+      error: err,
+      url,
+      headers,
+    });
+  }
 
   return (
     <MainContainer>
