@@ -1,7 +1,8 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using api.Context;
 using api.Models;
+using api.Services;
+using api.Validators;
 
 namespace api.Controllers
 {
@@ -9,39 +10,19 @@ namespace api.Controllers
     [Route("[controller]")]
     public class FormController : ControllerBase
     {
-        private readonly ILogger<FormController> _logger;
-        private readonly AppDbContext _context;
+        private readonly FormService _formService;
 
-        public FormController(ILogger<FormController> logger, AppDbContext context)
+        public FormController(FormService formService)
         {
-            _logger = logger;
-            _context = context;
+            _formService = formService;
         }
 
         [HttpGet]
         [Authorize]
         public ActionResult<List<FormModel>> Get()
         {
-            var email = HttpContext.Items["Email"];
-            if (email == null)
-            {
-                return Unauthorized();
-            }
-
-            var forms = _context.form
-                .Where(f => f.email == email.ToString())
-                .Select(f => new FormModel
-                {
-                    id = f.id,
-                    email = f.email,
-                    title = f.title,
-                    description = f.description,
-                    location = f.location,
-                    created_at = f.created_at,
-                    updated_at = f.updated_at,
-                    response_count = _context.response.Count(r => r.fk_form_id == f.id && r.completed_at != null),
-                })
-                .ToList();
+            var email = EmailValidator.ExtractEmailFromContext(HttpContext);
+            var forms = _formService.GetFormsByEmail(email);
 
             return Ok(forms);
         }
@@ -51,27 +32,8 @@ namespace api.Controllers
         [Authorize]
         public ActionResult<FormModel> GetById(Guid id)
         {
-            var email = HttpContext.Items["Email"];
-            if (email == null)
-            {
-                return Unauthorized();
-            }
-
-            var form = _context.form
-                .Where(f => f.id == id && f.email == email.ToString())
-                .Select(f => new FormModel
-                {
-                    id = f.id,
-                    email = f.email,
-                    title = f.title,
-                    description = f.description,
-                    location = f.location,
-                    created_at = f.created_at,
-                    updated_at = f.updated_at,
-                    response_count = _context.response.Count(r => r.fk_form_id == f.id && r.completed_at != null),
-                })
-                .FirstOrDefault();
-
+            var email = EmailValidator.ExtractEmailFromContext(HttpContext);
+            var form = _formService.GetById(id, email);
             if (form == null)
             {
                 return NotFound();
@@ -80,6 +42,16 @@ namespace api.Controllers
             return Ok(form);
         }
 
+        [HttpDelete("{id}")]
+        [Authorize]
+        public ActionResult Delete(Guid id)
+        {
+            var email = EmailValidator.ExtractEmailFromContext(HttpContext);
+            _formService.DeleteForm(id, email);
+
+            return NoContent();
+        }
     }
 }
+
 
