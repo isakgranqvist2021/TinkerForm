@@ -19,7 +19,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<AppDbContext>(options => options.UseNpgsql(DATABASE_URL));
 builder.Services.AddSingleton<IAuthorizationHandler, HasScopeHandler>();
-builder.Services.AddScoped<FormService>();
+builder.Services.AddScoped<ModelService>();
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
 {

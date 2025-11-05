@@ -10,11 +10,11 @@ namespace api.Controllers
     [Route("[controller]")]
     public class FormController : ControllerBase
     {
-        private readonly FormService _formService;
+        private readonly ModelService _modelService;
 
-        public FormController(FormService formService)
+        public FormController(ModelService modelServices)
         {
-            _formService = formService;
+            _modelService = modelServices;
         }
 
         [HttpGet]
@@ -22,7 +22,7 @@ namespace api.Controllers
         public ActionResult<List<FormModel>> Get()
         {
             var email = EmailValidator.ExtractEmailFromContext(HttpContext);
-            var forms = _formService.GetFormsByEmail(email);
+            var forms = _modelService.formService.GetFormsByEmail(email);
 
             return Ok(forms);
         }
@@ -33,7 +33,7 @@ namespace api.Controllers
         public ActionResult<FormModel> GetById(Guid id)
         {
             var email = EmailValidator.ExtractEmailFromContext(HttpContext);
-            var form = _formService.GetById(id, email);
+            var form = _modelService.formService.GetById(id, email);
             if (form == null)
             {
                 return NotFound();
@@ -47,7 +47,7 @@ namespace api.Controllers
         public ActionResult Delete(Guid id)
         {
             var email = EmailValidator.ExtractEmailFromContext(HttpContext);
-            _formService.DeleteForm(id, email);
+            _modelService.formService.DeleteForm(id, email);
 
             return NoContent();
         }
