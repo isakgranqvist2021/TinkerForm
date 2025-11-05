@@ -65,7 +65,7 @@ export default async function Page() {
 function Art() {
   return (
     <svg
-      className="max-w-sm text-base-content max-h-96"
+      className="max-w-sm text-primary max-h-96"
       xmlns="http://www.w3.org/2000/svg"
       width="800.003"
       height="618.866"
