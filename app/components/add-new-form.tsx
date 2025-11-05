@@ -14,112 +14,14 @@ const defaultValues: Form = {
   title: '',
   description: '',
   location: '',
-  sections: [
-    {
-      id: crypto.randomUUID(),
-      type: 'text',
-      index: 0,
-      description: 'Please enter your legal name.',
-      title: 'Your name',
-      required: true,
-      min: 4,
-      max: 100,
-    },
-    {
-      id: crypto.randomUUID(),
-      type: 'email',
-      index: 1,
-      description: 'Please enter your personal email address.',
-      title: 'Your email',
-      required: true,
-    },
-    {
-      id: crypto.randomUUID(),
-      type: 'phone',
-      index: 2,
-      description: 'Please enter your phone number.',
-      title: 'Your phone number',
-      required: false,
-    },
-    {
-      id: crypto.randomUUID(),
-      type: 'link',
-      index: 3,
-      description: 'Please enter the link to your LinkedIn profile.',
-      title: 'LinkedIn profile',
-      required: true,
-    },
-    {
-      id: crypto.randomUUID(),
-      type: 'file',
-      index: 4,
-      description: 'Please upload your resume/CV.',
-      title: 'Resume/CV',
-      required: true,
-    },
-    {
-      id: crypto.randomUUID(),
-      type: 'boolean',
-      index: 5,
-      description: 'Do you agree to the terms and conditions?',
-      title: 'Terms and Conditions Agreement',
-      required: true,
-    },
-    {
-      id: crypto.randomUUID(),
-      type: 'range',
-      index: 6,
-      description:
-        'On a scale of 1 to 10, how would you rate your proficiency in JavaScript?',
-      title: 'JavaScript Proficiency',
-      required: true,
-      min: 1,
-      max: 10,
-    },
-  ],
+  sections: [],
 };
-
-const placeholders = [
-  {
-    title: 'Sales Representative',
-    description:
-      "We're looking for a skilled sales representative to join our team and help drive revenue growth through effective client engagement and relationship management.",
-    location: 'New York, NY',
-  },
-  {
-    title: 'Customer Support Specialist',
-    description:
-      'Seeking a dedicated customer support specialist to provide exceptional service and resolve client issues efficiently, ensuring high customer satisfaction.',
-    location: 'Remote',
-  },
-  {
-    title: 'Marketing Coordinator',
-    description:
-      'Hiring a creative marketing coordinator to assist in the development and execution of marketing campaigns, social media management, and event planning.',
-    location: 'Los Angeles, CA',
-  },
-  {
-    title: 'Software Engineer',
-    description:
-      'Looking for a talented software engineer to design, develop, and maintain high-quality software solutions that meet user needs and business goals.',
-    location: 'San Francisco, CA',
-  },
-  {
-    title: 'Product Manager',
-    description:
-      'Seeking an experienced product manager to lead cross-functional teams in the development and launch of innovative products that drive business success.',
-    location: 'Remote',
-  },
-];
-
-const randomIndex = Math.floor(Math.random() * placeholders.length);
-const randomPlaceholder = placeholders[randomIndex];
 
 export function AddNewForm() {
   const router = useRouter();
 
   const form = useForm<Form>({
-    defaultValues: { ...defaultValues, ...randomPlaceholder },
+    defaultValues: defaultValues,
     resolver: zodResolver(formSchema),
   });
 

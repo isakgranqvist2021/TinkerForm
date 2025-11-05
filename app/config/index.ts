@@ -12,7 +12,6 @@ const env = {
   NODE_ENV: requireEnv('NODE_ENV'),
   STRIPE_SECRET_KEY: requireEnv('STRIPE_SECRET_KEY'),
   DATABASE_URL: requireEnv('DATABASE_URL'),
-  FILE_BASE_URL: requireEnv('FILE_BASE_URL'),
   BLOB_READ_WRITE_TOKEN: requireEnv('BLOB_READ_WRITE_TOKEN'),
   API_URL: requireEnv('API_URL'),
 };

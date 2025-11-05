@@ -197,11 +197,9 @@ export function ControlledRangeInput(
 export function ControlledBooleanInput(
   props: ControlledComponentProps & React.ComponentProps<'input'>,
 ) {
-  const { name, label, ...rest } = props;
+  const { name, label } = props;
 
   const controller = useController({ name });
-
-  console.log(controller.field.value);
 
   return (
     <fieldset className="fieldset w-full">

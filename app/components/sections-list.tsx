@@ -338,3 +338,67 @@ function ListItem(props: ListItemProps) {
     </li>
   );
 }
+
+const exampleSections = [
+  {
+    id: crypto.randomUUID(),
+    type: 'text',
+    index: 0,
+    description: 'Please enter your legal name.',
+    title: 'Your name',
+    required: true,
+    min: 4,
+    max: 100,
+  },
+  {
+    id: crypto.randomUUID(),
+    type: 'email',
+    index: 1,
+    description: 'Please enter your personal email address.',
+    title: 'Your email',
+    required: true,
+  },
+  {
+    id: crypto.randomUUID(),
+    type: 'phone',
+    index: 2,
+    description: 'Please enter your phone number.',
+    title: 'Your phone number',
+    required: false,
+  },
+  {
+    id: crypto.randomUUID(),
+    type: 'link',
+    index: 3,
+    description: 'Please enter the link to your LinkedIn profile.',
+    title: 'LinkedIn profile',
+    required: true,
+  },
+  {
+    id: crypto.randomUUID(),
+    type: 'file',
+    index: 4,
+    description: 'Please upload your resume/CV.',
+    title: 'Resume/CV',
+    required: true,
+  },
+  {
+    id: crypto.randomUUID(),
+    type: 'boolean',
+    index: 5,
+    description: 'Do you agree to the terms and conditions?',
+    title: 'Terms and Conditions Agreement',
+    required: true,
+  },
+  {
+    id: crypto.randomUUID(),
+    type: 'range',
+    index: 6,
+    description:
+      'On a scale of 1 to 10, how would you rate your proficiency in JavaScript?',
+    title: 'JavaScript Proficiency',
+    required: true,
+    min: 1,
+    max: 10,
+  },
+];

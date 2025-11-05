@@ -31,8 +31,6 @@ See app/.env.template
 
 `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY`
 
-`FILE_BASE_URL`
-
 `API_URL`
 
 `DATABASE_URL`

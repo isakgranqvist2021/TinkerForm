@@ -3,3 +3,51 @@
 @plugin "daisyui" {
   themes: all;
 }
+
+@layer utilities {
+  .ql-container.ql-snow,
+  .ql-toolbar.ql-snow {
+    --input-color: color-mix(in oklab, var(--color-base-content) 20%, #0000);
+  }
+
+  .ql-container:focus-within {
+    --input-color: var(--color-base-content);
+  }
+}
+
+.ql-container.ql-snow {
+  border-color: var(--input-color) !important;
+  border-bottom-left-radius: var(--join-ee, var(--radius-field));
+  border-bottom-right-radius: var(--join-ee, var(--radius-field));
+  border-top: 1px solid var(--input-color) !important;
+
+  box-shadow:
+    0 1px
+      color-mix(in oklab, var(--input-color) calc(var(--depth) * 10%), #0000)
+      inset,
+    0 -1px oklch(100% 0 0 / calc(var(--depth) * 0.1)) inset;
+  color: var(--color-base-content);
+}
+
+.ql-container:focus-within {
+  outline: 2px solid var(--input-color);
+  outline-offset: 2px;
+  isolation: isolate;
+  z-index: 1;
+  box-shadow: 0 1px
+    color-mix(in oklab, var(--input-color) calc(var(--depth) * 10%), #0000);
+}
+
+.ql-toolbar.ql-snow {
+  border-color: var(--input-color) !important;
+  border-top-left-radius: var(--join-ee, var(--radius-field));
+  border-top-right-radius: var(--join-ee, var(--radius-field));
+  color: var(--color-base-content);
+  border-bottom: none !important;
+}
+
+.ql-stroke,
+.ql-picker-label {
+  stroke: var(--color-base-content) !important;
+  color: var(--color-base-content) !important;
+}

@@ -16,12 +16,14 @@ export function FormDetails() {
         name="title"
         label="Title"
         disabled={formState.isSubmitting}
+        placeholder="Software Engineer"
       />
 
       <ControlledInput
         name="location"
         label="Location"
         disabled={formState.isSubmitting}
+        placeholder="San Francisco, CA"
       />
 
       <ControlledTextarea
