@@ -30,7 +30,7 @@ async function NavDropdown() {
   if (!user) {
     return (
       <li>
-        <Link href="/auth/login">Log In</Link>
+        <a href="/auth/login">Log In</a>
       </li>
     );
   }
@@ -65,7 +65,7 @@ async function NavDropdown() {
           <Link href="/dashboard/account">My Account</Link>
         </li>
         <li>
-          <Link href="/auth/logout">Logout</Link>
+          <a href="/auth/logout">Logout</a>
         </li>
       </ul>
     </div>

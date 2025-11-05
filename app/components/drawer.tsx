@@ -1,7 +1,10 @@
+import { auth0 } from 'lib/auth0';
 import Link from 'next/link';
 import React from 'react';
 
-export function Drawer(props: React.PropsWithChildren) {
+export async function Drawer(props: React.PropsWithChildren) {
+  const session = await auth0.getSession();
+
   const links = (
     <React.Fragment>
       <li>
@@ -54,9 +57,15 @@ export function Drawer(props: React.PropsWithChildren) {
               <ul className="menu menu-horizontal px-1">{links}</ul>
             </div>
             <div className="navbar-end">
-              <Link href="/dashboard/forms" className="btn btn-primary">
-                Get Started
-              </Link>
+              {session ? (
+                <Link href="/dashboard/forms" className="btn btn-primary">
+                  Dashboard
+                </Link>
+              ) : (
+                <a href="/auth/login" className="btn btn-primary">
+                  Get Started
+                </a>
+              )}
             </div>
           </div>
         </div>

@@ -8,6 +8,8 @@ export const metadata = {
 };
 
 export default async function Page() {
+  const session = await auth0.getSession();
+
   return (
     <Drawer>
       <div
@@ -28,9 +30,15 @@ export default async function Page() {
             </p>
 
             <div className="flex gap-6">
-              <Link href="/dashboard/forms" className="btn btn-primary">
-                Get Started
-              </Link>
+              {session ? (
+                <Link href="/dashboard/forms" className="btn btn-primary">
+                  Dashboard
+                </Link>
+              ) : (
+                <a href="/auth/login" className="btn btn-primary">
+                  Get Started
+                </a>
+              )}
 
               <a
                 href="https://github.com/isakgranqvist2021/TinkerForm"
