@@ -1,7 +1,13 @@
 import Link from 'next/link';
 import React from 'react';
+import { ThemeToggler } from './theme-toggler';
+import { getThemeFromCookie } from 'utils/utils.server';
+import { auth0 } from 'lib/auth0';
 
-export function Drawer(props: React.PropsWithChildren) {
+export async function Drawer(props: React.PropsWithChildren) {
+  const session = await auth0.getSession();
+  const theme = await getThemeFromCookie();
+
   const links = (
     <React.Fragment>
       <li>
@@ -53,10 +59,18 @@ export function Drawer(props: React.PropsWithChildren) {
             <div className="navbar-center hidden lg:flex">
               <ul className="menu menu-horizontal px-1">{links}</ul>
             </div>
-            <div className="navbar-end">
-              <Link href="/dashboard/forms" className="btn btn-primary">
-                Get Started
-              </Link>
+            <div className="navbar-end gap-4">
+              <ThemeToggler initialState={theme} />
+
+              {session ? (
+                <Link href="/dashboard/forms" className="btn btn-primary">
+                  Dashboard
+                </Link>
+              ) : (
+                <a href="/auth/login" className="btn btn-primary">
+                  Get Started
+                </a>
+              )}
             </div>
           </div>
         </div>
