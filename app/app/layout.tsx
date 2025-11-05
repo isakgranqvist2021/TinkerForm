@@ -4,7 +4,7 @@ import { Toaster } from 'sonner';
 
 export default async function RootLayout(props: React.PropsWithChildren) {
   return (
-    <html data-theme="halloween" lang="en">
+    <html data-theme="night" lang="en">
       <body className="min-h-screen">
         {props.children}
 
