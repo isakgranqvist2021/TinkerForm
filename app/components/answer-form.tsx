@@ -17,12 +17,12 @@ import {
 } from 'models/answer-form';
 import { toast } from 'sonner';
 import React from 'react';
-import { SelectedResponse } from 'db/schema';
 import { type FormDto } from 'services/api/forms.server';
+import { ResponseDto } from 'services/api/response.server';
 
 interface AnswerFormProps {
   sections: Section[];
-  response: SelectedResponse;
+  response: ResponseDto;
   form: FormDto;
 }
 
@@ -61,7 +61,7 @@ export function AnswerForm(props: AnswerFormProps) {
             </div>
           </div>
 
-          {!props.response.completed_at && (
+          {!props.response.completedAt && (
             <button
               onClick={() =>
                 formRef.current?.scrollIntoView({
@@ -86,7 +86,7 @@ export function AnswerForm(props: AnswerFormProps) {
           responseId={props.response.id}
           sections={props.sections}
           formId={props.form.id}
-          isCompleted={props.response.completed_at !== null}
+          isCompleted={props.response.completedAt !== null}
         />
       </div>
     </div>

@@ -3,11 +3,12 @@ import { auth0 } from 'lib/auth0';
 
 export interface FormDto {
   id: string;
+  createdAt: string;
+  updatedAt: string;
+
   email: string;
   title: string;
   description: string;
-  createdAt: string;
-  updatedAt: string;
   responseCount: number;
   location: string;
 }

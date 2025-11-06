@@ -4,9 +4,12 @@ import { SelectedResponse } from 'db/schema';
 import React from 'react';
 import { calculateDuration, formatDate, formatDuration } from 'utils';
 import useSWR from 'swr';
-import { responseMapper } from 'db/mapper';
 import { SectionType } from 'models/form';
 import Link from 'next/link';
+import {
+  AnswersByResponseIdDto,
+  ResponseDto,
+} from 'services/api/response.server';
 
 function ResponseModal() {
   const responseContext = useResponseContext();
@@ -40,7 +43,10 @@ function ResponseModalContent(props: ResponseModalContentProps) {
         throw new Error('Failed to fetch response details');
       }
 
-      return (await res.json()) as ReturnType<typeof responseMapper>;
+      return (await res.json()) as {
+        answers: AnswersByResponseIdDto[];
+        response: ResponseDto;
+      };
     },
   );
 
@@ -49,7 +55,7 @@ function ResponseModalContent(props: ResponseModalContentProps) {
     props.response.completed_at,
   );
 
-  const hasAnswers = Boolean(data?.items.length);
+  const hasAnswers = Boolean(data?.answers.length);
 
   return (
     <React.Fragment>
@@ -108,11 +114,17 @@ function ResponseModalContent(props: ResponseModalContentProps) {
 
             {hasAnswers &&
               !isLoading &&
-              data?.items.map((item: any, index: number) => (
+              data?.answers.map((item, index: number) => (
                 <AnswerListItem
                   key={index}
                   question={item.section.title}
-                  answer={item.answer.answer}
+                  answer={
+                    item.answer.answerText ??
+                    item.answer.answerNumber?.toString() ??
+                    item.answer.answerBoolean?.toString() ??
+                    item.answer.answerFile ??
+                    ''
+                  }
                   type={item.section.type}
                 />
               ))}

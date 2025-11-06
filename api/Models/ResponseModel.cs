@@ -7,7 +7,7 @@ namespace api.Models
     public class ResponseModel : BaseModel
     {
         [Required]
-        [JsonPropertyName("formId")]
+        [JsonPropertyName("fkFormId")]
         public Guid fk_form_id { get; set; }
 
         [JsonPropertyName("completedAt")]

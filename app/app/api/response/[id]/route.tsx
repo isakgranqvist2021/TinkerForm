@@ -1,8 +1,9 @@
 import { internalServerError, ok, unauthorized } from 'app/api/utils';
-import { responseMapper } from 'db/mapper';
-import { AnswersTable } from 'db/query/answer';
-import { ResponseTable } from 'db/query/response';
 import { auth0 } from 'lib/auth0';
+import {
+  getAnswersByResponseId,
+  getResponseById,
+} from 'services/api/response.server';
 
 export async function GET(
   req: Request,
@@ -16,10 +17,10 @@ export async function GET(
       return unauthorized();
     }
 
-    const response = await ResponseTable.findById(id);
-    const answers = await AnswersTable.findByResponseId(id);
+    const response = await getResponseById(id);
+    const answers = await getAnswersByResponseId(id);
 
-    return ok(responseMapper(response, answers));
+    return ok({ response, answers });
   } catch (err) {
     return internalServerError();
   }

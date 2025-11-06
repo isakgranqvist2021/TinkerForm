@@ -9,6 +9,7 @@ export const sectionTypes = [
   'file',
   'range',
   'boolean',
+  'multiple-choice',
 ] satisfies Section['type'][];
 
 export type BaseSection = z.infer<typeof baseSectionSchema>;
@@ -72,6 +73,17 @@ export const booleanSectionSchema = baseSectionSchema.extend({
   type: z.literal('boolean'),
 });
 
+export const multipleChoiceOptionSchema = z.object({
+  text: z.string().min(1, 'Option text is required'),
+});
+export type MultipleChoiceSection = z.infer<typeof multipleChoiceSectionSchema>;
+export const multipleChoiceSectionSchema = baseSectionSchema.extend({
+  type: z.literal('multiple-choice'),
+  options: z
+    .array(multipleChoiceOptionSchema)
+    .min(2, 'At least two options are required'),
+});
+
 export const sectionSchema = z.discriminatedUnion('type', [
   textSectionSchema,
   linkSectionSchema,
@@ -80,6 +92,7 @@ export const sectionSchema = z.discriminatedUnion('type', [
   fileSectionSchema,
   rangeSectionSchema,
   booleanSectionSchema,
+  multipleChoiceSectionSchema,
 ]);
 export type Section = z.infer<typeof sectionSchema>;
 

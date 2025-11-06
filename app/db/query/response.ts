@@ -14,15 +14,6 @@ async function insertOne(formId: string) {
   return responses[0];
 }
 
-async function findById(responseId: string) {
-  const responses = await db
-    .select()
-    .from(responseTable)
-    .where(eq(responseTable.id, responseId));
-
-  return responses[0];
-}
-
 async function updateCompletedAt(responseId: string) {
   return db
     .update(responseTable)
@@ -63,7 +54,6 @@ function listByFormId(formId: string) {
 
 export const ResponseTable = {
   insertOne,
-  findById,
   updateCompletedAt,
   countByFormId,
   countCompletedByFormId,
