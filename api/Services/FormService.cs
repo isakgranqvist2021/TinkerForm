@@ -59,5 +59,25 @@ namespace api.Services
                 })
                 .FirstOrDefault();
         }
+
+
+        public FormModel? GetSlimById(Guid id)
+        {
+            return
+                _context.form
+                .Where(f => f.id == id)
+                .Select(f => new FormModel
+                {
+                    id = f.id,
+                    email = f.email,
+                    title = f.title,
+                    description = f.description,
+                    location = f.location,
+                    created_at = f.created_at,
+                    updated_at = f.updated_at,
+                    response_count = null,
+                })
+                .FirstOrDefault();
+        }
     }
 }

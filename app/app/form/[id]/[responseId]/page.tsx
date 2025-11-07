@@ -1,17 +1,16 @@
 import { AnswerForm } from 'components/answer-form';
 import { MainContainer } from 'containers/main-container';
 import { sectionMapper } from 'db/mapper';
-import { ResponseTable } from 'db/query/response';
 import { SectionTable } from 'db/query/section';
 import { redirect } from 'next/navigation';
 import React from 'react';
-import { getFormById } from 'services/api/forms.server';
+import { getSlimFormById } from 'services/api/forms.server';
 import { getResponseById } from 'services/api/response.server';
 import { PageProps } from 'types/page';
 
 export async function generateMetadata(props: PageProps<{ id: string }>) {
   const params = await props.params;
-  const form = await getFormById(params.id);
+  const form = await getSlimFormById(params.id);
 
   return {
     title: form ? form.title : 'Form',
@@ -24,14 +23,11 @@ export default async function Page(
 ) {
   const params = await props.params;
 
-  const form = await getFormById(params.id);
-  if (!form) {
-    return redirect('/404');
-  }
-
+  const form = await getSlimFormById(params.id);
   const response = await getResponseById(params.responseId);
-  if (!response) {
-    return redirect(`/form/${form.id}`);
+
+  if (!form || !response) {
+    return redirect('/404');
   }
 
   const sections = await SectionTable.listByFormId(form.id);

@@ -30,7 +30,6 @@ namespace api.Controllers
         }
 
         [HttpGet("{id}")]
-        [Authorize]
         public ActionResult<ResponseModel> GetById(Guid id)
         {
             var response = _modelService.responseService.GetById(id);

@@ -51,6 +51,19 @@ namespace api.Controllers
 
             return NoContent();
         }
+
+
+        [HttpGet("{id}/slim")]
+        public ActionResult<FormModel> GetSlimById(Guid id)
+        {
+            var form = _modelService.formService.GetSlimById(id);
+            if (form == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(form);
+        }
     }
 }
 

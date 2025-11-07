@@ -11,10 +11,9 @@ import { AnswersTable } from 'db/query/answer';
 import { ResponseTable } from 'db/query/response';
 import { SectionTable } from 'db/query/section';
 import { InsertAnswer, SelectedSection } from 'db/schema';
-import { auth0 } from 'lib/auth0';
 import { constructSchema } from 'models/answer-form.server';
 import { SectionType } from 'models/form';
-import { getFormById } from 'services/api/forms.server';
+import { getSlimFormById } from 'services/api/forms.server';
 import { getResponseById } from 'services/api/response.server';
 
 export async function POST(
@@ -24,12 +23,7 @@ export async function POST(
   try {
     const { id, responseId } = await ctx.params;
 
-    const session = await auth0.getSession();
-    if (!session?.user.email) {
-      return unauthorized();
-    }
-
-    const form = await getFormById(id);
+    const form = await getSlimFormById(id);
     if (!form) {
       return notFound();
     }

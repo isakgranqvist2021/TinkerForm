@@ -20,6 +20,6 @@ namespace api.Models
 
         [NotMapped]
         [JsonPropertyName("responseCount")]
-        public int response_count { get; set; } = 0;
+        public int? response_count { get; set; } = null;
     }
 }

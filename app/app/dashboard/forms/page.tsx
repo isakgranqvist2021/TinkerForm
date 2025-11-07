@@ -92,7 +92,7 @@ export default async function Page() {
 }
 
 function renderFormListItem(form: FormDto) {
-  const responseCount = Number(form.responseCount);
+  const responseCount = Number(form.responseCount ?? 0);
 
   return (
     <li key={form.id} className="list-row justify-between flex w-full p-0">

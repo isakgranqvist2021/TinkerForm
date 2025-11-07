@@ -41,16 +41,7 @@ export async function getAnswersByResponseId(
 export async function getResponseById(
   responseId: string,
 ): Promise<ResponseDto | null> {
-  const session = await auth0.getSession();
-  if (!session?.user.email) {
-    return null;
-  }
-
-  return fetch(`${env.API_URL}/response/${responseId}`, {
-    headers: {
-      Authorization: `Bearer ${session.tokenSet.accessToken}`,
-    },
-  })
+  return fetch(`${env.API_URL}/response/${responseId}`)
     .then((res) => res.json())
     .catch((err) => {
       console.error(err);

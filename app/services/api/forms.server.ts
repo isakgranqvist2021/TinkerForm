@@ -9,7 +9,7 @@ export interface FormDto {
   email: string;
   title: string;
   description: string;
-  responseCount: number;
+  responseCount: number | null;
   location: string;
 }
 
@@ -42,6 +42,15 @@ export async function getFormById(formId: string): Promise<FormDto | null> {
       Authorization: `Bearer ${session.tokenSet.accessToken}`,
     },
   })
+    .then((res) => res.json())
+    .catch((err) => {
+      console.error(err);
+      return null;
+    });
+}
+
+export async function getSlimFormById(formId: string): Promise<FormDto | null> {
+  return fetch(`${env.API_URL}/form/${formId}/slim`)
     .then((res) => res.json())
     .catch((err) => {
       console.error(err);
