@@ -46,16 +46,6 @@ export async function DELETE(
   try {
     const { id } = await ctx.params;
 
-    const session = await auth0.getSession();
-    if (!session?.user.email) {
-      return unauthorized();
-    }
-
-    const canContinue = await FormTable.isOwner(id, session.user.email);
-    if (!canContinue) {
-      return forbidden();
-    }
-
     await deleteFormById(id);
 
     return ok();

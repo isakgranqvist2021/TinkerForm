@@ -1,6 +1,6 @@
 import { db } from 'db/db';
 import { InsertSection, sectionTable, SelectedSection } from 'db/schema';
-import { and, eq, inArray, sql } from 'drizzle-orm';
+import { and, eq, inArray } from 'drizzle-orm';
 import { Section } from 'models/form';
 
 async function upsertMany(formId: string, sections: Section[]) {
