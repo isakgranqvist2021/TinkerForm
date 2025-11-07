@@ -52,7 +52,7 @@ export function getAnswerSchema(section: Section) {
         .min(section.min)
         .max(section.max);
 
-    default:
+    case 'multiple-choice':
       return z.string();
   }
 }

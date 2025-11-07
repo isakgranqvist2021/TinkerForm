@@ -4,7 +4,7 @@ namespace api.Models
 {
     public class SectionModel : BaseModel
     {
-        [JsonPropertyName("formId")]
+        [JsonPropertyName("fkFormId")]
         public Guid fk_form_id { get; set; }
         public string type { get; set; } = string.Empty;
         public string title { get; set; } = string.Empty;

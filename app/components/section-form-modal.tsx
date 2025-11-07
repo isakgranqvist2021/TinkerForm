@@ -39,6 +39,11 @@ export function SectionFormModal(props: SectionFormModalProps) {
               </option>
             ))}
           </select>
+
+          <p className="label">
+            When someone fills out your form, the answer they provide will be in
+            this format.
+          </p>
         </fieldset>
 
         <Forms onSubmit={props.onSubmit} />
@@ -88,16 +93,45 @@ export function useSectionFormContext() {
 }
 
 export function getSectionDefaultValues(type: SectionType): Section {
-  return {
-    id: '',
-    index: 0,
-    description: '',
-    required: false,
-    title: '',
-    type,
-    min: 0,
-    max: 0,
-  };
+  switch (type) {
+    case 'text':
+    case 'range':
+      return {
+        id: '',
+        index: 0,
+        description: '',
+        required: false,
+        title: '',
+        type,
+        min: 0,
+        max: 0,
+      };
+
+    case 'boolean':
+    case 'email':
+    case 'file':
+    case 'link':
+    case 'phone':
+      return {
+        id: '',
+        index: 0,
+        description: '',
+        required: false,
+        title: '',
+        type,
+      };
+
+    case 'multiple-choice':
+      return {
+        id: '',
+        index: 0,
+        description: '',
+        required: false,
+        title: '',
+        type,
+        options: [],
+      };
+  }
 }
 
 const modalName = 'add-section-modal';

@@ -38,7 +38,10 @@ CREATE TABLE "section" (
 	"title" varchar(255) NOT NULL,
 	"index" integer NOT NULL,
 	"description" varchar(1000) NOT NULL,
-	"required" boolean DEFAULT false
+	"required" boolean DEFAULT false,
+	"min" integer,
+	"max" integer,
+	"options" jsonb
 );
 --> statement-breakpoint
 ALTER TABLE "answer" ADD CONSTRAINT "answer_fk_form_id_form_id_fk" FOREIGN KEY ("fk_form_id") REFERENCES "public"."form"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint

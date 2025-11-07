@@ -15,7 +15,7 @@ export async function POST(req: Request) {
     const form = formSchema.parse(body);
 
     const res = await FormTable.insertOne(form, session.user.email);
-    await SectionTable.insertMany(form, res[0].id);
+    await SectionTable.insertMany(form.sections, res[0].id);
 
     return created(res[0]);
   } catch (err) {

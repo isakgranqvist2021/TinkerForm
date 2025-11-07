@@ -58,6 +58,9 @@ export function getAnswerSchema(section: Section) {
         .number('This field must be a number')
         .min(section.min)
         .max(section.max);
+
+    case 'multiple-choice':
+      return z.string();
   }
 }
 
@@ -73,6 +76,7 @@ export function getConstructedSchemaDefaultValues(sections: Section[]) {
       case 'phone':
       case 'text':
       case 'file':
+      case 'multiple-choice':
         defaultValues[section.id] = '';
         break;
 

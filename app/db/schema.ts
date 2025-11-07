@@ -6,7 +6,9 @@ import {
   timestamp,
   boolean,
   uuid,
+  jsonb,
 } from 'drizzle-orm/pg-core';
+import { SectionType } from 'models/form';
 
 const defaultColumns = {
   id: uuid('id').primaryKey().defaultRandom(),
@@ -39,6 +41,7 @@ export const sectionTable = pgTable('section', {
   required: boolean('required').default(false),
   min: integer('min'),
   max: integer('max'),
+  options: jsonb().$type<{ text: string }[]>(),
 });
 
 export type SelectedResponse = InferSelectModel<typeof responseTable>;

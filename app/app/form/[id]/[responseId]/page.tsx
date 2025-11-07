@@ -6,6 +6,7 @@ import { SectionTable } from 'db/query/section';
 import { redirect } from 'next/navigation';
 import React from 'react';
 import { getFormById } from 'services/api/forms.server';
+import { getResponseById } from 'services/api/response.server';
 import { PageProps } from 'types/page';
 
 export async function generateMetadata(props: PageProps<{ id: string }>) {
@@ -28,7 +29,7 @@ export default async function Page(
     return redirect('/404');
   }
 
-  const response = await ResponseTable.findById(params.responseId);
+  const response = await getResponseById(params.responseId);
   if (!response) {
     return redirect(`/form/${form.id}`);
   }

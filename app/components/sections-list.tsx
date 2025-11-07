@@ -33,7 +33,7 @@ import { EmptyState } from './empty-state';
 export function SectionsList() {
   const sectionFormContext = useSectionFormContext();
   const formContext = useFormContext<Form>();
-  const fieldArray = useFieldArray<Form>({
+  const fieldArray = useFieldArray<Form, 'sections'>({
     name: 'sections',
   });
 

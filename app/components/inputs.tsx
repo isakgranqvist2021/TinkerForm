@@ -230,3 +230,40 @@ export function ControlledBooleanInput(
     </fieldset>
   );
 }
+
+export function ControlledSelect(
+  props: ControlledComponentProps &
+    React.ComponentProps<'select'> & {
+      options: { value: string; label: string }[];
+    },
+) {
+  const { name, label, options, ...rest } = props;
+
+  const controller = useController({ name });
+
+  const error = controller.fieldState.error?.message;
+  return (
+    <fieldset className="fieldset w-full">
+      <legend className="fieldset-legend">{props.label}</legend>
+      <select
+        className="select w-full"
+        {...rest}
+        {...controller.field}
+        onChange={(e) => {
+          controller.field.onChange(e.target.value);
+        }}
+      >
+        {options.map((option) => (
+          <option key={option.value} value={option.value}>
+            {option.label}
+          </option>
+        ))}
+      </select>
+      {error ? (
+        <p className="text-error">{error}</p>
+      ) : (
+        <p className="label">{props.description}</p>
+      )}
+    </fieldset>
+  );
+}

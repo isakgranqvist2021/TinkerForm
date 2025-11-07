@@ -1,5 +1,5 @@
 {
-  "id": "8ad943e4-6224-4f3b-bf12-961d9c2abf21",
+  "id": "3ea891ea-eb57-471e-8125-069f31ac6ace",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -299,6 +299,24 @@
           "primaryKey": false,
           "notNull": false,
           "default": false
+        },
+        "min": {
+          "name": "min",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "max": {
+          "name": "max",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "options": {
+          "name": "options",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": false
         }
       },
       "indexes": {},

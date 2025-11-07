@@ -15,6 +15,7 @@ import { auth0 } from 'lib/auth0';
 import { constructSchema } from 'models/answer-form.server';
 import { SectionType } from 'models/form';
 import { getFormById } from 'services/api/forms.server';
+import { getResponseById } from 'services/api/response.server';
 
 export async function POST(
   req: Request,
@@ -33,12 +34,12 @@ export async function POST(
       return notFound();
     }
 
-    const response = await ResponseTable.findById(responseId);
-    if (!response || response.fk_form_id !== form.id) {
+    const response = await getResponseById(responseId);
+    if (!response || response.fkFormId !== form.id) {
       return notFound();
     }
 
-    if (response.completed_at) {
+    if (response.completedAt) {
       return badRequest('Response already completed');
     }
 
@@ -105,6 +106,10 @@ async function validateAnswers(
           });
           formDataObj[key] = url;
           break;
+
+        case 'multiple-choice':
+          formDataObj[key] = value;
+          break;
       }
     }
 
@@ -133,6 +138,7 @@ async function validateAnswers(
         case 'email':
         case 'link':
         case 'phone':
+        case 'multiple-choice':
           insertAnswer.answer_text = parsed[key] as string;
           break;
 
