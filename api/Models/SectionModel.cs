@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
 
 namespace api.Models
@@ -13,6 +14,9 @@ namespace api.Models
         public bool required { get; set; } = false;
         public int? min { get; set; }
         public int? max { get; set; }
+
+        [Column(TypeName = "jsonb")]
+        public object? options { get; set; }
     }
 }
 
