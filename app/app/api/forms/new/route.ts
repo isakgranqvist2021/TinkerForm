@@ -1,8 +1,8 @@
 import { created, internalServerError, unauthorized } from 'app/api/utils';
-import { FormTable } from 'db/query/form';
 import { SectionTable } from 'db/query/section';
 import { auth0 } from 'lib/auth0';
 import { formSchema } from 'models/form';
+import { createForm } from 'services/api/forms.server';
 
 export async function POST(req: Request) {
   try {
@@ -14,10 +14,14 @@ export async function POST(req: Request) {
     const body = await req.json();
     const form = formSchema.parse(body);
 
-    const res = await FormTable.insertOne(form, session.user.email);
-    await SectionTable.insertMany(form.sections, res[0].id);
+    const res = await createForm(form);
+    if (!res) {
+      return internalServerError();
+    }
 
-    return created(res[0]);
+    await SectionTable.insertMany(form.sections, res.id);
+
+    return created(res);
   } catch (err) {
     return internalServerError();
   }

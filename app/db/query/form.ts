@@ -28,21 +28,7 @@ function updateById(formId: string, form: Omit<Form, 'sections'>) {
     .execute();
 }
 
-function insertOne(form: Form, email: string) {
-  return db
-    .insert(formTable)
-    .values({
-      email,
-      title: form.title,
-      description: form.description,
-      location: form.location,
-    })
-    .returning()
-    .execute();
-}
-
 export const FormTable = {
-  insertOne,
   updateById,
   isOwner,
 };

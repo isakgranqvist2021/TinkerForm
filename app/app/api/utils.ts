@@ -36,6 +36,6 @@ export function ok(data: Record<string, unknown> = {}) {
   return new Response(JSON.stringify(data), { status: 200 });
 }
 
-export function created(data: Record<string, unknown> = {}) {
+export function created(data: Record<string, any> = {}) {
   return new Response(JSON.stringify(data), { status: 201 });
 }
