@@ -65,3 +65,17 @@ export const answerTable = pgTable('answer', {
   answer_boolean: boolean('answer_boolean'),
   answer_file: varchar('answer_file', { length: 500 }),
 });
+
+export type InsertMultipleChoiceOption = InferInsertModel<
+  typeof multipleChoiceOptionTable
+>;
+export type SelectedMultipleChoiceOption = InferSelectModel<
+  typeof multipleChoiceOptionTable
+>;
+export const multipleChoiceOptionTable = pgTable('multiple_choice_option', {
+  ...defaultColumns,
+  fk_section_id: uuid('fk_section_id')
+    .references(() => sectionTable.id, { onDelete: 'cascade' })
+    .notNull(),
+  text: varchar('text', { length: 255 }).notNull(),
+});

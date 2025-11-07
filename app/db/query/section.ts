@@ -1,7 +1,13 @@
 import { db } from 'db/db';
-import { InsertSection, sectionTable, SelectedSection } from 'db/schema';
+import {
+  InsertMultipleChoiceOption,
+  InsertSection,
+  multipleChoiceOptionTable,
+  sectionTable,
+  SelectedSection,
+} from 'db/schema';
 import { and, eq, inArray } from 'drizzle-orm';
-import { Form, Section } from 'models/form';
+import { Section } from 'models/form';
 
 async function upsertMany(formId: string, sections: Section[]) {
   const currentSections = await listByFormId(formId);
@@ -57,10 +63,7 @@ async function upsertMany(formId: string, sections: Section[]) {
   }
 
   if (sectionsToCreate.length > 0) {
-    await db
-      .insert(sectionTable)
-      .values(sectionsToCreate.map((section) => getSection(section, formId)))
-      .execute();
+    await SectionTable.insertMany(sectionsToCreate, formId);
   }
 }
 
@@ -71,6 +74,7 @@ function getSection(section: Section, formId: string): InsertSection {
     case 'file':
     case 'link':
     case 'phone':
+    case 'multiple-choice':
       return {
         fk_form_id: formId,
         type: section.type,
@@ -105,42 +109,73 @@ function listByFormId(formId: string) {
     .where(eq(sectionTable.fk_form_id, formId));
 }
 
-function insertMany(form: Form, formId: string) {
-  return db
-    .insert(sectionTable)
-    .values(
-      form.sections.map((section) => {
-        switch (section.type) {
-          case 'email':
-          case 'file':
-          case 'link':
-          case 'phone':
-          case 'boolean':
-            return {
-              fk_form_id: formId,
-              type: section.type,
-              title: section.title,
-              index: section.index,
-              description: section.description,
-              required: section.required,
-            };
+async function insertMany(sections: Section[], formId: string) {
+  const options: InsertMultipleChoiceOption[] = [];
 
-          case 'range':
-          case 'text':
-            return {
-              fk_form_id: formId,
-              type: section.type,
-              title: section.title,
-              index: section.index,
-              description: section.description,
-              required: section.required,
-              min: section.min,
-              max: section.max,
-            };
+  const values = sections.map((section): InsertSection => {
+    switch (section.type) {
+      case 'email':
+      case 'file':
+      case 'link':
+      case 'phone':
+      case 'boolean':
+        return {
+          fk_form_id: formId,
+          type: section.type,
+          title: section.title,
+          index: section.index,
+          description: section.description,
+          required: section.required,
+        };
+
+      case 'range':
+      case 'text':
+        return {
+          fk_form_id: formId,
+          type: section.type,
+          title: section.title,
+          index: section.index,
+          description: section.description,
+          required: section.required,
+          min: section.min,
+          max: section.max,
+        };
+
+      case 'multiple-choice':
+        const id = crypto.randomUUID();
+
+        for (let i = 0; i < section.options.length; i++) {
+          options.push({
+            fk_section_id: id,
+            text: section.options[i].text,
+          });
         }
-      }),
-    )
+
+        return {
+          id,
+          fk_form_id: formId,
+          type: section.type,
+          title: section.title,
+          index: section.index,
+          description: section.description,
+          required: section.required,
+          min: null,
+          max: null,
+        };
+    }
+  });
+
+  const result = await db
+    .insert(sectionTable)
+    .values(values)
+    .returning()
     .execute();
+
+  if (options.length > 0) {
+    await db.insert(multipleChoiceOptionTable).values(options).execute();
+  }
+
+  return result;
 }
 
 export const SectionTable = {

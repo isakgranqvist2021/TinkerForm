@@ -1,4 +1,4 @@
-import { SelectedAnswer, SelectedResponse, SelectedSection } from './schema';
+import { SelectedSection } from './schema';
 import { Section, SectionType } from 'models/form';
 
 export function sectionMapper(section: SelectedSection): Section {
@@ -30,6 +30,17 @@ export function sectionMapper(section: SelectedSection): Section {
         index: section.index,
         required: Boolean(section.required),
         title: section.title,
+      };
+
+    case 'multiple-choice':
+      return {
+        type,
+        description: section.description,
+        id: section.id,
+        index: section.index,
+        required: Boolean(section.required),
+        title: section.title,
+        options: [],
       };
 
     default:
