@@ -6,6 +6,7 @@ import {
   timestamp,
   boolean,
   uuid,
+  jsonb,
 } from 'drizzle-orm/pg-core';
 import { SectionType } from 'models/form';
 
@@ -29,13 +30,7 @@ export const formTable = pgTable('form', {
 });
 
 export type InsertSection = InferInsertModel<typeof sectionTable>;
-type BaseSelectedSection = InferSelectModel<typeof sectionTable>;
-
-export type SelectedSection = BaseSelectedSection & {
-  type: SectionType;
-  options?: SelectedMultipleChoiceOption[] | null;
-};
-
+export type SelectedSection = InferSelectModel<typeof sectionTable>;
 export const sectionTable = pgTable('section', {
   ...defaultColumns,
   fk_form_id,
@@ -46,6 +41,7 @@ export const sectionTable = pgTable('section', {
   required: boolean('required').default(false),
   min: integer('min'),
   max: integer('max'),
+  options: jsonb().$type<{ text: string }[]>(),
 });
 
 export type SelectedResponse = InferSelectModel<typeof responseTable>;
@@ -71,18 +67,4 @@ export const answerTable = pgTable('answer', {
   answer_number: integer('answer_number'),
   answer_boolean: boolean('answer_boolean'),
   answer_file: varchar('answer_file', { length: 500 }),
-});
-
-export type InsertMultipleChoiceOption = InferInsertModel<
-  typeof multipleChoiceOptionTable
->;
-export type SelectedMultipleChoiceOption = InferSelectModel<
-  typeof multipleChoiceOptionTable
->;
-export const multipleChoiceOptionTable = pgTable('multiple_choice_option', {
-  ...defaultColumns,
-  fk_section_id: uuid('fk_section_id')
-    .references(() => sectionTable.id, { onDelete: 'cascade' })
-    .notNull(),
-  text: varchar('text', { length: 255 }).notNull(),
 });

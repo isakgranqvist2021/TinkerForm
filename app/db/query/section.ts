@@ -1,11 +1,5 @@
 import { db } from 'db/db';
-import {
-  InsertMultipleChoiceOption,
-  InsertSection,
-  multipleChoiceOptionTable,
-  sectionTable,
-  SelectedSection,
-} from 'db/schema';
+import { InsertSection, sectionTable, SelectedSection } from 'db/schema';
 import { and, eq, inArray, sql } from 'drizzle-orm';
 import { Section } from 'models/form';
 
@@ -74,6 +68,18 @@ function getSection(section: Section, formId: string): InsertSection {
     case 'file':
     case 'link':
     case 'phone':
+      return {
+        fk_form_id: formId,
+        type: section.type,
+        title: section.title,
+        index: section.index,
+        description: section.description,
+        required: section.required,
+        updated_at: new Date(),
+        min: null,
+        max: null,
+      };
+
     case 'multiple-choice':
       return {
         fk_form_id: formId,
@@ -82,6 +88,7 @@ function getSection(section: Section, formId: string): InsertSection {
         index: section.index,
         description: section.description,
         required: section.required,
+        options: section.options,
         updated_at: new Date(),
         min: null,
         max: null,
@@ -104,57 +111,12 @@ function getSection(section: Section, formId: string): InsertSection {
 
 function listByFormId(formId: string) {
   return db
-    .select({
-      created_at: sectionTable.created_at,
-      id: sectionTable.id,
-      updated_at: sectionTable.updated_at,
-      fk_form_id: sectionTable.fk_form_id,
-      type: sectionTable.type,
-      title: sectionTable.title,
-      index: sectionTable.index,
-      description: sectionTable.description,
-      required: sectionTable.required,
-      min: sectionTable.min,
-      max: sectionTable.max,
-      options: sql`CASE
-        WHEN ${sectionTable.type} = 'multiple-choice' THEN
-          NULLIF(
-            jsonb_agg(
-              jsonb_build_object(
-                'id', ${multipleChoiceOptionTable.id},
-                'text', ${multipleChoiceOptionTable.text},
-                'fk_section_id', ${multipleChoiceOptionTable.fk_section_id}
-              )
-            ) FILTER (WHERE ${multipleChoiceOptionTable.id} IS NOT NULL),
-            '[]'::jsonb
-          )
-        ELSE NULL
-      END`,
-    })
+    .select()
     .from(sectionTable)
-    .leftJoin(
-      multipleChoiceOptionTable,
-      eq(sectionTable.id, multipleChoiceOptionTable.fk_section_id),
-    )
-    .where(eq(sectionTable.fk_form_id, formId))
-    .groupBy(
-      sectionTable.id,
-      sectionTable.created_at,
-      sectionTable.updated_at,
-      sectionTable.fk_form_id,
-      sectionTable.type,
-      sectionTable.title,
-      sectionTable.index,
-      sectionTable.description,
-      sectionTable.required,
-      sectionTable.min,
-      sectionTable.max,
-    ) as Promise<SelectedSection[]>;
+    .where(eq(sectionTable.fk_form_id, formId));
 }
 
 async function insertMany(sections: Section[], formId: string) {
-  const options: InsertMultipleChoiceOption[] = [];
-
   const values = sections.map((section): InsertSection => {
     switch (section.type) {
       case 'email':
@@ -185,23 +147,14 @@ async function insertMany(sections: Section[], formId: string) {
         };
 
       case 'multiple-choice':
-        const id = crypto.randomUUID();
-
-        for (let i = 0; i < section.options.length; i++) {
-          options.push({
-            fk_section_id: id,
-            text: section.options[i].text,
-          });
-        }
-
         return {
-          id,
           fk_form_id: formId,
           type: section.type,
           title: section.title,
           index: section.index,
           description: section.description,
           required: section.required,
+          options: section.options,
           min: null,
           max: null,
         };
@@ -213,10 +166,6 @@ async function insertMany(sections: Section[], formId: string) {
     .values(values)
     .returning()
     .execute();
-
-  if (options.length > 0) {
-    await db.insert(multipleChoiceOptionTable).values(options).execute();
-  }
 
   return result;
 }
