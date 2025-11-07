@@ -29,11 +29,9 @@ namespace api.Controllers
 
 
         [HttpGet("{id}")]
-        [Authorize]
         public ActionResult<FormModel> GetById(Guid id)
         {
-            var email = EmailValidator.ExtractEmailFromContext(HttpContext);
-            var form = _modelService.formService.GetById(id, email);
+            var form = _modelService.formService.GetById(id);
             if (form == null)
             {
                 return NotFound();
@@ -52,19 +50,6 @@ namespace api.Controllers
             return NoContent();
         }
 
-
-        [HttpGet("{id}/slim")]
-        public ActionResult<FormModel> GetSlimById(Guid id)
-        {
-            var form = _modelService.formService.GetSlimById(id);
-            if (form == null)
-            {
-                return NotFound();
-            }
-
-            return Ok(form);
-        }
-
         [HttpPost]
         [Authorize]
         public ActionResult<FormModel> Create(CreateFormModel form)
@@ -76,7 +61,25 @@ namespace api.Controllers
 
             var email = EmailValidator.ExtractEmailFromContext(HttpContext);
             var createdForm = _modelService.formService.InsertOne(form, email);
-            return CreatedAtAction(nameof(GetSlimById), new { id = createdForm.id }, createdForm);
+            return CreatedAtAction(nameof(GetById), new { id = createdForm.id }, createdForm);
+        }
+
+        [HttpPut("{id}")]
+        [Authorize]
+        public ActionResult Update(Guid id, [FromBody] UpdateFormModel form)
+        {
+            Console.WriteLine("Updating form with ID: " + id);
+            Console.WriteLine(ModelState.IsValid);
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var email = EmailValidator.ExtractEmailFromContext(HttpContext);
+            _modelService.formService.UpdateOne(form, id, email);
+
+            return NoContent();
         }
     }
 }

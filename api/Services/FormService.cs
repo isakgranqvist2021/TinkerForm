@@ -41,27 +41,7 @@ namespace api.Services
                 .ToList();
         }
 
-        public FormModel? GetById(Guid id, string email)
-        {
-            return
-                _context.form
-                .Where(f => f.id == id && f.email == email.ToString())
-                .Select(f => new FormModel
-                {
-                    id = f.id,
-                    email = f.email,
-                    title = f.title,
-                    description = f.description,
-                    location = f.location,
-                    created_at = f.created_at,
-                    updated_at = f.updated_at,
-                    response_count = _context.response.Count(r => r.fk_form_id == f.id && r.completed_at != null),
-                })
-                .FirstOrDefault();
-        }
-
-
-        public FormModel? GetSlimById(Guid id)
+        public FormModel? GetById(Guid id)
         {
             return
                 _context.form
@@ -75,7 +55,7 @@ namespace api.Services
                     location = f.location,
                     created_at = f.created_at,
                     updated_at = f.updated_at,
-                    response_count = null,
+                    response_count = _context.response.Count(r => r.fk_form_id == f.id && r.completed_at != null),
                 })
                 .FirstOrDefault();
         }
@@ -93,6 +73,20 @@ namespace api.Services
             _context.form.Add(newForm);
             _context.SaveChanges();
             return newForm;
+        }
+
+        public void UpdateOne(UpdateFormModel form, Guid id, string email)
+        {
+            var existingForm = _context.form.FirstOrDefault(f => f.id == id && f.email == email);
+            if (existingForm != null)
+            {
+                existingForm.title = form.title;
+                existingForm.description = form.description;
+                existingForm.location = form.location;
+                existingForm.updated_at = DateTime.UtcNow;
+
+                _context.SaveChanges();
+            }
         }
     }
 }

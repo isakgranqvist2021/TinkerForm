@@ -34,4 +34,16 @@ namespace api.Models
         [Required]
         public string location { get; set; } = string.Empty;
     }
+
+    public class UpdateFormModel
+    {
+        [Required]
+        public string title { get; set; } = string.Empty;
+
+        [Required]
+        public string description { get; set; } = string.Empty;
+
+        [Required]
+        public string location { get; set; } = string.Empty;
+    }
 }
