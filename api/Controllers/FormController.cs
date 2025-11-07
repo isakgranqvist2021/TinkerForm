@@ -64,6 +64,20 @@ namespace api.Controllers
 
             return Ok(form);
         }
+
+        [HttpPost]
+        [Authorize]
+        public ActionResult<FormModel> Create(CreateFormModel form)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var email = EmailValidator.ExtractEmailFromContext(HttpContext);
+            var createdForm = _modelService.formService.InsertOne(form, email);
+            return CreatedAtAction(nameof(GetSlimById), new { id = createdForm.id }, createdForm);
+        }
     }
 }
 

@@ -79,5 +79,20 @@ namespace api.Services
                 })
                 .FirstOrDefault();
         }
+
+        public FormModel InsertOne(CreateFormModel form, string email)
+        {
+            var newForm = new FormModel
+            {
+                email = email,
+                title = form.title,
+                description = form.description,
+                location = form.location,
+            };
+
+            _context.form.Add(newForm);
+            _context.SaveChanges();
+            return newForm;
+        }
     }
 }

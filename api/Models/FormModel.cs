@@ -22,4 +22,16 @@ namespace api.Models
         [JsonPropertyName("responseCount")]
         public int? response_count { get; set; } = null;
     }
+
+    public class CreateFormModel
+    {
+        [Required]
+        public string title { get; set; } = string.Empty;
+
+        [Required]
+        public string description { get; set; } = string.Empty;
+
+        [Required]
+        public string location { get; set; } = string.Empty;
+    }
 }
