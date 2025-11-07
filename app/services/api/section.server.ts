@@ -1,4 +1,4 @@
-import { SectionType } from 'models/form';
+import { MultipleChoiceOption, SectionType } from 'models/form';
 
 export interface SectionDto {
   id: string;
@@ -14,4 +14,6 @@ export interface SectionDto {
   required: boolean;
   min: number | null;
   max: number | null;
+
+  options: MultipleChoiceOption[] | null;
 }

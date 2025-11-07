@@ -73,6 +73,7 @@ export const booleanSectionSchema = baseSectionSchema.extend({
   type: z.literal('boolean'),
 });
 
+export type MultipleChoiceOption = z.infer<typeof multipleChoiceOptionSchema>;
 export const multipleChoiceOptionSchema = z.object({
   text: z.string().min(1, 'Option text is required'),
 });
