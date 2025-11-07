@@ -35,7 +35,7 @@ export function SectionFormModal(props: SectionFormModalProps) {
             <option disabled={true}>Section type</option>
             {sectionTypes.map((type) => (
               <option key={type} value={type}>
-                {type}
+                {formatType(type)}
               </option>
             ))}
           </select>
@@ -50,6 +50,34 @@ export function SectionFormModal(props: SectionFormModalProps) {
       </div>
     </dialog>
   );
+}
+
+function formatType(type: SectionType) {
+  switch (type) {
+    case 'boolean':
+      return 'True / False';
+
+    case 'multiple-choice':
+      return 'Multiple Choice';
+
+    case 'email':
+      return 'Email';
+
+    case 'file':
+      return 'File';
+
+    case 'link':
+      return 'Link';
+
+    case 'phone':
+      return 'Phone Number';
+
+    case 'range':
+      return 'Range (Number)';
+
+    case 'text':
+      return 'Text';
+  }
 }
 
 export type FormMode = 'edit' | 'add';

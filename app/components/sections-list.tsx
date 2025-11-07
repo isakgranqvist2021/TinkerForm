@@ -29,6 +29,7 @@ import {
 } from './section-form-modal';
 import React from 'react';
 import { EmptyState } from './empty-state';
+import countries from 'config/countries.json';
 
 export function SectionsList() {
   const sectionFormContext = useSectionFormContext();
@@ -89,9 +90,38 @@ export function SectionsList() {
       <div>
         <div className="mb-4">
           <div className="flex justify-between">
-            <div>
-              <h3 className="text-lg font-bold">2. Sections</h3>
-              <p>Add sections to your form that the user can fill out.</p>
+            <div className="flex flex-col">
+              <div>
+                <h3 className="text-lg font-bold">2. Sections</h3>
+                <p>Add sections to your form that the user can fill out.</p>
+              </div>
+
+              <div className="flex flex-wrap gap-2 mt-2">
+                {exampleSections.map((exampleSection) => {
+                  return (
+                    <div
+                      key={exampleSection.id}
+                      className="tooltip"
+                      data-tip={exampleSection.description}
+                    >
+                      <div
+                        className="badge badge-primary hover:badge-outline cursor-pointer"
+                        onClick={() => {
+                          if (formContext.formState.isSubmitting) return;
+
+                          fieldArray.append({
+                            ...exampleSection,
+                            id: crypto.randomUUID(),
+                            index: fieldArray.fields.length,
+                          });
+                        }}
+                      >
+                        {exampleSection.title}
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
             </div>
 
             {sections.length > 0 && (
@@ -231,6 +261,9 @@ function ListItem(props: ListItemProps) {
       <div>
         <div>
           {props.index + 1}. {props.section.title}
+          <span className="ml-1 text-secondary">
+            ({props.section.required ? 'Required' : 'Optional'})
+          </span>
         </div>
         <div className="text-xs uppercase font-semibold opacity-60">
           {props.section.description}
@@ -339,7 +372,7 @@ function ListItem(props: ListItemProps) {
   );
 }
 
-const exampleSections = [
+const exampleSections: Section[] = [
   {
     id: crypto.randomUUID(),
     type: 'text',
@@ -347,7 +380,7 @@ const exampleSections = [
     description: 'Please enter your legal name.',
     title: 'Your name',
     required: true,
-    min: 4,
+    min: 1,
     max: 100,
   },
   {
@@ -384,21 +417,47 @@ const exampleSections = [
   },
   {
     id: crypto.randomUUID(),
-    type: 'boolean',
+    type: 'text',
     index: 5,
-    description: 'Do you agree to the terms and conditions?',
-    title: 'Terms and Conditions Agreement',
+    min: 50,
+    max: 1000,
+    required: false,
+    title: 'Cover letter',
+    description:
+      'Please provide a brief cover letter explaining your interest in this position.',
+  },
+  {
+    id: crypto.randomUUID(),
+    type: 'multiple-choice',
+    index: 6,
+    description: 'When would you be available to start?',
+    title: 'Start date',
+    required: true,
+    options: [
+      { text: 'Immediately' },
+      { text: 'Within 2 weeks' },
+      { text: 'Within a month' },
+      { text: 'More than a month' },
+    ],
+  },
+  {
+    id: crypto.randomUUID(),
+    type: 'boolean',
+    index: 7,
+    description:
+      'Are you legally authorized to work in the country where this job is located?',
+    title: 'Work authorization',
     required: true,
   },
   {
     id: crypto.randomUUID(),
-    type: 'range',
-    index: 6,
-    description:
-      'On a scale of 1 to 10, how would you rate your proficiency in JavaScript?',
-    title: 'JavaScript Proficiency',
+    type: 'multiple-choice',
+    index: 8,
+    description: 'Select your country of residence.',
+    title: 'Country of Residence',
     required: true,
-    min: 1,
-    max: 10,
+    options: countries.map((country) => ({
+      text: `${country.emoji} ${country.name}`,
+    })),
   },
 ];

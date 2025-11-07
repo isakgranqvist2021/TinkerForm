@@ -201,6 +201,8 @@ export function ControlledBooleanInput(
 
   const controller = useController({ name });
 
+  const error = controller.fieldState.error?.message;
+
   return (
     <fieldset className="fieldset w-full">
       <legend className="fieldset-legend">{label}</legend>
@@ -227,6 +229,12 @@ export function ControlledBooleanInput(
           Yes
         </button>
       </div>
+
+      {error ? (
+        <p className="text-error">{error}</p>
+      ) : (
+        <p className="label">{props.description}</p>
+      )}
     </fieldset>
   );
 }
