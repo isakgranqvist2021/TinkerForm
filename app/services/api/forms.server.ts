@@ -34,7 +34,12 @@ export async function getForms(): Promise<FormDto[]> {
 export async function getFormById(formId: string): Promise<FormDto | null> {
   const session = await auth0.getSession();
   if (!session?.user.email) {
-    return null;
+    return fetch(`${env.API_URL}/form/${formId}/slim`)
+      .then((res) => res.json())
+      .catch((err) => {
+        console.error(err);
+        return null;
+      });
   }
 
   return fetch(`${env.API_URL}/form/${formId}`, {
@@ -42,15 +47,6 @@ export async function getFormById(formId: string): Promise<FormDto | null> {
       Authorization: `Bearer ${session.tokenSet.accessToken}`,
     },
   })
-    .then((res) => res.json())
-    .catch((err) => {
-      console.error(err);
-      return null;
-    });
-}
-
-export async function getSlimFormById(formId: string): Promise<FormDto | null> {
-  return fetch(`${env.API_URL}/form/${formId}/slim`)
     .then((res) => res.json())
     .catch((err) => {
       console.error(err);

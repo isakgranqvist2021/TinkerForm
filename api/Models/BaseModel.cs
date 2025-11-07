@@ -10,10 +10,10 @@ namespace api.Models
 
         [Required]
         [JsonPropertyName("createdAt")]
-        public DateTime created_at { get; set; }
+        public DateTime created_at { get; set; } = DateTime.UtcNow;
 
         [Required]
         [JsonPropertyName("updatedAt")]
-        public DateTime updated_at { get; set; }
+        public DateTime updated_at { get; set; } = DateTime.UtcNow;
     }
 }

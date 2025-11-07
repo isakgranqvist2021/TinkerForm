@@ -4,13 +4,13 @@ import { sectionMapper } from 'db/mapper';
 import { SectionTable } from 'db/query/section';
 import { redirect } from 'next/navigation';
 import React from 'react';
-import { getSlimFormById } from 'services/api/forms.server';
+import { getFormById } from 'services/api/forms.server';
 import { getResponseById } from 'services/api/response.server';
 import { PageProps } from 'types/page';
 
 export async function generateMetadata(props: PageProps<{ id: string }>) {
   const params = await props.params;
-  const form = await getSlimFormById(params.id);
+  const form = await getFormById(params.id);
 
   return {
     title: form ? form.title : 'Form',
@@ -23,7 +23,7 @@ export default async function Page(
 ) {
   const params = await props.params;
 
-  const form = await getSlimFormById(params.id);
+  const form = await getFormById(params.id);
   const response = await getResponseById(params.responseId);
 
   if (!form || !response) {

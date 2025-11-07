@@ -1,19 +1,13 @@
 import { put } from '@vercel/blob';
-import {
-  badRequest,
-  internalServerError,
-  notFound,
-  ok,
-  unauthorized,
-} from 'app/api/utils';
+import { badRequest, internalServerError, notFound, ok } from 'app/api/utils';
 import { sectionMapper } from 'db/mapper';
-import { AnswersTable } from 'db/query/answer';
 import { ResponseTable } from 'db/query/response';
 import { SectionTable } from 'db/query/section';
-import { InsertAnswer, SelectedSection } from 'db/schema';
+import { SelectedSection } from 'db/schema';
 import { constructSchema } from 'models/answer-form.server';
 import { SectionType } from 'models/form';
-import { getSlimFormById } from 'services/api/forms.server';
+import { CreateAnswerDto, createAnswers } from 'services/api/answer.server';
+import { getFormById } from 'services/api/forms.server';
 import { getResponseById } from 'services/api/response.server';
 
 export async function POST(
@@ -23,7 +17,7 @@ export async function POST(
   try {
     const { id, responseId } = await ctx.params;
 
-    const form = await getSlimFormById(id);
+    const form = await getFormById(id);
     if (!form) {
       return notFound();
     }
@@ -56,7 +50,7 @@ export async function POST(
       return badRequest('Invalid answers');
     }
 
-    await AnswersTable.insertMany(values);
+    await createAnswers(values);
     await ResponseTable.updateCompletedAt(response.id);
 
     return ok();
@@ -70,7 +64,7 @@ async function validateAnswers(
   responseId: string,
   formData: FormData,
   sections: Record<string, SelectedSection>,
-): Promise<InsertAnswer[] | null> {
+): Promise<CreateAnswerDto[] | null> {
   try {
     const formDataObj: Record<string, any> = {};
     for (const [key, value] of formData.entries()) {
@@ -110,21 +104,21 @@ async function validateAnswers(
     const mappedSections = Object.values(sections).map(sectionMapper);
     const schema = constructSchema(mappedSections);
 
-    const insertAnswers: InsertAnswer[] = [];
+    const insertAnswers: CreateAnswerDto[] = [];
     const parsed = schema.parse(formDataObj);
 
     for (const key in parsed) {
       const section = sections[key];
       const type = section.type as SectionType;
 
-      const insertAnswer: InsertAnswer = {
-        answer_boolean: null,
-        answer_file: null,
-        answer_number: null,
-        answer_text: null,
-        fk_form_id: formId,
-        fk_section_id: section.id,
-        fk_response_id: responseId,
+      const insertAnswer: CreateAnswerDto = {
+        answerBoolean: null,
+        answerFile: null,
+        answerNumber: null,
+        answerText: null,
+        fkFormId: formId,
+        fkSectionId: section.id,
+        fkResponseId: responseId,
       };
 
       switch (type) {
@@ -133,19 +127,19 @@ async function validateAnswers(
         case 'link':
         case 'phone':
         case 'multiple-choice':
-          insertAnswer.answer_text = parsed[key] as string;
+          insertAnswer.answerText = parsed[key] as string;
           break;
 
         case 'boolean':
-          insertAnswer.answer_boolean = parsed[key] as boolean;
+          insertAnswer.answerBoolean = parsed[key] as boolean;
           break;
 
         case 'range':
-          insertAnswer.answer_number = parsed[key] as number;
+          insertAnswer.answerNumber = parsed[key] as number;
           break;
 
         case 'file':
-          insertAnswer.answer_file = parsed[key] as string;
+          insertAnswer.answerFile = parsed[key] as string;
           break;
       }
 

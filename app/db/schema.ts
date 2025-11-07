@@ -50,21 +50,3 @@ export const responseTable = pgTable('response', {
   fk_form_id,
   completed_at: timestamp('completed_at'),
 });
-
-export type InsertAnswer = InferInsertModel<typeof answerTable>;
-export type SelectedAnswer = InferSelectModel<typeof answerTable>;
-export const answerTable = pgTable('answer', {
-  ...defaultColumns,
-  fk_form_id,
-  fk_response_id: uuid('fk_response_id')
-    .references(() => responseTable.id, { onDelete: 'cascade' })
-    .notNull(),
-  fk_section_id: uuid('fk_section_id')
-    .references(() => sectionTable.id, { onDelete: 'cascade' })
-    .notNull(),
-
-  answer_text: varchar('answer_text', { length: 2000 }),
-  answer_number: integer('answer_number'),
-  answer_boolean: boolean('answer_boolean'),
-  answer_file: varchar('answer_file', { length: 500 }),
-});

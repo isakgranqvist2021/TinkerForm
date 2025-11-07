@@ -76,8 +76,11 @@ export function getConstructedSchemaDefaultValues(sections: Section[]) {
       case 'phone':
       case 'text':
       case 'file':
-      case 'multiple-choice':
         defaultValues[section.id] = '';
+        break;
+
+      case 'multiple-choice':
+        defaultValues[section.id] = section.options[0].text;
         break;
 
       case 'boolean':
