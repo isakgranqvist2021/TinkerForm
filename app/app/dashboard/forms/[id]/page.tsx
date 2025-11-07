@@ -124,6 +124,9 @@ export default async function Page(props: PageProps<{ id: string }>) {
             </div>
             <div className="stat-title">Views</div>
             <div className="stat-value text-secondary">{responsesCount}</div>
+            <div className="stat-desc">
+              Number of times your form was viewed
+            </div>
           </div>
 
           <div className="stat">
@@ -146,6 +149,9 @@ export default async function Page(props: PageProps<{ id: string }>) {
             <div className="stat-title">Responses</div>
             <div className="stat-value text-secondary">
               {completedResponsesCount}
+            </div>
+            <div className="stat-desc">
+              Number of completed form submissions
             </div>
           </div>
 
@@ -170,6 +176,7 @@ export default async function Page(props: PageProps<{ id: string }>) {
             <div className="stat-value text-secondary">
               {averageCompletionTime ?? 'N/A'}
             </div>
+            <div className="stat-desc">Average time to complete the form</div>
           </div>
 
           <div className="stat">
@@ -191,6 +198,7 @@ export default async function Page(props: PageProps<{ id: string }>) {
             </div>
             <div className="stat-title">Completion Rate</div>
             <div className="stat-value text-secondary">{completionRate}%</div>
+            <div className="stat-desc">Percentage of completed forms</div>
           </div>
         </div>
 
