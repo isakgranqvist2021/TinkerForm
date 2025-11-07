@@ -8,6 +8,7 @@ import {
   ControlledFileInput,
   ControlledInput,
   ControlledRangeInput,
+  ControlledSelect,
   ControlledTextarea,
 } from './inputs';
 import {
@@ -266,6 +267,21 @@ export function AnswerFormContent(props: AnswerFormContentProps) {
                     description={section.description}
                     key={section.id}
                     disabled={form.formState.isSubmitting}
+                  />
+                );
+
+              case 'multiple-choice':
+                return (
+                  <ControlledSelect
+                    name={section.id}
+                    label={section.title}
+                    description={section.description}
+                    key={section.id}
+                    disabled={form.formState.isSubmitting}
+                    options={section.options.map((option) => ({
+                      value: option.text,
+                      label: option.text,
+                    }))}
                   />
                 );
             }

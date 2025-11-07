@@ -28,6 +28,7 @@ export default async function Page(props: PageProps<{ id: string }>) {
   }
 
   const sections = await SectionTable.listByFormId(form.id);
+
   const mappedSections = sections.map(sectionMapper);
 
   return (
@@ -52,7 +53,20 @@ export default async function Page(props: PageProps<{ id: string }>) {
           title: form.title,
           description: form.description,
           location: form.location,
-          sections: mappedSections.sort((a, b) => a.index - b.index),
+          sections: mappedSections
+            .map((section) => {
+              if (section.type === 'multiple-choice') {
+                return {
+                  ...section,
+                  options: section.options.map((option) => ({
+                    text: option.text,
+                  })),
+                };
+              }
+
+              return section;
+            })
+            .sort((a, b) => a.index - b.index),
         }}
       />
     </MainContainer>

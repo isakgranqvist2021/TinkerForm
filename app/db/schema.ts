@@ -7,6 +7,7 @@ import {
   boolean,
   uuid,
 } from 'drizzle-orm/pg-core';
+import { SectionType } from 'models/form';
 
 const defaultColumns = {
   id: uuid('id').primaryKey().defaultRandom(),
@@ -28,7 +29,13 @@ export const formTable = pgTable('form', {
 });
 
 export type InsertSection = InferInsertModel<typeof sectionTable>;
-export type SelectedSection = InferSelectModel<typeof sectionTable>;
+type BaseSelectedSection = InferSelectModel<typeof sectionTable>;
+
+export type SelectedSection = BaseSelectedSection & {
+  type: SectionType;
+  options?: SelectedMultipleChoiceOption[] | null;
+};
+
 export const sectionTable = pgTable('section', {
   ...defaultColumns,
   fk_form_id,

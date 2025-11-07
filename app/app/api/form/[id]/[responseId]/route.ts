@@ -106,6 +106,10 @@ async function validateAnswers(
           });
           formDataObj[key] = url;
           break;
+
+        case 'multiple-choice':
+          formDataObj[key] = value;
+          break;
       }
     }
 
@@ -134,6 +138,7 @@ async function validateAnswers(
         case 'email':
         case 'link':
         case 'phone':
+        case 'multiple-choice':
           insertAnswer.answer_text = parsed[key] as string;
           break;
 

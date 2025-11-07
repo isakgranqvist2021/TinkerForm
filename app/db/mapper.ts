@@ -1,8 +1,8 @@
 import { SelectedSection } from './schema';
-import { Section, SectionType } from 'models/form';
+import { Section } from 'models/form';
 
 export function sectionMapper(section: SelectedSection): Section {
-  const type = section.type as SectionType;
+  const type = section.type;
 
   switch (type) {
     case 'text':
@@ -40,10 +40,10 @@ export function sectionMapper(section: SelectedSection): Section {
         index: section.index,
         required: Boolean(section.required),
         title: section.title,
-        options: [],
+        options: section.options ?? [],
       };
 
     default:
-      throw new Error(`Unknown section type: ${type}`);
+      throw new Error(`Unknown section type: ${section.type}`);
   }
 }

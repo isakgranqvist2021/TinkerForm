@@ -154,6 +154,7 @@ function AnswerListItem(props: AnswerListItemProps) {
     case 'email':
     case 'phone':
     case 'range':
+    case 'multiple-choice':
       return (
         <li className="list-row">
           <div>

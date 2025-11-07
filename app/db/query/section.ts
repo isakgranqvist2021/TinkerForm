@@ -6,7 +6,7 @@ import {
   sectionTable,
   SelectedSection,
 } from 'db/schema';
-import { and, eq, inArray } from 'drizzle-orm';
+import { and, eq, inArray, sql } from 'drizzle-orm';
 import { Section } from 'models/form';
 
 async function upsertMany(formId: string, sections: Section[]) {
@@ -63,7 +63,7 @@ async function upsertMany(formId: string, sections: Section[]) {
   }
 
   if (sectionsToCreate.length > 0) {
-    await SectionTable.insertMany(sectionsToCreate, formId);
+    await insertMany(sectionsToCreate, formId);
   }
 }
 
@@ -104,9 +104,52 @@ function getSection(section: Section, formId: string): InsertSection {
 
 function listByFormId(formId: string) {
   return db
-    .select()
+    .select({
+      created_at: sectionTable.created_at,
+      id: sectionTable.id,
+      updated_at: sectionTable.updated_at,
+      fk_form_id: sectionTable.fk_form_id,
+      type: sectionTable.type,
+      title: sectionTable.title,
+      index: sectionTable.index,
+      description: sectionTable.description,
+      required: sectionTable.required,
+      min: sectionTable.min,
+      max: sectionTable.max,
+      options: sql`CASE
+        WHEN ${sectionTable.type} = 'multiple-choice' THEN
+          NULLIF(
+            jsonb_agg(
+              jsonb_build_object(
+                'id', ${multipleChoiceOptionTable.id},
+                'text', ${multipleChoiceOptionTable.text},
+                'fk_section_id', ${multipleChoiceOptionTable.fk_section_id}
+              )
+            ) FILTER (WHERE ${multipleChoiceOptionTable.id} IS NOT NULL),
+            '[]'::jsonb
+          )
+        ELSE NULL
+      END`,
+    })
     .from(sectionTable)
-    .where(eq(sectionTable.fk_form_id, formId));
+    .leftJoin(
+      multipleChoiceOptionTable,
+      eq(sectionTable.id, multipleChoiceOptionTable.fk_section_id),
+    )
+    .where(eq(sectionTable.fk_form_id, formId))
+    .groupBy(
+      sectionTable.id,
+      sectionTable.created_at,
+      sectionTable.updated_at,
+      sectionTable.fk_form_id,
+      sectionTable.type,
+      sectionTable.title,
+      sectionTable.index,
+      sectionTable.description,
+      sectionTable.required,
+      sectionTable.min,
+      sectionTable.max,
+    ) as Promise<SelectedSection[]>;
 }
 
 async function insertMany(sections: Section[], formId: string) {

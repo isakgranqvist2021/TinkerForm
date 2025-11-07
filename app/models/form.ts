@@ -109,21 +109,3 @@ export const formSchema = z.object({
     .min(1, 'Location is required')
     .max(500, 'Location is too long'),
 });
-
-function refineNumber(value: any) {
-  if (value === undefined) {
-    return true;
-  }
-
-  const asNumber = Number(value);
-
-  if (isNaN(asNumber)) {
-    return false;
-  }
-
-  if (asNumber === 0) {
-    return true;
-  }
-
-  return true;
-}
