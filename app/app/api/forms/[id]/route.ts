@@ -4,11 +4,10 @@ import {
   ok,
   unauthorized,
 } from 'app/api/utils';
-import { FormTable } from 'db/query/form';
 import { SectionTable } from 'db/query/section';
 import { auth0 } from 'lib/auth0';
 import { formSchema } from 'models/form';
-import { deleteFormById } from 'services/api/forms.server';
+import { deleteFormById, updateForm } from 'services/api/forms';
 
 export async function PATCH(
   req: Request,
@@ -25,12 +24,7 @@ export async function PATCH(
     const body = await req.json();
     const form = formSchema.parse(body);
 
-    const canContinue = await FormTable.isOwner(id, session.user.email);
-    if (!canContinue) {
-      return forbidden();
-    }
-
-    await FormTable.updateById(id, form);
+    await updateForm(id, form);
     await SectionTable.upsertMany(id, form.sections);
 
     return ok();

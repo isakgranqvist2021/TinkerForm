@@ -1,9 +1,6 @@
 import { internalServerError, ok, unauthorized } from 'app/api/utils';
 import { auth0 } from 'lib/auth0';
-import {
-  getAnswersByResponseId,
-  getResponseById,
-} from 'services/api/response.server';
+import { getAnswersByResponseId, getResponseById } from 'services/api/response';
 
 export async function GET(
   req: Request,

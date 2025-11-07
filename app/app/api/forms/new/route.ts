@@ -2,7 +2,7 @@ import { created, internalServerError, unauthorized } from 'app/api/utils';
 import { SectionTable } from 'db/query/section';
 import { auth0 } from 'lib/auth0';
 import { formSchema } from 'models/form';
-import { createForm } from 'services/api/forms.server';
+import { createForm } from 'services/api/forms';
 
 export async function POST(req: Request) {
   try {

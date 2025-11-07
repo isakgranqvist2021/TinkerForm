@@ -5,7 +5,7 @@ import { MainContainer } from 'containers/main-container';
 import { redirect } from 'next/navigation';
 import { DeleteFormIconButton } from 'components/delete-form-button';
 import { EmptyState } from 'components/empty-state';
-import { getForms, type FormDto } from 'services/api/forms.server';
+import { getForms, type FormDto } from 'services/api/forms';
 
 export const metadata = {
   title: 'My Forms',

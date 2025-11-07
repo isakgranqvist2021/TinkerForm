@@ -4,8 +4,8 @@ import { sectionMapper } from 'db/mapper';
 import { SectionTable } from 'db/query/section';
 import { redirect } from 'next/navigation';
 import React from 'react';
-import { getFormById } from 'services/api/forms.server';
-import { getResponseById } from 'services/api/response.server';
+import { getFormById } from 'services/api/forms';
+import { getResponseById } from 'services/api/response';
 import { PageProps } from 'types/page';
 
 export async function generateMetadata(props: PageProps<{ id: string }>) {

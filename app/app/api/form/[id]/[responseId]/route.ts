@@ -6,9 +6,9 @@ import { SectionTable } from 'db/query/section';
 import { SelectedSection } from 'db/schema';
 import { constructSchema } from 'models/answer-form.server';
 import { SectionType } from 'models/form';
-import { CreateAnswerDto, createAnswers } from 'services/api/answer.server';
-import { getFormById } from 'services/api/forms.server';
-import { getResponseById } from 'services/api/response.server';
+import { CreateAnswerDto, createAnswers } from 'services/api/answer';
+import { getFormById } from 'services/api/forms';
+import { getResponseById } from 'services/api/response';
 
 export async function POST(
   req: Request,

@@ -18,8 +18,8 @@ import {
 } from 'models/answer-form';
 import { toast } from 'sonner';
 import React from 'react';
-import { type FormDto } from 'services/api/forms.server';
-import { ResponseDto } from 'services/api/response.server';
+import { type FormDto } from 'services/api/forms';
+import { ResponseDto } from 'services/api/response';
 
 interface AnswerFormProps {
   sections: Section[];

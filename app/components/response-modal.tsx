@@ -6,10 +6,7 @@ import { calculateDuration, formatDate, formatDuration } from 'utils';
 import useSWR from 'swr';
 import { SectionType } from 'models/form';
 import Link from 'next/link';
-import {
-  AnswersByResponseIdDto,
-  ResponseDto,
-} from 'services/api/response.server';
+import { AnswersByResponseIdDto, ResponseDto } from 'services/api/response';
 
 function ResponseModal() {
   const responseContext = useResponseContext();

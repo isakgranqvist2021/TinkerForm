@@ -1,7 +1,7 @@
 import { MainContainer } from 'containers/main-container';
 import { ResponseTable } from 'db/query/response';
 import { redirect } from 'next/navigation';
-import { getFormById } from 'services/api/forms.server';
+import { getFormById } from 'services/api/forms';
 import { PageProps } from 'types/page';
 
 export default async function Page(props: PageProps<{ id: string }>) {

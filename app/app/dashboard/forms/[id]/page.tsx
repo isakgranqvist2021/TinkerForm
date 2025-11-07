@@ -16,7 +16,7 @@ import {
 import { ResponseTableRow } from 'components/response-table-row';
 import { EmptyState } from 'components/empty-state';
 import { VisitFormLink } from 'components/view-form-link';
-import { getFormById } from 'services/api/forms.server';
+import { getFormById } from 'services/api/forms';
 
 export const metadata = {
   title: 'Form',

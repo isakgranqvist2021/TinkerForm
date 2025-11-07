@@ -25,12 +25,16 @@ export interface CreateAnswerDto {
   answerFile: string | null;
 }
 
-export function createAnswers(answers: CreateAnswerDto[]) {
-  return fetch(`${env.API_URL}/answer`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(answers),
-  });
+export async function createAnswers(answers: CreateAnswerDto[]) {
+  try {
+    await fetch(`${env.API_URL}/answer`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(answers),
+    });
+  } catch (err) {
+    console.error(err);
+  }
 }
