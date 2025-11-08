@@ -71,3 +71,24 @@ export async function createResponse(
     return null;
   }
 }
+
+export async function getResponsesByFormId(
+  formId: string,
+): Promise<ResponseDto[]> {
+  try {
+    const { token } = await auth0.getAccessToken();
+
+    const res = await fetch(`${env.API_URL}/response/form/${formId}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    const data = await res.json();
+
+    return data;
+  } catch (err) {
+    console.error(err);
+    return [];
+  }
+}

@@ -1,6 +1,5 @@
 'use client';
 
-import { SelectedResponse } from 'db/schema';
 import React from 'react';
 import { calculateDuration, formatDate, formatDuration } from 'utils';
 import useSWR from 'swr';
@@ -27,7 +26,7 @@ function ResponseModal() {
 }
 
 interface ResponseModalContentProps {
-  response: SelectedResponse;
+  response: ResponseDto;
   onClose: () => void;
 }
 
@@ -48,8 +47,8 @@ function ResponseModalContent(props: ResponseModalContentProps) {
   );
 
   const duration = calculateDuration(
-    props.response.created_at,
-    props.response.completed_at,
+    props.response.createdAt,
+    props.response.completedAt,
   );
 
   const hasAnswers = Boolean(data?.answers.length);
@@ -99,7 +98,7 @@ function ResponseModalContent(props: ResponseModalContentProps) {
           <ul className="list bg-base-100 rounded-box shadow-md">
             <AnswerListItem
               question="Date"
-              answer={formatDate(props.response.created_at)}
+              answer={formatDate(props.response.createdAt)}
               type="text"
             />
 
@@ -210,8 +209,8 @@ function AnswerListItem(props: AnswerListItemProps) {
 }
 
 const ResponseContext = React.createContext<{
-  response: SelectedResponse | null;
-  setResponse: React.Dispatch<React.SetStateAction<SelectedResponse | null>>;
+  response: ResponseDto | null;
+  setResponse: React.Dispatch<React.SetStateAction<ResponseDto | null>>;
 }>({
   response: null,
   setResponse: () => {},
@@ -220,7 +219,7 @@ const ResponseContext = React.createContext<{
 export const ResponseConsumer = ResponseContext.Consumer;
 
 export function ResponseProvider(props: React.PropsWithChildren) {
-  const [response, setResponse] = React.useState<SelectedResponse | null>(null);
+  const [response, setResponse] = React.useState<ResponseDto | null>(null);
 
   return (
     <ResponseContext.Provider value={{ response, setResponse }}>

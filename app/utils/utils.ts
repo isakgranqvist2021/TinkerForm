@@ -1,6 +1,7 @@
 import currency from 'currency.js';
 import dayjs from 'dayjs';
 import Dayjs from 'dayjs';
+import { ResponseDto } from 'services/api/response';
 
 export function formatCurrency(value: number) {
   return currency(value / 100).format({ symbol: '€' });
@@ -10,7 +11,10 @@ export function formatDate(date: Dayjs.ConfigType) {
   return Dayjs(date).format('MMM DD YYYY HH:mm');
 }
 
-export function calculateDuration(createdAt: Date, completedAt: Date | null) {
+export function calculateDuration(
+  createdAt: dayjs.ConfigType,
+  completedAt: dayjs.ConfigType,
+) {
   return completedAt
     ? dayjs(completedAt).diff(dayjs(createdAt), 'second')
     : null;
@@ -39,13 +43,11 @@ export function calculateAverageCompletionTime(durations: number[]) {
     : null;
 }
 
-export function getDurations(
-  responses: { created_at: Date; completed_at: Date | null }[],
-) {
+export function getDurations(responses: ResponseDto[]) {
   return responses.reduce((acc, response) => {
     const duration = calculateDuration(
-      response.created_at,
-      response.completed_at,
+      response.createdAt,
+      response.completedAt,
     );
 
     if (duration !== null) {

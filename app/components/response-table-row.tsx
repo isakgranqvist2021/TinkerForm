@@ -1,18 +1,18 @@
 'use client';
 
-import { SelectedResponse } from 'db/schema';
 import { openResponseModal, ResponseConsumer } from './response-modal';
 import { calculateDuration, formatDate, formatDuration } from 'utils';
+import { ResponseDto } from 'services/api/response';
 
 interface ResponseTableRowProps {
-  response: SelectedResponse;
+  response: ResponseDto;
   index: number;
 }
 
 export function ResponseTableRow(props: ResponseTableRowProps) {
   const duration = calculateDuration(
-    props.response.created_at,
-    props.response.completed_at,
+    props.response.createdAt,
+    props.response.completedAt,
   );
 
   return (
@@ -31,7 +31,7 @@ export function ResponseTableRow(props: ResponseTableRowProps) {
             }}
           >
             <td>{props.index + 1}</td>
-            <td>{formatDate(props.response.created_at)}</td>
+            <td>{formatDate(props.response.createdAt)}</td>
             <td>{duration ? formatDuration(duration) : ''}</td>
           </tr>
         );

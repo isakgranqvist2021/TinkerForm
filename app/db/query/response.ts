@@ -33,16 +33,8 @@ async function countCompletedByFormId(formId: string) {
   return Number(result[0].count);
 }
 
-function listByFormId(formId: string) {
-  return db
-    .select()
-    .from(responseTable)
-    .where(eq(responseTable.fk_form_id, formId));
-}
-
 export const ResponseTable = {
   updateCompletedAt,
   countByFormId,
   countCompletedByFormId,
-  listByFormId,
 };

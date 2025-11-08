@@ -17,6 +17,7 @@ import { ResponseTableRow } from 'components/response-table-row';
 import { EmptyState } from 'components/empty-state';
 import { VisitFormLink } from 'components/view-form-link';
 import { getFormById } from 'services/api/forms';
+import { getResponsesByFormId } from 'services/api/response';
 
 export const metadata = {
   title: 'Form',
@@ -35,7 +36,7 @@ export default async function Page(props: PageProps<{ id: string }>) {
     return redirect('/404');
   }
 
-  const responses = await ResponseTable.listByFormId(params.id);
+  const responses = await getResponsesByFormId(params.id);
   const responsesCount = await ResponseTable.countByFormId(params.id);
   const completedResponsesCount = await ResponseTable.countCompletedByFormId(
     params.id,
