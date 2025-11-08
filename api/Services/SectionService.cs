@@ -26,15 +26,26 @@ namespace api.Services
                 .ToList();
         }
 
-        public IEnumerable<SectionModel> Create(IEnumerable<SectionModel> sections)
+        public IEnumerable<SectionModel> Create(IEnumerable<SectionModel> sections, string email)
         {
             var createdSections = new List<SectionModel>();
 
+            var formIds = sections.Select(s => s.fk_form_id).Distinct().ToList();
+            var forms = _context.form
+               .Where(f => formIds.Contains(f.id) && f.email == email)
+               .ToDictionary(f => f.id);
+
             foreach (var section in sections)
             {
+                if (!forms.ContainsKey(section.fk_form_id))
+                {
+                    throw new UnauthorizedAccessException("You do not have permission to add sections to this form.");
+                }
+
                 _context.section.Add(section);
                 createdSections.Add(section);
             }
+
 
             _context.SaveChanges();
 

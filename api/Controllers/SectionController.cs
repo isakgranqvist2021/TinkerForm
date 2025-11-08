@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using api.Models;
 using api.Services;
 using Microsoft.AspNetCore.Authorization;
+using api.Validators;
 
 namespace api.Controllers
 {
@@ -42,7 +43,8 @@ namespace api.Controllers
                 return BadRequest();
             }
 
-            var createdSections = _modelService.sectionService.Create(sections);
+            var email = EmailValidator.ExtractEmailFromContext(HttpContext);
+            var createdSections = _modelService.sectionService.Create(sections, email);
             return CreatedAtAction(nameof(GetByFormId), new { formId = createdSections.First().fk_form_id }, createdSections);
         }
     }
