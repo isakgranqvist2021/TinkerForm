@@ -2,13 +2,12 @@ import { put } from '@vercel/blob';
 import { badRequest, internalServerError, notFound, ok } from 'app/api/utils';
 import { sectionMapper } from 'db/mapper';
 import { ResponseTable } from 'db/query/response';
-import { SectionTable } from 'db/query/section';
-import { SelectedSection } from 'db/schema';
 import { constructSchema } from 'models/answer-form.server';
 import { SectionType } from 'models/form';
 import { CreateAnswerDto, createAnswers } from 'services/api/answer';
 import { getFormById } from 'services/api/forms';
 import { getResponseById } from 'services/api/response';
+import { getSectionsByFormId, SectionDto } from 'services/api/section';
 
 export async function POST(
   req: Request,
@@ -31,7 +30,7 @@ export async function POST(
       return badRequest('Response already completed');
     }
 
-    const sections = await SectionTable.listByFormId(id);
+    const sections = await getSectionsByFormId(form.id);
 
     const formData = await req.formData();
     const values = await validateAnswers(
@@ -43,7 +42,7 @@ export async function POST(
           acc[section.id] = section;
           return acc;
         },
-        {} as Record<string, SelectedSection>,
+        {} as Record<string, SectionDto>,
       ),
     );
     if (!values) {
@@ -63,7 +62,7 @@ async function validateAnswers(
   formId: string,
   responseId: string,
   formData: FormData,
-  sections: Record<string, SelectedSection>,
+  sections: Record<string, SectionDto>,
 ): Promise<CreateAnswerDto[] | null> {
   try {
     const formDataObj: Record<string, any> = {};

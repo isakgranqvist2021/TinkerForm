@@ -1,7 +1,7 @@
-import { SelectedSection } from './schema';
+import { SectionDto } from 'services/api/section';
 import { Section } from 'models/form';
 
-export function sectionMapper(section: SelectedSection): Section {
+export function sectionMapper(section: SectionDto): Section {
   const type = section.type;
 
   switch (type) {

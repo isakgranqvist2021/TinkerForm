@@ -1,10 +1,15 @@
 import { db } from 'db/db';
-import { InsertSection, sectionTable, SelectedSection } from 'db/schema';
+import { InsertSection, sectionTable } from 'db/schema';
 import { and, eq, inArray } from 'drizzle-orm';
 import { Section } from 'models/form';
+import {
+  createSections,
+  getSectionsByFormId,
+  SectionDto,
+} from 'services/api/section';
 
 async function upsertMany(formId: string, sections: Section[]) {
-  const currentSections = await listByFormId(formId);
+  const currentSections = await getSectionsByFormId(formId);
 
   // if a section is in sections but not in currentSections, create it
   // if a section is in both, update it
@@ -12,7 +17,7 @@ async function upsertMany(formId: string, sections: Section[]) {
 
   const sectionsToCreate: Section[] = [];
   const sectionsToUpdate: Section[] = [];
-  const sectionsToDelete: SelectedSection[] = [];
+  const sectionsToDelete: SectionDto[] = [];
 
   for (const section of sections) {
     const existingSection = currentSections.find((s) => s.id === section.id);
@@ -57,7 +62,7 @@ async function upsertMany(formId: string, sections: Section[]) {
   }
 
   if (sectionsToCreate.length > 0) {
-    await insertMany(sectionsToCreate, formId);
+    await createSections(sectionsToCreate, formId);
   }
 }
 
@@ -109,69 +114,6 @@ function getSection(section: Section, formId: string): InsertSection {
   }
 }
 
-function listByFormId(formId: string) {
-  return db
-    .select()
-    .from(sectionTable)
-    .where(eq(sectionTable.fk_form_id, formId));
-}
-
-async function insertMany(sections: Section[], formId: string) {
-  const values = sections.map((section): InsertSection => {
-    switch (section.type) {
-      case 'email':
-      case 'file':
-      case 'link':
-      case 'phone':
-      case 'boolean':
-        return {
-          fk_form_id: formId,
-          type: section.type,
-          title: section.title,
-          index: section.index,
-          description: section.description,
-          required: section.required,
-        };
-
-      case 'range':
-      case 'text':
-        return {
-          fk_form_id: formId,
-          type: section.type,
-          title: section.title,
-          index: section.index,
-          description: section.description,
-          required: section.required,
-          min: section.min,
-          max: section.max,
-        };
-
-      case 'multiple-choice':
-        return {
-          fk_form_id: formId,
-          type: section.type,
-          title: section.title,
-          index: section.index,
-          description: section.description,
-          required: section.required,
-          options: section.options,
-          min: null,
-          max: null,
-        };
-    }
-  });
-
-  const result = await db
-    .insert(sectionTable)
-    .values(values)
-    .returning()
-    .execute();
-
-  return result;
-}
-
 export const SectionTable = {
-  insertMany,
-  listByFormId,
   upsertMany,
 };

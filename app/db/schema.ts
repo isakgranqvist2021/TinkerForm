@@ -30,7 +30,6 @@ export const formTable = pgTable('form', {
 });
 
 export type InsertSection = InferInsertModel<typeof sectionTable>;
-export type SelectedSection = InferSelectModel<typeof sectionTable>;
 export const sectionTable = pgTable('section', {
   ...defaultColumns,
   fk_form_id,

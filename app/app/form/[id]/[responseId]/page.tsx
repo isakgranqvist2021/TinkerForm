@@ -6,6 +6,7 @@ import { redirect } from 'next/navigation';
 import React from 'react';
 import { getFormById } from 'services/api/forms';
 import { getResponseById } from 'services/api/response';
+import { getSectionsByFormId } from 'services/api/section';
 import { PageProps } from 'types/page';
 
 export async function generateMetadata(props: PageProps<{ id: string }>) {
@@ -30,7 +31,7 @@ export default async function Page(
     return redirect('/404');
   }
 
-  const sections = await SectionTable.listByFormId(form.id);
+  const sections = await getSectionsByFormId(form.id);
   const mappedSections = sections.map(sectionMapper);
 
   return (

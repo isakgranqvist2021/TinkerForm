@@ -1,12 +1,12 @@
 import { EditForm } from 'components/edit-form';
 import { MainContainer } from 'containers/main-container';
 import { sectionMapper } from 'db/mapper';
-import { SectionTable } from 'db/query/section';
 import { auth0 } from 'lib/auth0';
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
 import React from 'react';
 import { getFormById } from 'services/api/forms';
+import { getSectionsByFormId } from 'services/api/section';
 import { PageProps } from 'types/page';
 
 export const metadata = {
@@ -27,7 +27,7 @@ export default async function Page(props: PageProps<{ id: string }>) {
     return redirect('/404');
   }
 
-  const sections = await SectionTable.listByFormId(form.id);
+  const sections = await getSectionsByFormId(form.id);
 
   const mappedSections = sections.map(sectionMapper);
 

@@ -1,8 +1,8 @@
 import { created, internalServerError, unauthorized } from 'app/api/utils';
-import { SectionTable } from 'db/query/section';
 import { auth0 } from 'lib/auth0';
 import { formSchema } from 'models/form';
 import { createForm } from 'services/api/forms';
+import { createSections } from 'services/api/section';
 
 export async function POST(req: Request) {
   try {
@@ -19,7 +19,7 @@ export async function POST(req: Request) {
       return internalServerError();
     }
 
-    await SectionTable.insertMany(form.sections, res.id);
+    await createSections(form.sections, res.id);
 
     return created(res);
   } catch (err) {
