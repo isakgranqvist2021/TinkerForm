@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using api.Models;
 using api.Services;
+using api.Validators;
 
 namespace api.Controllers
 {
@@ -51,6 +52,20 @@ namespace api.Controllers
 
             _modelService.responseService.InsertOne(response);
             return CreatedAtAction(nameof(GetById), new { id = response.id }, response);
+        }
+
+        [HttpGet("form/{formId}")]
+        [Authorize]
+        public ActionResult<IEnumerable<ResponseModel>> ListByFormId(Guid formId)
+        {
+            var email = EmailValidator.ExtractEmailFromContext(HttpContext);
+            var responses = _modelService.responseService.ListByFormId(formId, email);
+            if (responses == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(responses);
         }
     }
 }

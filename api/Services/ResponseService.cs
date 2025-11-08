@@ -25,7 +25,13 @@ namespace api.Services
 
         public ResponseModel GetById(Guid id)
         {
-            return _context.response.FirstOrDefault(r => r.id == id);
+            var response = _context.response.FirstOrDefault(r => r.id == id);
+            if (response == null)
+            {
+                throw new KeyNotFoundException($"Response with ID {id} not found.");
+            }
+
+            return response;
         }
 
         public void InsertOne(ResponseModel response)
@@ -33,6 +39,16 @@ namespace api.Services
             _context.response.Add(response);
             _context.SaveChanges();
         }
+
+        public IEnumerable<ResponseModel> ListByFormId(Guid formId, string email)
+        {
+            var form = _context.form.FirstOrDefault(f => f.id == formId && f.email == email);
+            if (form == null)
+            {
+                return Enumerable.Empty<ResponseModel>();
+            }
+
+            return _context.response.Where(r => r.fk_form_id == formId).ToList();
+        }
     }
 }
-
