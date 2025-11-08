@@ -40,6 +40,18 @@ namespace api.Controllers
 
             return Ok(response);
         }
+
+        [HttpPost]
+        public ActionResult CreateResponse([FromBody] ResponseModel response)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            _modelService.responseService.InsertOne(response);
+            return CreatedAtAction(nameof(GetById), new { id = response.id }, response);
+        }
     }
 }
 

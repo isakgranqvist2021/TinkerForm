@@ -11,6 +11,8 @@ namespace api.Models
         public Guid fk_form_id { get; set; }
 
         [JsonPropertyName("completedAt")]
-        public DateTime? completed_at { get; set; }
+        public DateTime? completed_at { get; set; } = null;
     }
+
+
 }

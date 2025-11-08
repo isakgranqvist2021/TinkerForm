@@ -18,8 +18,6 @@ namespace api.Controllers
         [HttpPost]
         public ActionResult GetAnswersByResponseId([FromBody] List<AnswerModel> answers)
         {
-            Console.WriteLine(answers.ToString());
-
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);

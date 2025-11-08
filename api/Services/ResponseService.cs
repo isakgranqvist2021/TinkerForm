@@ -27,6 +27,12 @@ namespace api.Services
         {
             return _context.response.FirstOrDefault(r => r.id == id);
         }
+
+        public void InsertOne(ResponseModel response)
+        {
+            _context.response.Add(response);
+            _context.SaveChanges();
+        }
     }
 }
 
