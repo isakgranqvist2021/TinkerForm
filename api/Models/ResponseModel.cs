@@ -13,6 +13,4 @@ namespace api.Models
         [JsonPropertyName("completedAt")]
         public DateTime? completed_at { get; set; } = null;
     }
-
-
 }
