@@ -1,7 +1,7 @@
 import { MainContainer } from 'containers/main-container';
-import { ResponseTable } from 'db/query/response';
 import { redirect } from 'next/navigation';
 import { getFormById } from 'services/api/forms';
+import { createResponse } from 'services/api/response';
 import { PageProps } from 'types/page';
 
 export default async function Page(props: PageProps<{ id: string }>) {
@@ -12,7 +12,10 @@ export default async function Page(props: PageProps<{ id: string }>) {
     return <MainContainer>Form not found</MainContainer>;
   }
 
-  const response = await ResponseTable.insertOne(form.id);
+  const response = await createResponse(form.id);
+  if (!response) {
+    return <MainContainer>Failed to create response</MainContainer>;
+  }
 
   return redirect(`/form/${form.id}/${response.id}`);
 }

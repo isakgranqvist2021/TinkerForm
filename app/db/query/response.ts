@@ -2,18 +2,6 @@ import { db } from 'db/db';
 import { responseTable } from 'db/schema';
 import { and, count, eq, isNotNull } from 'drizzle-orm';
 
-async function insertOne(formId: string) {
-  const responses = await db
-    .insert(responseTable)
-    .values({
-      fk_form_id: formId,
-    })
-    .returning()
-    .execute();
-
-  return responses[0];
-}
-
 async function updateCompletedAt(responseId: string) {
   return db
     .update(responseTable)
@@ -53,7 +41,6 @@ function listByFormId(formId: string) {
 }
 
 export const ResponseTable = {
-  insertOne,
   updateCompletedAt,
   countByFormId,
   countCompletedByFormId,

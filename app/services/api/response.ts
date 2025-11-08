@@ -51,3 +51,23 @@ export async function getResponseById(
     return null;
   }
 }
+
+export async function createResponse(
+  fkFormId: string,
+): Promise<ResponseDto | null> {
+  try {
+    const res = await fetch(`${env.API_URL}/response`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ fkFormId }),
+    });
+
+    const data = await res.json();
+    return data;
+  } catch (err) {
+    console.error(err);
+    return null;
+  }
+}
