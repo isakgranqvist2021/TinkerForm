@@ -25,5 +25,20 @@ namespace api.Services
                 .Where(s => s.fk_form_id == formId)
                 .ToList();
         }
+
+        public IEnumerable<SectionModel> Create(IEnumerable<SectionModel> sections)
+        {
+            var createdSections = new List<SectionModel>();
+
+            foreach (var section in sections)
+            {
+                _context.section.Add(section);
+                createdSections.Add(section);
+            }
+
+            _context.SaveChanges();
+
+            return createdSections;
+        }
     }
 }
