@@ -17,4 +17,6 @@ export const auth0 = new Auth0Client({
     scope: requireEnv('AUTH0_SCOPE'),
     audience: requireEnv('AUTH0_AUDIENCE'),
   },
+
+  signInReturnToPath: '/dashboard',
 });
