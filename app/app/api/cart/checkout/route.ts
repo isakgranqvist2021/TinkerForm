@@ -1,41 +1,41 @@
-import { products } from 'data/products';
+import { requireEnv } from 'config';
+import { PackageId, packages } from 'config/packages';
 import { auth0 } from 'lib/auth0';
+import { createSubscriptionSchema } from 'models/subscribe';
 import { createCheckoutSession } from 'services/payment';
 import Stripe from 'stripe';
-import type { Cart } from 'types/cart';
 
 function getStripeCheckoutParams(
-  cart: Cart,
+  id: PackageId,
   options: { email?: string; url?: string },
 ) {
-  const lineItems: Stripe.Checkout.SessionCreateParams.LineItem[] = [];
-  const metadata: Stripe.Metadata = {};
-
-  cart.items.forEach((item) => {
-    const product = products.find((product) => product.id === item.id);
-    if (!product) return;
-
-    lineItems.push({
-      price_data: {
-        currency: 'EUR',
-        unit_amount: product.price,
-        product_data: { name: product.name },
-      },
-      quantity: item.quantity,
-    });
-
-    metadata[product.id] = product.id;
-  });
+  const pkg = packages.find((pkg) => pkg.id === id);
+  if (!pkg) {
+    throw new Error('Invalid package ID');
+  }
 
   const params: Stripe.Checkout.SessionCreateParams = {
-    mode: 'payment',
-    submit_type: 'pay',
+    mode: 'subscription',
+    submit_type: 'subscribe',
     payment_method_types: ['card'],
     customer_email: options.email,
-    line_items: lineItems,
+    line_items: [
+      {
+        price_data: {
+          currency: 'EUR',
+          unit_amount: pkg.price,
+          recurring: {
+            interval: 'month',
+            interval_count: 1,
+          },
+          product_data: { name: pkg.name },
+        },
+        quantity: 1,
+      },
+    ],
     success_url: `${options.url}/payment/accepted?checkoutSessionId={CHECKOUT_SESSION_ID}`,
     cancel_url: `${options.url}/payment/rejected`,
-    metadata,
+    metadata: { id },
   };
 
   return params;
@@ -43,13 +43,14 @@ function getStripeCheckoutParams(
 
 export async function POST(req: Request) {
   try {
-    const cart: Cart = await req.json();
+    const data = await req.json();
+    const parsedData = createSubscriptionSchema.parse(data);
 
     const session = await auth0.getSession();
 
-    const checkoutSessionParams = getStripeCheckoutParams(cart, {
+    const checkoutSessionParams = getStripeCheckoutParams(parsedData.id, {
       email: session?.user.email,
-      url: req.headers.get('origin') || 'http://localhost:3000',
+      url: req.headers.get('origin') || requireEnv('APP_BASE_URL'),
     });
 
     const checkoutSession = await createCheckoutSession(checkoutSessionParams);

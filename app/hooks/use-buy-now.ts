@@ -1,7 +1,7 @@
+import { PackageId } from 'config/packages';
 import getStripe from 'services/stripe';
-import type { Cart, CartItem } from 'types/cart';
 
-export function useBuyNow(cartItem: CartItem) {
+export function useBuyNow(id: PackageId) {
   return async () => {
     const stripe = await getStripe();
     if (!stripe) {
@@ -9,11 +9,9 @@ export function useBuyNow(cartItem: CartItem) {
       return;
     }
 
-    const cart: Cart = {
-      items: [cartItem],
-    };
-
-    const body = JSON.stringify(cart);
+    const body = JSON.stringify({
+      id,
+    });
 
     const res = await fetch('/api/cart/checkout', {
       body,

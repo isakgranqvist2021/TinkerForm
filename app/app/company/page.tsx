@@ -1,5 +1,10 @@
 import { Drawer } from 'components/drawer';
 
+export const metadata = {
+  title: 'Company - TinkerForm',
+  description: 'Learn more about our company and team.',
+};
+
 export default function Page() {
   return (
     <Drawer>

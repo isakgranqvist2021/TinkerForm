@@ -16,7 +16,10 @@ export default async function Page(
     throw new Error('Invalid checkout session id');
   }
 
-  await verifyAndCompletePayment(checkoutSessionId);
+  const isSubscribed = await verifyAndCompletePayment(checkoutSessionId);
+  if (!isSubscribed) {
+    return <p>Subscription not completed</p>;
+  }
 
-  return <p>payment accepted</p>;
+  return <p>Subscription confirmed</p>;
 }

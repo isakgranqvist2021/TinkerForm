@@ -11,7 +11,7 @@ export async function Nav() {
     <div className="navbar bg-base-100 shadow-sm">
       <div className="container flex justify-between items-center mx-auto">
         <div className="flex-1 gap-2 flex">
-          <Link href="/" className="btn btn-ghost text-xl">
+          <Link href="/dashboard" className="btn btn-ghost text-xl">
             TinkerForm
           </Link>
         </div>

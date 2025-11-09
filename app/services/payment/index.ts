@@ -1,4 +1,5 @@
 import { env } from 'config';
+import { createSubscriptionSchema } from 'models/subscribe';
 import Stripe from 'stripe';
 
 export const stripe = new Stripe(env.STRIPE_SECRET_KEY, {
@@ -8,9 +9,16 @@ export const stripe = new Stripe(env.STRIPE_SECRET_KEY, {
 export async function verifyAndCompletePayment(checkoutSessionId: string) {
   const checkoutSession =
     await stripe.checkout.sessions.retrieve(checkoutSessionId);
-  if (checkoutSession.payment_status !== 'paid') {
-    throw new Error('Payment not completed');
+
+  if (checkoutSession.status !== 'complete') {
+    return false;
   }
+
+  const parsedData = createSubscriptionSchema.parse(checkoutSession.metadata);
+
+  console.log(parsedData);
+
+  return true;
 }
 
 export async function createCheckoutSession(

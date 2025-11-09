@@ -5,5 +5,5 @@ export const metadata = {
 };
 
 export default function Page() {
-  return <p>payment rejected</p>;
+  return <p>Subscription not completed</p>;
 }
