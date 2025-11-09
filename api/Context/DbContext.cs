@@ -10,6 +10,7 @@ namespace api.Context
         public DbSet<Models.SectionModel> section { get; set; }
         public DbSet<Models.ResponseModel> response { get; set; }
         public DbSet<Models.AnswerModel> answer { get; set; }
+        public DbSet<Models.SubscriptionModel> subscription { get; set; }
     }
 
 }
