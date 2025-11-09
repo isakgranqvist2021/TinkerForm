@@ -1,3 +1,4 @@
+import { CheckoutFailed } from 'components/checkout-completed-screen';
 import React from 'react';
 
 export const metadata = {
@@ -5,5 +6,5 @@ export const metadata = {
 };
 
 export default function Page() {
-  return <p>Subscription not completed</p>;
+  return <CheckoutFailed />;
 }

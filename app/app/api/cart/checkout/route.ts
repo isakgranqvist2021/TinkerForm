@@ -9,7 +9,7 @@ function getStripeCheckoutParams(
   id: PackageId,
   options: { email?: string; url?: string },
 ) {
-  const pkg = packages.find((pkg) => pkg.id === id);
+  const pkg = packages[id];
   if (!pkg) {
     throw new Error('Invalid package ID');
   }

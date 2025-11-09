@@ -1,3 +1,9 @@
+import {
+  CheckoutFailed,
+  CheckoutSuccess,
+} from 'components/checkout-completed-screen';
+import { auth0 } from 'lib/auth0';
+import Link from 'next/link';
 import React from 'react';
 import { verifyAndCompletePayment } from 'services/payment';
 import type { PageProps } from 'types/page';
@@ -18,8 +24,8 @@ export default async function Page(
 
   const isSubscribed = await verifyAndCompletePayment(checkoutSessionId);
   if (!isSubscribed) {
-    return <p>Subscription not completed</p>;
+    return <CheckoutFailed checkoutSessionId={checkoutSessionId} />;
   }
 
-  return <p>Subscription confirmed</p>;
+  return <CheckoutSuccess />;
 }

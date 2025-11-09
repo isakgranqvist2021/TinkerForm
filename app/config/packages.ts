@@ -1,4 +1,4 @@
-export type PackageId = 'free' | 'pro' | 'enterprise';
+export type PackageId = 'starter' | 'pro' | 'enterprise';
 
 export interface Package {
   id: PackageId;
@@ -8,18 +8,18 @@ export interface Package {
   badge?: string;
 }
 
-export const packages: Package[] = [
-  {
-    id: 'free',
-    name: 'Free',
-    price: 0,
+export const packages: Record<PackageId, Package> = {
+  starter: {
+    id: 'starter',
+    name: 'Starter',
+    price: 100,
     features: [
       { name: 'Basic support', available: true },
       { name: 'Limited access to features', available: true },
       { name: 'No custom branding', available: false },
     ],
   },
-  {
+  pro: {
     id: 'pro',
     name: 'Pro',
     price: 2900,
@@ -30,7 +30,7 @@ export const packages: Package[] = [
       { name: 'Custom branding', available: true },
     ],
   },
-  {
+  enterprise: {
     id: 'enterprise',
     name: 'Custom',
     price: 99900,
@@ -40,4 +40,4 @@ export const packages: Package[] = [
       { name: 'Advanced security features', available: true },
     ],
   },
-];
+};

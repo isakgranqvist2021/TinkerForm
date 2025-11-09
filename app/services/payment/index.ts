@@ -1,5 +1,6 @@
 import { env } from 'config';
 import { createSubscriptionSchema } from 'models/subscribe';
+import { createSubscription } from 'services/api/subscription';
 import Stripe from 'stripe';
 
 export const stripe = new Stripe(env.STRIPE_SECRET_KEY, {
@@ -14,11 +15,27 @@ export async function verifyAndCompletePayment(checkoutSessionId: string) {
     return false;
   }
 
+  const subscriptionId =
+    typeof checkoutSession.subscription === 'string'
+      ? checkoutSession.subscription
+      : checkoutSession.subscription?.id;
+
+  if (!subscriptionId) {
+    return false;
+  }
+
+  const email = checkoutSession.customer_details?.email;
+  if (!email) {
+    return false;
+  }
+
   const parsedData = createSubscriptionSchema.parse(checkoutSession.metadata);
 
-  console.log(parsedData);
-
-  return true;
+  return createSubscription({
+    email,
+    packageId: parsedData.id,
+    subscriptionId: subscriptionId,
+  });
 }
 
 export async function createCheckoutSession(

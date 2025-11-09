@@ -21,3 +21,15 @@ export function useBuyNow(id: PackageId) {
     await stripe.redirectToCheckout({ sessionId: res.sessionId });
   };
 }
+
+export function useRetryCheckout(checkoutSessionId: string) {
+  return async () => {
+    const stripe = await getStripe();
+    if (!stripe) {
+      console.error(`Stripe is ${stripe}`);
+      return;
+    }
+
+    await stripe.redirectToCheckout({ sessionId: checkoutSessionId });
+  };
+}
