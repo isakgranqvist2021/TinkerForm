@@ -42,6 +42,20 @@ namespace api.Controllers
 
             return Ok(subscription);
         }
+
+        [HttpDelete]
+        [Authorize]
+        public ActionResult Delete()
+        {
+            var email = EmailValidator.ExtractEmailFromContext(HttpContext);
+            var success = _modelService.subscriptionService.Delete(email);
+            if (!success)
+            {
+                return NotFound();
+            }
+
+            return NoContent();
+        }
     }
 }
 

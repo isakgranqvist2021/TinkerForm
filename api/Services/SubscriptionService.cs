@@ -24,5 +24,19 @@ namespace api.Services
         {
             return _context.subscription.FirstOrDefault(s => s.email == email);
         }
+
+        public bool Delete(string email)
+        {
+            var subscription = _context.subscription.FirstOrDefault(s => s.email == email);
+            if (subscription == null)
+            {
+                return false;
+            }
+
+            _context.subscription.Remove(subscription);
+            _context.SaveChanges();
+
+            return true;
+        }
     }
 }
