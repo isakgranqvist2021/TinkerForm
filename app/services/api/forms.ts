@@ -14,6 +14,11 @@ export interface FormDto {
   location: string;
 }
 
+interface FormStats {
+  totalResponses: number;
+  completedResponses: number;
+}
+
 export async function getForms(): Promise<FormDto[]> {
   try {
     const { token } = await auth0.getAccessToken();
@@ -44,7 +49,7 @@ export async function getFormById(formId: string): Promise<FormDto | null> {
   }
 }
 
-export async function deleteFormById(formId: string): Promise<boolean> {
+export async function deleteForm(formId: string): Promise<boolean> {
   try {
     const { token } = await auth0.getAccessToken();
 
@@ -100,5 +105,26 @@ export async function updateForm(formId: string, form: Form): Promise<boolean> {
   } catch (err) {
     console.error(err);
     return false;
+  }
+}
+
+export async function getFormStats(formId: string): Promise<FormStats> {
+  try {
+    const { token } = await auth0.getAccessToken();
+
+    const res = await fetch(`${env.API_URL}/form/${formId}/stats`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    const data = await res.json();
+    return data;
+  } catch (err) {
+    console.error(err);
+    return {
+      completedResponses: 0,
+      totalResponses: 0,
+    };
   }
 }

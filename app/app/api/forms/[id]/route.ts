@@ -1,13 +1,7 @@
-import {
-  forbidden,
-  internalServerError,
-  ok,
-  unauthorized,
-} from 'app/api/utils';
-import { SectionTable } from 'db/query/section';
+import { internalServerError, ok, unauthorized } from 'app/api/utils';
 import { auth0 } from 'lib/auth0';
 import { formSchema } from 'models/form';
-import { deleteFormById, updateForm } from 'services/api/forms';
+import { deleteForm, updateForm } from 'services/api/forms';
 
 export async function PATCH(
   req: Request,
@@ -25,7 +19,6 @@ export async function PATCH(
     const form = formSchema.parse(body);
 
     await updateForm(id, form);
-    await SectionTable.upsertMany(id, form.sections);
 
     return ok();
   } catch (err) {
@@ -40,7 +33,7 @@ export async function DELETE(
   try {
     const { id } = await ctx.params;
 
-    await deleteFormById(id);
+    await deleteForm(id);
 
     return ok();
   } catch (err) {

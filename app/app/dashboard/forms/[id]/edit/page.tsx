@@ -1,12 +1,11 @@
 import { EditForm } from 'components/edit-form';
 import { MainContainer } from 'containers/main-container';
-import { sectionMapper } from 'db/mapper';
 import { auth0 } from 'lib/auth0';
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
 import React from 'react';
 import { getFormById } from 'services/api/forms';
-import { getSectionsByFormId } from 'services/api/section';
+import { getSectionsByFormId, sectionMapper } from 'services/api/section';
 import { PageProps } from 'types/page';
 
 export const metadata = {

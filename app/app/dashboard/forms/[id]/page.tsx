@@ -2,7 +2,6 @@ import { ResponseProvider } from 'components/response-modal';
 import { CopyFormLink } from 'components/copy-form-link';
 import { DeleteFormIconButton } from 'components/delete-form-button';
 import { MainContainer } from 'containers/main-container';
-import { ResponseTable } from 'db/query/response';
 import { auth0 } from 'lib/auth0';
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
@@ -16,7 +15,7 @@ import {
 import { ResponseTableRow } from 'components/response-table-row';
 import { EmptyState } from 'components/empty-state';
 import { VisitFormLink } from 'components/view-form-link';
-import { getFormById } from 'services/api/forms';
+import { getFormById, getFormStats } from 'services/api/forms';
 import { getResponsesByFormId } from 'services/api/response';
 
 export const metadata = {
@@ -37,16 +36,13 @@ export default async function Page(props: PageProps<{ id: string }>) {
   }
 
   const responses = await getResponsesByFormId(params.id);
-  const responsesCount = await ResponseTable.countByFormId(params.id);
-  const completedResponsesCount = await ResponseTable.countCompletedByFormId(
-    params.id,
-  );
+  const formStats = await getFormStats(params.id);
 
   const durations = getDurations(responses);
   const averageCompletionTime = calculateAverageCompletionTime(durations);
   const completionRate = getCompletionRate(
-    completedResponsesCount,
-    responsesCount,
+    formStats.completedResponses,
+    formStats.totalResponses,
   );
 
   const formLink = `${process.env.APP_BASE_URL}/form/${form.id}`;
@@ -124,7 +120,9 @@ export default async function Page(props: PageProps<{ id: string }>) {
               </svg>
             </div>
             <div className="stat-title">Views</div>
-            <div className="stat-value text-secondary">{responsesCount}</div>
+            <div className="stat-value text-secondary">
+              {formStats.totalResponses}
+            </div>
             <div className="stat-desc">
               Number of times your form was viewed
             </div>
@@ -149,7 +147,7 @@ export default async function Page(props: PageProps<{ id: string }>) {
             </div>
             <div className="stat-title">Responses</div>
             <div className="stat-value text-secondary">
-              {completedResponsesCount}
+              {formStats.completedResponses}
             </div>
             <div className="stat-desc">
               Number of completed form submissions

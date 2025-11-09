@@ -92,3 +92,16 @@ export async function getResponsesByFormId(
     return [];
   }
 }
+
+export async function completeResponse(responseId: string): Promise<boolean> {
+  try {
+    const res = await fetch(`${env.API_URL}/response/${responseId}/complete`, {
+      method: 'PUT',
+    });
+
+    return res.ok;
+  } catch (err) {
+    console.error(err);
+    return false;
+  }
+}

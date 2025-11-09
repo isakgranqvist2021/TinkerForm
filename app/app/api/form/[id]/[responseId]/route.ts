@@ -1,13 +1,15 @@
 import { put } from '@vercel/blob';
 import { badRequest, internalServerError, notFound, ok } from 'app/api/utils';
-import { sectionMapper } from 'db/mapper';
-import { ResponseTable } from 'db/query/response';
 import { constructSchema } from 'models/answer-form.server';
 import { SectionType } from 'models/form';
 import { CreateAnswerDto, createAnswers } from 'services/api/answer';
 import { getFormById } from 'services/api/forms';
-import { getResponseById } from 'services/api/response';
-import { getSectionsByFormId, SectionDto } from 'services/api/section';
+import { completeResponse, getResponseById } from 'services/api/response';
+import {
+  getSectionsByFormId,
+  SectionDto,
+  sectionMapper,
+} from 'services/api/section';
 
 export async function POST(
   req: Request,
@@ -50,7 +52,7 @@ export async function POST(
     }
 
     await createAnswers(values);
-    await ResponseTable.updateCompletedAt(response.id);
+    await completeResponse(response.id);
 
     return ok();
   } catch (err) {
