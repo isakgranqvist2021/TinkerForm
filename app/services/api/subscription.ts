@@ -45,12 +45,54 @@ export async function getSubscription(): Promise<SubscriptionDto | null> {
     });
 
     if (!res.ok) {
-      throw new Error('Failed to fetch subscription');
+      return null;
     }
 
     return await res.json();
   } catch (err) {
     console.error(err);
     return null;
+  }
+}
+
+export async function deleteSubscription(): Promise<boolean> {
+  try {
+    const { token } = await auth0.getAccessToken();
+
+    const res = await fetch(`${env.API_URL}/subscription`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    return res.ok;
+  } catch (err) {
+    console.error(err);
+    return false;
+  }
+}
+
+export async function getSubscriptions(): Promise<SubscriptionDto[]> {
+  try {
+    const { token } = await auth0.getAccessToken();
+
+    const res = await fetch(`${env.API_URL}/subscriptions`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    if (!res.ok) {
+      throw new Error('Failed to fetch subscriptions');
+    }
+
+    return await res.json();
+  } catch (err) {
+    console.error(err);
+    return [];
   }
 }

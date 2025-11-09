@@ -1,6 +1,10 @@
 import { env } from 'config';
 import { createSubscriptionSchema } from 'models/subscribe';
-import { createSubscription } from 'services/api/subscription';
+import {
+  createSubscription,
+  deleteSubscription,
+  getSubscription,
+} from 'services/api/subscription';
 import Stripe from 'stripe';
 
 export const stripe = new Stripe(env.STRIPE_SECRET_KEY, {
@@ -27,6 +31,12 @@ export async function verifyAndCompletePayment(checkoutSessionId: string) {
   const email = checkoutSession.customer_details?.email;
   if (!email) {
     return false;
+  }
+
+  const currentSubscription = await getSubscription();
+  if (currentSubscription) {
+    await stripe.subscriptions.cancel(currentSubscription.subscriptionId);
+    await deleteSubscription();
   }
 
   const parsedData = createSubscriptionSchema.parse(checkoutSession.metadata);

@@ -40,7 +40,10 @@ export async function CheckoutSuccess() {
             <Link href="/dashboard" className="btn btn-primary">
               Go to your dashboard
             </Link>
-            <Link href="/account/billing" className="btn btn-secondary">
+            <Link
+              href="/dashboard/account/billing"
+              className="btn btn-secondary"
+            >
               Billing Settings
             </Link>
           </React.Fragment>

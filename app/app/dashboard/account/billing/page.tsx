@@ -1,6 +1,8 @@
+import { CancelSubscriptionButton } from 'components/cancel-subscription-button';
 import { PackageCards } from 'components/package-cards';
 import { packages } from 'config/packages';
 import { auth0 } from 'lib/auth0';
+import Link from 'next/link';
 import { redirect } from 'next/navigation';
 import React from 'react';
 import { getSubscription, SubscriptionDto } from 'services/api/subscription';
@@ -53,7 +55,9 @@ async function ActiveSubscriptionDetails(
       <p>Subscription: {packages[props.subscription.packageId].name}</p>
       <p>Status: {formatStatusText(subscription.status)}</p>
 
-      <button className="btn btn-default mt-4">Cancel Subscription</button>
+      <CancelSubscriptionButton className="btn btn-default mt-4">
+        Cancel Subscription
+      </CancelSubscriptionButton>
     </div>
   );
 }
