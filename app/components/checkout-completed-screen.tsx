@@ -78,7 +78,7 @@ export function CheckoutFailed(props: CheckoutFailedProps) {
       <h1 className="text-3xl font-bold">Something went wrong</h1>
 
       <p className="max-w-prose">
-        We're sorry, but there was an error processing your subscription.
+        We{"'"}re sorry, but there was an error processing your subscription.
       </p>
 
       <div className="flex gap-4 mt-4">
