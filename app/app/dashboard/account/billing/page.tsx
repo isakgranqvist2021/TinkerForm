@@ -5,6 +5,7 @@ import { redirect } from 'next/navigation';
 import React from 'react';
 import { getSubscription, SubscriptionDto } from 'services/api/subscription';
 import { stripe } from 'services/payment';
+import Stripe from 'stripe';
 
 export const metadata = {
   title: 'Billing',
@@ -49,10 +50,31 @@ async function ActiveSubscriptionDetails(
 
   return (
     <div>
-      <p className="capitalize">Status: {subscription.status}</p>
-      <p>Package: {packages[props.subscription.packageId].name}</p>
+      <p>Subscription: {packages[props.subscription.packageId].name}</p>
+      <p>Status: {formatStatusText(subscription.status)}</p>
 
       <button className="btn btn-default mt-4">Cancel Subscription</button>
     </div>
   );
+}
+
+function formatStatusText(status: Stripe.Subscription.Status) {
+  switch (status) {
+    case 'active':
+      return 'Active';
+    case 'unpaid':
+      return 'Unpaid';
+    case 'canceled':
+      return 'Canceled';
+    case 'paused':
+      return 'Paused';
+    case 'incomplete':
+      return 'Incomplete';
+    case 'incomplete_expired':
+      return 'Incomplete Expired';
+    case 'past_due':
+      return 'Past Due';
+    case 'trialing':
+      return 'Trialing';
+  }
 }
