@@ -50,5 +50,15 @@ namespace api.Services
 
             return _context.response.Where(r => r.fk_form_id == formId).ToList();
         }
+
+        public void UpdateCompletedAt(Guid responseId)
+        {
+            var response = _context.response.FirstOrDefault(r => r.id == responseId);
+            if (response != null)
+            {
+                response.completed_at = DateTime.UtcNow;
+                _context.SaveChanges();
+            }
+        }
     }
 }

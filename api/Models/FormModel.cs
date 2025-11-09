@@ -45,5 +45,17 @@ namespace api.Models
 
         [Required]
         public string location { get; set; } = string.Empty;
+
+        [Required]
+        public List<SectionModel> sections { get; set; } = [];
+    }
+
+    public class FormStats
+    {
+        [JsonPropertyName("totalResponses")]
+        public int total_responses { get; set; }
+
+        [JsonPropertyName("completedResponses")]
+        public int completed_responses { get; set; }
     }
 }

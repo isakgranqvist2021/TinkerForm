@@ -67,6 +67,13 @@ namespace api.Controllers
 
             return Ok(responses);
         }
+
+        [HttpPut("{responseId}/complete")]
+        public ActionResult MarkAsCompleted(Guid responseId)
+        {
+            _modelService.responseService.UpdateCompletedAt(responseId);
+            return NoContent();
+        }
     }
 }
 

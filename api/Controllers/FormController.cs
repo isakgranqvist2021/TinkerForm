@@ -68,9 +68,6 @@ namespace api.Controllers
         [Authorize]
         public ActionResult Update(Guid id, [FromBody] UpdateFormModel form)
         {
-            Console.WriteLine("Updating form with ID: " + id);
-            Console.WriteLine(ModelState.IsValid);
-
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
@@ -78,10 +75,19 @@ namespace api.Controllers
 
             var email = EmailValidator.ExtractEmailFromContext(HttpContext);
             _modelService.formService.UpdateOne(form, id, email);
+            _modelService.sectionService.UpsertSections(form.sections, id, email);
 
             return NoContent();
         }
+
+        [HttpGet("{id}/stats")]
+        [Authorize]
+        public ActionResult<FormStats> GetFormStats(Guid id)
+        {
+            var email = EmailValidator.ExtractEmailFromContext(HttpContext);
+            var stats = _modelService.formService.GetFormStats(id, email);
+            return Ok(stats);
+        }
     }
 }
-
 

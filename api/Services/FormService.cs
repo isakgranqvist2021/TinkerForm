@@ -88,5 +88,23 @@ namespace api.Services
                 _context.SaveChanges();
             }
         }
+
+        public FormStats GetFormStats(Guid formId, string email)
+        {
+            var form = _context.form.FirstOrDefault(f => f.id == formId && f.email == email);
+            if (form == null)
+            {
+                throw new UnauthorizedAccessException("You do not have permission to view stats for this form.");
+            }
+
+            var totalResponses = _context.response.Count(r => r.fk_form_id == formId);
+            var completedResponses = _context.response.Count(r => r.fk_form_id == formId && r.completed_at != null);
+
+            return new FormStats
+            {
+                total_responses = totalResponses,
+                completed_responses = completedResponses
+            };
+        }
     }
 }

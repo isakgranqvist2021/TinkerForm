@@ -51,5 +51,49 @@ namespace api.Services
 
             return createdSections;
         }
+
+        public void UpsertSections(IEnumerable<SectionModel> sections, Guid formId, string email)
+        {
+            var form = _context.form.FirstOrDefault(f => f.id == formId && f.email == email) ?? throw new UnauthorizedAccessException("You do not have permission to modify sections for this form.");
+            foreach (var section in sections)
+            {
+                if (section.fk_form_id != formId)
+                {
+                    throw new UnauthorizedAccessException("You do not have permission to modify sections for this form.");
+                }
+            }
+
+            var existingSections = _context.section
+                .Where(s => s.fk_form_id == formId)
+                .ToList();
+
+            var sectionsToDelete = existingSections.Where(es => sections.All(s => s.id != es.id)).ToList();
+            var sectionsToUpdate = sections.Where(s => existingSections.Any(es => es.id == s.id)).ToList();
+            var sectionsToCreate = sections.Where(s => existingSections.All(es => es.id != s.id)).ToList().Select(s =>
+            {
+                s.fk_form_id = formId;
+                return s;
+            }).ToList();
+
+
+            foreach (var section in sectionsToUpdate)
+            {
+                var existingSection = existingSections.First(es => es.id == section.id);
+                existingSection.type = section.type;
+                existingSection.title = section.title;
+                existingSection.index = section.index;
+                existingSection.description = section.description;
+                existingSection.required = section.required;
+                existingSection.options = section.options;
+                existingSection.min = section.min;
+                existingSection.max = section.max;
+                existingSection.updated_at = DateTime.UtcNow;
+            }
+
+            _context.section.RemoveRange(sectionsToDelete);
+            _context.section.AddRange(sectionsToCreate);
+
+            _context.SaveChanges();
+        }
     }
 }
