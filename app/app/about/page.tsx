@@ -1,4 +1,6 @@
 import { Drawer } from 'components/drawer';
+import { PageTitle } from 'components/page-title';
+import { Container } from 'containers/main-container';
 import { getMetadata } from 'utils';
 
 export const metadata = getMetadata({
@@ -9,9 +11,9 @@ export const metadata = getMetadata({
 export default function Page() {
   return (
     <Drawer>
-      <div className="max-w-6xl mx-auto w-full p-4 flex-grow">
-        <h1>About Us</h1>
-      </div>
+      <Container>
+        <PageTitle>About Us</PageTitle>
+      </Container>
     </Drawer>
   );
 }

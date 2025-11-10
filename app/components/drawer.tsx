@@ -20,9 +20,6 @@ export async function Drawer(props: React.PropsWithChildren) {
       <li>
         <Link href="/features">Features</Link>
       </li>
-      <li>
-        <Link href="/company">Company</Link>
-      </li>
     </React.Fragment>
   );
 

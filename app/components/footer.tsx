@@ -15,9 +15,6 @@ export function Footer() {
           <Link href="/features" className="link link-hover">
             Features
           </Link>
-          <Link href="/company" className="link link-hover">
-            Company
-          </Link>
         </nav>
         <nav>
           <h6 className="footer-title">Company</h6>
