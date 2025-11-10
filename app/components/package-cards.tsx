@@ -1,12 +1,22 @@
-import { BuyNowButton } from 'components/buy-now-button';
-import { Package, packages } from 'config/packages';
-import { formatCurrency } from 'utils';
+'use client';
 
-export function PackageCards() {
+import { BuyNowButton } from 'components/buy-now-button';
+import { Package, PackageId, packages } from 'config/packages';
+import { formatCurrency } from 'utils';
+import { CancelSubscriptionButton } from './cancel-subscription-button';
+
+interface PackageCardsProps {
+  activePackageId?: PackageId;
+}
+export function PackageCards(props: PackageCardsProps) {
   return (
-    <div className="flex gap-2 lg:flex-row flex-col">
+    <div className="flex gap-2 lg:flex-row flex-col justify-center">
       {Object.values(packages).map((pkg) => (
-        <PricingCard key={pkg.id} pkg={pkg} />
+        <PricingCard
+          key={pkg.id}
+          pkg={pkg}
+          activePackageId={props.activePackageId}
+        />
       ))}
     </div>
   );
@@ -14,10 +24,11 @@ export function PackageCards() {
 
 interface PricingCardProps {
   pkg: Package;
+  activePackageId?: PackageId;
 }
 function PricingCard(props: PricingCardProps) {
   return (
-    <div className="card flex-grow bg-base-100 shadow-sm w-full">
+    <div className="card bg-base-100 shadow-sm w-96">
       <div className="card-body flex flex-col justify-between">
         {props.pkg.badge && (
           <span className="badge badge-xs badge-warning">
@@ -77,9 +88,18 @@ function PricingCard(props: PricingCardProps) {
           })}
         </ul>
         <div className="mt-6">
-          <BuyNowButton id={props.pkg.id} className="btn btn-primary btn-block">
-            Subscribe
-          </BuyNowButton>
+          {props.activePackageId === props.pkg.id ? (
+            <CancelSubscriptionButton className="btn btn-neutral btn-block">
+              Cancel Subscription
+            </CancelSubscriptionButton>
+          ) : (
+            <BuyNowButton
+              id={props.pkg.id}
+              className="btn btn-primary btn-block"
+            >
+              Subscribe
+            </BuyNowButton>
+          )}
         </div>
       </div>
     </div>

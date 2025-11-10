@@ -33,6 +33,9 @@ function getStripeCheckoutParams(
         quantity: 1,
       },
     ],
+    subscription_data: {
+      metadata: { id: pkg.id },
+    },
     success_url: `${options.url}/payment/accepted?checkoutSessionId={CHECKOUT_SESSION_ID}`,
     cancel_url: `${options.url}/payment/rejected`,
     metadata: { id },

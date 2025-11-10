@@ -8,10 +8,10 @@ interface ThemeTogglerProps {
 }
 
 export function ThemeToggler(props: ThemeTogglerProps) {
-  const [isDark, setIsDark] = React.useState(props.initialState === 'dark');
+  const [isDark, setIsDark] = React.useState(props.initialState === 'dracula');
 
   const toggleTheme = async () => {
-    const newTheme = isDark ? 'light' : 'dark';
+    const newTheme: Theme = isDark ? 'light' : 'dracula';
     document.documentElement.setAttribute('data-theme', newTheme);
     setIsDark(!isDark);
 

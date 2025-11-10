@@ -1,13 +1,9 @@
-import { CancelSubscriptionButton } from 'components/cancel-subscription-button';
 import { PackageCards } from 'components/package-cards';
-import { packages } from 'config/packages';
+import dayjs from 'dayjs';
 import { auth0 } from 'lib/auth0';
-import Link from 'next/link';
 import { redirect } from 'next/navigation';
 import React from 'react';
-import { getSubscription, SubscriptionDto } from 'services/api/subscription';
-import { stripe } from 'services/payment';
-import Stripe from 'stripe';
+import { getSubscriptionInfo } from 'utils/utils.server';
 
 export const metadata = {
   title: 'Billing',
@@ -19,66 +15,44 @@ export default async function Page() {
     return redirect('/auth/login');
   }
 
-  const subscription = await getSubscription();
+  const { nextPaymentDate, hasActiveSubscription, subscription } =
+    await getSubscriptionInfo();
 
   return (
     <section className="container mx-auto px-2 py-8">
-      {subscription ? (
-        <div>
-          <h1 className="text-4xl font-bold mb-4">Billing</h1>
-          <ActiveSubscriptionDetails subscription={subscription} />
-        </div>
-      ) : (
-        <div>
-          <h1 className="text-4xl font-bold mb-4 text-center">Choose a Plan</h1>
+      <div>
+        {hasActiveSubscription ? (
+          <React.Fragment>
+            <h1 className="text-4xl font-bold text-center mb-2">Change Plan</h1>
+            <p className="text-center max-w-prose mx-auto mb-4">
+              {nextPaymentDate && (
+                <React.Fragment>
+                  {' '}
+                  Your next payment date is{' '}
+                  {dayjs(nextPaymentDate).format('MMMM D, YYYY')}.
+                </React.Fragment>
+              )}{' '}
+              You can change your plan below.
+            </p>
+          </React.Fragment>
+        ) : (
+          <React.Fragment>
+            <h1 className="text-4xl font-bold text-center mb-2">
+              Choose a Plan
+            </h1>
+            <p className="text-center max-w-prose mx-auto mb-4">
+              You do not have an active subscription. Choose a plan below to get
+              started.
+            </p>
+          </React.Fragment>
+        )}
 
-          <PackageCards />
-        </div>
-      )}
+        <PackageCards
+          activePackageId={
+            hasActiveSubscription ? subscription?.packageId : undefined
+          }
+        />
+      </div>
     </section>
   );
-}
-
-interface ActiveSubscriptionDetailsProps {
-  subscription: SubscriptionDto;
-}
-
-async function ActiveSubscriptionDetails(
-  props: ActiveSubscriptionDetailsProps,
-) {
-  const subscription = await stripe.subscriptions.retrieve(
-    props.subscription.subscriptionId,
-  );
-
-  return (
-    <div>
-      <p>Subscription: {packages[props.subscription.packageId].name}</p>
-      <p>Status: {formatStatusText(subscription.status)}</p>
-
-      <CancelSubscriptionButton className="btn btn-default mt-4">
-        Cancel Subscription
-      </CancelSubscriptionButton>
-    </div>
-  );
-}
-
-function formatStatusText(status: Stripe.Subscription.Status) {
-  switch (status) {
-    case 'active':
-      return 'Active';
-    case 'unpaid':
-      return 'Unpaid';
-    case 'canceled':
-      return 'Canceled';
-    case 'paused':
-      return 'Paused';
-    case 'incomplete':
-      return 'Incomplete';
-    case 'incomplete_expired':
-      return 'Incomplete Expired';
-    case 'past_due':
-      return 'Past Due';
-    case 'trialing':
-      return 'Trialing';
-  }
 }

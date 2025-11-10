@@ -15,6 +15,7 @@ export const packages: Record<PackageId, Package> = {
     price: 100,
     features: [
       { name: 'Basic support', available: true },
+      { name: 'Cancel anytime', available: true },
       { name: 'Limited access to features', available: true },
       { name: 'No custom branding', available: false },
     ],
@@ -26,6 +27,7 @@ export const packages: Record<PackageId, Package> = {
     badge: 'Most popular',
     features: [
       { name: 'Priority support', available: true },
+      { name: 'Cancel anytime', available: true },
       { name: 'Full access to features', available: true },
       { name: 'Custom branding', available: true },
     ],
@@ -36,6 +38,7 @@ export const packages: Record<PackageId, Package> = {
     price: 99900,
     features: [
       { name: 'Dedicated account manager', available: true },
+      { name: 'Cancel anytime', available: true },
       { name: 'Custom integrations', available: true },
       { name: 'Advanced security features', available: true },
     ],
