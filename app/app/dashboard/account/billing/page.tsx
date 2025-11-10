@@ -3,8 +3,8 @@ import dayjs from 'dayjs';
 import { auth0 } from 'lib/auth0';
 import { redirect } from 'next/navigation';
 import React from 'react';
+import { getSubscription } from 'services/api/subscription';
 import { getMetadata } from 'utils';
-import { getSubscriptionInfo } from 'utils/utils.server';
 
 export const metadata = getMetadata({
   title: 'Billing',
@@ -17,15 +17,15 @@ export default async function Page() {
     return redirect('/auth/login');
   }
 
-  const { nextPaymentDate, packageId } = await getSubscriptionInfo();
+  const subscription = await getSubscription();
 
   let title = 'Choose a Plan';
   let subtitle =
     'You do not have an active subscription. Choose a plan below to get started.';
 
-  if (packageId) {
+  if (subscription?.packageId) {
     title = 'Change Plan';
-    subtitle = `${nextPaymentDate ? `Your next payment date is ${dayjs(nextPaymentDate).format('MMMM D, YYYY')}. ` : ''}You can change your plan below.`;
+    subtitle = `${subscription.nextPaymentDate ? `Your next payment date is ${dayjs(subscription.nextPaymentDate).format('MMMM D, YYYY')}. ` : ''}You can change your plan below.`;
   }
 
   return (
@@ -35,7 +35,7 @@ export default async function Page() {
         <p className="text-center">{subtitle}</p>
       </div>
 
-      <PackageCards activePackageId={packageId} />
+      <PackageCards activePackageId={subscription?.packageId} />
     </div>
   );
 }

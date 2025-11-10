@@ -1,7 +1,6 @@
 import { auth0 } from 'lib/auth0';
 import { Theme, updateThemeSchema } from 'models/theme';
 import { cookies } from 'next/headers';
-import { getSubscription } from 'services/api/subscription';
 import { stripe } from 'services/payment';
 import Stripe from 'stripe';
 
@@ -12,31 +11,6 @@ export async function getThemeFromCookie(): Promise<Theme> {
   });
 
   return schemaParseResult.data?.theme ?? 'light';
-}
-
-export async function getSubscriptionInfo() {
-  const session = await auth0.getSession();
-  if (!session?.user.email) {
-    return {
-      nextPaymentDate: null,
-      packageId: null,
-    };
-  }
-
-  const subscription = await getSubscription();
-  const stripeSubscription = subscription
-    ? await stripe.subscriptions.retrieve(subscription.subscriptionId, {
-        expand: ['latest_invoice'],
-      })
-    : null;
-
-  const nextPaymentDate = getNextPaymentDate(stripeSubscription);
-  const isActive = getIsActive(stripeSubscription);
-
-  return {
-    nextPaymentDate,
-    packageId: isActive ? subscription?.packageId : null,
-  };
 }
 
 export function getNextPaymentDate(subscription: Stripe.Subscription | null) {
@@ -52,7 +26,7 @@ export function getNextPaymentDate(subscription: Stripe.Subscription | null) {
   return nextPaymentDate;
 }
 
-function getIsActive(subscription: Stripe.Subscription | null) {
+export function getIsActive(subscription: Stripe.Subscription | null) {
   if (!subscription) {
     return false;
   }

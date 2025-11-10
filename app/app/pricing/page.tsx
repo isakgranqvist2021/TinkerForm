@@ -1,7 +1,7 @@
 import { Drawer } from 'components/drawer';
 import { PackageCards } from 'components/package-cards';
+import { getSubscription } from 'services/api/subscription';
 import { getMetadata } from 'utils';
-import { getSubscriptionInfo } from 'utils/utils.server';
 
 export const metadata = getMetadata({
   title: 'Pricing',
@@ -9,7 +9,7 @@ export const metadata = getMetadata({
 });
 
 export default async function Page() {
-  const { packageId } = await getSubscriptionInfo();
+  const subscription = await getSubscription();
 
   return (
     <Drawer>
@@ -21,7 +21,7 @@ export default async function Page() {
           </p>
         </div>
 
-        <PackageCards activePackageId={packageId} />
+        <PackageCards activePackageId={subscription?.packageId} />
       </div>
     </Drawer>
   );

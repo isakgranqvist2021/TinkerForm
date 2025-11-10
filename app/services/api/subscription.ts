@@ -1,6 +1,8 @@
 import { env } from 'config';
 import { PackageId } from 'config/packages';
 import { auth0 } from 'lib/auth0';
+import { stripe } from 'services/payment';
+import { getIsActive, getNextPaymentDate } from 'utils/utils.server';
 
 export interface CreateSubscriptionDto {
   email: string;
@@ -32,7 +34,7 @@ export async function createSubscription(dto: CreateSubscriptionDto) {
   }
 }
 
-export async function getSubscription(): Promise<SubscriptionDto | null> {
+export async function getSubscription() {
   try {
     const { token } = await auth0.getAccessToken();
 
@@ -48,7 +50,26 @@ export async function getSubscription(): Promise<SubscriptionDto | null> {
       return null;
     }
 
-    return await res.json();
+    const subscription: SubscriptionDto = await res.json();
+    const stripeSubscription = await stripe.subscriptions.retrieve(
+      subscription.subscriptionId,
+      {
+        expand: ['latest_invoice'],
+      },
+    );
+
+    const isActive = getIsActive(stripeSubscription);
+    if (!isActive) {
+      return null;
+    }
+
+    const nextPaymentDate = getNextPaymentDate(stripeSubscription);
+
+    return {
+      nextPaymentDate,
+      packageId: subscription.packageId,
+      subscriptionId: subscription.subscriptionId,
+    };
   } catch (err) {
     console.error(err);
     return null;
@@ -71,28 +92,5 @@ export async function deleteSubscription(): Promise<boolean> {
   } catch (err) {
     console.error(err);
     return false;
-  }
-}
-
-export async function getSubscriptions(): Promise<SubscriptionDto[]> {
-  try {
-    const { token } = await auth0.getAccessToken();
-
-    const res = await fetch(`${env.API_URL}/subscriptions`, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`,
-      },
-    });
-
-    if (!res.ok) {
-      throw new Error('Failed to fetch subscriptions');
-    }
-
-    return await res.json();
-  } catch (err) {
-    console.error(err);
-    return [];
   }
 }
