@@ -8,11 +8,11 @@ export const metadata = {
 };
 
 export default async function Page() {
-  const { hasActiveSubscription, subscription } = await getSubscriptionInfo();
+  const { packageId } = await getSubscriptionInfo();
 
   return (
     <Drawer>
-      <div className="max-w-5xl mx-auto w-full px-4 py-12 flex flex-col gap-10 flex-grow">
+      <div className="max-w-6xl mx-auto w-full px-4 py-12 flex flex-col gap-10 flex-grow">
         <div className="mb-4">
           <h1 className="text-4xl font-bold text-center mb-2">Pricing</h1>
           <p className="text-center">
@@ -20,11 +20,7 @@ export default async function Page() {
           </p>
         </div>
 
-        <PackageCards
-          activePackageId={
-            hasActiveSubscription ? subscription?.packageId : undefined
-          }
-        />
+        <PackageCards activePackageId={packageId} />
       </div>
     </Drawer>
   );

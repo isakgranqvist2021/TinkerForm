@@ -6,7 +6,7 @@ import { formatCurrency } from 'utils';
 import { CancelSubscriptionButton } from './cancel-subscription-button';
 
 interface PackageCardsProps {
-  activePackageId?: PackageId;
+  activePackageId?: PackageId | null;
 }
 export function PackageCards(props: PackageCardsProps) {
   return (
@@ -24,7 +24,7 @@ export function PackageCards(props: PackageCardsProps) {
 
 interface PricingCardProps {
   pkg: Package;
-  activePackageId?: PackageId;
+  activePackageId?: PackageId | null;
 }
 function PricingCard(props: PricingCardProps) {
   return (

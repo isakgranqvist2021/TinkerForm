@@ -8,7 +8,7 @@ export const metadata = {
 export default function Page() {
   return (
     <Drawer>
-      <div className="max-w-5xl mx-auto w-full p-4">
+      <div className="max-w-6xl mx-auto w-full p-4 flex-grow">
         <h1>Company Page</h1>
       </div>
     </Drawer>

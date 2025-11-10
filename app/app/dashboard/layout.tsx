@@ -1,3 +1,4 @@
+import { Footer } from 'components/footer';
 import { Nav } from 'components/nav';
 import { auth0 } from 'lib/auth0';
 import { redirect } from 'next/navigation';
@@ -10,10 +11,14 @@ export default async function AdminLayout(props: React.PropsWithChildren) {
   }
 
   return (
-    <React.Fragment>
+    <div className="min-h-screen flex flex-col">
       <Nav />
 
-      {props.children}
-    </React.Fragment>
+      <div className="max-w-6xl mx-auto w-full p-4 flex-grow">
+        {props.children}
+      </div>
+
+      <Footer />
+    </div>
   );
 }

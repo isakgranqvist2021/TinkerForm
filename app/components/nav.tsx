@@ -9,7 +9,7 @@ export async function Nav() {
 
   return (
     <div className="navbar bg-base-100 shadow-sm">
-      <div className="container flex justify-between items-center mx-auto">
+      <div className="container flex justify-between items-center mx-auto max-w-6xl mx-auto flex justify-between w-full px-4">
         <div className="flex-1 gap-2 flex">
           <Link href="/dashboard" className="btn btn-ghost text-xl">
             TinkerForm

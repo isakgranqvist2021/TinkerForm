@@ -16,7 +16,7 @@ export default async function Page() {
           minHeight: 'calc(100vh - 65px)',
         }}
       >
-        <div className="hero-content flex-col lg:flex-row max-w-5xl gap-12">
+        <div className="hero-content flex-col lg:flex-row max-w-6xl gap-12">
           <div>
             <h1 className="text-5xl font-bold max-w-prose">
               Build beautiful forms, fast and easyly.

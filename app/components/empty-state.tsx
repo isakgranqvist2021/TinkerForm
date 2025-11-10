@@ -6,7 +6,7 @@ interface EmptyStateProps {
 
 export function EmptyState(props: EmptyStateProps) {
   return (
-    <div className="flex flex-col items-center justify-center p-16 bg-base-200 rounded-lg">
+    <div className="flex flex-col items-center justify-center p-16 bg-base-200 rounded-lg text-center">
       <h1 className="text-3xl font-bold">{props.title}</h1>
       <p className="py-4">{props.subtitle}</p>
 
