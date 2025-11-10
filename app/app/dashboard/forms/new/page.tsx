@@ -4,10 +4,12 @@ import { auth0 } from 'lib/auth0';
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
 import React from 'react';
+import { getMetadata } from 'utils';
 
-export const metadata = {
+export const metadata = getMetadata({
   title: 'New Form',
-};
+  description: 'Create a new form to collect responses.',
+});
 
 export default async function Page() {
   const session = await auth0.getSession();

@@ -11,6 +11,7 @@ import {
   calculateAverageCompletionTime,
   getCompletionRate,
   getDurations,
+  getMetadata,
 } from 'utils';
 import { ResponseTableRow } from 'components/response-table-row';
 import { EmptyState } from 'components/empty-state';
@@ -18,8 +19,16 @@ import { VisitFormLink } from 'components/view-form-link';
 import { getFormById, getFormStats } from 'services/api/forms';
 import { getResponsesByFormId } from 'services/api/response';
 
-export const metadata = {
-  title: 'Form',
+export const generateMetadata = async (props: PageProps<{ id: string }>) => {
+  const params = await props.params;
+  const form = await getFormById(params.id);
+
+  return getMetadata({
+    title: form ? `Form - ${form.title}` : 'Form Not Found',
+    description: form
+      ? `Manage and view responses for the form "${form.title}".`
+      : 'The requested form was not found.',
+  });
 };
 
 export default async function Page(props: PageProps<{ id: string }>) {

@@ -1,11 +1,12 @@
 import { Drawer } from 'components/drawer';
 import { PackageCards } from 'components/package-cards';
+import { getMetadata } from 'utils';
 import { getSubscriptionInfo } from 'utils/utils.server';
 
-export const metadata = {
-  title: 'Pricing - TinkerForm',
-  description: 'Choose the best plan that fits your needs.',
-};
+export const metadata = getMetadata({
+  title: 'Pricing',
+  description: 'Choose the plan that best fits your needs.',
+});
 
 export default async function Page() {
   const { packageId } = await getSubscriptionInfo();

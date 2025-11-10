@@ -4,7 +4,7 @@ import { auth0 } from 'lib/auth0';
 import { redirect } from 'next/navigation';
 import React from 'react';
 
-export default async function AdminLayout(props: React.PropsWithChildren) {
+export default async function DashboardLayout(props: React.PropsWithChildren) {
   const session = await auth0.getSession();
   if (!session) {
     return redirect('/auth/login');
@@ -14,9 +14,7 @@ export default async function AdminLayout(props: React.PropsWithChildren) {
     <div className="min-h-screen flex flex-col">
       <Nav />
 
-      <div className="max-w-6xl mx-auto w-full p-4 flex-grow">
-        {props.children}
-      </div>
+      <div className="max-w-6xl mx-auto w-full flex-grow">{props.children}</div>
 
       <Footer />
     </div>

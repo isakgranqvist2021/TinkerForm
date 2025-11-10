@@ -1,6 +1,7 @@
 import currency from 'currency.js';
 import dayjs from 'dayjs';
 import Dayjs from 'dayjs';
+import { Metadata } from 'next';
 import { ResponseDto } from 'services/api/response';
 
 export function formatCurrency(value: number) {
@@ -68,4 +69,16 @@ export function getCompletionRate(
   ).toFixed(2);
 
   return isNaN(Number(completionRate)) ? '0.00' : completionRate;
+}
+
+export function getMetadata(options: {
+  title: string;
+  description: string;
+}): Metadata {
+  const metadata = {
+    title: `TinkerForm - ${options.title}`,
+    description: options.description,
+  };
+
+  return metadata;
 }

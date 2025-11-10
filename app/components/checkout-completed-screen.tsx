@@ -37,7 +37,7 @@ export async function CheckoutSuccess() {
           </Link>
         ) : (
           <React.Fragment>
-            <Link href="/dashboard" className="btn btn-primary">
+            <Link href="/dashboard/forms" className="btn btn-primary">
               Go to your dashboard
             </Link>
             <Link

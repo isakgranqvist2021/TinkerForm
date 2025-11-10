@@ -6,10 +6,12 @@ import { redirect } from 'next/navigation';
 import { DeleteFormIconButton } from 'components/delete-form-button';
 import { EmptyState } from 'components/empty-state';
 import { getForms, type FormDto } from 'services/api/forms';
+import { getMetadata } from 'utils';
 
-export const metadata = {
+export const metadata = getMetadata({
   title: 'My Forms',
-};
+  description: 'Manage and create your forms.',
+});
 
 export default async function Page() {
   const session = await auth0.getSession();

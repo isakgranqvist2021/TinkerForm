@@ -4,20 +4,27 @@ import { BuyNowButton } from 'components/buy-now-button';
 import { Package, PackageId, packages } from 'config/packages';
 import { formatCurrency } from 'utils';
 import { CancelSubscriptionButton } from './cancel-subscription-button';
+import Link from 'next/link';
 
 interface PackageCardsProps {
   activePackageId?: PackageId | null;
 }
 export function PackageCards(props: PackageCardsProps) {
   return (
-    <div className="flex gap-2 lg:flex-row flex-col justify-center">
-      {Object.values(packages).map((pkg) => (
-        <PricingCard
-          key={pkg.id}
-          pkg={pkg}
-          activePackageId={props.activePackageId}
-        />
-      ))}
+    <div className="flex flex-col gap-8">
+      <div className="flex gap-4 lg:flex-row flex-col justify-center items-center">
+        {Object.values(packages).map((pkg) => (
+          <PricingCard
+            key={pkg.id}
+            pkg={pkg}
+            activePackageId={props.activePackageId}
+          />
+        ))}
+      </div>
+
+      <Link href="/support" className="text-center link">
+        Contact Support
+      </Link>
     </div>
   );
 }

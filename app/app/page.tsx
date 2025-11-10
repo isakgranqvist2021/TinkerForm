@@ -1,11 +1,12 @@
 import { Drawer } from 'components/drawer';
-import { auth0 } from 'lib/auth0';
 import Link from 'next/link';
 import React from 'react';
+import { getMetadata } from 'utils';
 
-export const metadata = {
-  title: 'TinkerForm - Build beautiful forms, fast and easyly.',
-};
+export const metadata = getMetadata({
+  title: 'Home',
+  description: 'Build beautiful forms, fast and easily with TinkerForm.',
+});
 
 export default async function Page() {
   return (

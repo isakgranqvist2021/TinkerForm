@@ -1,10 +1,12 @@
 import { auth0 } from 'lib/auth0';
 import { redirect } from 'next/navigation';
 import React from 'react';
+import { getMetadata } from 'utils';
 
-export const metadata = {
-  title: 'Account',
-};
+export const metadata = getMetadata({
+  title: 'Account Settings',
+  description: 'Manage your account settings and preferences.',
+});
 
 export default async function Page() {
   const session = await auth0.getSession();

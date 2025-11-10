@@ -18,5 +18,5 @@ export const auth0 = new Auth0Client({
     audience: requireEnv('AUTH0_AUDIENCE'),
   },
 
-  signInReturnToPath: '/dashboard',
+  signInReturnToPath: '/dashboard/forms',
 });

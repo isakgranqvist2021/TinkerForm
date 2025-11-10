@@ -27,6 +27,9 @@ export function Footer() {
           <Link href="/contact" className="link link-hover">
             Contact
           </Link>
+          <Link href="/support" className="link link-hover">
+            Support
+          </Link>
         </nav>
         <nav>
           <h6 className="footer-title">Social</h6>

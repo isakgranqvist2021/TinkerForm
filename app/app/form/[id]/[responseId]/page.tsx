@@ -6,15 +6,18 @@ import { getFormById } from 'services/api/forms';
 import { getResponseById } from 'services/api/response';
 import { getSectionsByFormId, sectionMapper } from 'services/api/section';
 import { PageProps } from 'types/page';
+import { getMetadata } from 'utils';
 
 export async function generateMetadata(props: PageProps<{ id: string }>) {
   const params = await props.params;
   const form = await getFormById(params.id);
 
-  return {
-    title: form ? form.title : 'Form',
-    description: form ? form.description : undefined,
-  };
+  return getMetadata({
+    title: form ? form.title : 'Response Not Found',
+    description: form
+      ? `View the response for the form "${form.title}".`
+      : 'The requested response was not found.',
+  });
 }
 
 export default async function Page(

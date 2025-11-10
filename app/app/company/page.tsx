@@ -1,9 +1,10 @@
 import { Drawer } from 'components/drawer';
+import { getMetadata } from 'utils';
 
-export const metadata = {
-  title: 'Company - TinkerForm',
-  description: 'Learn more about our company and team.',
-};
+export const metadata = getMetadata({
+  title: 'Company',
+  description: 'Learn more about TinkerForm as a company.',
+});
 
 export default function Page() {
   return (

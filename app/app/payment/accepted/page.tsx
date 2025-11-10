@@ -2,15 +2,15 @@ import {
   CheckoutFailed,
   CheckoutSuccess,
 } from 'components/checkout-completed-screen';
-import { auth0 } from 'lib/auth0';
-import Link from 'next/link';
 import React from 'react';
 import { verifyAndCompletePayment } from 'services/payment';
 import type { PageProps } from 'types/page';
+import { getMetadata } from 'utils';
 
-export const metadata = {
+export const metadata = getMetadata({
   title: 'Payment Accepted',
-};
+  description: 'Your payment has been successfully processed.',
+});
 
 export default async function Page(
   props: PageProps<undefined, { checkoutSessionId: string }>,

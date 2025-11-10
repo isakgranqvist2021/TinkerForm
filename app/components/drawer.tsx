@@ -30,7 +30,7 @@ export async function Drawer(props: React.PropsWithChildren) {
     <div className="drawer">
       <input id="my-drawer-1" type="checkbox" className="drawer-toggle" />
       <div className="drawer-content min-h-screen flex flex-col">
-        <div className="navbar bg-base-100 shadow-sm">
+        <div className="navbar bg-base-100 shadow-sm" style={{ height: 72 }}>
           <div className="max-w-6xl mx-auto flex justify-between w-full">
             <div className="navbar-start">
               <label

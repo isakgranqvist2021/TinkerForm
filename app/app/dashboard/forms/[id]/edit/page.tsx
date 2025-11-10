@@ -7,10 +7,12 @@ import React from 'react';
 import { getFormById } from 'services/api/forms';
 import { getSectionsByFormId, sectionMapper } from 'services/api/section';
 import { PageProps } from 'types/page';
+import { getMetadata } from 'utils';
 
-export const metadata = {
+export const metadata = getMetadata({
   title: 'Edit Form',
-};
+  description: 'Edit your form and its sections.',
+});
 
 export default async function Page(props: PageProps<{ id: string }>) {
   const session = await auth0.getSession();
