@@ -5,37 +5,12 @@ You can view stats like number of applications, completion rate, average complet
 
 ## Environment Variables
 
-To run this project, you will need to add the following environment variables to your .env file.
+To run this project, you will need to add the environment variables to your .env file.
+There are two .env files. One for the backend and one for the client. You can see which variables are required in the .env.template files, which exists in both directories.
 
-Create a .env file in the app directory and add these variables.
+`app/.env.template`
 
-See app/.env.template
-
-`NODE_ENV`
-
-`AUTH0_SECRET`
-
-`APP_BASE_URL`
-
-`AUTH0_DOMAIN`
-
-`AUTH0_CLIENT_ID`
-
-`AUTH0_CLIENT_SECRET`
-
-`AUTH0_SCOPE`
-
-`AUTH0_AUDIENCE`
-
-`STRIPE_SECRET_KEY`
-
-`NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY`
-
-`API_URL`
-
-`DATABASE_URL`
-
-`BLOB_READ_WRITE_TOKEN`
+`api/.env.template`
 
 ## Installation
 
