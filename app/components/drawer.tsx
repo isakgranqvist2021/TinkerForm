@@ -27,7 +27,7 @@ export async function Drawer(props: React.PropsWithChildren) {
     <div className="drawer">
       <input id="my-drawer-1" type="checkbox" className="drawer-toggle" />
       <div className="drawer-content min-h-screen flex flex-col">
-        <div className="navbar bg-base-100 shadow-sm" style={{ height: 72 }}>
+        <div className="navbar bg-base-100 shadow-sm lg:h-[72px]">
           <div className="max-w-6xl mx-auto flex justify-between w-full">
             <div className="navbar-start">
               <label
@@ -57,7 +57,7 @@ export async function Drawer(props: React.PropsWithChildren) {
             <div className="navbar-center hidden lg:flex">
               <ul className="menu menu-horizontal px-1">{links}</ul>
             </div>
-            <div className="navbar-end gap-4">
+            <div className="navbar-end gap-4 hidden lg:flex">
               <ThemeToggler initialState={theme} />
 
               {session ? (
@@ -83,7 +83,16 @@ export async function Drawer(props: React.PropsWithChildren) {
           aria-label="close sidebar"
           className="drawer-overlay"
         ></label>
-        <ul className="menu bg-base-200 min-h-full w-80 p-4">{links}</ul>
+        <ul className="menu bg-base-200 min-h-full w-80 p-4">
+          {session ? (
+            <li>
+              <Link href="/dashboard/forms">Dashboard</Link>
+            </li>
+          ) : (
+            <li>Get Started</li>
+          )}
+          {links}
+        </ul>
       </div>
     </div>
   );

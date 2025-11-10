@@ -12,9 +12,9 @@ export default async function Page() {
   return (
     <Drawer>
       <div className="hero bg-base-200 pb-4 flex-grow">
-        <div className="hero-content flex-col lg:flex-row max-w-6xl gap-12">
+        <div className="hero-content flex-col p-6 md:p-12 lg:p-4  lg:flex-row max-w-6xl gap-12">
           <div>
-            <h1 className="text-5xl font-bold" style={{ maxWidth: '18ch' }}>
+            <h1 className="text-5xl font-bold max-w-[18ch]">
               Build beautiful forms, fast and easyly.
             </h1>
             <p className="py-6 max-w-prose">
@@ -22,7 +22,7 @@ export default async function Page() {
               purpose—all from a simple, user-friendly dashboard.
             </p>
 
-            <div className="flex gap-6">
+            <div className="flex gap-6 flex-wrap">
               <Link href="/dashboard/forms" className="btn btn-primary">
                 Get Started
               </Link>
@@ -60,7 +60,7 @@ export default async function Page() {
 function Art() {
   return (
     <svg
-      className="max-w-sm text-primary max-h-96"
+      className="w-sm text-primary max-h-96 max-w-full lg:block hidden"
       xmlns="http://www.w3.org/2000/svg"
       width="800.003"
       height="618.866"
