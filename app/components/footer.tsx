@@ -2,7 +2,7 @@ import Link from 'next/link';
 
 export function Footer() {
   return (
-    <footer className="bg-base-300 text-base-content p-10">
+    <footer className="bg-neutral text-neutral-content p-10">
       <div className="footer sm:footer-horizontal max-w-6xl mx-auto">
         <nav>
           <h6 className="footer-title">Product</h6>

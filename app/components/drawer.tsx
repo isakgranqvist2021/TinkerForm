@@ -89,8 +89,9 @@ export async function Drawer(props: React.PropsWithChildren) {
               <Link href="/dashboard/forms">Dashboard</Link>
             </li>
           ) : (
-            <li>Get Started</li>
+            <a href="/auth/login">Get Started</a>
           )}
+
           {links}
         </ul>
       </div>
