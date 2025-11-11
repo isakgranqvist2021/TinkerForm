@@ -11,10 +11,12 @@ namespace api.Controllers
     public class FormController : ControllerBase
     {
         private readonly ModelService _modelService;
+        private readonly ILogger<FormController> _logger;
 
-        public FormController(ModelService modelServices)
+        public FormController(ModelService modelServices, ILogger<FormController> logger)
         {
             _modelService = modelServices;
+            _logger = logger;
         }
 
         [HttpGet]
@@ -22,8 +24,13 @@ namespace api.Controllers
         public ActionResult<List<FormModel>> Get()
         {
             var email = EmailValidator.ExtractEmailFromContext(HttpContext);
-            var forms = _modelService.formService.GetFormsByEmail(email);
+            if (email == null)
+            {
+                _logger.LogWarning("Unauthorized access attempt.");
+                return Unauthorized();
+            }
 
+            var forms = _modelService.formService.GetFormsByEmail(email);
             return Ok(forms);
         }
 
@@ -45,6 +52,12 @@ namespace api.Controllers
         public ActionResult Delete(Guid id)
         {
             var email = EmailValidator.ExtractEmailFromContext(HttpContext);
+            if (email == null)
+            {
+                _logger.LogWarning("Unauthorized access attempt.");
+                return Unauthorized();
+            }
+
             _modelService.formService.DeleteForm(id, email);
 
             return NoContent();
@@ -54,12 +67,18 @@ namespace api.Controllers
         [Authorize]
         public ActionResult<FormModel> Create(CreateFormModel form)
         {
+            var email = EmailValidator.ExtractEmailFromContext(HttpContext);
+            if (email == null)
+            {
+                _logger.LogWarning("Unauthorized access attempt.");
+                return Unauthorized();
+            }
+
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            var email = EmailValidator.ExtractEmailFromContext(HttpContext);
             var createdForm = _modelService.formService.InsertOne(form, email);
             return CreatedAtAction(nameof(GetById), new { id = createdForm.id }, createdForm);
         }
@@ -68,12 +87,18 @@ namespace api.Controllers
         [Authorize]
         public ActionResult Update(Guid id, [FromBody] UpdateFormModel form)
         {
+            var email = EmailValidator.ExtractEmailFromContext(HttpContext);
+            if (email == null)
+            {
+                _logger.LogWarning("Unauthorized access attempt.");
+                return Unauthorized();
+            }
+
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            var email = EmailValidator.ExtractEmailFromContext(HttpContext);
             _modelService.formService.UpdateOne(form, id, email);
             _modelService.sectionService.UpsertSections(form.sections, id, email);
 
@@ -85,6 +110,12 @@ namespace api.Controllers
         public ActionResult<FormStats> GetFormStats(Guid id)
         {
             var email = EmailValidator.ExtractEmailFromContext(HttpContext);
+            if (email == null)
+            {
+                _logger.LogWarning("Unauthorized access attempt.");
+                return Unauthorized();
+            }
+
             var stats = _modelService.formService.GetFormStats(id, email);
             return Ok(stats);
         }

@@ -1,6 +1,6 @@
 import { env } from 'config';
-import { auth0 } from 'lib/auth0';
 import { MultipleChoiceOption, Section, SectionType } from 'models/form';
+import { getAccessToken } from './access-token';
 
 export interface SectionDto {
   id: string;
@@ -101,7 +101,7 @@ export async function createSections(
   });
 
   try {
-    const { token } = await auth0.getAccessToken();
+    const { token } = await getAccessToken();
 
     const res = await fetch(`${env.API_URL}/section`, {
       method: 'POST',

@@ -1,7 +1,7 @@
 import { env } from 'config';
 import { AnswerDto } from './answer';
 import { SectionDto } from './section';
-import { auth0 } from 'lib/auth0';
+import { getAccessToken } from './access-token';
 
 export interface AnswersByResponseIdDto {
   answer: AnswerDto;
@@ -22,7 +22,7 @@ export async function getAnswersByResponseId(
   responseId: string,
 ): Promise<AnswersByResponseIdDto[]> {
   try {
-    const { token } = await auth0.getAccessToken();
+    const { token } = await getAccessToken();
 
     const res = await fetch(`${env.API_URL}/response/${responseId}/answers`, {
       headers: {
@@ -76,7 +76,7 @@ export async function getResponsesByFormId(
   formId: string,
 ): Promise<ResponseDto[]> {
   try {
-    const { token } = await auth0.getAccessToken();
+    const { token } = await getAccessToken();
 
     const res = await fetch(`${env.API_URL}/response/form/${formId}`, {
       headers: {

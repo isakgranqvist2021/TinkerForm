@@ -11,10 +11,12 @@ namespace api.Controllers
     public class ResponseController : ControllerBase
     {
         private readonly ModelService _modelService;
+        private readonly ILogger<ResponseController> _logger;
 
-        public ResponseController(ModelService modelServices)
+        public ResponseController(ModelService modelServices, ILogger<ResponseController> logger)
         {
             _modelService = modelServices;
+            _logger = logger;
         }
 
         [HttpGet("{id}/answers")]
@@ -59,6 +61,12 @@ namespace api.Controllers
         public ActionResult<IEnumerable<ResponseModel>> ListByFormId(Guid formId)
         {
             var email = EmailValidator.ExtractEmailFromContext(HttpContext);
+            if (email == null)
+            {
+                _logger.LogWarning("Unauthorized access attempt.");
+                return Unauthorized();
+            }
+
             var responses = _modelService.responseService.ListByFormId(formId, email);
             if (responses == null)
             {

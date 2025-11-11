@@ -1,8 +1,8 @@
 import { env } from 'config';
 import { PackageId } from 'config/packages';
-import { auth0 } from 'lib/auth0';
 import { stripe } from 'services/payment';
 import { getIsActive, getNextPaymentDate } from 'utils/utils.server';
+import { getAccessToken } from './access-token';
 
 export interface CreateSubscriptionDto {
   email: string;
@@ -36,7 +36,7 @@ export async function createSubscription(dto: CreateSubscriptionDto) {
 
 export async function getSubscription() {
   try {
-    const { token } = await auth0.getAccessToken();
+    const { token } = await getAccessToken();
 
     const res = await fetch(`${env.API_URL}/subscription`, {
       method: 'GET',
@@ -78,7 +78,7 @@ export async function getSubscription() {
 
 export async function deleteSubscription(): Promise<boolean> {
   try {
-    const { token } = await auth0.getAccessToken();
+    const { token } = await getAccessToken();
 
     const res = await fetch(`${env.API_URL}/subscription`, {
       method: 'DELETE',

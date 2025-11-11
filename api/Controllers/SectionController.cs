@@ -11,10 +11,12 @@ namespace api.Controllers
     public class SectionController : ControllerBase
     {
         private readonly ModelService _modelService;
+        private readonly ILogger<SectionController> _logger;
 
-        public SectionController(ModelService modelServices)
+        public SectionController(ModelService modelServices, ILogger<SectionController> logger)
         {
             _modelService = modelServices;
+            _logger = logger;
         }
 
         [HttpGet("form/{formId}")]
@@ -33,6 +35,13 @@ namespace api.Controllers
         [Authorize]
         public ActionResult Create([FromBody] List<SectionModel> sections)
         {
+            var email = EmailValidator.ExtractEmailFromContext(HttpContext);
+            if (email == null)
+            {
+                _logger.LogWarning("Unauthorized access attempt.");
+                return Unauthorized();
+            }
+
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
@@ -43,7 +52,6 @@ namespace api.Controllers
                 return BadRequest();
             }
 
-            var email = EmailValidator.ExtractEmailFromContext(HttpContext);
             var createdSections = _modelService.sectionService.Create(sections, email);
             return CreatedAtAction(nameof(GetByFormId), new { formId = createdSections.First().fk_form_id }, createdSections);
         }

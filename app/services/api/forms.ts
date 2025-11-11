@@ -1,6 +1,6 @@
 import { env } from 'config';
-import { auth0 } from 'lib/auth0';
 import { Form } from 'models/form';
+import { getAccessToken } from './access-token';
 
 export interface FormDto {
   id: string;
@@ -21,7 +21,7 @@ interface FormStats {
 
 export async function getForms(): Promise<FormDto[]> {
   try {
-    const { token } = await auth0.getAccessToken();
+    const { token } = await getAccessToken();
 
     const res = await fetch(`${env.API_URL}/form`, {
       headers: {
@@ -51,7 +51,7 @@ export async function getFormById(formId: string): Promise<FormDto | null> {
 
 export async function deleteForm(formId: string): Promise<boolean> {
   try {
-    const { token } = await auth0.getAccessToken();
+    const { token } = await getAccessToken();
 
     const res = await fetch(`${env.API_URL}/form/${formId}`, {
       method: 'DELETE',
@@ -69,7 +69,7 @@ export async function deleteForm(formId: string): Promise<boolean> {
 
 export async function createForm(form: Form): Promise<FormDto | null> {
   try {
-    const { token } = await auth0.getAccessToken();
+    const { token } = await getAccessToken();
 
     const res = await fetch(`${env.API_URL}/form`, {
       method: 'POST',
@@ -90,7 +90,7 @@ export async function createForm(form: Form): Promise<FormDto | null> {
 
 export async function updateForm(formId: string, form: Form): Promise<boolean> {
   try {
-    const { token } = await auth0.getAccessToken();
+    const { token } = await getAccessToken();
 
     const res = await fetch(`${env.API_URL}/form/${formId}`, {
       method: 'PUT',
@@ -110,7 +110,7 @@ export async function updateForm(formId: string, form: Form): Promise<boolean> {
 
 export async function getFormStats(formId: string): Promise<FormStats> {
   try {
-    const { token } = await auth0.getAccessToken();
+    const { token } = await getAccessToken();
 
     const res = await fetch(`${env.API_URL}/form/${formId}/stats`, {
       headers: {

@@ -17,7 +17,8 @@ export const packages: Record<PackageId, Package> = {
       { name: 'Basic support', available: true },
       { name: 'Cancel anytime', available: true },
       { name: 'Limited access to features', available: true },
-      { name: 'No custom branding', available: false },
+      { name: 'Up to 100 responses per month', available: true },
+      { name: 'Export to CSV', available: false },
     ],
   },
   pro: {
@@ -29,7 +30,8 @@ export const packages: Record<PackageId, Package> = {
       { name: 'Priority support', available: true },
       { name: 'Cancel anytime', available: true },
       { name: 'Full access to features', available: true },
-      { name: 'Custom branding', available: true },
+      { name: 'Up to 10,000 responses per month', available: true },
+      { name: 'Export to CSV', available: true },
     ],
   },
   enterprise: {
@@ -40,7 +42,8 @@ export const packages: Record<PackageId, Package> = {
       { name: 'Dedicated account manager', available: true },
       { name: 'Cancel anytime', available: true },
       { name: 'Custom integrations', available: true },
-      { name: 'Advanced security features', available: true },
+      { name: 'Unlimited responses', available: true },
+      { name: 'Export to CSV', available: true },
     ],
   },
 };

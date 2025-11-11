@@ -11,10 +11,12 @@ namespace api.Controllers
     public class SubscriptionController : ControllerBase
     {
         private readonly ModelService _modelService;
+        private readonly ILogger<SubscriptionController> _logger;
 
-        public SubscriptionController(ModelService modelServices)
+        public SubscriptionController(ModelService modelServices, ILogger<SubscriptionController> logger)
         {
             _modelService = modelServices;
+            _logger = logger;
         }
 
         [HttpPost]
@@ -34,6 +36,12 @@ namespace api.Controllers
         public ActionResult GetByEmail()
         {
             var email = EmailValidator.ExtractEmailFromContext(HttpContext);
+            if (email == null)
+            {
+                _logger.LogWarning("Unauthorized access attempt.");
+                return Unauthorized();
+            }
+
             var subscription = _modelService.subscriptionService.GetByEmail(email);
             if (subscription == null)
             {
@@ -48,6 +56,12 @@ namespace api.Controllers
         public ActionResult Delete()
         {
             var email = EmailValidator.ExtractEmailFromContext(HttpContext);
+            if (email == null)
+            {
+                _logger.LogWarning("Unauthorized access attempt.");
+                return Unauthorized();
+            }
+
             var success = _modelService.subscriptionService.Delete(email);
             if (!success)
             {
