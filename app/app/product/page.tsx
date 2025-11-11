@@ -23,7 +23,7 @@ export default function Page() {
             </span>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="card bg-base-100 shadow-xl">
+            <div className="card bg-base-200">
               <div className="card-body">
                 <h2 className="card-title">Drag-and-Drop Form Builder</h2>
                 <p>
@@ -32,16 +32,17 @@ export default function Page() {
                 </p>
               </div>
             </div>
-            <div className="card bg-base-100 shadow-xl">
+            <div className="card bg-base-200">
               <div className="card-body">
                 <h2 className="card-title">Secure &amp; Private</h2>
                 <p>
                   Your data is protected with industry-standard security and
-                  authentication powered by Auth0.
+                  authentication measures, ensuring peace of mind for you and
+                  your users.
                 </p>
               </div>
             </div>
-            <div className="card bg-base-100 shadow-xl">
+            <div className="card bg-base-200">
               <div className="card-body">
                 <h2 className="card-title">Real-Time Response Management</h2>
                 <p>
@@ -50,7 +51,7 @@ export default function Page() {
                 </p>
               </div>
             </div>
-            <div className="card bg-base-100 shadow-xl">
+            <div className="card bg-base-200">
               <div className="card-body">
                 <h2 className="card-title">Share &amp; Collaborate</h2>
                 <p>

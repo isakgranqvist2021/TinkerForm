@@ -22,7 +22,7 @@ export default function Page() {
             </span>
           </div>
 
-          <div className="card bg-base-100 shadow-xl mb-4">
+          <div className="card bg-base-200 mb-4">
             <div className="card-body">
               <h2 className="card-title">Response Table &amp; Stats</h2>
               <p>
@@ -51,37 +51,37 @@ export default function Page() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <div className="card bg-base-100 shadow-xl">
+            <div className="card bg-base-200">
               <div className="card-body">
                 <h2 className="card-title">Text</h2>
                 <p>Collect short or long text answers from your users.</p>
               </div>
             </div>
-            <div className="card bg-base-100 shadow-xl">
+            <div className="card bg-base-200">
               <div className="card-body">
                 <h2 className="card-title">Link</h2>
                 <p>Request a URL or website address from your users.</p>
               </div>
             </div>
-            <div className="card bg-base-100 shadow-xl">
+            <div className="card bg-base-200">
               <div className="card-body">
                 <h2 className="card-title">Phone</h2>
                 <p>Let users enter their phone number in a validated format.</p>
               </div>
             </div>
-            <div className="card bg-base-100 shadow-xl">
+            <div className="card bg-base-200">
               <div className="card-body">
                 <h2 className="card-title">Email</h2>
                 <p>Collect email addresses with built-in validation.</p>
               </div>
             </div>
-            <div className="card bg-base-100 shadow-xl">
+            <div className="card bg-base-200">
               <div className="card-body">
                 <h2 className="card-title">File</h2>
                 <p>Allow users to upload files and documents securely.</p>
               </div>
             </div>
-            <div className="card bg-base-100 shadow-xl">
+            <div className="card bg-base-200">
               <div className="card-body">
                 <h2 className="card-title">Range</h2>
                 <p>
@@ -90,13 +90,13 @@ export default function Page() {
                 </p>
               </div>
             </div>
-            <div className="card bg-base-100 shadow-xl">
+            <div className="card bg-base-200">
               <div className="card-body">
                 <h2 className="card-title">Boolean</h2>
                 <p>Simple yes/no or true/false questions for quick answers.</p>
               </div>
             </div>
-            <div className="card bg-base-100 shadow-xl">
+            <div className="card bg-base-200">
               <div className="card-body">
                 <h2 className="card-title">Multiple Choice</h2>
                 <p>Present a list of options for users to choose from.</p>
