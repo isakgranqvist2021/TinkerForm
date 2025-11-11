@@ -1,3 +1,4 @@
+import { PageTitle } from 'components/page-title';
 import { auth0 } from 'lib/auth0';
 import { redirect } from 'next/navigation';
 import React from 'react';
@@ -16,7 +17,7 @@ export default async function Page() {
 
   return (
     <section className="container mx-auto px-2 py-8">
-      <h1>Account</h1>
+      <PageTitle className="mb-4">Account Settings</PageTitle>
 
       <p>Email: {session.user.email}</p>
     </section>
