@@ -20,6 +20,7 @@ import { toast } from 'sonner';
 import React from 'react';
 import { type FormDto } from 'services/api/forms';
 import { ResponseDto } from 'services/api/response';
+import { MainContainer } from 'containers/main-container';
 
 interface AnswerFormProps {
   sections: Section[];
@@ -31,65 +32,78 @@ export function AnswerForm(props: AnswerFormProps) {
   const formRef = React.useRef<HTMLDivElement>(null);
 
   return (
-    <div className="w-[760px] mx-auto max-w-full gap-8 flex-col flex">
-      <div>
-        <div className="flex justify-between">
-          <div className="mb-4">
-            <h1 className="m-0 mb-2 text-xl font-bold">{props.form.title}</h1>
+    <div>
+      {props.form.coverImage && (
+        <img
+          src={props.form.coverImage}
+          className="w-full h-96 mb-8 object-cover"
+        />
+      )}
 
-            <div className="flex gap-2 mb-4">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                strokeWidth={1.5}
-                stroke="currentColor"
-                className="size-6"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"
-                />
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0Z"
-                />
-              </svg>
+      <MainContainer>
+        <div className="w-[760px] mx-auto max-w-full gap-8 flex-col flex">
+          <div>
+            <div className="flex justify-between">
+              <div className="mb-4">
+                <h1 className="m-0 mb-2 text-xl font-bold">
+                  {props.form.title}
+                </h1>
 
-              <p>{props.form.location}</p>
+                <div className="flex gap-2 mb-4">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    strokeWidth={1.5}
+                    stroke="currentColor"
+                    className="size-6"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"
+                    />
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0Z"
+                    />
+                  </svg>
+
+                  <p>{props.form.location}</p>
+                </div>
+              </div>
+
+              {!props.response.completedAt && (
+                <button
+                  onClick={() =>
+                    formRef.current?.scrollIntoView({
+                      behavior: 'smooth',
+                    })
+                  }
+                  className="btn btn-primary"
+                >
+                  Apply Now
+                </button>
+              )}
             </div>
+
+            <p
+              className="m-0 whitespace-pre-wrap"
+              dangerouslySetInnerHTML={{ __html: props.form.description }}
+            ></p>
           </div>
 
-          {!props.response.completedAt && (
-            <button
-              onClick={() =>
-                formRef.current?.scrollIntoView({
-                  behavior: 'smooth',
-                })
-              }
-              className="btn btn-primary"
-            >
-              Apply Now
-            </button>
-          )}
+          <div ref={formRef}>
+            <AnswerFormContent
+              responseId={props.response.id}
+              sections={props.sections}
+              formId={props.form.id}
+              isCompleted={props.response.completedAt !== null}
+            />
+          </div>
         </div>
-
-        <p
-          className="m-0 whitespace-pre-wrap"
-          dangerouslySetInnerHTML={{ __html: props.form.description }}
-        ></p>
-      </div>
-
-      <div ref={formRef}>
-        <AnswerFormContent
-          responseId={props.response.id}
-          sections={props.sections}
-          formId={props.form.id}
-          isCompleted={props.response.completedAt !== null}
-        />
-      </div>
+      </MainContainer>
     </div>
   );
 }

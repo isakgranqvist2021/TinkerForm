@@ -1,6 +1,7 @@
 import currency from 'currency.js';
 import dayjs from 'dayjs';
 import Dayjs from 'dayjs';
+import { Form } from 'models/form';
 import { Metadata } from 'next';
 import { AnswerDto } from 'services/api/answer';
 import { AnswersByFormDto } from 'services/api/forms';
@@ -115,4 +116,41 @@ export function formatExportFormData(responses: AnswersByFormDto): string {
   });
 
   return csvData;
+}
+
+export function formatFormValues(form: Form) {
+  const formData = new FormData();
+  for (const key in form) {
+    const value = form[key as keyof typeof form];
+    if (value instanceof File || typeof value === 'string') {
+      formData.append(key, value);
+    } else {
+      formData.append(key, JSON.stringify(value));
+    }
+  }
+  return formData;
+}
+
+export function parseFormFormData(formData: FormData) {
+  const values: Record<string, any> = {};
+  formData.forEach((value, key) => {
+    if (value instanceof File) {
+      values[key] = value;
+    } else {
+      try {
+        values[key] = JSON.parse(value);
+      } catch {
+        values[key] = value;
+      }
+    }
+  });
+
+  return values;
+}
+
+export async function urlToFile(url: string, filename: string): Promise<File> {
+  const response = await fetch(url);
+  const blob = await response.blob();
+
+  return new File([blob], filename, { type: blob.type });
 }

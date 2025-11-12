@@ -1,8 +1,10 @@
+import { put } from '@vercel/blob';
 import { created, internalServerError, unauthorized } from 'app/api/utils';
 import { auth0 } from 'lib/auth0';
 import { formSchema } from 'models/form';
-import { createForm } from 'services/api/forms';
+import { createForm, CreateFormDto } from 'services/api/forms';
 import { createSections } from 'services/api/section';
+import { parseFormFormData } from 'utils';
 
 export async function POST(req: Request) {
   try {
@@ -11,10 +13,17 @@ export async function POST(req: Request) {
       return unauthorized();
     }
 
-    const body = await req.json();
-    const form = formSchema.parse(body);
+    const formData = await req.formData();
+    const form = formSchema.parse(parseFormFormData(formData));
+    const createFormDto: CreateFormDto = { ...form, coverImage: '' };
+    const { url } = await put(
+      `files/${form.coverImage.name}`,
+      form.coverImage,
+      { access: 'public', addRandomSuffix: true },
+    );
+    createFormDto.coverImage = url;
 
-    const res = await createForm(form);
+    const res = await createForm(createFormDto);
     if (!res) {
       return internalServerError();
     }
@@ -23,6 +32,7 @@ export async function POST(req: Request) {
 
     return created(res);
   } catch (err) {
+    console.log(err);
     return internalServerError();
   }
 }

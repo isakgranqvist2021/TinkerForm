@@ -9,8 +9,10 @@ import { FormDetails } from './form-details';
 import { SectionsList } from './sections-list';
 import { useRouter } from 'next/navigation';
 import React from 'react';
+import { formatFormValues } from 'utils';
 
 const defaultValues: Form = {
+  coverImage: new File([], ''),
   title: '',
   description: '',
   location: '',
@@ -29,10 +31,7 @@ export function AddNewForm() {
     try {
       const res = await fetch('/api/forms/new', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(data),
+        body: formatFormValues(data),
       });
 
       if (!res.ok) {

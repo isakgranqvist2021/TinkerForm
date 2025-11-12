@@ -36,8 +36,6 @@ export default async function Page(
   const mappedSections = sections.map(sectionMapper);
 
   return (
-    <MainContainer>
-      <AnswerForm sections={mappedSections} response={response} form={form} />
-    </MainContainer>
+    <AnswerForm sections={mappedSections} response={response} form={form} />
   );
 }

@@ -2,15 +2,25 @@
 
 import { SectionFormProvider } from './section-form-modal';
 import { Form, formSchema } from 'models/form';
-import { FormProvider, useForm } from 'react-hook-form';
+import {
+  FormProvider,
+  useForm,
+  UseFormReset,
+  UseFormResetField,
+  UseFormSetValue,
+} from 'react-hook-form';
 import { toast } from 'sonner';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { FormDetails } from './form-details';
 import { SectionsList } from './sections-list';
+import { formatFormValues, urlToFile } from 'utils';
+import { getDownloadUrl } from '@vercel/blob';
+import React from 'react';
 
 interface EditFormProps {
   defaultValues: Form;
   formId: string;
+  coverImageUrl: string;
 }
 
 export function EditForm(props: EditFormProps) {
@@ -19,20 +29,24 @@ export function EditForm(props: EditFormProps) {
     resolver: zodResolver(formSchema),
   });
 
+  useInjectCoverImage(props.coverImageUrl, form.setValue);
+
   const submitForm = form.handleSubmit(async (data) => {
     try {
-      const res = await fetch(`/api/forms/${props.formId}`, {
-        method: 'PATCH',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          ...data,
-          sections: data.sections.map((section, i) => ({
+      const formData = formatFormValues(data);
+      formData.set(
+        'sections',
+        JSON.stringify(
+          data.sections.map((section, i) => ({
             ...section,
             index: i,
           })),
-        }),
+        ),
+      );
+
+      const res = await fetch(`/api/forms/${props.formId}`, {
+        method: 'PATCH',
+        body: formData,
       });
 
       if (!res.ok) {
@@ -62,4 +76,17 @@ export function EditForm(props: EditFormProps) {
       </SectionFormProvider>
     </FormProvider>
   );
+}
+
+function useInjectCoverImage(url: string, setValue: UseFormSetValue<Form>) {
+  const injectFile = React.useCallback(async () => {
+    const downloadUrl = getDownloadUrl(url);
+    const file = await urlToFile(downloadUrl, 'cover-image');
+
+    setValue('coverImage', file);
+  }, [url, setValue]);
+
+  React.useEffect(() => {
+    injectFile();
+  }, [injectFile]);
 }

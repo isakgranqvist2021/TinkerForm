@@ -14,6 +14,7 @@ export interface FormDto {
   description: string;
   responseCount: number | null;
   location: string;
+  coverImage: string;
 }
 
 interface FormStats {
@@ -24,6 +25,14 @@ interface FormStats {
 export interface AnswersByFormDto {
   sections: SectionDto[];
   answers: AnswerDto[];
+}
+
+export interface CreateFormDto extends Omit<Form, 'coverImage'> {
+  coverImage: string;
+}
+
+export interface UpdateFormDto extends Omit<Form, 'coverImage'> {
+  coverImage: string;
 }
 
 export async function getForms(): Promise<FormDto[]> {
@@ -74,7 +83,7 @@ export async function deleteForm(formId: string): Promise<boolean> {
   }
 }
 
-export async function createForm(form: Form): Promise<FormDto | null> {
+export async function createForm(form: CreateFormDto): Promise<FormDto | null> {
   try {
     const { token } = await getAccessToken();
 
@@ -95,7 +104,10 @@ export async function createForm(form: Form): Promise<FormDto | null> {
   }
 }
 
-export async function updateForm(formId: string, form: Form): Promise<boolean> {
+export async function updateForm(
+  formId: string,
+  form: UpdateFormDto,
+): Promise<boolean> {
   try {
     const { token } = await getAccessToken();
 

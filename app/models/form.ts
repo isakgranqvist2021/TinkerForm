@@ -97,6 +97,15 @@ export const sectionSchema = z.discriminatedUnion('type', [
 ]);
 export type Section = z.infer<typeof sectionSchema>;
 
+export const fileSchema = z
+  .instanceof(File, { message: 'File is required' })
+  .refine((file) => file && file.size > 0 && file.size <= 5000000, {
+    message: 'File must not be empty and must be ≤ 5MB',
+  })
+  .refine((value) => value instanceof File || typeof value === 'string', {
+    message: 'File is required',
+  });
+
 export type Form = z.infer<typeof formSchema>;
 export const formSchema = z.object({
   title: z.string().min(1, 'Title is required').max(255, 'Title is too long'),
@@ -109,4 +118,5 @@ export const formSchema = z.object({
     .string()
     .min(1, 'Location is required')
     .max(500, 'Location is too long'),
+  coverImage: fileSchema,
 });

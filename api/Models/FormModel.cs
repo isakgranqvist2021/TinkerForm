@@ -18,6 +18,10 @@ namespace api.Models
         [Required]
         public string location { get; set; } = string.Empty;
 
+        [Required]
+        [JsonPropertyName("coverImage")]
+        public string cover_image { get; set; } = string.Empty;
+
         [NotMapped]
         [JsonPropertyName("responseCount")]
         public int? response_count { get; set; } = null;
@@ -33,6 +37,10 @@ namespace api.Models
 
         [Required]
         public string location { get; set; } = string.Empty;
+
+        [Required]
+        [JsonPropertyName("coverImage")]
+        public string cover_image { get; set; } = string.Empty;
     }
 
     public class UpdateFormModel
@@ -45,6 +53,10 @@ namespace api.Models
 
         [Required]
         public string location { get; set; } = string.Empty;
+
+        [Required]
+        [JsonPropertyName("coverImage")]
+        public string cover_image { get; set; } = string.Empty;
 
         [Required]
         public List<SectionModel> sections { get; set; } = [];
