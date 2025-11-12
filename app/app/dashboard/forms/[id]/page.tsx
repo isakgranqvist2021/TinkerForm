@@ -1,6 +1,4 @@
 import { ResponseProvider } from 'components/response-modal';
-import { CopyFormLink } from 'components/copy-form-link';
-import { DeleteFormIconButton } from 'components/delete-form-button';
 import { MainContainer } from 'containers/main-container';
 import { auth0 } from 'lib/auth0';
 import Link from 'next/link';
@@ -15,10 +13,9 @@ import {
 } from 'utils';
 import { ResponseTableRow } from 'components/response-table-row';
 import { EmptyState } from 'components/empty-state';
-import { VisitFormLink } from 'components/view-form-link';
 import { getFormById, getFormStats } from 'services/api/forms';
 import { getResponsesByFormId } from 'services/api/response';
-import { ExportDataButton } from 'components/export-data-button';
+import { FormActions } from 'components/view-form-actions';
 
 export const generateMetadata = async (props: PageProps<{ id: string }>) => {
   const params = await props.params;
@@ -55,8 +52,6 @@ export default async function Page(props: PageProps<{ id: string }>) {
     formStats.totalResponses,
   );
 
-  const formLink = `${process.env.APP_BASE_URL}/form/${form.id}`;
-
   return (
     <ResponseProvider>
       <MainContainer>
@@ -72,40 +67,10 @@ export default async function Page(props: PageProps<{ id: string }>) {
             </ul>
           </div>
 
-          <div className="flex gap-4">
-            <VisitFormLink href={formLink} />
-
-            <CopyFormLink href={formLink} />
-
-            <DeleteFormIconButton
-              className="btn btn-circle"
-              formId={params.id}
-            />
-
-            <ExportDataButton formId={params.id} />
-
-            <div className="tooltip" data-tip="Edit">
-              <Link
-                className="btn btn-circle"
-                href={`/dashboard/forms/${params.id}/edit`}
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  strokeWidth={1.5}
-                  stroke="currentColor"
-                  className="size-6"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10"
-                  />
-                </svg>
-              </Link>
-            </div>
-          </div>
+          <FormActions
+            viewFormHref={`${process.env.APP_BASE_URL}/form/${form.id}`}
+            formId={form.id}
+          />
         </div>
 
         <div className="stats shadow">

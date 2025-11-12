@@ -3,10 +3,10 @@ import Link from 'next/link';
 import React from 'react';
 import { MainContainer } from 'containers/main-container';
 import { redirect } from 'next/navigation';
-import { DeleteFormIconButton } from 'components/delete-form-button';
 import { EmptyState } from 'components/empty-state';
 import { getForms, type FormDto } from 'services/api/forms';
 import { getMetadata } from 'utils';
+import { DeleteFormIconButton } from 'components/view-form-actions';
 
 export const metadata = getMetadata({
   title: 'My Forms',
