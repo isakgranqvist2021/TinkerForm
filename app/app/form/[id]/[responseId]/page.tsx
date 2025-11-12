@@ -1,5 +1,5 @@
 import { AnswerForm } from 'components/answer-form';
-import { MainContainer } from 'containers/main-container';
+import { defaultTheme } from 'config/theme';
 import { redirect } from 'next/navigation';
 import React from 'react';
 import { getFormById } from 'services/api/forms';
@@ -36,6 +36,10 @@ export default async function Page(
   const mappedSections = sections.map(sectionMapper);
 
   return (
-    <AnswerForm sections={mappedSections} response={response} form={form} />
+    <html lang="en" data-theme={form.theme ?? defaultTheme}>
+      <body className="min-h-screen">
+        <AnswerForm sections={mappedSections} response={response} form={form} />
+      </body>
+    </html>
   );
 }

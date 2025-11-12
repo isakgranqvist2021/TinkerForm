@@ -1,4 +1,5 @@
 import z from 'zod';
+import { themeSchema } from './theme';
 
 export type SectionType = (typeof sectionTypes)[number];
 export const sectionTypes = [
@@ -119,4 +120,5 @@ export const formSchema = z.object({
     .min(1, 'Location is required')
     .max(500, 'Location is too long'),
   coverImage: fileSchema,
+  theme: themeSchema,
 });

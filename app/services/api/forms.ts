@@ -3,6 +3,7 @@ import { Form } from 'models/form';
 import { getAccessToken } from './access-token';
 import { SectionDto } from './section';
 import { AnswerDto } from './answer';
+import { Theme } from 'config/theme';
 
 export interface FormDto {
   id: string;
@@ -15,6 +16,8 @@ export interface FormDto {
   responseCount: number | null;
   location: string;
   coverImage: string;
+
+  theme: Theme | null;
 }
 
 interface FormStats {

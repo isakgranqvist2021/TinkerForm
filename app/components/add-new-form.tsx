@@ -10,6 +10,7 @@ import { SectionsList } from './sections-list';
 import { useRouter } from 'next/navigation';
 import React from 'react';
 import { formatFormValues } from 'utils';
+import { defaultTheme } from 'config/theme';
 
 const defaultValues: Form = {
   coverImage: new File([], ''),
@@ -17,6 +18,7 @@ const defaultValues: Form = {
   description: '',
   location: '',
   sections: [],
+  theme: defaultTheme,
 };
 
 export function AddNewForm() {

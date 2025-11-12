@@ -19,7 +19,7 @@ export default async function Page() {
 function Hero() {
   return (
     <div className="hero bg-base-200 pb-4 flex-grow">
-      <div className="hero-content flex-col p-6 md:p-12 lg:p-4 lg:flex-row max-w-6xl gap-12">
+      <div className="hero-content flex-col p-6 md:p-12 lg:p-4 lg:flex-row max-w-7xl gap-12">
         <div>
           <h1 className="text-5xl font-bold max-w-[18ch]">
             Build beautiful forms, fast and easily.

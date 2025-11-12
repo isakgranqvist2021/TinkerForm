@@ -1,7 +1,7 @@
+import { Theme } from 'config/theme';
 import z from 'zod';
 
+export const themeSchema = z.enum(Object.values(Theme));
 export const updateThemeSchema = z.object({
-  theme: z.enum(['light', 'dracula']),
+  theme: themeSchema,
 });
-
-export type Theme = z.infer<typeof updateThemeSchema>['theme'];

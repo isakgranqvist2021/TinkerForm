@@ -37,6 +37,7 @@ namespace api.Services
                     created_at = f.created_at,
                     updated_at = f.updated_at,
                     cover_image = f.cover_image,
+                    theme = f.theme,
                     response_count = _context.response.Count(r => r.fk_form_id == f.id && r.completed_at != null),
                 })
                 .ToList();
@@ -57,6 +58,7 @@ namespace api.Services
                     created_at = f.created_at,
                     updated_at = f.updated_at,
                     cover_image = f.cover_image,
+                    theme = f.theme,
                     response_count = _context.response.Count(r => r.fk_form_id == f.id && r.completed_at != null),
                 })
                 .FirstOrDefault();
@@ -71,6 +73,7 @@ namespace api.Services
                 description = form.description,
                 location = form.location,
                 cover_image = form.cover_image,
+                theme = form.theme,
             };
 
             _context.form.Add(newForm);
@@ -88,6 +91,7 @@ namespace api.Services
                 existingForm.location = form.location;
                 existingForm.cover_image = form.cover_image;
                 existingForm.updated_at = DateTime.UtcNow;
+                existingForm.theme = form.theme;
 
                 _context.SaveChanges();
             }

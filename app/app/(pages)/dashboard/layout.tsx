@@ -15,7 +15,7 @@ export default async function DashboardLayout(props: React.PropsWithChildren) {
     <div className="min-h-screen flex flex-col">
       <Nav />
 
-      <div className="max-w-6xl mx-auto w-full flex-grow">
+      <div className="max-w-7xl mx-auto w-full flex-grow">
         <NoSubscriptionBanner />
 
         {props.children}

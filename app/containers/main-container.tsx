@@ -9,6 +9,6 @@ export function MainContainer(props: React.PropsWithChildren) {
 
 export function Container(props: React.PropsWithChildren) {
   return (
-    <section className="max-w-6xl mx-auto w-full p-4 flex-grow" {...props} />
+    <section className="max-w-7xl mx-auto w-full p-4 flex-grow" {...props} />
   );
 }

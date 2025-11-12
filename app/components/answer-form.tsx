@@ -95,6 +95,8 @@ export function AnswerForm(props: AnswerFormProps) {
             ></p>
           </div>
 
+          <div className="divider"></div>
+
           <div ref={formRef}>
             <AnswerFormContent
               responseId={props.response.id}

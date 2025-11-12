@@ -3,7 +3,7 @@ import Link from 'next/link';
 export function Footer() {
   return (
     <footer className="bg-neutral text-neutral-content p-10">
-      <div className="footer sm:footer-horizontal max-w-6xl mx-auto">
+      <div className="footer sm:footer-horizontal max-w-7xl mx-auto">
         <nav>
           <h6 className="footer-title">Product</h6>
           <Link href="/product" className="link link-hover">

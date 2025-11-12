@@ -2,6 +2,7 @@ import React from 'react';
 import { ControlledInput, ControlledTextarea } from './inputs';
 import { useFormContext, useFormState, useWatch } from 'react-hook-form';
 import { Form } from 'models/form';
+import { FormTheme } from './form-theme';
 
 function ImagePreview() {
   const formContext = useFormContext<Form>();
@@ -101,6 +102,8 @@ export function FormDetails() {
       </div>
 
       <ImagePreview />
+
+      <FormTheme />
 
       <ControlledInput
         name="title"

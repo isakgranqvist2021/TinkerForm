@@ -16,6 +16,9 @@ namespace api.Models
         public string description { get; set; } = string.Empty;
 
         [Required]
+        public string theme { get; set; } = string.Empty;
+
+        [Required]
         public string location { get; set; } = string.Empty;
 
         [Required]
@@ -36,6 +39,9 @@ namespace api.Models
         public string description { get; set; } = string.Empty;
 
         [Required]
+        public string theme { get; set; } = string.Empty;
+
+        [Required]
         public string location { get; set; } = string.Empty;
 
         [Required]
@@ -50,6 +56,9 @@ namespace api.Models
 
         [Required]
         public string description { get; set; } = string.Empty;
+
+        [Required]
+        public string theme { get; set; } = string.Empty;
 
         [Required]
         public string location { get; set; } = string.Empty;

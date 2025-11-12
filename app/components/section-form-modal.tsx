@@ -13,7 +13,7 @@ export function SectionFormModal(props: SectionFormModalProps) {
 
   return (
     <dialog id={modalName} className="modal">
-      <div className="modal-box flex flex-col w-8/12 max-w-6xl">
+      <div className="modal-box flex flex-col w-8/12 max-w-7xl">
         <h3 className="font-bold text-lg">
           {addSectionContext.mode === 'add'
             ? 'Add new section'

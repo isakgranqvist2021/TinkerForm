@@ -1,7 +1,6 @@
-import { auth0 } from 'lib/auth0';
-import { Theme, updateThemeSchema } from 'models/theme';
+import { defaultTheme, Theme } from 'config/theme';
+import { updateThemeSchema } from 'models/theme';
 import { cookies } from 'next/headers';
-import { stripe } from 'services/payment';
 import Stripe from 'stripe';
 
 export async function getThemeFromCookie(): Promise<Theme> {
@@ -10,7 +9,7 @@ export async function getThemeFromCookie(): Promise<Theme> {
     theme: cookieStore.get('theme')?.value,
   });
 
-  return schemaParseResult.data?.theme ?? 'light';
+  return schemaParseResult.data?.theme ?? defaultTheme;
 }
 
 export function getNextPaymentDate(subscription: Stripe.Subscription | null) {

@@ -1,4 +1,5 @@
 import { EditForm } from 'components/edit-form';
+import { defaultTheme, Theme } from 'config/theme';
 import { MainContainer } from 'containers/main-container';
 import { auth0 } from 'lib/auth0';
 import Link from 'next/link';
@@ -56,6 +57,7 @@ export default async function Page(props: PageProps<{ id: string }>) {
           description: form.description,
           location: form.location,
           coverImage: new File([], ''),
+          theme: form.theme ?? defaultTheme,
           sections: mappedSections
             .map((section) => {
               if (section.type === 'multiple-choice') {
