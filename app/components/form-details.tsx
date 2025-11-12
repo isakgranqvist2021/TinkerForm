@@ -26,6 +26,7 @@ function ImagePreview() {
           className="h-72 w-full object-cover rounded"
           ref={imgRef}
           onClick={openFileInput}
+          alt="Cover image"
         />
       ) : (
         <div
