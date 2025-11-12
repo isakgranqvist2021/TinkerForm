@@ -1,6 +1,7 @@
 'use client';
 
 import { Theme } from 'config/theme';
+import { useChangeTheme } from 'hooks/use-change-theme';
 import { Form } from 'models/form';
 import { useFormContext } from 'react-hook-form';
 
@@ -9,26 +10,30 @@ export function FormTheme() {
 
   const value = formContext.watch('theme');
 
+  const changeTheme = useChangeTheme();
+
   return (
     <fieldset className="fieldset">
       <legend className="fieldset-legend">Pick a theme for your form</legend>
-      <select
-        disabled={formContext.formState.isSubmitting}
-        defaultValue="Pick a theme"
-        className="select"
-        value={value}
-        onChange={(e) => {
-          document.documentElement.setAttribute('data-theme', e.target.value);
-          formContext.setValue('theme', e.target.value as Theme);
-        }}
-      >
-        <option disabled={true}>Pick a theme</option>
+
+      <div className="flex flex-wrap gap-4">
         {Object.values(Theme).map((theme) => (
-          <option key={theme} value={theme}>
+          <label key={theme} className="flex gap-2 cursor-pointer items-center">
+            <input
+              readOnly
+              name="theme-radio"
+              type="radio"
+              className="radio radio-sm"
+              checked={value === theme}
+              onClick={() => {
+                formContext.setValue('theme', theme);
+                changeTheme(theme);
+              }}
+            />
             {theme}
-          </option>
+          </label>
         ))}
-      </select>
+      </div>
     </fieldset>
   );
 }

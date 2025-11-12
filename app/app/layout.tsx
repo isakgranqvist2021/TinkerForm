@@ -2,15 +2,20 @@ import React from 'react';
 import 'styles/globals.css';
 import { Toaster } from 'sonner';
 import { GoogleAnalytics } from '@next/third-parties/google';
+import { getThemeFromCookie } from 'utils/utils.server';
 
 export default async function RootLayout(props: React.PropsWithChildren) {
-  return (
-    <React.Fragment>
-      {props.children}
+  const theme = await getThemeFromCookie();
 
-      <Toaster richColors />
+  return (
+    <html data-theme={theme} lang="en">
+      <body className="min-h-screen">
+        {props.children}
+
+        <Toaster richColors />
+      </body>
 
       <GoogleAnalytics gaId="G-51KMS7QMKY" />
-    </React.Fragment>
+    </html>
   );
 }

@@ -2,11 +2,8 @@ import Link from 'next/link';
 import React from 'react';
 import { auth0 } from 'lib/auth0';
 import { ThemeToggler } from './theme-toggler';
-import { getThemeFromCookie } from 'utils/utils.server';
 
 export async function Nav() {
-  const theme = await getThemeFromCookie();
-
   return (
     <div className="navbar bg-base-100 shadow-sm">
       <div className="flex justify-between items-center mx-auto max-w-7xl mx-auto flex justify-between w-full">
@@ -22,7 +19,7 @@ export async function Nav() {
 
           <NavDropdown />
 
-          <ThemeToggler initialState={theme} />
+          <ThemeToggler />
         </ul>
       </div>
     </div>
