@@ -37,6 +37,7 @@ export function AnswerForm(props: AnswerFormProps) {
         <img
           src={props.form.coverImage}
           className="w-full h-96 mb-8 object-cover"
+          alt="Cover image"
         />
       )}
 
