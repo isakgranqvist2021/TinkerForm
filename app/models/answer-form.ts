@@ -1,5 +1,5 @@
 import z from 'zod';
-import { Section, SectionType } from './form';
+import { Section } from './form';
 
 export function constructSchema(sections: Section[]) {
   const schema: Record<string, ReturnType<typeof getSchema>> = {};
