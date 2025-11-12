@@ -14,6 +14,8 @@ export default async function RootLayout(props: React.PropsWithChildren) {
 
         <Toaster richColors />
       </body>
+
+      <GoogleAnalytics gaId="G-51KMS7QMKY" />
     </html>
   );
 }
