@@ -18,6 +18,7 @@ import { EmptyState } from 'components/empty-state';
 import { VisitFormLink } from 'components/view-form-link';
 import { getFormById, getFormStats } from 'services/api/forms';
 import { getResponsesByFormId } from 'services/api/response';
+import { ExportDataButton } from 'components/export-data-button';
 
 export const generateMetadata = async (props: PageProps<{ id: string }>) => {
   const params = await props.params;
@@ -80,6 +81,8 @@ export default async function Page(props: PageProps<{ id: string }>) {
               className="btn btn-circle"
               formId={params.id}
             />
+
+            <ExportDataButton formId={params.id} />
 
             <div className="tooltip" data-tip="Edit">
               <Link

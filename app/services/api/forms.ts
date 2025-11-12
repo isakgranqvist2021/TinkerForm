@@ -1,6 +1,8 @@
 import { env } from 'config';
 import { auth0 } from 'lib/auth0';
 import { Form } from 'models/form';
+import { SectionDto } from './section';
+import { AnswerDto } from './answer';
 
 export interface FormDto {
   id: string;
@@ -17,6 +19,11 @@ export interface FormDto {
 interface FormStats {
   totalResponses: number;
   completedResponses: number;
+}
+
+export interface AnswersByFormDto {
+  section: SectionDto;
+  answers: AnswerDto[];
 }
 
 export async function getForms(): Promise<FormDto[]> {
@@ -126,5 +133,25 @@ export async function getFormStats(formId: string): Promise<FormStats> {
       completedResponses: 0,
       totalResponses: 0,
     };
+  }
+}
+
+export async function getAnswersByFormId(
+  formId: string,
+): Promise<AnswersByFormDto[]> {
+  try {
+    const { token } = await auth0.getAccessToken();
+
+    const res = await fetch(`${env.API_URL}/form/${formId}/answers`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    const data = await res.json();
+    return data;
+  } catch (err) {
+    console.error(err);
+    return [];
   }
 }

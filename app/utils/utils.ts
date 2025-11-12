@@ -2,7 +2,8 @@ import currency from 'currency.js';
 import dayjs from 'dayjs';
 import Dayjs from 'dayjs';
 import { Metadata } from 'next';
-import { ResponseDto } from 'services/api/response';
+import { AnswersByFormDto } from 'services/api/forms';
+import { AnswersByResponseIdDto, ResponseDto } from 'services/api/response';
 
 export function formatCurrency(value: number) {
   return currency(value / 100).format({ symbol: '€' });
@@ -81,4 +82,26 @@ export function getMetadata(options: {
   };
 
   return metadata;
+}
+
+export function formatExportFormData(responses: AnswersByFormDto[]): string {
+  responses.forEach((response) => {
+    console.log(response.section);
+    console.log(response.answers);
+  });
+  // const users = [
+  //   { name: 'Patricia', surname: 'Smith', age: null },
+  //   { name: 'John', surname: null, age: 56 },
+  //   { name: 'Maria', surname: 'Brown', age: 37 },
+  // ];
+
+  // let csvData = ['name', 'surname', 'age'].join(',') + '\r\n';
+
+  // responses.forEach((response) => {
+  //   csvData += [user.name, user.surname, user.age].join(',') + '\r\n';
+  // });
+
+  // return csvData;
+
+  return '';
 }

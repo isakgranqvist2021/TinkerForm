@@ -106,5 +106,26 @@ namespace api.Services
                 completed_responses = completedResponses
             };
         }
+
+        public IEnumerable<object> GetAnswers(Guid formId)
+        {
+            var sections = _context.section.Where(s => s.fk_form_id == formId).ToList();
+            var responses = _context.response.Where(r => r.fk_form_id == formId && r.completed_at != null).ToList();
+            var answers = _context.answer.Where(a => responses.Select(r => r.id).Contains(a.fk_response_id)).ToList();
+
+            var result = new List<object>();
+
+            foreach (var section in sections)
+            {
+                var sectionAnswers = answers.Where(a => a.fk_section_id == section.id).ToList();
+                result.Add(new
+                {
+                    section,
+                    answers = sectionAnswers
+                });
+            }
+
+            return result;
+        }
     }
 }
