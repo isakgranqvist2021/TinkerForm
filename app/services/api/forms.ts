@@ -22,7 +22,7 @@ interface FormStats {
 }
 
 export interface AnswersByFormDto {
-  section: SectionDto;
+  sections: SectionDto[];
   answers: AnswerDto[];
 }
 
@@ -138,9 +138,9 @@ export async function getFormStats(formId: string): Promise<FormStats> {
 
 export async function getAnswersByFormId(
   formId: string,
-): Promise<AnswersByFormDto[]> {
+): Promise<AnswersByFormDto | null> {
   try {
-    const { token } = await auth0.getAccessToken();
+    const { token } = await getAccessToken();
 
     const res = await fetch(`${env.API_URL}/form/${formId}/answers`, {
       headers: {
@@ -152,6 +152,6 @@ export async function getAnswersByFormId(
     return data;
   } catch (err) {
     console.error(err);
-    return [];
+    return null;
   }
 }

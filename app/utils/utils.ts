@@ -2,6 +2,7 @@ import currency from 'currency.js';
 import dayjs from 'dayjs';
 import Dayjs from 'dayjs';
 import { Metadata } from 'next';
+import { AnswerDto } from 'services/api/answer';
 import { AnswersByFormDto } from 'services/api/forms';
 import { AnswersByResponseIdDto, ResponseDto } from 'services/api/response';
 
@@ -84,24 +85,34 @@ export function getMetadata(options: {
   return metadata;
 }
 
-export function formatExportFormData(responses: AnswersByFormDto[]): string {
-  responses.forEach((response) => {
-    console.log(response.section);
-    console.log(response.answers);
+export function formatExportFormData(responses: AnswersByFormDto): string {
+  const answers: Record<string, AnswerDto[]> = {};
+
+  responses.answers.forEach((answer) => {
+    if (answers[answer.fkResponseId]) {
+      answers[answer.fkResponseId].push(answer);
+    } else {
+      answers[answer.fkResponseId] = [answer];
+    }
   });
-  // const users = [
-  //   { name: 'Patricia', surname: 'Smith', age: null },
-  //   { name: 'John', surname: null, age: 56 },
-  //   { name: 'Maria', surname: 'Brown', age: 37 },
-  // ];
 
-  // let csvData = ['name', 'surname', 'age'].join(',') + '\r\n';
+  const columns = responses.sections.map((section) => section.title);
+  const values = Object.values(answers).map((answer) =>
+    answer.map(
+      (answer) =>
+        answer.answerText ??
+        answer.answerNumber?.toString() ??
+        answer.answerBoolean?.toString() ??
+        answer.answerFile ??
+        '',
+    ),
+  );
 
-  // responses.forEach((response) => {
-  //   csvData += [user.name, user.surname, user.age].join(',') + '\r\n';
-  // });
+  let csvData = columns.join(',') + '\r\n';
 
-  // return csvData;
+  values.forEach((value) => {
+    csvData += value.join(',') + '\r\n';
+  });
 
-  return '';
+  return csvData;
 }

@@ -1,7 +1,6 @@
 import { internalServerError, unauthorized } from 'app/api/utils';
 import { auth0 } from 'lib/auth0';
 import { getAnswersByFormId, getFormById } from 'services/api/forms';
-import { getSubscription } from 'services/api/subscription';
 import { formatExportFormData } from 'utils';
 
 export async function GET(
@@ -22,6 +21,10 @@ export async function GET(
     }
 
     const responses = await getAnswersByFormId(id);
+    if (!responses) {
+      return internalServerError();
+    }
+
     const csvData = formatExportFormData(responses);
 
     return new Response(csvData, {

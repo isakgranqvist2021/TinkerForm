@@ -107,25 +107,30 @@ namespace api.Services
             };
         }
 
-        public IEnumerable<object> GetAnswers(Guid formId)
+        public object GetAnswers(Guid formId)
         {
             var sections = _context.section.Where(s => s.fk_form_id == formId).ToList();
-            var responses = _context.response.Where(r => r.fk_form_id == formId && r.completed_at != null).ToList();
-            var answers = _context.answer.Where(a => responses.Select(r => r.id).Contains(a.fk_response_id)).ToList();
-
-            var result = new List<object>();
-
-            foreach (var section in sections)
-            {
-                var sectionAnswers = answers.Where(a => a.fk_section_id == section.id).ToList();
-                result.Add(new
+            var answers = _context.answer
+                .Where(a => a.fk_form_id == formId)
+                .Select(a => new
                 {
-                    section,
-                    answers = sectionAnswers
-                });
-            }
+                    a.id,
+                    fkResponseId = a.fk_response_id,
+                    fkSectionId = a.fk_section_id,
+                    answerText = a.answer_text,
+                    answerNumber = a.answer_number,
+                    answerBoolean = a.answer_boolean,
+                    answerFile = a.answer_file,
+                    createdAt = a.created_at,
+                    updatedAt = a.updated_at
+                })
+                .ToList();
 
-            return result;
+            return new
+            {
+                sections,
+                answers
+            };
         }
     }
 }
