@@ -140,7 +140,7 @@ export function ControlledFileInput(
 
   return (
     <fieldset className="fieldset">
-      <legend className="fieldset-legend">Pick a file</legend>
+      <legend className="fieldset-legend">{label}</legend>
 
       <input
         type="file"
@@ -151,6 +151,7 @@ export function ControlledFileInput(
           const file = e.target.files ? e.target.files[0] : null;
           controller.field.onChange(file);
         }}
+        ref={controller.field.ref}
         {...rest}
       />
 

@@ -55,14 +55,6 @@ namespace api.Services
         public void UpsertSections(IEnumerable<SectionModel> sections, Guid formId, string email)
         {
             var form = _context.form.FirstOrDefault(f => f.id == formId && f.email == email) ?? throw new UnauthorizedAccessException("You do not have permission to modify sections for this form.");
-            foreach (var section in sections)
-            {
-                if (section.fk_form_id != formId)
-                {
-                    throw new UnauthorizedAccessException("You do not have permission to modify sections for this form.");
-                }
-            }
-
             var existingSections = _context.section
                 .Where(s => s.fk_form_id == formId)
                 .ToList();

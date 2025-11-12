@@ -49,11 +49,13 @@ export default async function Page(props: PageProps<{ id: string }>) {
       </div>
 
       <EditForm
+        coverImageUrl={form.coverImage}
         formId={params.id}
         defaultValues={{
           title: form.title,
           description: form.description,
           location: form.location,
+          coverImage: new File([], ''),
           sections: mappedSections
             .map((section) => {
               if (section.type === 'multiple-choice') {

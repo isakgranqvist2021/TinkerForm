@@ -36,6 +36,7 @@ namespace api.Services
                     location = f.location,
                     created_at = f.created_at,
                     updated_at = f.updated_at,
+                    cover_image = f.cover_image,
                     response_count = _context.response.Count(r => r.fk_form_id == f.id && r.completed_at != null),
                 })
                 .ToList();
@@ -55,6 +56,7 @@ namespace api.Services
                     location = f.location,
                     created_at = f.created_at,
                     updated_at = f.updated_at,
+                    cover_image = f.cover_image,
                     response_count = _context.response.Count(r => r.fk_form_id == f.id && r.completed_at != null),
                 })
                 .FirstOrDefault();
@@ -68,6 +70,7 @@ namespace api.Services
                 title = form.title,
                 description = form.description,
                 location = form.location,
+                cover_image = form.cover_image,
             };
 
             _context.form.Add(newForm);
@@ -83,6 +86,7 @@ namespace api.Services
                 existingForm.title = form.title;
                 existingForm.description = form.description;
                 existingForm.location = form.location;
+                existingForm.cover_image = form.cover_image;
                 existingForm.updated_at = DateTime.UtcNow;
 
                 _context.SaveChanges();
@@ -104,6 +108,32 @@ namespace api.Services
             {
                 total_responses = totalResponses,
                 completed_responses = completedResponses
+            };
+        }
+
+        public object GetAnswers(Guid formId)
+        {
+            var sections = _context.section.Where(s => s.fk_form_id == formId).ToList();
+            var answers = _context.answer
+                .Where(a => a.fk_form_id == formId)
+                .Select(a => new
+                {
+                    a.id,
+                    fkResponseId = a.fk_response_id,
+                    fkSectionId = a.fk_section_id,
+                    answerText = a.answer_text,
+                    answerNumber = a.answer_number,
+                    answerBoolean = a.answer_boolean,
+                    answerFile = a.answer_file,
+                    createdAt = a.created_at,
+                    updatedAt = a.updated_at
+                })
+                .ToList();
+
+            return new
+            {
+                sections,
+                answers
             };
         }
     }

@@ -119,6 +119,19 @@ namespace api.Controllers
             var stats = _modelService.formService.GetFormStats(id, email);
             return Ok(stats);
         }
+
+        [HttpGet("{id}/answers")]
+        [Authorize]
+        public ActionResult GetAnswersByFormId(Guid id)
+        {
+            var answers = _modelService.formService.GetAnswers(id);
+            if (answers == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(answers);
+        }
     }
 }
 
