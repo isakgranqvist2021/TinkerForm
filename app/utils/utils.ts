@@ -154,3 +154,45 @@ export async function urlToFile(url: string, filename: string): Promise<File> {
 
   return new File([blob], filename, { type: blob.type });
 }
+
+export function formatNumber(value?: number, fallback: string = '0'): string {
+  if (!value) {
+    return fallback;
+  }
+
+  if (value >= 1_000_000) {
+    return (value / 1_000_000).toFixed(1).replace(/\.0$/, '') + 'M';
+  }
+
+  if (value >= 1_000) {
+    return (value / 1_000).toFixed(1).replace(/\.0$/, '') + 'K';
+  }
+
+  return value.toString();
+}
+
+export function percentageChange(a: number, b: number) {
+  if (b === 0) {
+    return a === 0 ? 0 : 100;
+  }
+
+  if (a === b) {
+    return 0;
+  }
+
+  const changePercentage = parseFloat((((a - b) / b) * 100).toFixed(1));
+
+  return changePercentage;
+}
+
+export function formatMonthlyChange(changePercentage: number) {
+  if (changePercentage > 0) {
+    return `${changePercentage}% more than last month`;
+  }
+
+  if (changePercentage < 0) {
+    return `${Math.abs(changePercentage)}% less than last month`;
+  }
+
+  return `No change from last month`;
+}

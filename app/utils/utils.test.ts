@@ -3,7 +3,9 @@ import {
   getCompletionRate,
   calculateDuration,
   formatDuration,
+  percentageChange,
   calculateAverageCompletionTime,
+  formatMonthlyChange,
 } from './utils';
 
 test('getCompletionRate', () => {
@@ -28,4 +30,20 @@ test('calculateAverageCompletionTime', () => {
   expect(calculateAverageCompletionTime([60, 120, 180])).toBe('2m');
   expect(calculateAverageCompletionTime([])).toBe(null);
   expect(calculateAverageCompletionTime([60, 120, 180, 240])).toBe('2m 30s');
+});
+
+test('percentageChange', () => {
+  expect(percentageChange(150, 100)).toBe(50);
+  expect(percentageChange(50, 100)).toBe(-50);
+  expect(percentageChange(0, 0)).toBe(0);
+  expect(percentageChange(100, 0)).toBe(100);
+});
+
+test('formatMonthlyChange', () => {
+  expect(formatMonthlyChange(25)).toBe('25% more than last month');
+  expect(formatMonthlyChange(25.67)).toBe('25.67% more than last month');
+  expect(formatMonthlyChange(-45)).toBe('45% less than last month');
+  expect(formatMonthlyChange(-45.89)).toBe('45.89% less than last month');
+  expect(formatMonthlyChange(0)).toBe('No change from last month');
+  expect(formatMonthlyChange(-0)).toBe('No change from last month');
 });

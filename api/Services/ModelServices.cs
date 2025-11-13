@@ -9,6 +9,7 @@ namespace api.Services
         public readonly AnswerService answerService;
         public readonly SectionService sectionService;
         public readonly SubscriptionService subscriptionService;
+        public readonly StatsService statsService;
 
         public ModelService(AppDbContext context)
         {
@@ -17,6 +18,7 @@ namespace api.Services
             answerService = new AnswerService(context);
             sectionService = new SectionService(context);
             subscriptionService = new SubscriptionService(context);
+            statsService = new StatsService(context);
         }
     }
 }

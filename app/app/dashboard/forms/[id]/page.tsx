@@ -7,6 +7,7 @@ import React from 'react';
 import { PageProps } from 'types/page';
 import {
   calculateAverageCompletionTime,
+  formatNumber,
   getCompletionRate,
   getDurations,
   getMetadata,
@@ -96,17 +97,14 @@ export default async function Page(props: PageProps<{ id: string }>) {
                 />
               </svg>
             </div>
-            <div className="stat-title">Views</div>
-            <div className="stat-value text-secondary">
-              {formStats.totalResponses}
-            </div>
-            <div className="stat-desc">
-              Number of times your form was viewed
+            <div className="stat-title">Total Views</div>
+            <div className="stat-value text-primary">
+              {formatNumber(formStats.totalResponses)}
             </div>
           </div>
 
           <div className="stat">
-            <div className="stat-figure text-primary">
+            <div className="stat-figure text-secondary">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
@@ -122,17 +120,14 @@ export default async function Page(props: PageProps<{ id: string }>) {
                 />
               </svg>
             </div>
-            <div className="stat-title">Responses</div>
+            <div className="stat-title">Total Responses</div>
             <div className="stat-value text-secondary">
-              {formStats.completedResponses}
-            </div>
-            <div className="stat-desc">
-              Number of completed form submissions
+              {formatNumber(formStats.completedResponses)}
             </div>
           </div>
 
           <div className="stat">
-            <div className="stat-figure text-primary">
+            <div className="stat-figure text-secondary">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
@@ -152,11 +147,10 @@ export default async function Page(props: PageProps<{ id: string }>) {
             <div className="stat-value text-secondary">
               {averageCompletionTime ?? 'N/A'}
             </div>
-            <div className="stat-desc">Average time to complete the form</div>
           </div>
 
           <div className="stat">
-            <div className="stat-figure text-primary">
+            <div className="stat-figure text-secondary">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
@@ -173,8 +167,7 @@ export default async function Page(props: PageProps<{ id: string }>) {
               </svg>
             </div>
             <div className="stat-title">Completion Rate</div>
-            <div className="stat-value text-secondary">{completionRate}%</div>
-            <div className="stat-desc">Percentage of completed forms</div>
+            <div className="stat-value">{completionRate}%</div>
           </div>
         </div>
 
