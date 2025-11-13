@@ -19,8 +19,6 @@ interface FormActionsProps extends FormIdProps, FormLinkProps {}
 export function FormActions(props: FormActionsProps) {
   return (
     <React.Fragment>
-      <DeleteFormModal formId={props.formId} />
-
       <div className="flex gap-4 hidden md:flex">
         <ViewFormButton viewFormHref={props.viewFormHref} />
 
@@ -43,7 +41,7 @@ export function FormActions(props: FormActionsProps) {
   );
 }
 
-function DeleteFormModal(props: FormIdProps) {
+export function DeleteFormModal(props: FormIdProps) {
   const { isLoading, deleteForm } = useDeleteForm({ formId: props.formId });
 
   return (

@@ -16,7 +16,7 @@ import { ResponseTableRow } from 'components/response-table-row';
 import { EmptyState } from 'components/empty-state';
 import { getFormById, getFormStats } from 'services/api/forms';
 import { getResponsesByFormId } from 'services/api/response';
-import { FormActions } from 'components/view-form-actions';
+import { DeleteFormModal, FormActions } from 'components/view-form-actions';
 
 export const generateMetadata = async (props: PageProps<{ id: string }>) => {
   const params = await props.params;
@@ -55,6 +55,8 @@ export default async function Page(props: PageProps<{ id: string }>) {
 
   return (
     <ResponseProvider>
+      <DeleteFormModal formId={form.id} />
+
       <MainContainer>
         <div className="flex justify-between">
           <div className="breadcrumbs text-sm">

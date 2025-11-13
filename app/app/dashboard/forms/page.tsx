@@ -11,7 +11,10 @@ import {
   getMetadata,
   percentageChange,
 } from 'utils';
-import { DeleteFormIconButton } from 'components/view-form-actions';
+import {
+  DeleteFormIconButton,
+  DeleteFormModal,
+} from 'components/view-form-actions';
 import { getFormStats } from 'services/api/stats';
 
 export const metadata = getMetadata({
@@ -212,7 +215,6 @@ function renderFormListItem(form: FormDto) {
             </svg>
           </Link>
         </div>
-
         <div className="tooltip" data-tip="Edit">
           <Link
             className="btn btn-square btn-ghost"
@@ -234,8 +236,8 @@ function renderFormListItem(form: FormDto) {
             </svg>
           </Link>
         </div>
-
         <DeleteFormIconButton formId={form.id} />
+        <DeleteFormModal formId={form.id} />
       </div>
     </li>
   );
