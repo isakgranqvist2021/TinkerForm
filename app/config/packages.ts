@@ -14,11 +14,10 @@ export const packages: Record<PackageId, Package> = {
     name: 'Starter',
     price: 100,
     features: [
-      { name: 'Basic support', available: true },
       { name: 'Cancel anytime', available: true },
-      { name: 'Limited access to features', available: true },
       { name: 'Up to 100 responses per month', available: true },
       { name: 'Export to CSV', available: false },
+      { name: 'Choose form theme', available: false },
     ],
   },
   pro: {
@@ -27,23 +26,21 @@ export const packages: Record<PackageId, Package> = {
     price: 2900,
     badge: 'Most popular',
     features: [
-      { name: 'Priority support', available: true },
       { name: 'Cancel anytime', available: true },
-      { name: 'Full access to features', available: true },
       { name: 'Up to 10,000 responses per month', available: true },
       { name: 'Export to CSV', available: true },
+      { name: 'Choose form theme', available: true },
     ],
   },
   enterprise: {
     id: 'enterprise',
-    name: 'Custom',
+    name: 'Enterprise',
     price: 99900,
     features: [
-      { name: 'Dedicated account manager', available: true },
       { name: 'Cancel anytime', available: true },
-      { name: 'Custom integrations', available: true },
       { name: 'Unlimited responses', available: true },
       { name: 'Export to CSV', available: true },
+      { name: 'Choose form theme', available: true },
     ],
   },
 };
