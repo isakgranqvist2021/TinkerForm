@@ -12,11 +12,10 @@ import {
   getDurations,
   getMetadata,
 } from 'utils';
-import { ResponseTableRow } from 'components/response-table-row';
-import { EmptyState } from 'components/empty-state';
 import { getFormById, getFormStats } from 'services/api/forms';
 import { getResponsesByFormId } from 'services/api/response';
 import { DeleteFormModal, FormActions } from 'components/view-form-actions';
+import { ResponsesTable } from 'components/responses-table';
 
 export const generateMetadata = async (props: PageProps<{ id: string }>) => {
   const params = await props.params;
@@ -173,33 +172,7 @@ export default async function Page(props: PageProps<{ id: string }>) {
           </div>
         </div>
 
-        {Boolean(responses.length) ? (
-          <div className="overflow-x-auto rounded-box border border-base-content/5 bg-base-100">
-            <table className="table">
-              <thead>
-                <tr>
-                  <th>#</th>
-                  <th>Date</th>
-                  <th>Completion Time</th>
-                </tr>
-              </thead>
-              <tbody>
-                {responses.map((response, index) => (
-                  <ResponseTableRow
-                    key={response.id}
-                    response={response}
-                    index={index}
-                  />
-                ))}
-              </tbody>
-            </table>
-          </div>
-        ) : (
-          <EmptyState
-            title="No responses yet"
-            subtitle="When someone fills out your form, the responses will be displayed here."
-          />
-        )}
+        <ResponsesTable responses={responses} />
       </MainContainer>
     </ResponseProvider>
   );
