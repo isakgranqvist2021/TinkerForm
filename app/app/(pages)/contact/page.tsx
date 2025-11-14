@@ -1,5 +1,5 @@
+import { ContactForm } from 'components/contact-form';
 import { Drawer } from 'components/drawer';
-import { PageTitle } from 'components/page-title';
 import { Container } from 'containers/main-container';
 import { getMetadata } from 'utils';
 
@@ -12,7 +12,7 @@ export default function Page() {
   return (
     <Drawer>
       <Container>
-        <PageTitle>Contact Us</PageTitle>
+        <ContactForm />
       </Container>
     </Drawer>
   );
