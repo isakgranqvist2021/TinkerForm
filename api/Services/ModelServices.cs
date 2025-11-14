@@ -11,6 +11,8 @@ namespace api.Services
         public readonly SubscriptionService subscriptionService;
         public readonly StatsService statsService;
 
+        public readonly ContactService contactService;
+
         public ModelService(AppDbContext context)
         {
             formService = new FormService(context);
@@ -19,6 +21,7 @@ namespace api.Services
             sectionService = new SectionService(context);
             subscriptionService = new SubscriptionService(context);
             statsService = new StatsService(context);
+            contactService = new ContactService(context);
         }
     }
 }

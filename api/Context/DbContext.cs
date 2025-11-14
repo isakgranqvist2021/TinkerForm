@@ -11,6 +11,7 @@ namespace api.Context
         public DbSet<Models.ResponseModel> response { get; set; }
         public DbSet<Models.AnswerModel> answer { get; set; }
         public DbSet<Models.SubscriptionModel> subscription { get; set; }
+        public DbSet<Models.ContactModel> contact { get; set; }
     }
 
 }
