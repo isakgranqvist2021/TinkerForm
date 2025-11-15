@@ -30,4 +30,16 @@ namespace api.Models
         public Guid response_id { get; set; }
         public List<QuestionAnswerModel> answers { get; set; } = [];
     }
+
+    public class UpdateScoreAndReasoningModel
+    {
+        [JsonPropertyName("responseId")]
+        public Guid response_id { get; set; }
+
+        [Required]
+        public float score { get; set; }
+
+        [Required]
+        public string reasoning { get; set; } = string.Empty;
+    }
 }

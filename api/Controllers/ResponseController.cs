@@ -82,6 +82,26 @@ namespace api.Controllers
             _modelService.responseService.UpdateCompletedAt(responseId);
             return NoContent();
         }
+
+        [HttpPut("score")]
+        [Authorize]
+        public ActionResult UpdateScoreAndReasoning([FromBody] List<UpdateScoreAndReasoningModel> updateModels)
+        {
+            var email = EmailValidator.ExtractEmailFromContext(HttpContext);
+            if (email == null)
+            {
+                _logger.LogWarning("Unauthorized access attempt.");
+                return Unauthorized();
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            _modelService.responseService.UpdateScoreAndReasoning(updateModels, email);
+            return NoContent();
+        }
     }
 }
 

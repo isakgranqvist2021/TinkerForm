@@ -60,5 +60,24 @@ namespace api.Services
                 _context.SaveChanges();
             }
         }
+
+        public void UpdateScoreAndReasoning(List<UpdateScoreAndReasoningModel> updateModels, string email)
+        {
+            foreach (var updateModel in updateModels)
+            {
+                var response = _context.response.FirstOrDefault(r => r.id == updateModel.response_id);
+                if (response != null)
+                {
+                    var form = _context.form.FirstOrDefault(f => f.id == response.fk_form_id && f.email == email);
+                    if (form != null)
+                    {
+                        response.score = updateModel.score;
+                        response.reasoning = updateModel.reasoning;
+                    }
+                }
+            }
+
+            _context.SaveChanges();
+        }
     }
 }

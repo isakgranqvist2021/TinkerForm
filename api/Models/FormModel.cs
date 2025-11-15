@@ -71,7 +71,7 @@ namespace api.Models
         public List<SectionModel> sections { get; set; } = [];
     }
 
-    public class FormStats
+    public class FormStatsModel
     {
         [JsonPropertyName("totalResponses")]
         public int total_responses { get; set; }

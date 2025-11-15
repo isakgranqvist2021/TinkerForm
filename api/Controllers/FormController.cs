@@ -107,7 +107,7 @@ namespace api.Controllers
 
         [HttpGet("{id}/stats")]
         [Authorize]
-        public ActionResult<FormStats> GetFormStats(Guid id)
+        public ActionResult<FormStatsModel> GetFormStats(Guid id)
         {
             var email = EmailValidator.ExtractEmailFromContext(HttpContext);
             if (email == null)

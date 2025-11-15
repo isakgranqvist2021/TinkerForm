@@ -97,7 +97,7 @@ namespace api.Services
             }
         }
 
-        public FormStats GetFormStats(Guid formId, string email)
+        public FormStatsModel GetFormStats(Guid formId, string email)
         {
             var form = _context.form.FirstOrDefault(f => f.id == formId && f.email == email);
             if (form == null)
@@ -108,7 +108,7 @@ namespace api.Services
             var totalResponses = _context.response.Count(r => r.fk_form_id == formId);
             var completedResponses = _context.response.Count(r => r.fk_form_id == formId && r.completed_at != null);
 
-            return new FormStats
+            return new FormStatsModel
             {
                 total_responses = totalResponses,
                 completed_responses = completedResponses
