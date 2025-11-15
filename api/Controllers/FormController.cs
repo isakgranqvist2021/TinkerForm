@@ -132,6 +132,26 @@ namespace api.Controllers
 
             return Ok(answers);
         }
+
+        [HttpGet("{id}/with-answers")]
+        [Authorize]
+        public ActionResult<FormWithAnswersModel> GetFormWithAnswers(Guid id)
+        {
+            var email = EmailValidator.ExtractEmailFromContext(HttpContext);
+            if (email == null)
+            {
+                _logger.LogWarning("Unauthorized access attempt.");
+                return Unauthorized();
+            }
+
+            var formWithAnswers = _modelService.formService.GetFormWithAnswers(id, email);
+            if (formWithAnswers == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(formWithAnswers);
+        }
     }
 }
 

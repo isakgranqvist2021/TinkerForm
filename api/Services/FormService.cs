@@ -140,5 +140,57 @@ namespace api.Services
                 answers
             };
         }
+
+        public FormWithAnswersModel? GetFormWithAnswers(Guid formId, string email)
+        {
+            var form = _context.form.FirstOrDefault(f => f.id == formId && f.email == email);
+            if (form == null)
+            {
+                return null;
+            }
+
+            // Fetch all responses and answers in one query
+            var responseAnswerData = _context.answer
+                .Where(a => a.fk_form_id == formId)
+                .Join(
+                    _context.section,
+                    a => a.fk_section_id,
+                    q => q.id,
+                    (a, q) => new { answer = a, question = q.title }
+                )
+                .GroupBy(x => x.answer.fk_response_id)
+                .ToList();
+
+            var responses = new List<ResponseWithAnswersModel>();
+
+            foreach (var groupedAnswers in responseAnswerData)
+            {
+                var responseAnswers = groupedAnswers
+                    .Select(x => new QuestionAnswerModel
+                    {
+                        question = x.question,
+                        answer = x.answer.answer_text ?? x.answer.answer_number?.ToString() ?? x.answer.answer_boolean?.ToString() ?? x.answer.answer_file ?? string.Empty
+                    })
+                    .ToList();
+
+                responses.Add(new ResponseWithAnswersModel
+                {
+                    response_id = groupedAnswers.Key,
+                    answers = responseAnswers
+                });
+            }
+
+            var formWithAnswers = new FormWithAnswersModel
+            {
+                id = form.id,
+                title = form.title,
+                location = form.location,
+                description = form.description,
+                responses = responses
+            };
+
+            return formWithAnswers;
+        }
     }
 }
+

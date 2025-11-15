@@ -79,4 +79,17 @@ namespace api.Models
         [JsonPropertyName("completedResponses")]
         public int completed_responses { get; set; }
     }
+
+    public class FormWithAnswersModel
+    {
+        public Guid id { get; set; }
+
+        public string title { get; set; } = string.Empty;
+
+        public string location { get; set; } = string.Empty;
+
+        public string description { get; set; } = string.Empty;
+
+        public List<ResponseWithAnswersModel> responses { get; set; } = [];
+    }
 }

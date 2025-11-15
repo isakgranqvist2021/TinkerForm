@@ -13,4 +13,17 @@ namespace api.Models
         [JsonPropertyName("completedAt")]
         public DateTime? completed_at { get; set; } = null;
     }
+
+    public class QuestionAnswerModel
+    {
+        public string question { get; set; } = string.Empty;
+        public object? answer { get; set; } = string.Empty;
+    }
+
+    public class ResponseWithAnswersModel
+    {
+        [JsonPropertyName("responseId")]
+        public Guid response_id { get; set; }
+        public List<QuestionAnswerModel> answers { get; set; } = [];
+    }
 }
