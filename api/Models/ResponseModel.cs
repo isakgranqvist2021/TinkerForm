@@ -12,6 +12,10 @@ namespace api.Models
 
         [JsonPropertyName("completedAt")]
         public DateTime? completed_at { get; set; } = null;
+
+        public float? score { get; set; } = null;
+
+        public string? reasoning { get; set; } = null;
     }
 
     public class QuestionAnswerModel
