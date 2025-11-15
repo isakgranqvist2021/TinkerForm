@@ -42,18 +42,18 @@ namespace api.Services
 
         public IEnumerable<ResponseModel> ListByFormId(Guid formId, string email)
         {
-            var form = _context.form.FirstOrDefault(f => f.id == formId && f.email == email);
+            var form = _context.form.FirstOrDefault(form => form.id == formId && form.email == email);
             if (form == null)
             {
                 return Enumerable.Empty<ResponseModel>();
             }
 
-            return _context.response.Where(r => r.fk_form_id == formId).ToList();
+            return _context.response.Where(response => response.fk_form_id == formId).ToList();
         }
 
         public void UpdateCompletedAt(Guid responseId)
         {
-            var response = _context.response.FirstOrDefault(r => r.id == responseId);
+            var response = _context.response.FirstOrDefault(response => response.id == responseId);
             if (response != null)
             {
                 response.completed_at = DateTime.UtcNow;
@@ -65,10 +65,10 @@ namespace api.Services
         {
             foreach (var updateModel in updateModels)
             {
-                var response = _context.response.FirstOrDefault(r => r.id == updateModel.response_id);
+                var response = _context.response.FirstOrDefault(response => response.id == updateModel.response_id);
                 if (response != null)
                 {
-                    var form = _context.form.FirstOrDefault(f => f.id == response.fk_form_id && f.email == email);
+                    var form = _context.form.FirstOrDefault(form => form.id == response.fk_form_id && form.email == email);
                     if (form != null)
                     {
                         response.score = updateModel.score;

@@ -41,8 +41,8 @@ namespace api.Services
 
             // get the user's form ids
             var userFormIds = _context.form
-                .Where(f => f.email == email)
-                .Select(f => f.id)
+                .Where(form => form.email == email)
+                .Select(form => form.id)
                 .ToList();
 
             // if the user has no forms, return zeros
@@ -57,26 +57,26 @@ namespace api.Services
 
             // Query responses for the two months
             var currentTotal = _context.response
-                .Count(r => userFormIds.Contains(r.fk_form_id)
-                            && r.created_at >= startOfCurrentMonthUtc
-                            && r.created_at < startOfNextMonthUtc);
+                .Count(response => userFormIds.Contains(response.fk_form_id)
+                            && response.created_at >= startOfCurrentMonthUtc
+                            && response.created_at < startOfNextMonthUtc);
 
             var currentCompleted = _context.response
-                .Count(r => userFormIds.Contains(r.fk_form_id)
-                            && r.created_at >= startOfCurrentMonthUtc
-                            && r.created_at < startOfNextMonthUtc
-                            && r.completed_at != null);
+                .Count(response => userFormIds.Contains(response.fk_form_id)
+                            && response.created_at >= startOfCurrentMonthUtc
+                            && response.created_at < startOfNextMonthUtc
+                            && response.completed_at != null);
 
             var prevTotal = _context.response
-                .Count(r => userFormIds.Contains(r.fk_form_id)
-                            && r.created_at >= startOfPreviousMonthUtc
-                            && r.created_at < endOfPreviousMonthUtc);
+                .Count(response => userFormIds.Contains(response.fk_form_id)
+                            && response.created_at >= startOfPreviousMonthUtc
+                            && response.created_at < endOfPreviousMonthUtc);
 
             var prevCompleted = _context.response
-                .Count(r => userFormIds.Contains(r.fk_form_id)
-                            && r.created_at >= startOfPreviousMonthUtc
-                            && r.created_at < endOfPreviousMonthUtc
-                            && r.completed_at != null);
+                .Count(response => userFormIds.Contains(response.fk_form_id)
+                            && response.created_at >= startOfPreviousMonthUtc
+                            && response.created_at < endOfPreviousMonthUtc
+                            && response.completed_at != null);
 
             return new StatsDto
             {

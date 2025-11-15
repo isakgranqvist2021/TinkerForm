@@ -22,12 +22,12 @@ namespace api.Services
 
         public SubscriptionModel? GetByEmail(string email)
         {
-            return _context.subscription.FirstOrDefault(s => s.email == email);
+            return _context.subscription.FirstOrDefault(subscription => subscription.email == email);
         }
 
         public bool Delete(string email)
         {
-            var subscription = _context.subscription.FirstOrDefault(s => s.email == email);
+            var subscription = _context.subscription.FirstOrDefault(subscription => subscription.email == email);
             if (subscription == null)
             {
                 return false;

@@ -30,10 +30,10 @@ namespace api.Services
         {
             var createdSections = new List<SectionModel>();
 
-            var formIds = sections.Select(s => s.fk_form_id).Distinct().ToList();
+            var formIds = sections.Select(section => section.fk_form_id).Distinct().ToList();
             var forms = _context.form
-               .Where(f => formIds.Contains(f.id) && f.email == email)
-               .ToDictionary(f => f.id);
+               .Where(form => formIds.Contains(form.id) && form.email == email)
+               .ToDictionary(form => form.id);
 
             foreach (var section in sections)
             {
@@ -54,23 +54,23 @@ namespace api.Services
 
         public void UpsertSections(IEnumerable<SectionModel> sections, Guid formId, string email)
         {
-            var form = _context.form.FirstOrDefault(f => f.id == formId && f.email == email) ?? throw new UnauthorizedAccessException("You do not have permission to modify sections for this form.");
+            var form = _context.form.FirstOrDefault(form => form.id == formId && form.email == email) ?? throw new UnauthorizedAccessException("You do not have permission to modify sections for this form.");
             var existingSections = _context.section
-                .Where(s => s.fk_form_id == formId)
+                .Where(section => section.fk_form_id == formId)
                 .ToList();
 
-            var sectionsToDelete = existingSections.Where(es => sections.All(s => s.id != es.id)).ToList();
-            var sectionsToUpdate = sections.Where(s => existingSections.Any(es => es.id == s.id)).ToList();
-            var sectionsToCreate = sections.Where(s => existingSections.All(es => es.id != s.id)).ToList().Select(s =>
+            var sectionsToDelete = existingSections.Where(section => sections.All(s => s.id != section.id)).ToList();
+            var sectionsToUpdate = sections.Where(section => existingSections.Any(existingSection => existingSection.id == section.id)).ToList();
+            var sectionsToCreate = sections.Where(section => existingSections.All(existingSection => existingSection.id != section.id)).ToList().Select(section =>
             {
-                s.fk_form_id = formId;
-                return s;
+                section.fk_form_id = formId;
+                return section;
             }).ToList();
 
 
             foreach (var section in sectionsToUpdate)
             {
-                var existingSection = existingSections.First(es => es.id == section.id);
+                var existingSection = existingSections.First(existingSection => existingSection.id == section.id);
                 existingSection.type = section.type;
                 existingSection.title = section.title;
                 existingSection.index = section.index;

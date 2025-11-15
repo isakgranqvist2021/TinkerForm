@@ -149,16 +149,21 @@ namespace api.Services
                 return null;
             }
 
-            // Fetch all responses and answers in one query
             var responseAnswerData = _context.answer
-                .Where(a => a.fk_form_id == formId)
+                .Where(answer => answer.fk_form_id == formId)
+                .Join(
+                    _context.response.Where(r => r.fk_form_id == formId && r.score == null),
+                    answer => answer.fk_response_id,
+                    response => response.id,
+                    (answer, response) => new { answer, response }
+                )
                 .Join(
                     _context.section,
-                    a => a.fk_section_id,
-                    q => q.id,
-                    (a, q) => new { answer = a, question = q.title }
+                    ar => ar.answer.fk_section_id,
+                    section => section.id,
+                    (ar, section) => new { ar.response, ar.answer, question = section.title }
                 )
-                .GroupBy(x => x.answer.fk_response_id)
+                .GroupBy(x => x.response.id)
                 .ToList();
 
             var responses = new List<ResponseWithAnswersModel>();
