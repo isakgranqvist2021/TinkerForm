@@ -20,6 +20,20 @@ export interface FormDto {
   theme: Theme | null;
 }
 
+export interface FormWithAnswersDto {
+  id: string;
+  title: string;
+  location: string;
+  description: string;
+  responses: {
+    responseId: string;
+    answers: {
+      question: string;
+      answer: string;
+    }[];
+  }[];
+}
+
 interface FormStats {
   totalResponses: number;
   completedResponses: number;
@@ -164,6 +178,27 @@ export async function getAnswersByFormId(
     });
 
     const data = await res.json();
+    return data;
+  } catch (err) {
+    console.error(err);
+    return null;
+  }
+}
+
+export async function getFormWithAnswers(
+  formId: string,
+): Promise<FormWithAnswersDto | null> {
+  try {
+    const { token } = await getAccessToken();
+
+    const res = await fetch(`${env.API_URL}/form/${formId}/with-answers`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    const data = await res.json();
+
     return data;
   } catch (err) {
     console.error(err);

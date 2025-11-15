@@ -6,6 +6,7 @@ import {
   percentageChange,
   calculateAverageCompletionTime,
   formatMonthlyChange,
+  formatScore,
 } from './utils';
 
 test('getCompletionRate', () => {
@@ -46,4 +47,9 @@ test('formatMonthlyChange', () => {
   expect(formatMonthlyChange(-45.89)).toBe('45.89% less than last month');
   expect(formatMonthlyChange(0)).toBe('No change from last month');
   expect(formatMonthlyChange(-0)).toBe('No change from last month');
+});
+
+test('formatScore', () => {
+  expect(formatScore(0.5)).toBe('50.0%');
+  expect(formatScore(0)).toBe('0.0%');
 });

@@ -25,7 +25,7 @@ export async function POST(req: Request) {
 
     const res = await createForm(createFormDto);
     if (!res) {
-      return internalServerError();
+      throw new Error('Failed to create form');
     }
 
     await createSections(form.sections, res.id);

@@ -14,13 +14,14 @@ export async function PATCH(
 
     const deleted = await deleteSubscription();
     if (!deleted) {
-      return internalServerError();
+      throw new Error('Failed to delete subscription');
     }
 
     await stripe.subscriptions.cancel(subscription.subscriptionId);
 
     return ok();
   } catch (err) {
+    console.error(err);
     return internalServerError();
   }
 }

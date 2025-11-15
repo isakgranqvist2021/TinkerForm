@@ -13,6 +13,7 @@ const env = {
   STRIPE_SECRET_KEY: requireEnv('STRIPE_SECRET_KEY'),
   BLOB_READ_WRITE_TOKEN: requireEnv('BLOB_READ_WRITE_TOKEN'),
   API_URL: requireEnv('API_URL'),
+  OPENAI_API_KEY: requireEnv('OPENAI_API_KEY'),
 };
 
 const errors = [];

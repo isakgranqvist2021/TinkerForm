@@ -2,6 +2,7 @@ import { env } from 'config';
 import { AnswerDto } from './answer';
 import { SectionDto } from './section';
 import { getAccessToken } from './access-token';
+import { ScoreResponse } from 'models/score-response';
 
 export interface AnswersByResponseIdDto {
   answer: AnswerDto;
@@ -16,6 +17,9 @@ export interface ResponseDto {
   fkFormId: string;
 
   completedAt: string | null;
+
+  score: number | null;
+  reasoning: string | null;
 }
 
 export async function getAnswersByResponseId(
@@ -97,6 +101,28 @@ export async function completeResponse(responseId: string): Promise<boolean> {
   try {
     const res = await fetch(`${env.API_URL}/response/${responseId}/complete`, {
       method: 'PUT',
+    });
+
+    return res.ok;
+  } catch (err) {
+    console.error(err);
+    return false;
+  }
+}
+
+export async function updateResponseScoreAndReasoning(
+  scoreResponses: ScoreResponse[],
+): Promise<boolean> {
+  try {
+    const { token } = await getAccessToken();
+
+    const res = await fetch(`${env.API_URL}/response/score`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(scoreResponses),
     });
 
     return res.ok;

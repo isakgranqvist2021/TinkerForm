@@ -172,7 +172,7 @@ export default async function Page(props: PageProps<{ id: string }>) {
           </div>
         </div>
 
-        <ResponsesTable responses={responses} />
+        <ResponsesTable formId={form.id} responses={responses} />
       </MainContainer>
     </ResponseProvider>
   );

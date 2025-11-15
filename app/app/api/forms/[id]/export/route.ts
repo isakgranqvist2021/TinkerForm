@@ -22,7 +22,7 @@ export async function GET(
 
     const responses = await getAnswersByFormId(id);
     if (!responses) {
-      return internalServerError();
+      throw new Error('No responses found');
     }
 
     const csvData = formatExportFormData(responses);
@@ -34,6 +34,7 @@ export async function GET(
       },
     });
   } catch (err) {
+    console.error(err);
     return internalServerError();
   }
 }

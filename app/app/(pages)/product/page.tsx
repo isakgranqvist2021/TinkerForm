@@ -22,6 +22,7 @@ export default function Page() {
               registrations, or quizzes, TinkerForm makes it fast and easy.
             </span>
           </div>
+
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="card bg-base-200">
               <div className="card-body">
@@ -53,10 +54,12 @@ export default function Page() {
             </div>
             <div className="card bg-base-200">
               <div className="card-body">
-                <h2 className="card-title">Share &amp; Collaborate</h2>
+                <h2 className="card-title">AI Powered Response Scoring</h2>
                 <p>
-                  Share your forms with a simple link and collaborate with your
-                  team to build the perfect form for your needs.
+                  Automatically evaluate and score form responses using advanced
+                  AI algorithms. Gain insights into the quality and relevance of
+                  submissions, helping you make informed decisions quickly and
+                  efficiently.
                 </p>
               </div>
             </div>

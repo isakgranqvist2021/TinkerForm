@@ -12,16 +12,20 @@ export default function Page() {
   return (
     <Drawer>
       <Container>
-        <PageTitle className="mb-4">Form Section Types</PageTitle>
+        <PageTitle className="mb-4">Features</PageTitle>
 
         <div className="mb-6">
-          <div className="alert alert-info mb-4">
-            <span>
-              TinkerForm lets you build forms using a variety of section types.
-              Mix and match these to collect the information you need!
-            </span>
+          <div className="card bg-base-200 mb-4">
+            <div className="card-body">
+              <h2 className="card-title">AI-Powered Response Scoring</h2>
+              <p>
+                Leverage advanced AI algorithms to automatically evaluate and
+                score form responses. Gain insights into the quality and
+                relevance of submissions, helping you make informed decisions
+                quickly and efficiently.
+              </p>
+            </div>
           </div>
-
           <div className="card bg-base-200 mb-4">
             <div className="card-body">
               <h2 className="card-title">Response Table &amp; Stats</h2>

@@ -56,6 +56,7 @@ export async function POST(
 
     return ok();
   } catch (err) {
+    console.error(err);
     return internalServerError();
   }
 }

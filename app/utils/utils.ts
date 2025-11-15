@@ -196,3 +196,7 @@ export function formatMonthlyChange(changePercentage: number) {
 
   return `No change from last month`;
 }
+
+export function formatScore(score: number) {
+  return `${(score * 100).toFixed(1)}%`;
+}

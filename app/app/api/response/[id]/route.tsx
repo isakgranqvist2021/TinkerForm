@@ -19,6 +19,7 @@ export async function GET(
 
     return ok({ response, answers });
   } catch (err) {
+    console.error(err);
     return internalServerError();
   }
 }

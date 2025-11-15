@@ -12,11 +12,12 @@ export async function POST(
 
     const result = await sendContactForm(parsedData);
     if (!result) {
-      return internalServerError();
+      throw new Error('Failed to send contact form');
     }
 
     return ok();
   } catch (err) {
+    console.error(err);
     return internalServerError();
   }
 }

@@ -42,6 +42,7 @@ export async function PATCH(
 
     return ok();
   } catch (err) {
+    console.error(err);
     return internalServerError();
   }
 }
@@ -57,6 +58,7 @@ export async function DELETE(
 
     return ok();
   } catch (err) {
+    console.error(err);
     return internalServerError();
   }
 }

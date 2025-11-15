@@ -12,6 +12,7 @@ export async function POST(req: Request, ctx: RouteContext<'/api/theme'>) {
 
     return ok();
   } catch (err) {
+    console.error(err);
     return internalServerError();
   }
 }

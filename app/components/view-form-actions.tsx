@@ -180,29 +180,28 @@ function ExportDataButton(props: FormIdProps) {
 function useDeleteForm(props: FormIdProps) {
   const router = useRouter();
 
-  const [isLoading, setIsLoading] = React.useState(false);
+  const mutation = useMutation(
+    `/api/forms/${props.formId}`,
+    async (url) => fetch(url, { method: 'DELETE' }),
 
-  const deleteForm = async () => {
-    setIsLoading(true);
+    {
+      onError: () => {
+        toast.error('Error deleting form');
+      },
 
-    const res = await fetch(`/api/forms/${props.formId}`, {
-      method: 'DELETE',
-    });
+      onSuccess: () => {
+        router.refresh();
+        toast.success('Form deleted successfully');
 
-    if (!res.ok) {
-      toast.error('Error deleting form');
-      return;
-    }
+        closeDeleteFormModal();
+      },
+    },
+  );
 
-    router.replace('/dashboard/forms');
-    toast.success('Form deleted successfully');
-
-    closeDeleteFormModal();
-
-    setIsLoading(false);
+  return {
+    isLoading: mutation.isMutating,
+    deleteForm: () => mutation.trigger(),
   };
-
-  return { isLoading, deleteForm };
 }
 
 interface DeleteFormButtonProps
