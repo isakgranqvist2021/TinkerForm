@@ -3,6 +3,7 @@
 import { openResponseModal, ResponseConsumer } from './response-modal';
 import {
   calculateDuration,
+  cn,
   formatDate,
   formatDuration,
   formatScore,
@@ -25,17 +26,18 @@ export function ResponseTableRow(props: ResponseTableRowProps) {
   return (
     <ResponseConsumer>
       {(ctx) => {
+        const handleTableRowClick = () => {
+          ctx.setResponse(props.response);
+          openResponseModal();
+        };
+
         return (
           <tr
             key={props.response.id}
-            className={
-              'hover:bg-base-200 cursor-pointer ' +
-              (ctx.response?.id === props.response.id ? 'bg-base-300' : '')
-            }
-            onClick={() => {
-              ctx.setResponse(props.response);
-              openResponseModal();
-            }}
+            className={cn('hover:bg-base-200 cursor-pointer h-[49px]', {
+              'bg-base-300': ctx.response?.id === props.response.id,
+            })}
+            onClick={handleTableRowClick}
           >
             <td>{formatDate(props.response.createdAt)}</td>
             <td>{duration !== null ? formatDuration(duration) : ''}</td>

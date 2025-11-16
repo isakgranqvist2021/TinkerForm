@@ -111,16 +111,22 @@ export function ResponsesTable(props: ResponsesTableProps) {
         <table className="table">
           <thead>
             <tr>
-              <th className="cursor-pointer" onClick={() => sort('createdAt')}>
+              <th
+                className="cursor-pointer hover:text-primary"
+                onClick={() => sort('createdAt')}
+              >
                 Date
               </th>
               <th
-                className="cursor-pointer"
+                className="cursor-pointer hover:text-primary"
                 onClick={() => sort('completionTime')}
               >
                 Completion Time
               </th>
-              <th className="cursor-pointer" onClick={() => sort('score')}>
+              <th
+                className="cursor-pointer hover:text-primary"
+                onClick={() => sort('score')}
+              >
                 Score
               </th>
             </tr>

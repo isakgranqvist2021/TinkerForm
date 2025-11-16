@@ -7,6 +7,7 @@ import {
   calculateAverageCompletionTime,
   formatMonthlyChange,
   formatScore,
+  cn,
 } from './utils';
 
 test('getCompletionRate', () => {
@@ -52,4 +53,12 @@ test('formatMonthlyChange', () => {
 test('formatScore', () => {
   expect(formatScore(0.5)).toBe('50.0%');
   expect(formatScore(0)).toBe('0.0%');
+});
+
+test('cn', () => {
+  expect(cn('text-xl', 'text-primary')).toBe('text-xl text-primary');
+  expect(cn('text-xl', { 'text-primary': false })).toBe('text-xl');
+  expect(cn('text-xl', { 'text-primary': true })).toBe('text-xl text-primary');
+  expect(cn('text-primary text-primary')).toBe('text-primary');
+  expect(cn('text-2xl text-3xl')).toBe('text-3xl');
 });

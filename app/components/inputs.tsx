@@ -1,6 +1,7 @@
 import React from 'react';
 import { useController } from 'react-hook-form';
 import { Editor } from 'primereact/editor';
+import { cn } from 'utils';
 
 interface ControlledComponentProps {
   label: string;
@@ -211,20 +212,20 @@ export function ControlledBooleanInput(
       <div className="flex gap-2">
         <button
           type="button"
-          className={[
+          className={cn(
             'btn',
             !controller.field.value ? 'btn-neutral' : 'btn-outline',
-          ].join(' ')}
+          )}
           onClick={() => controller.field.onChange(false)}
         >
           No
         </button>
         <button
           type="button"
-          className={[
+          className={cn(
             'btn',
             controller.field.value ? 'btn-neutral' : 'btn-outline',
-          ].join(' ')}
+          )}
           onClick={() => controller.field.onChange(true)}
         >
           Yes

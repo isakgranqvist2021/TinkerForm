@@ -5,7 +5,9 @@ import { Form } from 'models/form';
 import { Metadata } from 'next';
 import { AnswerDto } from 'services/api/answer';
 import { AnswersByFormDto } from 'services/api/forms';
-import { AnswersByResponseIdDto, ResponseDto } from 'services/api/response';
+import { ResponseDto } from 'services/api/response';
+import { ClassValue, clsx } from 'clsx';
+import { twMerge } from 'tailwind-merge';
 
 export function formatCurrency(value: number) {
   return currency(value / 100).format({ symbol: '€' });
@@ -200,3 +202,7 @@ export function formatMonthlyChange(changePercentage: number) {
 export function formatScore(score: number) {
   return `${(score * 100).toFixed(1)}%`;
 }
+
+export const cn = (...inputs: ClassValue[]) => {
+  return twMerge(clsx(inputs));
+};

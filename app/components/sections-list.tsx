@@ -30,6 +30,7 @@ import {
 import React from 'react';
 import { EmptyState } from './empty-state';
 import countries from 'config/countries.json';
+import { cn } from 'utils';
 
 export function SectionsList() {
   const sectionFormContext = useSectionFormContext();
@@ -274,9 +275,9 @@ function ListItem(props: ListItemProps) {
         <div className="tooltip" data-tip="Move">
           <button
             disabled={formContext.formState.isSubmitting}
-            className={
-              'btn btn-square btn-ghost ' + (isDragging ? 'cursor-grab' : '')
-            }
+            className={cn('btn btn-square btn-ghost', {
+              'cursor-grab': isDragging,
+            })}
             {...listeners}
           >
             <svg
