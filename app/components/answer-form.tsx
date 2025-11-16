@@ -21,6 +21,7 @@ import React from 'react';
 import { type FormDto } from 'services/api/forms';
 import { ResponseDto } from 'services/api/response';
 import { MainContainer } from 'containers/main-container';
+import useMutation from 'swr/mutation';
 
 interface AnswerFormProps {
   sections: Section[];
@@ -126,6 +127,45 @@ export function AnswerFormContent(props: AnswerFormContentProps) {
 
   const [hasResponded, setHasResponded] = React.useState(props.isCompleted);
 
+  const mutation = useMutation(
+    `/api/form/${props.formId}/${props.responseId}`,
+    async (url, arg: { arg: ConstructedSchema }) => {
+      const data = arg.arg;
+
+      const formData = new FormData();
+      for (const key in data) {
+        const value = data[key as keyof typeof data];
+        if (value instanceof File || typeof value === 'string') {
+          formData.append(key, value);
+        } else {
+          formData.append(key, JSON.stringify(value));
+        }
+      }
+
+      const res = await fetch(url, {
+        method: 'POST',
+        body: formData,
+      });
+
+      if (!res.ok) {
+        throw new Error('Failed to save form');
+      }
+    },
+    {
+      onSuccess: () => {
+        setHasResponded(true);
+
+        window.scrollTo({
+          top: document.body.scrollHeight,
+          behavior: 'smooth',
+        });
+      },
+      onError: () => {
+        toast.error("Couldn't save form. Please try again.");
+      },
+    },
+  );
+
   if (hasResponded) {
     return (
       <div className="flex flex-col items-center justify-center gap-2 py-24 text-green-600">
@@ -149,34 +189,7 @@ export function AnswerFormContent(props: AnswerFormContentProps) {
     );
   }
 
-  const handleSubmit = form.handleSubmit(async (data) => {
-    try {
-      const formData = new FormData();
-      for (const key in data) {
-        const value = data[key as keyof typeof data];
-        if (value instanceof File || typeof value === 'string') {
-          formData.append(key, value);
-        } else {
-          formData.append(key, JSON.stringify(value));
-        }
-      }
-
-      const res = await fetch(`/api/form/${props.formId}/${props.responseId}`, {
-        method: 'POST',
-        body: formData,
-      });
-
-      if (!res.ok) {
-        throw new Error('Failed to save form');
-      }
-
-      setHasResponded(true);
-
-      window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
-    } catch (error) {
-      toast.error("Couldn't save form. Please try again.");
-    }
-  });
+  const handleSubmit = form.handleSubmit((data) => mutation.trigger(data));
 
   return (
     <FormProvider {...form}>
