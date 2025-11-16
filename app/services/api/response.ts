@@ -35,6 +35,7 @@ export async function getAnswersByResponseId(
     });
 
     const data = await res.json();
+
     return data;
   } catch (err) {
     console.error(err);
@@ -49,6 +50,7 @@ export async function getResponseById(
     const res = await fetch(`${env.API_URL}/response/${responseId}`);
 
     const data = await res.json();
+
     return data;
   } catch (err) {
     console.error(err);
