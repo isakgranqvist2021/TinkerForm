@@ -36,10 +36,8 @@ export default async function Page(
   const mappedSections = sections.map(sectionMapper);
 
   return (
-    <html lang="en" data-theme={form.theme ?? defaultTheme}>
-      <body className="min-h-screen">
-        <AnswerForm sections={mappedSections} response={response} form={form} />
-      </body>
-    </html>
+    <div data-theme={form.theme ?? defaultTheme} className="min-h-screen">
+      <AnswerForm sections={mappedSections} response={response} form={form} />
+    </div>
   );
 }

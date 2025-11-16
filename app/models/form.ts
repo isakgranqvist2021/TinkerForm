@@ -29,7 +29,7 @@ export type TextSection = z.infer<typeof textSectionSchema>;
 export const textSectionSchema = baseSectionSchema
   .extend({
     min: z.number().min(1),
-    max: z.number().min(1),
+    max: z.number().min(1).max(5000, 'Can not exceed 5000'),
     type: z.literal('text'),
   })
   .refine((data) => data.max > data.min, {
@@ -62,7 +62,7 @@ export const rangeSectionSchema = baseSectionSchema
   .extend({
     type: z.literal('range'),
     min: z.number().min(1),
-    max: z.number().min(1),
+    max: z.number().min(1).max(9999999, 'Can not exceed 9999999'),
   })
   .refine((data) => data.max > data.min, {
     message: 'max must be greater than min',
