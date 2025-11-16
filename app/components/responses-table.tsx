@@ -18,7 +18,7 @@ interface ResponsesTableProps {
 export function ResponsesTable(props: ResponsesTableProps) {
   const [onlyShowCompleted, setOnlyShowCompleted] = React.useState(false);
 
-  const { sort, sorter } = useResponsesTableSorting();
+  const { sort, sorter, sortBy, sortOrder } = useResponsesTableSorting();
 
   const router = useRouter();
 
@@ -69,6 +69,19 @@ export function ResponsesTable(props: ResponsesTableProps) {
     );
   }
 
+  const counts = props.responses.reduce(
+    (acc, curr) => {
+      if (curr.completedAt && curr.score === null) {
+        acc.withoutScoreCount++;
+      }
+
+      return acc;
+    },
+    {
+      withoutScoreCount: 0,
+    },
+  );
+
   return (
     <React.Fragment>
       <div className="flex gap-4">
@@ -85,16 +98,12 @@ export function ResponsesTable(props: ResponsesTableProps) {
         <button
           className="btn btn-primary btn-sm ml-auto"
           onClick={() => score.trigger()}
-          disabled={
-            score.isMutating ||
-            props.responses.filter((response) => response.completedAt !== null)
-              .length === 0
-          }
+          disabled={score.isMutating || counts.withoutScoreCount === 0}
         >
           {score.isMutating && (
             <span className="loading loading-spinner loading-xs"></span>
           )}
-          Score responses with AI
+          Score responses with AI ({counts.withoutScoreCount})
         </button>
       </div>
 
@@ -158,33 +167,32 @@ function useResponsesTableSorting() {
   const [sortBy, setSortBy] = React.useState<SortKey>('createdAt');
   const [sortOrder, setSortOrder] = React.useState<SortOrder>('asc');
 
-  function sort(key: SortKey) {
+  const sort = (key: SortKey) => {
     if (sortBy === key) {
-      setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
+      setSortOrder((sortOrder) => (sortOrder === 'asc' ? 'desc' : 'asc'));
     } else {
       setSortBy(key);
       setSortOrder('asc');
     }
-  }
+  };
 
   const sorter = (a: ResponseDto, b: ResponseDto) => {
     switch (sortBy) {
       case 'score': {
-        const scoreA = a.score ?? 0;
-        const scoreB = b.score ?? 0;
+        const scoreA = a.score ?? -1;
+        const scoreB = b.score ?? -1;
         return sortOrder === 'asc' ? scoreA - scoreB : scoreB - scoreA;
       }
 
       case 'createdAt':
-        return sortOrder === 'asc'
-          ? new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
-          : new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+        const aTime = new Date(a.createdAt).getTime();
+        const bTime = new Date(b.createdAt).getTime();
+
+        return sortOrder === 'asc' ? aTime - bTime : bTime - aTime;
 
       case 'completionTime':
-        const durationA =
-          calculateDuration(a.createdAt, a.completedAt) ?? Infinity;
-        const durationB =
-          calculateDuration(b.createdAt, b.completedAt) ?? Infinity;
+        const durationA = calculateDuration(a.createdAt, a.completedAt) ?? -1;
+        const durationB = calculateDuration(b.createdAt, b.completedAt) ?? -1;
 
         return sortOrder === 'asc'
           ? durationA - durationB
