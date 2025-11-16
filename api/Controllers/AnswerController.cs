@@ -16,7 +16,7 @@ namespace api.Controllers
         }
 
         [HttpPost]
-        public ActionResult GetAnswersByResponseId([FromBody] List<AnswerModel> answers)
+        public ActionResult CreateAnswers([FromBody] List<AnswerModel> answers)
         {
             if (!ModelState.IsValid)
             {
