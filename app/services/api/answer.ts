@@ -27,14 +27,17 @@ export interface CreateAnswerDto {
 
 export async function createAnswers(answers: CreateAnswerDto[]) {
   try {
-    await fetch(`${env.API_URL}/answer`, {
+    const res = await fetch(`${env.API_URL}/answer`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify(answers),
     });
+
+    return res.ok;
   } catch (err) {
     console.error(err);
+    return false;
   }
 }

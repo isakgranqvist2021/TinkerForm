@@ -51,7 +51,11 @@ export async function POST(
       return badRequest('Invalid answers');
     }
 
-    await createAnswers(values);
+    const created = await createAnswers(values);
+    if (!created) {
+      throw new Error('Answers not created');
+    }
+
     await completeResponse(response.id);
 
     return ok();
