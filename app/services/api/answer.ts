@@ -23,6 +23,7 @@ export interface CreateAnswerDto {
   answerNumber: number | null;
   answerBoolean: boolean | null;
   answerFile: string | null;
+  metadata: string | null;
 }
 
 export async function createAnswers(answers: CreateAnswerDto[]) {

@@ -17,6 +17,12 @@ export async function GET(
       throw new Error('Form not found');
     }
 
+    console.log(
+      formWithAnswers.responses.forEach((res) => {
+        console.log(res.answers);
+      }),
+    );
+
     if (!formWithAnswers.responses.length) {
       return ok({ scores: {} });
     }

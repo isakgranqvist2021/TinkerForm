@@ -30,6 +30,7 @@ export interface FormWithAnswersDto {
     answers: {
       question: string;
       answer: string;
+      metadata: string | null;
     }[];
   }[];
 }

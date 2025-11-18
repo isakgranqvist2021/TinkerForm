@@ -10,6 +10,7 @@ import {
   SectionDto,
   sectionMapper,
 } from 'services/api/section';
+import { extractText, getDocumentProxy } from 'unpdf';
 
 export async function POST(
   req: Request,
@@ -71,6 +72,9 @@ async function validateAnswers(
   formData: FormData,
   sections: Record<string, SectionDto>,
 ): Promise<CreateAnswerDto[] | null> {
+  // extracted data from file uploads
+  const metadata: Record<string, string> = {};
+
   try {
     const formDataObj: Record<string, any> = {};
     for (const [key, value] of formData.entries()) {
@@ -99,6 +103,13 @@ async function validateAnswers(
             addRandomSuffix: true,
           });
           formDataObj[key] = url;
+
+          // add support for more file types here like word document
+          switch (fileValue.type) {
+            case 'application/pdf':
+              metadata[key] = await extractTextFromPdf(fileValue);
+          }
+
           break;
 
         case 'multiple-choice':
@@ -125,6 +136,7 @@ async function validateAnswers(
         fkFormId: formId,
         fkSectionId: section.id,
         fkResponseId: responseId,
+        metadata: metadata[key] ?? null,
       };
 
       switch (type) {
@@ -156,4 +168,15 @@ async function validateAnswers(
   } catch (err) {
     return null;
   }
+}
+
+async function extractTextFromPdf(file: File) {
+  const buffer = await file.arrayBuffer();
+  const pdf = await getDocumentProxy(new Uint8Array(buffer));
+
+  const { text } = await extractText(pdf, {
+    mergePages: true,
+  });
+
+  return text;
 }

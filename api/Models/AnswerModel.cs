@@ -28,5 +28,7 @@ namespace api.Models
 
         [JsonPropertyName("answerFile")]
         public string? answer_file { get; set; }
+
+        public string? metadata { get; set; }
     }
 }

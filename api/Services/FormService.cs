@@ -161,7 +161,13 @@ namespace api.Services
                     _context.section,
                     ar => ar.answer.fk_section_id,
                     section => section.id,
-                    (ar, section) => new { ar.response, ar.answer, question = section.title }
+                    (ar, section) => new
+                    {
+                        ar.response,
+                        ar.answer,
+                        ar.answer.metadata,
+                        question = section.title
+                    }
                 )
                 .GroupBy(x => x.response.id)
                 .ToList();
@@ -173,6 +179,7 @@ namespace api.Services
                 var responseAnswers = groupedAnswers
                     .Select(x => new QuestionAnswerModel
                     {
+                        metadata = x.metadata,
                         question = x.question,
                         answer = x.answer.answer_text ?? x.answer.answer_number?.ToString() ?? x.answer.answer_boolean?.ToString() ?? x.answer.answer_file ?? string.Empty
                     })

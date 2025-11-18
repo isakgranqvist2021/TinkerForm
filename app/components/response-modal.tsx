@@ -155,7 +155,7 @@ function AnswerListItem(props: AnswerListItemProps) {
         <li className="list-row">
           <div>
             <div>{props.question}</div>
-            <div className="text-xs uppercase font-semibold opacity-60">
+            <div className="text-xs uppercase font-semibold opacity-60 whitespace-break-spaces">
               {props.answer}
             </div>
           </div>

@@ -18,7 +18,7 @@ interface ResponsesTableProps {
 export function ResponsesTable(props: ResponsesTableProps) {
   const [onlyShowCompleted, setOnlyShowCompleted] = React.useState(false);
 
-  const { sort, sorter, sortBy, sortOrder } = useResponsesTableSorting();
+  const { sort, sorter } = useResponsesTableSorting();
 
   const router = useRouter();
 

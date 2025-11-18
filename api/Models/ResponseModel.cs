@@ -22,6 +22,7 @@ namespace api.Models
     {
         public string question { get; set; } = string.Empty;
         public object? answer { get; set; } = string.Empty;
+        public string? metadata { get; set; } = null;
     }
 
     public class ResponseWithAnswersModel
