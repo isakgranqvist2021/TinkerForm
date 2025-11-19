@@ -1,6 +1,5 @@
 using api.Models;
 using api.Services;
-using api.Validators;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -23,7 +22,7 @@ namespace api.Controllers
         [Authorize]
         public ActionResult<StatsDto> GetStats()
         {
-            var email = EmailValidator.ExtractEmailFromContext(HttpContext);
+            var email = HttpContext.Items["Email"]?.ToString();
             if (email == null)
             {
                 _logger.LogWarning("Unauthorized access attempt.");

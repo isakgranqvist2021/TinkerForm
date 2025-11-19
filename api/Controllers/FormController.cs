@@ -2,7 +2,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using api.Models;
 using api.Services;
-using api.Validators;
 
 namespace api.Controllers
 {
@@ -23,7 +22,7 @@ namespace api.Controllers
         [Authorize]
         public ActionResult<List<FormModel>> Get()
         {
-            var email = EmailValidator.ExtractEmailFromContext(HttpContext);
+            var email = HttpContext.Items["Email"]?.ToString();
             if (email == null)
             {
                 _logger.LogWarning("Unauthorized access attempt.");
@@ -51,7 +50,7 @@ namespace api.Controllers
         [Authorize]
         public ActionResult Delete(Guid id)
         {
-            var email = EmailValidator.ExtractEmailFromContext(HttpContext);
+            var email = HttpContext.Items["Email"]?.ToString();
             if (email == null)
             {
                 _logger.LogWarning("Unauthorized access attempt.");
@@ -67,7 +66,7 @@ namespace api.Controllers
         [Authorize]
         public ActionResult<FormModel> Create(CreateFormModel form)
         {
-            var email = EmailValidator.ExtractEmailFromContext(HttpContext);
+            var email = HttpContext.Items["Email"]?.ToString();
             if (email == null)
             {
                 _logger.LogWarning("Unauthorized access attempt.");
@@ -87,7 +86,7 @@ namespace api.Controllers
         [Authorize]
         public ActionResult Update(Guid id, [FromBody] UpdateFormModel form)
         {
-            var email = EmailValidator.ExtractEmailFromContext(HttpContext);
+            var email = HttpContext.Items["Email"]?.ToString();
             if (email == null)
             {
                 _logger.LogWarning("Unauthorized access attempt.");
@@ -109,7 +108,7 @@ namespace api.Controllers
         [Authorize]
         public ActionResult<FormStatsModel> GetFormStats(Guid id)
         {
-            var email = EmailValidator.ExtractEmailFromContext(HttpContext);
+            var email = HttpContext.Items["Email"]?.ToString();
             if (email == null)
             {
                 _logger.LogWarning("Unauthorized access attempt.");
@@ -137,7 +136,7 @@ namespace api.Controllers
         [Authorize]
         public ActionResult<FormWithAnswersModel> GetFormWithAnswers(Guid id)
         {
-            var email = EmailValidator.ExtractEmailFromContext(HttpContext);
+            var email = HttpContext.Items["Email"]?.ToString();
             if (email == null)
             {
                 _logger.LogWarning("Unauthorized access attempt.");
