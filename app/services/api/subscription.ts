@@ -19,6 +19,8 @@ export interface SubscriptionDto {
   updatedAt: string;
 }
 
+export type SubscriptionDetails = Awaited<ReturnType<typeof getSubscription>>;
+
 export async function createSubscription(dto: CreateSubscriptionDto) {
   try {
     const res = await fetch(`${env.API_URL}/subscription`, {

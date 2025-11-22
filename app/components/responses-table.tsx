@@ -9,10 +9,13 @@ import { ScoreResponse } from 'models/score-response';
 import { toast } from 'sonner';
 import { calculateDuration } from 'utils';
 import { useRouter } from 'next/navigation';
+import { SubscriptionDetails } from 'services/api/subscription';
+import { canScoreApplications } from 'config/packages';
 
 interface ResponsesTableProps {
   formId: string;
   responses: ResponseDto[];
+  subscription: SubscriptionDetails | null;
 }
 
 export function ResponsesTable(props: ResponsesTableProps) {
@@ -95,16 +98,29 @@ export function ResponsesTable(props: ResponsesTableProps) {
           Only show completed
         </label>
 
-        <button
-          className="btn btn-primary btn-sm ml-auto"
-          onClick={() => score.trigger()}
-          disabled={score.isMutating || counts.withoutScoreCount === 0}
+        <div
+          className="tooltip tooltip-left ml-auto"
+          data-tip={
+            canScoreApplications(props.subscription?.packageId)
+              ? ''
+              : 'Please upgrade your package to score applications with AI'
+          }
         >
-          {score.isMutating && (
-            <span className="loading loading-spinner loading-xs"></span>
-          )}
-          Score responses with AI ({counts.withoutScoreCount})
-        </button>
+          <button
+            className="btn btn-primary btn-sm ml-auto"
+            onClick={() => score.trigger()}
+            disabled={
+              score.isMutating ||
+              counts.withoutScoreCount === 0 ||
+              !canScoreApplications(props.subscription?.packageId)
+            }
+          >
+            {score.isMutating && (
+              <span className="loading loading-spinner loading-xs"></span>
+            )}
+            Score responses with AI ({counts.withoutScoreCount})
+          </button>
+        </div>
       </div>
 
       <div className="overflow-x-auto rounded-box border border-base-content/5 bg-base-100">

@@ -16,6 +16,7 @@ import { getFormById, getFormStats } from 'services/api/forms';
 import { getResponsesByFormId } from 'services/api/response';
 import { DeleteFormModal, FormActions } from 'components/view-form-actions';
 import { ResponsesTable } from 'components/responses-table';
+import { getSubscription } from 'services/api/subscription';
 
 export const generateMetadata = async (props: PageProps<{ id: string }>) => {
   const params = await props.params;
@@ -44,6 +45,7 @@ export default async function Page(props: PageProps<{ id: string }>) {
 
   const responses = await getResponsesByFormId(params.id);
   const formStats = await getFormStats(params.id);
+  const subscription = await getSubscription();
 
   const durations = getDurations(responses);
   const averageCompletionTime = calculateAverageCompletionTime(durations);
@@ -172,7 +174,11 @@ export default async function Page(props: PageProps<{ id: string }>) {
           </div>
         </div>
 
-        <ResponsesTable formId={form.id} responses={responses} />
+        <ResponsesTable
+          subscription={subscription}
+          formId={form.id}
+          responses={responses}
+        />
       </MainContainer>
     </ResponseProvider>
   );
