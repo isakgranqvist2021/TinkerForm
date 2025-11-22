@@ -2,7 +2,6 @@ using Microsoft.AspNetCore.Mvc;
 using api.Models;
 using api.Services;
 using Microsoft.AspNetCore.Authorization;
-using api.Validators;
 
 namespace api.Controllers
 {
@@ -35,7 +34,7 @@ namespace api.Controllers
         [Authorize]
         public ActionResult GetByEmail()
         {
-            var email = EmailValidator.ExtractEmailFromContext(HttpContext);
+            var email = HttpContext.Items["Email"]?.ToString();
             if (email == null)
             {
                 _logger.LogWarning("Unauthorized access attempt.");
@@ -55,7 +54,7 @@ namespace api.Controllers
         [Authorize]
         public ActionResult Delete()
         {
-            var email = EmailValidator.ExtractEmailFromContext(HttpContext);
+            var email = HttpContext.Items["Email"]?.ToString();
             if (email == null)
             {
                 _logger.LogWarning("Unauthorized access attempt.");

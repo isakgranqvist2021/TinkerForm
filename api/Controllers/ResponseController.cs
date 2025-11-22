@@ -2,7 +2,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using api.Models;
 using api.Services;
-using api.Validators;
 
 namespace api.Controllers
 {
@@ -60,7 +59,7 @@ namespace api.Controllers
         [Authorize]
         public ActionResult<IEnumerable<ResponseModel>> ListByFormId(Guid formId)
         {
-            var email = EmailValidator.ExtractEmailFromContext(HttpContext);
+            var email = HttpContext.Items["Email"]?.ToString();
             if (email == null)
             {
                 _logger.LogWarning("Unauthorized access attempt.");
@@ -87,7 +86,7 @@ namespace api.Controllers
         [Authorize]
         public ActionResult UpdateScoreAndReasoning([FromBody] List<UpdateScoreAndReasoningModel> updateModels)
         {
-            var email = EmailValidator.ExtractEmailFromContext(HttpContext);
+            var email = HttpContext.Items["Email"]?.ToString();
             if (email == null)
             {
                 _logger.LogWarning("Unauthorized access attempt.");

@@ -1,9 +1,10 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
-using api.Context;
 using DotNetEnv;
+using api.Context;
 using api.Services;
+using api.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -43,7 +44,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseAuthentication();
-app.UseMiddleware<api.Middleware.Auth0UserInfoMiddleware>();
+app.UseMiddleware<Auth0UserInfoMiddleware>();
 app.UseAuthorization();
 app.MapControllers();
 
