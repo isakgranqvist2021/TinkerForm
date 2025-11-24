@@ -1,9 +1,15 @@
 import React from 'react';
-import { verifyAndCompletePayment } from 'services/payment';
+import { stripe } from 'services/payment';
 import type { PageProps } from 'types/page';
 import { getMetadata } from 'utils';
 import { CheckoutSuccess } from './checkout-success';
 import { CheckoutFailed } from '../rejected/checkout-failed';
+import {
+  createSubscription,
+  deleteSubscription,
+  getSubscription,
+} from 'services/api/subscription';
+import { createSubscriptionSchema } from 'models/subscribe';
 
 export const metadata = getMetadata({
   title: 'Payment Accepted',
@@ -26,4 +32,41 @@ export default async function Page(
   }
 
   return <CheckoutSuccess />;
+}
+
+async function verifyAndCompletePayment(checkoutSessionId: string) {
+  const checkoutSession =
+    await stripe.checkout.sessions.retrieve(checkoutSessionId);
+
+  if (checkoutSession.status !== 'complete') {
+    return false;
+  }
+
+  const subscriptionId =
+    typeof checkoutSession.subscription === 'string'
+      ? checkoutSession.subscription
+      : checkoutSession.subscription?.id;
+
+  if (!subscriptionId) {
+    return false;
+  }
+
+  const email = checkoutSession.customer_details?.email;
+  if (!email) {
+    return false;
+  }
+
+  const currentSubscription = await getSubscription();
+  if (currentSubscription) {
+    await stripe.subscriptions.cancel(currentSubscription.subscriptionId);
+    await deleteSubscription();
+  }
+
+  const parsedData = createSubscriptionSchema.parse(checkoutSession.metadata);
+
+  return createSubscription({
+    email,
+    packageId: parsedData.id,
+    subscriptionId: subscriptionId,
+  });
 }

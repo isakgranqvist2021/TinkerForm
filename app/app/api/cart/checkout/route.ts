@@ -2,7 +2,7 @@ import { requireEnv } from 'config';
 import { PackageId, packages } from 'config/packages';
 import { auth0 } from 'lib/auth0';
 import { createSubscriptionSchema } from 'models/subscribe';
-import { createCheckoutSession } from 'services/payment';
+import { stripe } from 'services/payment';
 import Stripe from 'stripe';
 
 function getStripeCheckoutParams(
@@ -56,7 +56,9 @@ export async function POST(req: Request) {
       url: req.headers.get('origin') || requireEnv('APP_BASE_URL'),
     });
 
-    const checkoutSession = await createCheckoutSession(checkoutSessionParams);
+    const checkoutSession = await stripe.checkout.sessions.create(
+      checkoutSessionParams,
+    );
 
     return Response.json({ sessionId: checkoutSession.id });
   } catch (err) {
