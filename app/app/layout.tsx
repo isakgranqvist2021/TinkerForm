@@ -3,6 +3,7 @@ import 'styles/globals.css';
 import { Toaster } from 'sonner';
 import { GoogleAnalytics } from '@next/third-parties/google';
 import { getThemeFromCookie } from 'utils/utils.server';
+import { env } from 'config';
 
 export default async function RootLayout(props: React.PropsWithChildren) {
   const theme = await getThemeFromCookie();
@@ -15,7 +16,7 @@ export default async function RootLayout(props: React.PropsWithChildren) {
         <Toaster richColors />
       </body>
 
-      <GoogleAnalytics gaId="G-51KMS7QMKY" />
+      {env.NODE_ENV === 'production' && <GoogleAnalytics gaId="G-51KMS7QMKY" />}
     </html>
   );
 }
