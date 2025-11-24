@@ -1,31 +1,28 @@
 'use client';
 
 import { Package, PackageId, packages } from 'config/packages';
-import { formatCurrency } from 'utils';
-import Link from 'next/link';
+import { cn, formatCurrency } from 'utils';
 import useMutation from 'swr/mutation';
 import { toast } from 'sonner';
 import getStripe from 'services/stripe';
 
-interface PackageCardsProps {
+interface PackageCardsProps extends React.ComponentProps<'div'> {
   activePackageId?: PackageId | null;
 }
 export function PackageCards(props: PackageCardsProps) {
-  return (
-    <div className="flex flex-col gap-8">
-      <div className="flex gap-4 lg:flex-row flex-col justify-center items-center">
-        {Object.values(packages).map((pkg) => (
-          <PricingCard
-            key={pkg.id}
-            pkg={pkg}
-            activePackageId={props.activePackageId}
-          />
-        ))}
-      </div>
+  const { activePackageId, className, ...rest } = props;
 
-      <Link href="/support" className="text-center link">
-        Contact Support
-      </Link>
+  return (
+    <div
+      className={cn(
+        'flex gap-4 lg:flex-row flex-col justify-center items-center',
+        className,
+      )}
+      {...rest}
+    >
+      {Object.values(packages).map((pkg) => (
+        <PricingCard key={pkg.id} pkg={pkg} activePackageId={activePackageId} />
+      ))}
     </div>
   );
 }

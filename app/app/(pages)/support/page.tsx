@@ -78,10 +78,10 @@ export default function Page() {
             </div>
           </div>
         </div>
-        <div className="alert alert-info">
+        <div className="text-center pb-4">
           <span>
             Still have a question? Visit our{' '}
-            <a href="/contact" className="link link-primary">
+            <a href="/contact" className="link">
               Contact Page
             </a>{' '}
             and we&apos;ll be happy to help!

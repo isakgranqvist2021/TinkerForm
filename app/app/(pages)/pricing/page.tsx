@@ -1,6 +1,7 @@
 import { Drawer } from 'components/drawer';
 import { PackageCards } from 'components/package-cards';
 import { PageTitle } from 'components/page-title';
+import Link from 'next/link';
 import { getSubscription } from 'services/api/subscription';
 import { getMetadata } from 'utils';
 
@@ -22,7 +23,13 @@ export default async function Page() {
           </p>
         </div>
 
-        <PackageCards activePackageId={subscription?.packageId} />
+        <div className="flex flex-col gap-8">
+          <PackageCards activePackageId={subscription?.packageId} />
+
+          <Link href="/support" className="text-center link">
+            Contact Support
+          </Link>
+        </div>
       </div>
     </Drawer>
   );

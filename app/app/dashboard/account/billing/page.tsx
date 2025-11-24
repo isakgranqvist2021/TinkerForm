@@ -2,6 +2,7 @@ import { PackageCards } from 'components/package-cards';
 import { PageTitle } from 'components/page-title';
 import dayjs from 'dayjs';
 import { auth0 } from 'lib/auth0';
+import Link from 'next/link';
 import { redirect } from 'next/navigation';
 import React from 'react';
 import { getSubscription } from 'services/api/subscription';
@@ -36,7 +37,13 @@ export default async function Page() {
         <p className="text-center">{subtitle}</p>
       </div>
 
-      <PackageCards activePackageId={subscription?.packageId} />
+      <div className="flex flex-col gap-8">
+        <PackageCards activePackageId={subscription?.packageId} />
+
+        <Link href="/support" className="text-center link">
+          Contact Support
+        </Link>
+      </div>
     </div>
   );
 }

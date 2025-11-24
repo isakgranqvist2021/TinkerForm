@@ -1,4 +1,5 @@
 import { Drawer } from 'components/drawer';
+import { PackageCards } from 'components/package-cards';
 import Link from 'next/link';
 import React from 'react';
 import { getMetadata } from 'utils';
@@ -12,7 +13,25 @@ export default async function Page() {
   return (
     <Drawer>
       <Hero />
+
+      <Pricing />
     </Drawer>
+  );
+}
+
+function Pricing() {
+  return (
+    <div className="px-4 py-6 md:px-4 md:py-12 lg:px-4 lg:py-12 flex flex-col gap-4">
+      <h2 className="text-center text-3xl font-bold">Our Packages</h2>
+
+      <div className="flex flex-col gap-8">
+        <PackageCards className="flex flex-wrap flex-row!" />
+
+        <Link href="/support" className="text-center link">
+          Contact Support
+        </Link>
+      </div>
+    </div>
   );
 }
 
