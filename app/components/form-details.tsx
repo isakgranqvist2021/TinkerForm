@@ -4,6 +4,44 @@ import { useFormContext, useFormState, useWatch } from 'react-hook-form';
 import { Form } from 'models/form';
 import { FormTheme } from './form-theme';
 
+export function FormDetails() {
+  const formState = useFormState();
+
+  return (
+    <div>
+      <div className="mb-2">
+        <h3 className="text-lg font-bold">1. Form Details</h3>
+        <p>Describe your form so users know what to expect.</p>
+      </div>
+
+      <ImagePreview />
+
+      <FormTheme />
+
+      <ControlledInput
+        name="title"
+        label="Title"
+        disabled={formState.isSubmitting}
+        placeholder="Software Engineer"
+      />
+
+      <ControlledInput
+        name="location"
+        label="Location"
+        disabled={formState.isSubmitting}
+        placeholder="San Francisco, CA"
+      />
+
+      <ControlledTextarea
+        name="description"
+        label="Description"
+        disabled={formState.isSubmitting}
+        rich
+      />
+    </div>
+  );
+}
+
 function ImagePreview() {
   const formContext = useFormContext<Form>();
   const value = useWatch<Form, 'coverImage'>({
@@ -88,43 +126,5 @@ function ImagePreview() {
         )}
       </div>
     </React.Fragment>
-  );
-}
-
-export function FormDetails() {
-  const formState = useFormState();
-
-  return (
-    <div>
-      <div className="mb-2">
-        <h3 className="text-lg font-bold">1. Form Details</h3>
-        <p>Describe your form so users know what to expect.</p>
-      </div>
-
-      <ImagePreview />
-
-      <FormTheme />
-
-      <ControlledInput
-        name="title"
-        label="Title"
-        disabled={formState.isSubmitting}
-        placeholder="Software Engineer"
-      />
-
-      <ControlledInput
-        name="location"
-        label="Location"
-        disabled={formState.isSubmitting}
-        placeholder="San Francisco, CA"
-      />
-
-      <ControlledTextarea
-        name="description"
-        label="Description"
-        disabled={formState.isSubmitting}
-        rich
-      />
-    </div>
   );
 }

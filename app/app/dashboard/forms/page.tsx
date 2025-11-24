@@ -11,11 +11,9 @@ import {
   getMetadata,
   percentageChange,
 } from 'utils';
-import {
-  DeleteFormIconButton,
-  DeleteFormModal,
-} from 'components/view-form-actions';
+
 import { getFormStats } from 'services/api/stats';
+import { DeleteFormIconButton, DeleteFormModal } from './[id]/actions';
 
 export const metadata = getMetadata({
   title: 'My Forms',

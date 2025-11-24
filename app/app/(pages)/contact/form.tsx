@@ -3,8 +3,8 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { ContactFormModel, contactFormSchema } from 'models/contact-form';
 import { FormProvider, useForm } from 'react-hook-form';
-import { ControlledInput, ControlledTextarea } from './inputs';
-import { PageTitle } from './page-title';
+import { ControlledInput, ControlledTextarea } from 'components/inputs';
+import { PageTitle } from 'components/page-title';
 import useMutation from 'swr/mutation';
 import { toast } from 'sonner';
 

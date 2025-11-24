@@ -1,10 +1,11 @@
 'use client';
 
-import { BuyNowButton } from 'components/buy-now-button';
 import { Package, PackageId, packages } from 'config/packages';
 import { formatCurrency } from 'utils';
-import { CancelSubscriptionButton } from './cancel-subscription-button';
 import Link from 'next/link';
+import useMutation from 'swr/mutation';
+import { toast } from 'sonner';
+import getStripe from 'services/stripe';
 
 interface PackageCardsProps {
   activePackageId?: PackageId | null;
@@ -100,15 +101,65 @@ function PricingCard(props: PricingCardProps) {
               Cancel Subscription
             </CancelSubscriptionButton>
           ) : (
-            <BuyNowButton
+            <SubscribeButton
               id={props.pkg.id}
               className="btn btn-primary btn-block"
             >
               Subscribe
-            </BuyNowButton>
+            </SubscribeButton>
           )}
         </div>
       </div>
     </div>
   );
+}
+
+interface SubscribeButtonProps extends React.ComponentProps<'button'> {
+  id: PackageId;
+}
+
+function SubscribeButton(props: SubscribeButtonProps) {
+  const { id, ...rest } = props;
+
+  const buyNow = useStartCheckout(id);
+
+  return <button onClick={buyNow} {...rest} />;
+}
+
+function CancelSubscriptionButton(props: React.ComponentProps<'button'>) {
+  const { isMutating, trigger } = useMutation(
+    '/api/subscription',
+    async (url: string) => {
+      await fetch(url, { method: 'PATCH' });
+    },
+    {
+      onSuccess: () => window.location.reload(),
+      onError: () => {
+        toast.error("Couldn't cancel subscription. Please try again.");
+      },
+    },
+  );
+
+  return <button {...props} disabled={isMutating} onClick={() => trigger()} />;
+}
+
+export function useStartCheckout(id: PackageId) {
+  return async () => {
+    const stripe = await getStripe();
+    if (!stripe) {
+      console.error(`Stripe is ${stripe}`);
+      return;
+    }
+
+    const body = JSON.stringify({
+      id,
+    });
+
+    const res = await fetch('/api/cart/checkout', {
+      body,
+      method: 'POST',
+    }).then((res) => res.json());
+
+    await stripe.redirectToCheckout({ sessionId: res.sessionId });
+  };
 }

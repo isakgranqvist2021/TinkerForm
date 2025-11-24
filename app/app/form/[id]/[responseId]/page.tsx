@@ -1,4 +1,4 @@
-import { AnswerForm } from 'components/answer-form';
+import { AnswerForm } from './form';
 import { defaultTheme } from 'config/theme';
 import { redirect } from 'next/navigation';
 import React from 'react';

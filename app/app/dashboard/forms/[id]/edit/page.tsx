@@ -1,4 +1,3 @@
-import { EditForm } from 'components/edit-form';
 import { defaultTheme, Theme } from 'config/theme';
 import { MainContainer } from 'containers/main-container';
 import { auth0 } from 'lib/auth0';
@@ -9,6 +8,7 @@ import { getFormById } from 'services/api/forms';
 import { getSectionsByFormId, sectionMapper } from 'services/api/section';
 import { PageProps } from 'types/page';
 import { getMetadata } from 'utils';
+import { EditForm } from './form';
 
 export const metadata = getMetadata({
   title: 'Edit Form',

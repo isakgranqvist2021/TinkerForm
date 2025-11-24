@@ -1,4 +1,4 @@
-import { ResponseProvider } from 'components/response-modal';
+import { ResponseProvider } from './response-modal';
 import { MainContainer } from 'containers/main-container';
 import { auth0 } from 'lib/auth0';
 import Link from 'next/link';
@@ -14,9 +14,9 @@ import {
 } from 'utils';
 import { getFormById, getFormStats } from 'services/api/forms';
 import { getResponsesByFormId } from 'services/api/response';
-import { DeleteFormModal, FormActions } from 'components/view-form-actions';
-import { ResponsesTable } from 'components/responses-table';
+import { DeleteFormModal, FormActions } from './actions';
 import { getSubscription } from 'services/api/subscription';
+import { ResponsesTable } from './responses-table';
 
 export const generateMetadata = async (props: PageProps<{ id: string }>) => {
   const params = await props.params;

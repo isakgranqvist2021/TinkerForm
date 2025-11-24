@@ -1,11 +1,9 @@
-import {
-  CheckoutFailed,
-  CheckoutSuccess,
-} from 'components/checkout-completed-screen';
 import React from 'react';
 import { verifyAndCompletePayment } from 'services/payment';
 import type { PageProps } from 'types/page';
 import { getMetadata } from 'utils';
+import { CheckoutSuccess } from './checkout-success';
+import { CheckoutFailed } from '../rejected/checkout-failed';
 
 export const metadata = getMetadata({
   title: 'Payment Accepted',

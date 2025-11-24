@@ -1,15 +1,14 @@
 'use client';
 
-import { SectionFormProvider } from './section-form-modal';
 import { Form, formSchema } from 'models/form';
 import { FormProvider, useForm, UseFormSetValue } from 'react-hook-form';
 import { toast } from 'sonner';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { FormDetails } from './form-details';
-import { SectionsList } from './sections-list';
 import { formatFormValues, urlToFile } from 'utils';
 import { getDownloadUrl } from '@vercel/blob';
 import React from 'react';
+import { FormDetails } from 'components/form-details';
+import { SectionsList, SectionFormProvider } from 'components/sections-list';
 
 interface EditFormProps {
   defaultValues: Form;

@@ -1,10 +1,10 @@
-import { AddNewForm } from 'components/add-new-form';
 import { MainContainer } from 'containers/main-container';
 import { auth0 } from 'lib/auth0';
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
 import React from 'react';
 import { getMetadata } from 'utils';
+import { AddNewForm } from './form';
 
 export const metadata = getMetadata({
   title: 'New Form',

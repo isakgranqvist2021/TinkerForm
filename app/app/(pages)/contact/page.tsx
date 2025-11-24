@@ -1,4 +1,4 @@
-import { ContactForm } from 'components/contact-form';
+import { ContactForm } from './form';
 import { Drawer } from 'components/drawer';
 import { Container } from 'containers/main-container';
 import { getMetadata } from 'utils';

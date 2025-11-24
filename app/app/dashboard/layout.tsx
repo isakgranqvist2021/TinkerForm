@@ -1,9 +1,10 @@
 import { Footer } from 'components/footer';
 import { Nav } from 'components/nav';
-import { NoSubscriptionBanner } from 'components/no-subscription-banner';
 import { auth0 } from 'lib/auth0';
+import Link from 'next/link';
 import { redirect } from 'next/navigation';
 import React from 'react';
+import { getSubscription } from 'services/api/subscription';
 
 export default async function DashboardLayout(props: React.PropsWithChildren) {
   const session = await auth0.getSession();
@@ -22,6 +23,27 @@ export default async function DashboardLayout(props: React.PropsWithChildren) {
       </div>
 
       <Footer />
+    </div>
+  );
+}
+
+async function NoSubscriptionBanner() {
+  const subscription = await getSubscription();
+
+  if (subscription?.packageId) {
+    return null;
+  }
+
+  return (
+    <div className="alert alert-warning mt-4 justify-center mx-4">
+      You do not have an active subscription. Please choose a plan to get
+      started.
+      <Link
+        href="/dashboard/account/billing"
+        className="btn btn-neutral btn-sm"
+      >
+        Choose a Plan
+      </Link>
     </div>
   );
 }

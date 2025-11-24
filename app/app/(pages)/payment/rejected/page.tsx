@@ -1,6 +1,6 @@
-import { CheckoutFailed } from 'components/checkout-completed-screen';
 import React from 'react';
 import { getMetadata } from 'utils';
+import { CheckoutFailed } from './checkout-failed';
 
 export const metadata = getMetadata({
   title: 'Payment Rejected',

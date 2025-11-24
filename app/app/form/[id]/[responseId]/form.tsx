@@ -10,7 +10,7 @@ import {
   ControlledRangeInput,
   ControlledSelect,
   ControlledTextarea,
-} from './inputs';
+} from 'components/inputs';
 import {
   ConstructedSchema,
   constructSchema,
@@ -33,7 +33,7 @@ export function AnswerForm(props: AnswerFormProps) {
   const formRef = React.useRef<HTMLDivElement>(null);
 
   return (
-    <div>
+    <div data-testid="answer-form">
       {props.form.coverImage && (
         <img
           src={props.form.coverImage}
@@ -119,7 +119,7 @@ interface AnswerFormContentProps {
   isCompleted: boolean;
 }
 
-export function AnswerFormContent(props: AnswerFormContentProps) {
+function AnswerFormContent(props: AnswerFormContentProps) {
   const form = useForm<ConstructedSchema>({
     resolver: zodResolver(constructSchema(props.sections)),
     defaultValues: getConstructedSchemaDefaultValues(props.sections),
