@@ -1,7 +1,12 @@
 'use client';
 
 import React from 'react';
-import { calculateDuration, formatDate, formatDuration } from 'utils';
+import {
+  calculateDuration,
+  formatDate,
+  formatDuration,
+  formatScore,
+} from 'utils';
 import useSWR from 'swr';
 import { SectionType } from 'models/form';
 import Link from 'next/link';
@@ -107,6 +112,25 @@ function ResponseModalContent(props: ResponseModalContentProps) {
               answer={duration ? formatDuration(duration) : 'N/A'}
               type="text"
             />
+
+            {props.response.score !== null && (
+              <AnswerListItem
+                question="Score"
+                answer={formatScore(props.response.score)}
+                type="text"
+              />
+            )}
+
+            {props.response.reasoning !== null && (
+              <AnswerListItem
+                question="Score Reasoning"
+                answer={props.response.reasoning
+                  .split(';')
+                  .map((value) => value.trim())
+                  .join('.\n')}
+                type="text"
+              />
+            )}
 
             {hasAnswers &&
               !isLoading &&
