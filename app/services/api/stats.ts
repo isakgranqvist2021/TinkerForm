@@ -1,4 +1,4 @@
-import { env } from 'process';
+import { env } from 'config';
 import { getAccessToken } from './access-token';
 
 interface StatsDto {
