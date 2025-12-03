@@ -53,24 +53,6 @@ export interface UpdateFormDto extends Omit<Form, 'coverImage'> {
   coverImage: string;
 }
 
-export async function getForms(): Promise<FormDto[]> {
-  try {
-    const { token } = await getAccessToken();
-
-    const res = await fetch(`${env.API_URL}/form`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-
-    const data = await res.json();
-    return data;
-  } catch (err) {
-    console.error(err);
-    return [];
-  }
-}
-
 export async function getFormById(formId: string): Promise<FormDto | null> {
   try {
     const res = await fetch(`${env.API_URL}/form/${formId}`);
@@ -80,24 +62,6 @@ export async function getFormById(formId: string): Promise<FormDto | null> {
   } catch (err) {
     console.error(err);
     return null;
-  }
-}
-
-export async function deleteForm(formId: string): Promise<boolean> {
-  try {
-    const { token } = await getAccessToken();
-
-    const res = await fetch(`${env.API_URL}/form/${formId}`, {
-      method: 'DELETE',
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-
-    return res.ok;
-  } catch (err) {
-    console.error(err);
-    return false;
   }
 }
 

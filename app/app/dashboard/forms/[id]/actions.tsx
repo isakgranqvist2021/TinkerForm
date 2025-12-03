@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import React from 'react';
 import { toast } from 'sonner';
+import { useSWRConfig } from 'swr';
 import useMutation from 'swr/mutation';
 
 interface FormIdProps {
@@ -178,19 +179,27 @@ function ExportDataButton(props: FormIdProps) {
 }
 
 function useDeleteForm(props: FormIdProps) {
+  const { mutate } = useSWRConfig();
   const router = useRouter();
 
   const mutation = useMutation(
-    `/api/forms/${props.formId}`,
-    async (url) => fetch(url, { method: 'DELETE' }),
+    `/api/proxy/form/${props.formId}`,
+    async (url) => {
+      const res = await fetch(url, { method: 'DELETE' });
 
+      if (!res.ok) {
+        throw new Error('Could not delete form');
+      }
+    },
     {
       onError: () => {
         toast.error('Error deleting form');
       },
 
       onSuccess: () => {
+        mutate('/api/proxy/form');
         router.refresh();
+
         toast.success('Form deleted successfully');
 
         closeDeleteFormModal();

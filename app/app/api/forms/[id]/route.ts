@@ -2,12 +2,7 @@ import { put, del } from '@vercel/blob';
 import { internalServerError, ok, unauthorized } from 'app/api/utils';
 import { auth0 } from 'lib/auth0';
 import { formSchema } from 'models/form';
-import {
-  deleteForm,
-  getFormById,
-  updateForm,
-  UpdateFormDto,
-} from 'services/api/forms';
+import { getFormById, updateForm, UpdateFormDto } from 'services/api/forms';
 import { parseFormFormData } from 'utils';
 
 export async function PATCH(
@@ -39,22 +34,6 @@ export async function PATCH(
     updateFormDto.coverImage = url;
 
     await updateForm(id, updateFormDto);
-
-    return ok();
-  } catch (err) {
-    console.error(err);
-    return internalServerError();
-  }
-}
-
-export async function DELETE(
-  req: Request,
-  ctx: RouteContext<'/api/forms/[id]'>,
-) {
-  try {
-    const { id } = await ctx.params;
-
-    await deleteForm(id);
 
     return ok();
   } catch (err) {

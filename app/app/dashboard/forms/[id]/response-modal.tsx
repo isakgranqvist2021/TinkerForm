@@ -36,18 +36,15 @@ interface ResponseModalContentProps {
 }
 
 function ResponseModalContent(props: ResponseModalContentProps) {
-  const { data, error, isLoading } = useSWR(
-    `/api/response/${props.response.id}`,
-    async () => {
-      const res = await fetch(`/api/response/${props.response.id}`);
+  const { isLoading, data, error } = useSWR(
+    `/api/proxy/response/${props.response.id}/answers`,
+    async (url) => {
+      const res = await fetch(url);
       if (!res.ok) {
         throw new Error('Failed to fetch response details');
       }
 
-      return (await res.json()) as {
-        answers: AnswersByResponseIdDto[];
-        response: ResponseDto;
-      };
+      return (await res.json()) as AnswersByResponseIdDto[];
     },
   );
 
@@ -56,7 +53,7 @@ function ResponseModalContent(props: ResponseModalContentProps) {
     props.response.completedAt,
   );
 
-  const hasAnswers = Boolean(data?.answers.length);
+  const hasAnswers = Boolean(data?.length);
 
   return (
     <React.Fragment>
@@ -134,7 +131,7 @@ function ResponseModalContent(props: ResponseModalContentProps) {
 
             {hasAnswers &&
               !isLoading &&
-              data?.answers.map((item, index: number) => (
+              data?.map((item, index: number) => (
                 <AnswerListItem
                   key={index}
                   question={item.section.title}

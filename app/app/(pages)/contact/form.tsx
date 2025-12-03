@@ -10,14 +10,14 @@ import { toast } from 'sonner';
 
 export function ContactForm() {
   const { trigger, isMutating } = useMutation(
-    '/api/contact',
+    '/api/proxy/contact',
     async (url, { arg }: { arg: ContactFormModel }) => {
       const res = await fetch(url, {
         method: 'POST',
+        body: JSON.stringify(arg),
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(arg),
       });
 
       return res.ok;
