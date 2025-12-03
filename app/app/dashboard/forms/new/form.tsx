@@ -10,6 +10,7 @@ import { formatFormValues } from 'utils';
 import { defaultTheme } from 'config/theme';
 import { FormDetails } from 'components/form-details';
 import { SectionsList, SectionFormProvider } from 'components/sections-list';
+import useMutation from 'swr/mutation';
 
 const defaultValues: Form = {
   coverImage: new File([], ''),
@@ -28,11 +29,12 @@ export function AddNewForm() {
     resolver: zodResolver(formSchema),
   });
 
-  const submitForm = form.handleSubmit(async (data) => {
-    try {
-      const res = await fetch('/api/forms/new', {
+  const mutation = useMutation(
+    '/api/forms/new',
+    async (url, { arg }: { arg: FormData }): Promise<string> => {
+      const res = await fetch(url, {
         method: 'POST',
-        body: formatFormValues(data),
+        body: arg,
       });
 
       if (!res.ok) {
@@ -41,12 +43,21 @@ export function AddNewForm() {
 
       const createdForm = await res.json();
 
-      router.push(`/dashboard/forms/${createdForm.id}`);
+      return createdForm.id;
+    },
+    {
+      onSuccess: (id) => {
+        router.push(`/dashboard/forms/${id}`);
+        toast.success('Form created successfully!');
+      },
+      onError: () => {
+        toast.error("Couldn't create form. Please try again.");
+      },
+    },
+  );
 
-      toast.success('Form created successfully!');
-    } catch (error) {
-      toast.error("Couldn't create form. Please try again.");
-    }
+  const submitForm = form.handleSubmit(async (data) => {
+    await mutation.trigger(formatFormValues(data));
   });
 
   return (

@@ -126,8 +126,12 @@ function SubscribeButton(props: SubscribeButtonProps) {
 function CancelSubscriptionButton(props: React.ComponentProps<'button'>) {
   const { isMutating, trigger } = useMutation(
     '/api/subscription',
-    async (url: string) => {
-      await fetch(url, { method: 'PATCH' });
+    async (url) => {
+      const res = await fetch(url, { method: 'PATCH' });
+
+      if (!res.ok) {
+        throw new Error('Could not cancel subscription');
+      }
     },
     {
       onSuccess: () => window.location.reload(),

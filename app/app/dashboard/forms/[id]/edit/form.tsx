@@ -9,6 +9,7 @@ import { getDownloadUrl } from '@vercel/blob';
 import React from 'react';
 import { FormDetails } from 'components/form-details';
 import { SectionsList, SectionFormProvider } from 'components/sections-list';
+import useMutation from 'swr/mutation';
 
 interface EditFormProps {
   defaultValues: Form;
@@ -24,32 +25,43 @@ export function EditForm(props: EditFormProps) {
 
   useInjectCoverImage(props.coverImageUrl, form.setValue);
 
-  const submitForm = form.handleSubmit(async (data) => {
-    try {
-      const formData = formatFormValues(data);
-      formData.set(
-        'sections',
-        JSON.stringify(
-          data.sections.map((section, i) => ({
-            ...section,
-            index: i,
-          })),
-        ),
-      );
-
-      const res = await fetch(`/api/forms/${props.formId}`, {
+  const mutation = useMutation(
+    `/api/forms/${props.formId}`,
+    async (url, { arg }: { arg: FormData }) => {
+      const res = await fetch(url, {
         method: 'PATCH',
-        body: formData,
+        body: arg,
       });
 
       if (!res.ok) {
         throw new Error('Failed to save form');
       }
 
-      toast.success('Form saved successfully!');
-    } catch (error) {
-      toast.error("Couldn't save form. Please try again.");
-    }
+      return res.ok;
+    },
+    {
+      onSuccess: () => {
+        toast.success('Form saved successfully!');
+      },
+      onError: () => {
+        toast.error("Couldn't save form. Please try again.");
+      },
+    },
+  );
+
+  const submitForm = form.handleSubmit(async (data) => {
+    const formData = formatFormValues(data);
+    formData.set(
+      'sections',
+      JSON.stringify(
+        data.sections.map((section, i) => ({
+          ...section,
+          index: i,
+        })),
+      ),
+    );
+
+    await mutation.trigger(formData);
   });
 
   return (

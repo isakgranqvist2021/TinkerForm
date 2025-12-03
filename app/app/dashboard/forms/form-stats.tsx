@@ -6,8 +6,8 @@ import useSWR from 'swr';
 import { formatMonthlyChange, formatNumber, percentageChange } from 'utils';
 
 export function FormStats() {
-  const formStats = useSWR('/api/proxy/stats/forms', async (key) => {
-    const res = await fetch(key);
+  const formStats = useSWR('/api/proxy/stats/forms', async (url) => {
+    const res = await fetch(url);
 
     const data = await res.json();
 

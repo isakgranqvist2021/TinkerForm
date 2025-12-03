@@ -126,8 +126,13 @@ function FormActionsMenu(props: FormActionsProps) {
 function useExportData(props: FormIdProps) {
   return useMutation(
     `/api/forms/${props.formId}/export`,
-    async (url: string) => {
-      return await fetch(url);
+    async (url) => {
+      const res = await fetch(url);
+      if (!res.ok) {
+        throw new Error('Could not load data');
+      }
+
+      return res;
     },
     {
       onSuccess: (res) => {
