@@ -10,6 +10,7 @@ import {
   getSubscription,
 } from 'services/api/subscription';
 import { createSubscriptionSchema } from 'models/subscribe';
+import { auth0 } from 'lib/auth0';
 
 export const metadata = getMetadata({
   title: 'Payment Accepted',
@@ -56,10 +57,13 @@ async function verifyAndCompletePayment(checkoutSessionId: string) {
     return false;
   }
 
-  const currentSubscription = await getSubscription();
-  if (currentSubscription) {
-    await stripe.subscriptions.cancel(currentSubscription.subscriptionId);
-    await deleteSubscription();
+  const session = await auth0.getSession();
+  if (session) {
+    const currentSubscription = await getSubscription(session);
+    if (currentSubscription) {
+      await stripe.subscriptions.cancel(currentSubscription.subscriptionId);
+      await deleteSubscription(session);
+    }
   }
 
   const parsedData = createSubscriptionSchema.parse(checkoutSession.metadata);

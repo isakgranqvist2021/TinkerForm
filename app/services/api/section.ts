@@ -1,6 +1,6 @@
+import { SessionData } from '@auth0/nextjs-auth0/types';
 import { env } from 'config';
 import { MultipleChoiceOption, Section, SectionType } from 'models/form';
-import { getAccessToken } from './access-token';
 
 export interface SectionDto {
   id: string;
@@ -51,6 +51,7 @@ export async function getSectionsByFormId(
 export async function createSections(
   sections: Section[],
   formId: string,
+  session: SessionData,
 ): Promise<SectionDto[]> {
   const values = sections.map((section): CreateSectionDto => {
     switch (section.type) {
@@ -101,13 +102,11 @@ export async function createSections(
   });
 
   try {
-    const { token } = await getAccessToken();
-
     const res = await fetch(`${env.API_URL}/section`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`,
+        Authorization: `Bearer ${session.tokenSet.accessToken}`,
       },
       body: JSON.stringify(values),
     });

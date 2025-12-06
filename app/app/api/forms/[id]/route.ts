@@ -33,7 +33,7 @@ export async function PATCH(
     );
     updateFormDto.coverImage = url;
 
-    await updateForm(id, updateFormDto);
+    await updateForm(id, updateFormDto, session);
 
     return ok();
   } catch (err) {

@@ -1,4 +1,5 @@
 import { internalServerError, ok, unauthorized } from 'app/api/utils';
+import { auth0 } from 'lib/auth0';
 import { deleteSubscription, getSubscription } from 'services/api/subscription';
 import { stripe } from 'services/payment';
 
@@ -7,12 +8,17 @@ export async function PATCH(
   ctx: RouteContext<'/api/subscription'>,
 ) {
   try {
-    const subscription = await getSubscription();
+    const session = await auth0.getSession();
+    if (!session) {
+      return unauthorized();
+    }
+
+    const subscription = await getSubscription(session);
     if (!subscription) {
       return unauthorized();
     }
 
-    const deleted = await deleteSubscription();
+    const deleted = await deleteSubscription(session);
     if (!deleted) {
       throw new Error('Failed to delete subscription');
     }

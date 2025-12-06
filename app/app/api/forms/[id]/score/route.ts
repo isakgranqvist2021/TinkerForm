@@ -1,4 +1,5 @@
-import { internalServerError, ok } from 'app/api/utils';
+import { internalServerError, ok, unauthorized } from 'app/api/utils';
+import { auth0 } from 'lib/auth0';
 import { openai } from 'lib/openai';
 import { ScoreResponse, scoreResponseSchema } from 'models/score-response';
 import { Response } from 'openai/resources/responses/responses';
@@ -10,9 +11,14 @@ export async function GET(
   ctx: RouteContext<'/api/forms/[id]/score'>,
 ) {
   try {
+    const session = await auth0.getSession();
+    if (!session) {
+      return unauthorized();
+    }
+
     const { id } = await ctx.params;
 
-    const formWithAnswers = await getFormWithAnswers(id);
+    const formWithAnswers = await getFormWithAnswers(id, session);
     if (!formWithAnswers) {
       throw new Error('Form not found');
     }
@@ -29,7 +35,7 @@ export async function GET(
 
     const scores = parseScores(response);
 
-    await updateResponseScoreAndReasoning(scores);
+    await updateResponseScoreAndReasoning(scores, session);
 
     return ok({
       scores: scores.reduce(

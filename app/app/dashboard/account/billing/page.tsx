@@ -19,7 +19,7 @@ export default async function Page() {
     return redirect('/auth/login');
   }
 
-  const subscription = await getSubscription();
+  const subscription = await getSubscription(session);
 
   let title = 'Choose a Plan';
   let subtitle =

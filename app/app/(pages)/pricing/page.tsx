@@ -1,8 +1,12 @@
 import { Drawer } from 'components/drawer';
 import { PackageCards } from 'components/package-cards';
 import { PageTitle } from 'components/page-title';
+import { auth0 } from 'lib/auth0';
 import Link from 'next/link';
-import { getSubscription } from 'services/api/subscription';
+import {
+  getSubscription,
+  SubscriptionDetails,
+} from 'services/api/subscription';
 import { getMetadata } from 'utils';
 
 export const metadata = getMetadata({
@@ -11,7 +15,11 @@ export const metadata = getMetadata({
 });
 
 export default async function Page() {
-  const subscription = await getSubscription();
+  let subscription: SubscriptionDetails | null = null;
+  const session = await auth0.getSession();
+  if (session) {
+    subscription = await getSubscription(session);
+  }
 
   return (
     <Drawer>

@@ -23,12 +23,12 @@ export async function POST(req: Request) {
     );
     createFormDto.coverImage = url;
 
-    const res = await createForm(createFormDto);
+    const res = await createForm(createFormDto, session);
     if (!res) {
       throw new Error('Failed to create form');
     }
 
-    await createSections(form.sections, res.id);
+    await createSections(form.sections, res.id, session);
 
     return created(res);
   } catch (err) {

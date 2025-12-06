@@ -20,7 +20,7 @@ export async function GET(
       return unauthorized();
     }
 
-    const responses = await getAnswersByFormId(id);
+    const responses = await getAnswersByFormId(id, session);
     if (!responses) {
       throw new Error('No responses found');
     }

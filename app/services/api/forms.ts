@@ -1,9 +1,9 @@
 import { env } from 'config';
 import { Form } from 'models/form';
-import { getAccessToken } from './access-token';
 import { SectionDto } from './section';
 import { AnswerDto } from './answer';
 import { Theme } from 'config/theme';
+import { SessionData } from '@auth0/nextjs-auth0/types';
 
 export interface FormDto {
   id: string;
@@ -65,15 +65,16 @@ export async function getFormById(formId: string): Promise<FormDto | null> {
   }
 }
 
-export async function createForm(form: CreateFormDto): Promise<FormDto | null> {
+export async function createForm(
+  form: CreateFormDto,
+  session: SessionData,
+): Promise<FormDto | null> {
   try {
-    const { token } = await getAccessToken();
-
     const res = await fetch(`${env.API_URL}/form`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`,
+        Authorization: `Bearer ${session.tokenSet.accessToken}`,
       },
       body: JSON.stringify(form),
     });
@@ -89,15 +90,14 @@ export async function createForm(form: CreateFormDto): Promise<FormDto | null> {
 export async function updateForm(
   formId: string,
   form: UpdateFormDto,
+  session: SessionData,
 ): Promise<boolean> {
   try {
-    const { token } = await getAccessToken();
-
     const res = await fetch(`${env.API_URL}/form/${formId}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`,
+        Authorization: `Bearer ${session.tokenSet.accessToken}`,
       },
       body: JSON.stringify(form),
     });
@@ -109,13 +109,14 @@ export async function updateForm(
   }
 }
 
-export async function getFormStats(formId: string): Promise<FormStats> {
+export async function getFormStats(
+  formId: string,
+  session: SessionData,
+): Promise<FormStats> {
   try {
-    const { token } = await getAccessToken();
-
     const res = await fetch(`${env.API_URL}/form/${formId}/stats`, {
       headers: {
-        Authorization: `Bearer ${token}`,
+        Authorization: `Bearer ${session.tokenSet.accessToken}`,
       },
     });
 
@@ -132,13 +133,12 @@ export async function getFormStats(formId: string): Promise<FormStats> {
 
 export async function getAnswersByFormId(
   formId: string,
+  session: SessionData,
 ): Promise<AnswersByFormDto | null> {
   try {
-    const { token } = await getAccessToken();
-
     const res = await fetch(`${env.API_URL}/form/${formId}/answers`, {
       headers: {
-        Authorization: `Bearer ${token}`,
+        Authorization: `Bearer ${session.tokenSet.accessToken}`,
       },
     });
 
@@ -152,13 +152,12 @@ export async function getAnswersByFormId(
 
 export async function getFormWithAnswers(
   formId: string,
+  session: SessionData,
 ): Promise<FormWithAnswersDto | null> {
   try {
-    const { token } = await getAccessToken();
-
     const res = await fetch(`${env.API_URL}/form/${formId}/with-answers`, {
       headers: {
-        Authorization: `Bearer ${token}`,
+        Authorization: `Bearer ${session.tokenSet.accessToken}`,
       },
     });
 

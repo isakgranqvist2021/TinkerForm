@@ -1,8 +1,8 @@
+import { SessionData } from '@auth0/nextjs-auth0/types';
 import { env } from 'config';
 import { PackageId } from 'config/packages';
 import { stripe } from 'services/payment';
 import { getIsActive, getNextPaymentDate } from 'utils/utils.server';
-import { getAccessToken } from './access-token';
 
 export interface CreateSubscriptionDto {
   email: string;
@@ -36,15 +36,13 @@ export async function createSubscription(dto: CreateSubscriptionDto) {
   }
 }
 
-export async function getSubscription() {
+export async function getSubscription(session: SessionData) {
   try {
-    const { token } = await getAccessToken();
-
     const res = await fetch(`${env.API_URL}/subscription`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`,
+        Authorization: `Bearer ${session.tokenSet.accessToken}`,
       },
     });
 
@@ -78,15 +76,15 @@ export async function getSubscription() {
   }
 }
 
-export async function deleteSubscription(): Promise<boolean> {
+export async function deleteSubscription(
+  session: SessionData,
+): Promise<boolean> {
   try {
-    const { token } = await getAccessToken();
-
     const res = await fetch(`${env.API_URL}/subscription`, {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`,
+        Authorization: `Bearer ${session.tokenSet.accessToken}`,
       },
     });
 

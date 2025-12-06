@@ -4,7 +4,10 @@ import { auth0 } from 'lib/auth0';
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
 import React from 'react';
-import { getSubscription } from 'services/api/subscription';
+import {
+  getSubscription,
+  SubscriptionDetails,
+} from 'services/api/subscription';
 
 export default async function DashboardLayout(props: React.PropsWithChildren) {
   const session = await auth0.getSession();
@@ -28,7 +31,11 @@ export default async function DashboardLayout(props: React.PropsWithChildren) {
 }
 
 async function NoSubscriptionBanner() {
-  const subscription = await getSubscription();
+  let subscription: SubscriptionDetails | null = null;
+  const session = await auth0.getSession();
+  if (session) {
+    subscription = await getSubscription(session);
+  }
 
   if (subscription?.packageId) {
     return null;

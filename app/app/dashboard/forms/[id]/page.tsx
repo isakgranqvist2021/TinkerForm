@@ -43,9 +43,9 @@ export default async function Page(props: PageProps<{ id: string }>) {
     return redirect('/404');
   }
 
-  const responses = await getResponsesByFormId(params.id);
-  const formStats = await getFormStats(params.id);
-  const subscription = await getSubscription();
+  const responses = await getResponsesByFormId(params.id, session);
+  const formStats = await getFormStats(params.id, session);
+  const subscription = await getSubscription(session);
 
   const durations = getDurations(responses);
   const averageCompletionTime = calculateAverageCompletionTime(durations);

@@ -1,8 +1,8 @@
 import { env } from 'config';
 import { AnswerDto } from './answer';
 import { SectionDto } from './section';
-import { getAccessToken } from './access-token';
 import { ScoreResponse } from 'models/score-response';
+import { SessionData } from '@auth0/nextjs-auth0/types';
 
 export interface AnswersByResponseIdDto {
   answer: AnswerDto;
@@ -59,13 +59,12 @@ export async function createResponse(
 
 export async function getResponsesByFormId(
   formId: string,
+  session: SessionData,
 ): Promise<ResponseDto[]> {
   try {
-    const { token } = await getAccessToken();
-
     const res = await fetch(`${env.API_URL}/response/form/${formId}`, {
       headers: {
-        Authorization: `Bearer ${token}`,
+        Authorization: `Bearer ${session.tokenSet.accessToken}`,
       },
     });
 
@@ -93,15 +92,14 @@ export async function completeResponse(responseId: string): Promise<boolean> {
 
 export async function updateResponseScoreAndReasoning(
   scoreResponses: ScoreResponse[],
+  session: SessionData,
 ): Promise<boolean> {
   try {
-    const { token } = await getAccessToken();
-
     const res = await fetch(`${env.API_URL}/response/score`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`,
+        Authorization: `Bearer ${session.tokenSet.accessToken}`,
       },
       body: JSON.stringify(scoreResponses),
     });
