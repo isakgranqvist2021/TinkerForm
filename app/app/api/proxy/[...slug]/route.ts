@@ -17,17 +17,19 @@ async function proxy(
   ctx: RouteContext<'/api/proxy/[...slug]'>,
 ) {
   const params = await ctx.params;
-  // 1. Construct the target URL
-  // Join the slug array into a path string (e.g., ['users', '1'] -> 'users/1')
-  const path = params.slug.join('/');
-  // Preserve the original query parameters
-  const queryString = req.nextUrl.search;
 
-  const targetUrl = `${env.API_URL}/${path}${queryString}`;
+  const path = params.slug.join('/');
+  const targetUrl = `${env.API_URL}/${path}${req.nextUrl.search}`;
 
   try {
-    const { token } = await auth0.getAccessToken({});
-    req.headers.set('Authorization', `Bearer ${token}`);
+    const session = await auth0.getSession();
+
+    if (session) {
+      req.headers.set(
+        'Authorization',
+        `Bearer ${session.tokenSet.accessToken}`,
+      );
+    }
 
     const fetchOptions: RequestInit = {
       method: req.method,
