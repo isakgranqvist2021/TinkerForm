@@ -6,10 +6,6 @@ import Link from 'next/link';
 import { redirect } from 'next/navigation';
 import React from 'react';
 
-interface UserProps {
-  user: User;
-}
-
 export default async function DashboardLayout(props: React.PropsWithChildren) {
   const session = await auth0.getSession();
   if (!session) {
@@ -18,7 +14,7 @@ export default async function DashboardLayout(props: React.PropsWithChildren) {
 
   return (
     <div className="min-h-screen flex flex-col">
-      <Nav user={session.user} />
+      <Nav />
 
       <div className="max-w-7xl mx-auto w-full flex-grow">{props.children}</div>
 
@@ -27,7 +23,7 @@ export default async function DashboardLayout(props: React.PropsWithChildren) {
   );
 }
 
-function Nav(props: UserProps) {
+function Nav() {
   return (
     <div className="navbar bg-base-100 shadow-sm">
       <div className="flex justify-between items-center mx-auto max-w-7xl mx-auto flex justify-between w-full">
@@ -41,19 +37,36 @@ function Nav(props: UserProps) {
             <Link href="/dashboard/forms">My Forms</Link>
           </li>
 
-          <NavDropdown user={props.user} />
+          <NavDropdown />
         </ul>
       </div>
     </div>
   );
 }
 
-function NavDropdown(props: UserProps) {
-  const { user } = props;
-
+function NavDropdown() {
   return (
     <div className="dropdown dropdown-end">
-      <ProfileMenuAvatar user={user} />
+      <div
+        tabIndex={0}
+        role="button"
+        className="btn btn-ghost btn-circle avatar"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          strokeWidth={1.5}
+          stroke="currentColor"
+          className="size-6"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            d="M17.982 18.725A7.488 7.488 0 0 0 12 15.75a7.488 7.488 0 0 0-5.982 2.975m11.963 0a9 9 0 1 0-11.963 0m11.963 0A8.966 8.966 0 0 1 12 21a8.966 8.966 0 0 1-5.982-2.275M15 9.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"
+          />
+        </svg>
+      </div>
 
       <ul
         tabIndex={0}
@@ -72,28 +85,6 @@ function NavDropdown(props: UserProps) {
           <Link href="/auth/logout">Logout</Link>
         </li>
       </ul>
-    </div>
-  );
-}
-
-function ProfileMenuAvatar(props: UserProps) {
-  const { user } = props;
-
-  const placeholderName = `${user.given_name?.charAt(0)}${user.family_name?.charAt(0)}`;
-
-  return (
-    <div tabIndex={0} role="button" className="btn btn-ghost btn-circle avatar">
-      {user.picture ? (
-        <div className="w-8 rounded-full">
-          <img alt={placeholderName} src={user.picture} />
-        </div>
-      ) : (
-        <div className="avatar avatar-placeholder">
-          <div className="bg-neutral text-neutral-content w-8 rounded-full">
-            <span className="text-xs">{placeholderName}</span>
-          </div>
-        </div>
-      )}
     </div>
   );
 }
