@@ -36,4 +36,4 @@ export enum Theme {
   // silk = 'silk',
 }
 
-export const defaultTheme = Theme.light;
+export const defaultTheme = Theme.dark;

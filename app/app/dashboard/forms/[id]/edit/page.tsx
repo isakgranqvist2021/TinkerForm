@@ -1,4 +1,4 @@
-import { defaultTheme, Theme } from 'config/theme';
+import { defaultTheme } from 'config/theme';
 import { MainContainer } from 'containers/main-container';
 import { auth0 } from 'lib/auth0';
 import Link from 'next/link';

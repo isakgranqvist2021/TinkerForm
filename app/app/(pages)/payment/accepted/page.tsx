@@ -11,6 +11,7 @@ import {
 } from 'services/api/subscription';
 import { createSubscriptionSchema } from 'models/subscribe';
 import { auth0 } from 'lib/auth0';
+import { SessionData } from '@auth0/nextjs-auth0/types';
 
 export const metadata = getMetadata({
   title: 'Payment Accepted',
@@ -20,6 +21,7 @@ export const metadata = getMetadata({
 export default async function Page(
   props: PageProps<undefined, { checkoutSessionId: string }>,
 ) {
+  const session = await auth0.getSession();
   const searchParams = await props.searchParams;
 
   const checkoutSessionId = searchParams.checkoutSessionId;
@@ -27,7 +29,10 @@ export default async function Page(
     throw new Error('Invalid checkout session id');
   }
 
-  const isSubscribed = await verifyAndCompletePayment(checkoutSessionId);
+  const isSubscribed = await verifyAndCompletePayment(
+    checkoutSessionId,
+    session,
+  );
   if (!isSubscribed) {
     return <CheckoutFailed checkoutSessionId={checkoutSessionId} />;
   }
@@ -35,7 +40,10 @@ export default async function Page(
   return <CheckoutSuccess />;
 }
 
-async function verifyAndCompletePayment(checkoutSessionId: string) {
+async function verifyAndCompletePayment(
+  checkoutSessionId: string,
+  session: SessionData | null,
+) {
   const checkoutSession =
     await stripe.checkout.sessions.retrieve(checkoutSessionId);
 
@@ -57,7 +65,6 @@ async function verifyAndCompletePayment(checkoutSessionId: string) {
     return false;
   }
 
-  const session = await auth0.getSession();
   if (session) {
     const currentSubscription = await getSubscription(session);
     if (currentSubscription) {
