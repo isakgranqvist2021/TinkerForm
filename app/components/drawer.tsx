@@ -64,11 +64,11 @@ export async function Drawer(props: React.PropsWithChildren) {
 
             <div className="navbar-end gap-4 hidden lg:flex">
               {session ? (
-                <Link href="/dashboard/forms" className="btn btn-primary">
+                <Link href="/dashboard/forms" className="btn btn-primary mr-4">
                   Dashboard
                 </Link>
               ) : (
-                <a href="/auth/login" className="btn btn-primary">
+                <a href="/auth/login" className="btn btn-primary mr-4">
                   Login
                 </a>
               )}
