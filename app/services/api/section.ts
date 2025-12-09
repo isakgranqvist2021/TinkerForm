@@ -17,6 +17,8 @@ export interface SectionDto {
   min: number | null;
   max: number | null;
 
+  acceptedFileTypes: string | null;
+
   options: MultipleChoiceOption[] | null;
 }
 
@@ -30,6 +32,7 @@ export interface CreateSectionDto {
   required: boolean;
   min: number | null;
   max: number | null;
+  acceptedFileTypes: string | null;
   options: MultipleChoiceOption[] | null;
 }
 
@@ -70,6 +73,7 @@ export async function createSections(
           min: null,
           max: null,
           options: null,
+          acceptedFileTypes: null,
         };
 
       case 'range':
@@ -84,6 +88,7 @@ export async function createSections(
           min: section.min,
           max: section.max,
           options: null,
+          acceptedFileTypes: null,
         };
 
       case 'multiple-choice':
@@ -97,6 +102,7 @@ export async function createSections(
           options: section.options,
           min: null,
           max: null,
+          acceptedFileTypes: null,
         };
     }
   });
@@ -161,6 +167,7 @@ export function sectionMapper(section: SectionDto): Section {
         index: section.index,
         required: Boolean(section.required),
         title: section.title,
+        acceptedFileTypes: null,
       };
 
     case 'multiple-choice':

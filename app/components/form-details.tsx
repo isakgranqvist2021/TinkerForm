@@ -16,8 +16,6 @@ export function FormDetails() {
 
       <ImagePreview />
 
-      <FormTheme />
-
       <ControlledInput
         name="title"
         label="Title"
@@ -38,6 +36,8 @@ export function FormDetails() {
         disabled={formState.isSubmitting}
         rich
       />
+
+      <FormTheme />
     </div>
   );
 }
@@ -95,7 +95,7 @@ function ImagePreview() {
         hidden
         type="file"
         multiple={false}
-        accept="pdf, doc, docx, png, jpg, jpeg, webp"
+        accept="image/png, image/jpg, image/jpeg, image/webp"
         onChange={(e) => {
           const file = e.target.files ? e.target.files[0] : null;
 

@@ -55,6 +55,7 @@ export const phoneSectionSchema = baseSectionSchema.extend({
 export type FileSection = z.infer<typeof fileSectionSchema>;
 export const fileSectionSchema = baseSectionSchema.extend({
   type: z.literal('file'),
+  acceptedFileTypes: z.string().nullable(),
 });
 
 export type RangeSection = z.infer<typeof rangeSectionSchema>;
