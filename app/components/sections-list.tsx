@@ -469,6 +469,7 @@ const exampleSections: Section[] = [
     description: 'Please upload your resume/CV.',
     title: 'Resume/CV',
     required: true,
+    acceptedFileTypes: null,
   },
   {
     id: crypto.randomUUID(),
@@ -886,7 +887,6 @@ function getSectionDefaultValues(type: SectionType): Section {
 
     case 'boolean':
     case 'email':
-    case 'file':
     case 'link':
     case 'phone':
       return {
@@ -896,6 +896,17 @@ function getSectionDefaultValues(type: SectionType): Section {
         required: false,
         title: '',
         type,
+      };
+
+    case 'file':
+      return {
+        id: '',
+        index: 0,
+        description: '',
+        required: false,
+        title: '',
+        type,
+        acceptedFileTypes: null,
       };
 
     case 'multiple-choice':

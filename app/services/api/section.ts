@@ -76,6 +76,20 @@ export async function createSections(
           acceptedFileTypes: null,
         };
 
+      case 'file':
+        return {
+          fkFormId: formId,
+          type: section.type,
+          title: section.title,
+          index: section.index,
+          description: section.description,
+          required: section.required,
+          min: null,
+          max: null,
+          options: null,
+          acceptedFileTypes: section.acceptedFileTypes,
+        };
+
       case 'range':
       case 'text':
         return {
