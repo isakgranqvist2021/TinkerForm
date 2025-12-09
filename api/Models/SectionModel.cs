@@ -15,6 +15,9 @@ namespace api.Models
         public int? min { get; set; }
         public int? max { get; set; }
 
+        [JsonPropertyName("acceptedFileTypes")]
+        public string? accepted_file_types { get; set; }
+
         [Column(TypeName = "jsonb")]
         public object? options { get; set; }
     }

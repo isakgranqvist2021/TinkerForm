@@ -79,6 +79,7 @@ namespace api.Services
                 existingSection.options = section.options;
                 existingSection.min = section.min;
                 existingSection.max = section.max;
+                existingSection.accepted_file_types = section.accepted_file_types;
                 existingSection.updated_at = DateTime.UtcNow;
             }
 
