@@ -717,9 +717,11 @@ function ExtraFields(props: ExtraFieldsProps) {
   switch (props.type) {
     case 'boolean':
     case 'email':
-    case 'file':
     case 'link':
     case 'phone':
+      return null;
+
+    case 'file':
       return null;
 
     case 'range':

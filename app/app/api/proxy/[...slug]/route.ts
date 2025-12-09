@@ -22,15 +22,16 @@ async function proxy(
   const targetUrl = `${env.API_URL}/${path}${req.nextUrl.search}`;
 
   try {
-    const session = await auth0.getSession();
+    const { token } = await auth0.getAccessToken({
+      refresh: true,
+    });
 
-    if (session) {
-      req.headers.set(
-        'Authorization',
-        `Bearer ${session.tokenSet.accessToken}`,
-      );
-    }
+    req.headers.set('Authorization', `Bearer ${token}`);
+  } catch (err) {
+    console.log('Failed to refresh accessToken');
+  }
 
+  try {
     const fetchOptions: RequestInit = {
       method: req.method,
       body: req.body,
