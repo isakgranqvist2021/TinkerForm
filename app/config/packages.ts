@@ -20,7 +20,7 @@ export const packages: Record<PackageId, Package> = {
   starter: {
     id: 'starter',
     name: 'Starter',
-    price: 100,
+    price: 0,
     features: [
       {
         name: 'Cancel anytime',

@@ -5,6 +5,8 @@ import { cn, formatCurrency } from 'utils';
 import useMutation from 'swr/mutation';
 import { toast } from 'sonner';
 import getStripe from 'services/stripe';
+import Link from 'next/link';
+import { useUser } from '@auth0/nextjs-auth0';
 
 interface PackageCardsProps extends React.ComponentProps<'div'> {
   activePackageId?: PackageId | null;
@@ -93,21 +95,44 @@ function PricingCard(props: PricingCardProps) {
           })}
         </ul>
         <div className="mt-6">
-          {props.activePackageId === props.pkg.id ? (
-            <CancelSubscriptionButton className="btn btn-neutral btn-block">
-              Cancel Subscription
-            </CancelSubscriptionButton>
-          ) : (
-            <SubscribeButton
-              id={props.pkg.id}
-              className="btn btn-primary btn-block"
-            >
-              Subscribe
-            </SubscribeButton>
-          )}
+          <PricingCardActionButton {...props} />
         </div>
       </div>
     </div>
+  );
+}
+
+function PricingCardActionButton(props: PricingCardProps) {
+  const { user, isLoading } = useUser();
+
+  if (props.pkg.price === 0) {
+    if (user || isLoading) {
+      return (
+        <button className="btn btn-primary btn-block" disabled>
+          Subscribe
+        </button>
+      );
+    }
+
+    return (
+      <Link className="btn btn-primary btn-block" href="/dashboard/forms">
+        Subscribe
+      </Link>
+    );
+  }
+
+  if (props.activePackageId === props.pkg.id) {
+    return (
+      <CancelSubscriptionButton className="btn btn-neutral btn-block">
+        Cancel Subscription
+      </CancelSubscriptionButton>
+    );
+  }
+
+  return (
+    <SubscribeButton id={props.pkg.id} className="btn btn-primary btn-block">
+      Subscribe
+    </SubscribeButton>
   );
 }
 
