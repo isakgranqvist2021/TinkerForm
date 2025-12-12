@@ -40,10 +40,6 @@ function Hero() {
     <div className="hero bg-base-200 pb-4 flex-grow">
       <div className="hero-content flex-col px-6 py-10 md:p-16 lg:p-12 lg:flex-row max-w-7xl gap-12">
         <div>
-          <Link className="badge badge-warning mb-2" href="/dashboard/forms">
-            Try For Free
-          </Link>
-
           <h1 className="text-5xl font-bold max-w-[18ch]">
             Build beautiful forms, fast and easily.
           </h1>
