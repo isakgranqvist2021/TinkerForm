@@ -147,7 +147,7 @@ export function SectionsList() {
           <div className="flex justify-between">
             <div className="flex flex-col">
               <div>
-                <h3 className="text-lg font-bold">2. Sections</h3>
+                <h3 className="card-title">2. Sections</h3>
                 <p>Add sections to your form that the user can fill out.</p>
               </div>
 

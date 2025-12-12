@@ -10,7 +10,7 @@ export function FormDetails() {
   return (
     <div>
       <div className="mb-2">
-        <h3 className="text-lg font-bold">1. Form Details</h3>
+        <div className="card-title">1. Form Details</div>
         <p>Describe your form so users know what to expect.</p>
       </div>
 
@@ -87,7 +87,7 @@ function ImagePreview() {
             />
           </svg>
 
-          <p>Cover image</p>
+          <p className="grow-[unset]">Cover image</p>
         </div>
       )}
 

@@ -30,8 +30,6 @@ interface AnswerFormProps {
 }
 
 export function AnswerForm(props: AnswerFormProps) {
-  const formRef = React.useRef<HTMLDivElement>(null);
-
   return (
     <div data-testid="answer-form">
       {props.form.coverImage && (
@@ -75,19 +73,6 @@ export function AnswerForm(props: AnswerFormProps) {
                   <p>{props.form.location}</p>
                 </div>
               </div>
-
-              {!props.response.completedAt && (
-                <button
-                  onClick={() =>
-                    formRef.current?.scrollIntoView({
-                      behavior: 'smooth',
-                    })
-                  }
-                  className="btn btn-primary"
-                >
-                  Apply Now
-                </button>
-              )}
             </div>
 
             <p
@@ -98,14 +83,12 @@ export function AnswerForm(props: AnswerFormProps) {
 
           <div className="divider"></div>
 
-          <div ref={formRef}>
-            <AnswerFormContent
-              responseId={props.response.id}
-              sections={props.sections}
-              formId={props.form.id}
-              isCompleted={props.response.completedAt !== null}
-            />
-          </div>
+          <AnswerFormContent
+            responseId={props.response.id}
+            sections={props.sections}
+            formId={props.form.id}
+            isCompleted={props.response.completedAt !== null}
+          />
         </div>
       </MainContainer>
     </div>

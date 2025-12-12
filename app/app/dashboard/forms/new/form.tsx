@@ -63,9 +63,17 @@ export function AddNewForm() {
   return (
     <FormProvider {...form}>
       <SectionFormProvider>
-        <FormDetails />
+        <div className="card shadow-sm">
+          <div className="card-body">
+            <FormDetails />
+          </div>
+        </div>
 
-        <SectionsList />
+        <div className="card shadow-sm">
+          <div className="card-body">
+            <SectionsList />
+          </div>
+        </div>
 
         <button
           disabled={form.formState.isSubmitting}
