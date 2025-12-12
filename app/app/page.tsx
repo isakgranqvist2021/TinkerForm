@@ -38,8 +38,12 @@ function Pricing() {
 function Hero() {
   return (
     <div className="hero bg-base-200 pb-4 flex-grow">
-      <div className="hero-content flex-col p-6 md:p-12 lg:p-4 lg:flex-row max-w-7xl gap-12">
+      <div className="hero-content flex-col px-6 py-10 md:p-16 lg:p-12 lg:flex-row max-w-7xl gap-12">
         <div>
+          <Link className="badge badge-warning mb-2" href="/dashboard/forms">
+            Try For Free
+          </Link>
+
           <h1 className="text-5xl font-bold max-w-[18ch]">
             Build beautiful forms, fast and easily.
           </h1>
@@ -47,7 +51,6 @@ function Hero() {
             TinkerForm lets you quickly create, share, and track forms for any
             purpose—all from a simple, user-friendly dashboard.
           </p>
-
           <div className="flex gap-6 flex-wrap">
             <Link href="/dashboard/forms" className="btn btn-primary">
               Get Started
