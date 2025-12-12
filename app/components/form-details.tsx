@@ -44,7 +44,7 @@ export function FormDetails() {
 
 function ImagePreview() {
   const formContext = useFormContext<Form>();
-  const value = useWatch<Form, 'coverImage'>({
+  const coverImage = useWatch<Form, 'coverImage'>({
     name: 'coverImage',
   });
   const imgRef = React.useRef<HTMLImageElement>(null);
@@ -53,14 +53,14 @@ function ImagePreview() {
   React.useEffect(() => {
     if (!imgRef.current) return;
 
-    imgRef.current.src = URL.createObjectURL(value);
-  }, [value, imgRef]);
+    imgRef.current.src = URL.createObjectURL(coverImage);
+  }, [coverImage, imgRef]);
 
   const openFileInput = () => uploadRef.current?.click();
 
   return (
     <React.Fragment>
-      {value.size ? (
+      {coverImage.size ? (
         <img
           className="h-72 w-full object-cover rounded"
           ref={imgRef}
@@ -116,7 +116,7 @@ function ImagePreview() {
           </p>
         )}
 
-        {value.size > 0 && (
+        {coverImage.size > 0 && (
           <button
             onClick={() => formContext.setValue('coverImage', new File([], ''))}
             className="link ml-auto"
