@@ -2,7 +2,6 @@ import React from 'react';
 import { ControlledInput, ControlledTextarea } from './inputs';
 import { useFormContext, useFormState, useWatch } from 'react-hook-form';
 import { Form } from 'models/form';
-import { FormTheme } from './form-theme';
 
 export function FormDetails() {
   const formState = useFormState();
@@ -31,8 +30,6 @@ export function FormDetails() {
         disabled={formState.isSubmitting}
         rich
       />
-
-      <FormTheme />
     </React.Fragment>
   );
 }

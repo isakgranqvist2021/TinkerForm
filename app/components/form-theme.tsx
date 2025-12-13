@@ -14,8 +14,6 @@ export function FormTheme() {
 
   return (
     <fieldset className="fieldset">
-      <legend className="fieldset-legend">Pick a theme for your form</legend>
-
       <div className="flex flex-wrap gap-4">
         {Object.values(Theme).map((theme) => (
           <label key={theme} className="flex gap-2 cursor-pointer items-center">

@@ -1,6 +1,7 @@
 import React from 'react';
 import { FormDetails } from './form-details';
 import { SectionsList } from './sections-list';
+import { FormTheme } from './form-theme';
 
 export function FormSections() {
   return (
@@ -19,7 +20,18 @@ export function FormSections() {
       <div className="card shadow-sm">
         <div className="card-body">
           <div>
-            <h3 className="card-title">2. Sections</h3>
+            <h3 className="card-title">2. Form Theme</h3>
+            <p>Choose a theme for your form to match your brand.</p>
+          </div>
+
+          <FormTheme />
+        </div>
+      </div>
+
+      <div className="card shadow-sm">
+        <div className="card-body">
+          <div>
+            <h3 className="card-title">3. Sections</h3>
             <p>Add sections to your form that the user can fill out.</p>
           </div>
 
