@@ -18,6 +18,11 @@ export interface FormDto {
   coverImage: string;
 
   theme: Theme | null;
+
+  availability: 'always' | 'dates' | 'responses';
+  startDate: string;
+  endDate: string;
+  maxResponses: number;
 }
 
 export interface FormWithAnswersDto {
@@ -168,4 +173,8 @@ export async function getFormWithAnswers(
     console.error(err);
     return null;
   }
+}
+
+export async function getResponseCount(formId: string) {
+  return 0;
 }
