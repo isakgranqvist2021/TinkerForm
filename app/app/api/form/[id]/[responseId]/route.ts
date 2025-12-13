@@ -1,4 +1,3 @@
-import { put } from '@vercel/blob';
 import { badRequest, internalServerError, notFound, ok } from 'app/api/utils';
 import { constructSchema } from 'models/answer-form.server';
 import { SectionType } from 'models/form';
@@ -11,6 +10,7 @@ import {
   sectionMapper,
 } from 'services/api/section';
 import { extractText, getDocumentProxy } from 'unpdf';
+import { uploadFile } from 'utils/utils.server';
 
 export async function POST(
   req: Request,
@@ -98,10 +98,7 @@ async function validateAnswers(
 
         case 'file':
           const fileValue: File = value as File;
-          const { url } = await put(`files/${fileValue.name}`, fileValue, {
-            access: 'public',
-            addRandomSuffix: true,
-          });
+          const url = await uploadFile(fileValue);
           formDataObj[key] = url;
 
           // add support for more file types here like word document

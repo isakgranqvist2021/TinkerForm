@@ -8,9 +8,9 @@ import { useRouter } from 'next/navigation';
 import React from 'react';
 import { formatFormValues } from 'utils';
 import { defaultTheme } from 'config/theme';
-import { FormDetails } from 'components/form-details';
-import { SectionsList, SectionFormProvider } from 'components/sections-list';
+import { SectionFormProvider } from 'components/sections-list';
 import useMutation from 'swr/mutation';
+import { FormSections } from 'components/form-sections';
 
 const defaultValues: Form = {
   coverImage: new File([], ''),
@@ -63,17 +63,7 @@ export function AddNewForm() {
   return (
     <FormProvider {...form}>
       <SectionFormProvider>
-        <div className="card shadow-sm">
-          <div className="card-body">
-            <FormDetails />
-          </div>
-        </div>
-
-        <div className="card shadow-sm">
-          <div className="card-body">
-            <SectionsList />
-          </div>
-        </div>
+        <FormSections />
 
         <button
           disabled={form.formState.isSubmitting}

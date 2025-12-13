@@ -7,9 +7,9 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { formatFormValues, urlToFile } from 'utils';
 import { getDownloadUrl } from '@vercel/blob';
 import React from 'react';
-import { FormDetails } from 'components/form-details';
-import { SectionsList, SectionFormProvider } from 'components/sections-list';
+import { SectionFormProvider } from 'components/sections-list';
 import useMutation from 'swr/mutation';
+import { FormSections } from 'components/form-sections';
 
 interface EditFormProps {
   defaultValues: Form;
@@ -67,17 +67,7 @@ export function EditForm(props: EditFormProps) {
   return (
     <FormProvider {...form}>
       <SectionFormProvider>
-        <div className="card shadow-sm">
-          <div className="card-body">
-            <FormDetails />
-          </div>
-        </div>
-
-        <div className="card shadow-sm">
-          <div className="card-body">
-            <SectionsList />
-          </div>
-        </div>
+        <FormSections />
 
         <button
           disabled={form.formState.isSubmitting}

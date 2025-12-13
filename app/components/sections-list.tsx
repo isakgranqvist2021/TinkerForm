@@ -142,139 +142,128 @@ export function SectionsList() {
     <React.Fragment>
       <SectionFormModal onSubmit={handleSubmit} />
 
-      <div>
-        <div className="mb-4">
-          <div className="flex justify-between">
-            <div className="flex flex-col">
-              <div>
-                <h3 className="card-title">2. Sections</h3>
-                <p>Add sections to your form that the user can fill out.</p>
-              </div>
+      <div className="flex justify-between">
+        <div className="flex flex-wrap gap-2 mt-2 mb-4">
+          {exampleSections.map((exampleSection) => {
+            return (
+              <div
+                key={exampleSection.id}
+                className="tooltip"
+                data-tip={exampleSection.description}
+              >
+                <div
+                  className="badge badge-primary hover:badge-outline cursor-pointer"
+                  onClick={() => {
+                    if (formContext.formState.isSubmitting) return;
 
-              <div className="flex flex-wrap gap-2 mt-2">
-                {exampleSections.map((exampleSection) => {
-                  return (
-                    <div
-                      key={exampleSection.id}
-                      className="tooltip"
-                      data-tip={exampleSection.description}
-                    >
-                      <div
-                        className="badge badge-primary hover:badge-outline cursor-pointer"
-                        onClick={() => {
-                          if (formContext.formState.isSubmitting) return;
-
-                          fieldArray.append({
-                            ...exampleSection,
-                            id: crypto.randomUUID(),
-                            index: fieldArray.fields.length,
-                          });
-                        }}
-                      >
-                        {exampleSection.title}
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
-
-            {sections.length > 0 && (
-              <div className="tooltip" data-tip="Add Section">
-                <button
-                  disabled={formContext.formState.isSubmitting}
-                  className="btn btn-circle btn-accent"
-                  onClick={openAddSectionModalAndSetValues}
+                    fieldArray.append({
+                      ...exampleSection,
+                      id: crypto.randomUUID(),
+                      index: fieldArray.fields.length,
+                    });
+                  }}
                 >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    strokeWidth={1.5}
-                    stroke="currentColor"
-                    className="size-6"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
-                    />
-                  </svg>
-                </button>
+                  {exampleSection.title}
+                </div>
               </div>
-            )}
-          </div>
-
-          {formContext.formState.errors.sections && (
-            <p className="text-sm text-error mt-2">
-              {formContext.formState.errors.sections.message}
-            </p>
-          )}
+            );
+          })}
         </div>
 
-        {sections.length > 0 ? (
-          <div className="flex-grow">
-            <ul className="list bg-base-100 rounded-box shadow-md">
-              <DndContext
-                sensors={sensors}
-                collisionDetection={closestCenter}
-                onDragEnd={handleDragEnd}
+        {sections.length > 0 && (
+          <div className="tooltip" data-tip="Add Section">
+            <button
+              disabled={formContext.formState.isSubmitting}
+              className="btn btn-circle btn-accent"
+              onClick={openAddSectionModalAndSetValues}
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth={1.5}
+                stroke="currentColor"
+                className="size-6"
               >
-                <SortableContext
-                  items={sections}
-                  strategy={verticalListSortingStrategy}
-                >
-                  {sections.map((section, index) => (
-                    <ListItem
-                      key={section.id}
-                      section={section}
-                      index={index}
-                      onDelete={() => {
-                        fieldArray.remove(index);
-                      }}
-                      onDuplicate={() =>
-                        fieldArray.append({
-                          ...section,
-                          title: 'Copy of ' + section.title,
-                          id: crypto.randomUUID(),
-                          index: fieldArray.fields.length,
-                        })
-                      }
-                    />
-                  ))}
-                </SortableContext>
-              </DndContext>
-            </ul>
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+                />
+              </svg>
+            </button>
           </div>
-        ) : (
-          <EmptyState
-            title="No sections added yet"
-            subtitle="Add sections to your form to start collecting information."
-            cta={
-              <button
-                className="btn btn-outline"
-                onClick={openAddSectionModalAndSetValues}
-              >
-                Add Section
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  strokeWidth={1.5}
-                  stroke="currentColor"
-                  className="size-6"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
-                  />
-                </svg>
-              </button>
-            }
-          />
         )}
       </div>
+
+      {sections.length > 0 ? (
+        <div className="flex-grow">
+          <ul className="list bg-base-100 rounded-box shadow-md">
+            <DndContext
+              sensors={sensors}
+              collisionDetection={closestCenter}
+              onDragEnd={handleDragEnd}
+            >
+              <SortableContext
+                items={sections}
+                strategy={verticalListSortingStrategy}
+              >
+                {sections.map((section, index) => (
+                  <ListItem
+                    key={section.id}
+                    section={section}
+                    index={index}
+                    onDelete={() => {
+                      fieldArray.remove(index);
+                    }}
+                    onDuplicate={() =>
+                      fieldArray.append({
+                        ...section,
+                        title: 'Copy of ' + section.title,
+                        id: crypto.randomUUID(),
+                        index: fieldArray.fields.length,
+                      })
+                    }
+                  />
+                ))}
+              </SortableContext>
+            </DndContext>
+          </ul>
+        </div>
+      ) : (
+        <EmptyState
+          title="No sections added yet"
+          subtitle="Add sections to your form to start collecting information."
+          cta={
+            <button
+              className="btn btn-outline"
+              onClick={openAddSectionModalAndSetValues}
+            >
+              Add Section
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth={1.5}
+                stroke="currentColor"
+                className="size-6"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+                />
+              </svg>
+            </button>
+          }
+        />
+      )}
+
+      {formContext.formState.errors.sections && (
+        <p className="text-sm text-error mt-2">
+          {formContext.formState.errors.sections.message}
+        </p>
+      )}
     </React.Fragment>
   );
 }

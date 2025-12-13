@@ -1,9 +1,10 @@
-import { put, del } from '@vercel/blob';
+import { del } from '@vercel/blob';
 import { internalServerError, ok, unauthorized } from 'app/api/utils';
 import { auth0 } from 'lib/auth0';
 import { formSchema } from 'models/form';
 import { getFormById, updateForm, UpdateFormDto } from 'services/api/forms';
 import { parseFormFormData } from 'utils';
+import { uploadFile } from 'utils/utils.server';
 
 export async function PATCH(
   req: Request,
@@ -26,11 +27,7 @@ export async function PATCH(
     const form = formSchema.parse(parseFormFormData(formData));
 
     const updateFormDto: UpdateFormDto = { ...form, coverImage: '' };
-    const { url } = await put(
-      `files/${form.coverImage.name}`,
-      form.coverImage,
-      { access: 'public', addRandomSuffix: true },
-    );
+    const url = await uploadFile(form.coverImage);
     updateFormDto.coverImage = url;
 
     await updateForm(id, updateFormDto, session);

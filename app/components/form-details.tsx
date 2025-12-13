@@ -8,12 +8,7 @@ export function FormDetails() {
   const formState = useFormState();
 
   return (
-    <div>
-      <div className="mb-2">
-        <div className="card-title">1. Form Details</div>
-        <p>Describe your form so users know what to expect.</p>
-      </div>
-
+    <React.Fragment>
       <ImagePreview />
 
       <ControlledInput
@@ -38,7 +33,7 @@ export function FormDetails() {
       />
 
       <FormTheme />
-    </div>
+    </React.Fragment>
   );
 }
 

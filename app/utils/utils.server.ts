@@ -1,3 +1,4 @@
+import { put } from '@vercel/blob';
 import { defaultTheme, Theme } from 'config/theme';
 import { updateThemeSchema } from 'models/theme';
 import { cookies } from 'next/headers';
@@ -34,4 +35,13 @@ export function getIsActive(subscription: Stripe.Subscription | null) {
 
   const hasActiveSubscription = status === 'active' || status === 'trialing';
   return hasActiveSubscription;
+}
+
+export async function uploadFile(file: File) {
+  const { url } = await put(`files/${file.name}`, file, {
+    access: 'public',
+    addRandomSuffix: true,
+  });
+
+  return url;
 }
