@@ -1,8 +1,9 @@
+import { PageTitle } from 'components/page-title';
 import { AnswerForm } from './form';
 import { defaultTheme } from 'config/theme';
 import { redirect } from 'next/navigation';
 import React from 'react';
-import { getFormById } from 'services/api/forms';
+import { getFormById, getResponseCount } from 'services/api/forms';
 import { getResponseById } from 'services/api/response';
 import { getSectionsByFormId, sectionMapper } from 'services/api/section';
 import { PageProps } from 'types/page';
@@ -35,9 +36,60 @@ export default async function Page(
   const sections = await getSectionsByFormId(form.id);
   const mappedSections = sections.map(sectionMapper);
 
+  const theme = form.theme ?? defaultTheme;
+
+  if (form.availability === 'dates') {
+    const now = Date.now();
+    const startDate = new Date(form.startDate).getTime();
+    const endDate = new Date(form.endDate).getTime();
+
+    if (startDate > now) {
+      return (
+        <FormContainer data-theme={theme}>
+          <PageTitle>This form has not started yet</PageTitle>
+          <p>
+            The form will be available from{' '}
+            {new Date(form.startDate).toLocaleString()}
+          </p>
+        </FormContainer>
+      );
+    }
+
+    if (endDate < now) {
+      return (
+        <FormContainer data-theme={theme}>
+          <PageTitle>Form has ended</PageTitle>
+          <p>The form ended on {new Date(form.endDate).toLocaleString()}</p>
+        </FormContainer>
+      );
+    }
+  }
+
+  if (form.availability === 'responses') {
+    const responseCount = await getResponseCount(form.id);
+
+    if (responseCount >= form.maxResponses) {
+      return (
+        <FormContainer data-theme={theme}>
+          <PageTitle>Form has ended</PageTitle>
+          <p>The form has reached its maximum number of responses.</p>
+        </FormContainer>
+      );
+    }
+  }
+
   return (
-    <div data-theme={form.theme ?? defaultTheme} className="min-h-screen">
+    <div data-theme={theme} className="min-h-screen">
       <AnswerForm sections={mappedSections} response={response} form={form} />
     </div>
+  );
+}
+
+function FormContainer(props: React.ComponentProps<'div'>) {
+  return (
+    <div
+      className="min-h-screen flex flex-col items-center justify-center gap-4"
+      {...props}
+    />
   );
 }
