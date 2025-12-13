@@ -189,7 +189,7 @@ function useDropzone(onDrop: (files: FileList) => void) {
       dropzone.removeEventListener('dragleave', handleDragLeave);
       dropzone.removeEventListener('drop', handleDrop);
     };
-  }, [dropzoneRef]);
+  }, [dropzoneRef, onDrop]);
 
   return { dropzoneRef, isDraggingOver };
 }
