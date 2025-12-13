@@ -37,6 +37,10 @@ namespace api.Services
                     created_at = f.created_at,
                     updated_at = f.updated_at,
                     cover_image = f.cover_image,
+                    availability = f.availability,
+                    start_date = f.start_date,
+                    end_date = f.end_date,
+                    max_responses = f.max_responses,
                     theme = f.theme,
                     response_count = _context.response.Count(r => r.fk_form_id == f.id && r.completed_at != null),
                 })
@@ -59,6 +63,10 @@ namespace api.Services
                     updated_at = f.updated_at,
                     cover_image = f.cover_image,
                     theme = f.theme,
+                    availability = f.availability,
+                    start_date = f.start_date,
+                    end_date = f.end_date,
+                    max_responses = f.max_responses,
                     response_count = _context.response.Count(r => r.fk_form_id == f.id && r.completed_at != null),
                 })
                 .FirstOrDefault();
@@ -74,6 +82,10 @@ namespace api.Services
                 location = form.location,
                 cover_image = form.cover_image,
                 theme = form.theme,
+                availability = form.availability,
+                start_date = form.start_date,
+                end_date = form.end_date,
+                max_responses = form.max_responses,
             };
 
             _context.form.Add(newForm);
@@ -92,6 +104,10 @@ namespace api.Services
                 existingForm.cover_image = form.cover_image;
                 existingForm.updated_at = DateTime.UtcNow;
                 existingForm.theme = form.theme;
+                existingForm.availability = form.availability;
+                existingForm.start_date = form.start_date;
+                existingForm.end_date = form.end_date;
+                existingForm.max_responses = form.max_responses;
 
                 _context.SaveChanges();
             }

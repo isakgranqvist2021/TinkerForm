@@ -22,6 +22,21 @@ namespace api.Models
         public string location { get; set; } = string.Empty;
 
         [Required]
+        public string availability { get; set; } = "always";
+
+        [Required]
+        [JsonPropertyName("startDate")]
+        public DateTime start_date { get; set; } = DateTime.UtcNow;
+
+        [Required]
+        [JsonPropertyName("endDate")]
+        public DateTime end_date { get; set; } = DateTime.UtcNow;
+
+        [Required]
+        [JsonPropertyName("maxResponses")]
+        public int max_responses { get; set; } = 0;
+
+        [Required]
         [JsonPropertyName("coverImage")]
         public string cover_image { get; set; } = string.Empty;
 
@@ -47,6 +62,21 @@ namespace api.Models
         [Required]
         [JsonPropertyName("coverImage")]
         public string cover_image { get; set; } = string.Empty;
+
+        [Required]
+        public string availability { get; set; } = "always";
+
+        [Required]
+        [JsonPropertyName("startDate")]
+        public DateTime start_date { get; set; } = DateTime.UtcNow;
+
+        [Required]
+        [JsonPropertyName("endDate")]
+        public DateTime end_date { get; set; } = DateTime.UtcNow;
+
+        [Required]
+        [JsonPropertyName("maxResponses")]
+        public int max_responses { get; set; } = 0;
     }
 
     public class UpdateFormModel
@@ -66,6 +96,21 @@ namespace api.Models
         [Required]
         [JsonPropertyName("coverImage")]
         public string cover_image { get; set; } = string.Empty;
+
+        [Required]
+        public string availability { get; set; } = "always";
+
+        [Required]
+        [JsonPropertyName("startDate")]
+        public DateTime start_date { get; set; } = DateTime.UtcNow;
+
+        [Required]
+        [JsonPropertyName("endDate")]
+        public DateTime end_date { get; set; } = DateTime.UtcNow;
+
+        [Required]
+        [JsonPropertyName("maxResponses")]
+        public int max_responses { get; set; } = 0;
 
         [Required]
         public List<SectionModel> sections { get; set; } = [];
@@ -89,6 +134,21 @@ namespace api.Models
         public string location { get; set; } = string.Empty;
 
         public string description { get; set; } = string.Empty;
+
+        [Required]
+        public string availability { get; set; } = "always";
+
+        [Required]
+        [JsonPropertyName("startDate")]
+        public DateTime start_date { get; set; } = DateTime.UtcNow;
+
+        [Required]
+        [JsonPropertyName("endDate")]
+        public DateTime end_date { get; set; } = DateTime.UtcNow;
+
+        [Required]
+        [JsonPropertyName("maxResponses")]
+        public int max_responses { get; set; } = 0;
 
         public List<ResponseWithAnswersModel> responses { get; set; } = [];
     }
