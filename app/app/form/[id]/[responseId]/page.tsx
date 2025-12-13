@@ -33,9 +33,6 @@ export default async function Page(
     return redirect('/404');
   }
 
-  const sections = await getSectionsByFormId(form.id);
-  const mappedSections = sections.map(sectionMapper);
-
   const theme = form.theme ?? defaultTheme;
 
   if (form.availability === 'dates') {
@@ -77,6 +74,9 @@ export default async function Page(
       );
     }
   }
+
+  const sections = await getSectionsByFormId(form.id);
+  const mappedSections = sections.map(sectionMapper);
 
   return (
     <div data-theme={theme} className="min-h-screen">
