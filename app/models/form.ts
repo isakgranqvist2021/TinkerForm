@@ -99,11 +99,21 @@ export const sectionSchema = z.discriminatedUnion('type', [
 ]);
 export type Section = z.infer<typeof sectionSchema>;
 
+export const COVER_IMAGE_FILE_TYPES = [
+  'image/png',
+  'image/jpg',
+  'image/jpeg',
+  'image/webp',
+];
+export const COVER_IMAGE_MAX_SIZE = 5000000; // 5MB
 export const fileSchema = z
   .instanceof(File, { message: 'File is required' })
-  .refine((file) => file && file.size > 0 && file.size <= 5000000, {
-    message: 'File must not be empty and must be ≤ 5MB',
-  })
+  .refine(
+    (file) => file && file.size > 0 && file.size <= COVER_IMAGE_MAX_SIZE,
+    {
+      message: 'File must not be empty and must be ≤ 5MB',
+    },
+  )
   .refine((value) => value instanceof File || typeof value === 'string', {
     message: 'File is required',
   });
