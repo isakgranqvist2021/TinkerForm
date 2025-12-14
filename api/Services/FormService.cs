@@ -83,8 +83,8 @@ namespace api.Services
                 cover_image = form.cover_image,
                 theme = form.theme,
                 availability = form.availability,
-                start_date = form.start_date,
-                end_date = form.end_date,
+                start_date = DateTime.SpecifyKind(form.start_date, DateTimeKind.Utc),
+                end_date = DateTime.SpecifyKind(form.end_date, DateTimeKind.Utc),
                 max_responses = form.max_responses,
             };
 
@@ -105,8 +105,8 @@ namespace api.Services
                 existingForm.updated_at = DateTime.UtcNow;
                 existingForm.theme = form.theme;
                 existingForm.availability = form.availability;
-                existingForm.start_date = form.start_date;
-                existingForm.end_date = form.end_date;
+                existingForm.start_date = DateTime.SpecifyKind(form.start_date, DateTimeKind.Utc);
+                existingForm.end_date = DateTime.SpecifyKind(form.end_date, DateTimeKind.Utc);
                 existingForm.max_responses = form.max_responses;
 
                 _context.SaveChanges();
