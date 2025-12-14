@@ -98,10 +98,9 @@ async function validateAnswers(
 
         case 'file':
           const fileValue: File = value as File;
-          const url = await uploadFile(fileValue);
-          formDataObj[key] = url;
+          formDataObj[key] = await uploadFile(fileValue);
 
-          // add support for more file types here like word document
+          // TODO: add support for more file types here like word document
           switch (fileValue.type) {
             case 'application/pdf':
               metadata[key] = await extractTextFromPdf(fileValue);

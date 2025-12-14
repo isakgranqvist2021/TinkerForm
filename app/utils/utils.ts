@@ -126,6 +126,7 @@ export function formatExportFormData(responses: AnswersByFormDto): string {
 
 export function formatFormValues(form: Form) {
   const formData = new FormData();
+
   for (const key in form) {
     const value = form[key as keyof typeof form];
     if (value instanceof File || typeof value === 'string') {
@@ -134,22 +135,47 @@ export function formatFormValues(form: Form) {
       formData.append(key, JSON.stringify(value));
     }
   }
+
   return formData;
 }
 
 export function parseFormFormData(formData: FormData) {
   const values: Record<string, any> = {};
+
   formData.forEach((value, key) => {
+    const typedKey = key as keyof Form;
+
     if (value instanceof File) {
       values[key] = value;
-    } else {
-      try {
-        values[key] = JSON.parse(value);
-      } catch {
+      return;
+    }
+
+    switch (typedKey) {
+      case 'availability':
+      case 'theme':
+      case 'title':
+      case 'description':
+      case 'endDate':
+      case 'startDate':
+      case 'location':
         values[key] = value;
-      }
+        break;
+
+      case 'sections':
+        values[key] = JSON.parse(value);
+        break;
+
+      case 'maxResponses':
+        values[key] = Number(value);
+        break;
+
+      default:
+        console.warn(`Unknown form key: ${typedKey}`);
+        break;
     }
   });
+
+  console.log(values);
 
   return values;
 }

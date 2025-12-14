@@ -16,8 +16,8 @@ export async function POST(req: Request) {
     const formData = await req.formData();
     const form = formSchema.parse(parseFormFormData(formData));
     const createFormDto: CreateFormDto = { ...form, coverImage: '' };
-    const url = await uploadFile(form.coverImage);
-    createFormDto.coverImage = url;
+
+    createFormDto.coverImage = await uploadFile(form.coverImage);
 
     const res = await createForm(createFormDto, session);
     if (!res) {

@@ -27,8 +27,8 @@ export async function PATCH(
     const form = formSchema.parse(parseFormFormData(formData));
 
     const updateFormDto: UpdateFormDto = { ...form, coverImage: '' };
-    const url = await uploadFile(form.coverImage);
-    updateFormDto.coverImage = url;
+
+    updateFormDto.coverImage = await uploadFile(form.coverImage);
 
     await updateForm(id, updateFormDto, session);
 
