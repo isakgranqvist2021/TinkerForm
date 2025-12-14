@@ -83,13 +83,14 @@ namespace api.Services
                 cover_image = form.cover_image,
                 theme = form.theme,
                 availability = form.availability,
-                start_date = DateTime.SpecifyKind(form.start_date, DateTimeKind.Utc),
-                end_date = DateTime.SpecifyKind(form.end_date, DateTimeKind.Utc),
                 max_responses = form.max_responses,
+                start_date = form.start_date.ToUniversalTime(),
+                end_date = form.end_date.ToUniversalTime(),
             };
 
             _context.form.Add(newForm);
             _context.SaveChanges();
+
             return newForm;
         }
 
@@ -105,9 +106,9 @@ namespace api.Services
                 existingForm.updated_at = DateTime.UtcNow;
                 existingForm.theme = form.theme;
                 existingForm.availability = form.availability;
-                existingForm.start_date = DateTime.SpecifyKind(form.start_date, DateTimeKind.Utc);
-                existingForm.end_date = DateTime.SpecifyKind(form.end_date, DateTimeKind.Utc);
                 existingForm.max_responses = form.max_responses;
+                existingForm.start_date = form.start_date.ToUniversalTime();
+                existingForm.end_date = form.end_date.ToUniversalTime();
 
                 _context.SaveChanges();
             }
