@@ -6,7 +6,7 @@ import { toast } from 'sonner';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useRouter } from 'next/navigation';
 import React from 'react';
-import { formatFormValues } from 'utils';
+import { formatDateInput, formatFormValues } from 'utils';
 import { defaultTheme } from 'config/theme';
 import { SectionFormProvider } from 'components/sections-list';
 import useMutation from 'swr/mutation';
@@ -19,6 +19,10 @@ const defaultValues: Form = {
   location: '',
   sections: [],
   theme: defaultTheme,
+  startDate: formatDateInput(new Date()),
+  endDate: formatDateInput(new Date()),
+  availability: 'always',
+  maxResponses: 0,
 };
 
 export function AddNewForm() {

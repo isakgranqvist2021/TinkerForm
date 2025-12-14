@@ -119,6 +119,7 @@ export const fileSchema = z
   });
 
 export type Form = z.infer<typeof formSchema>;
+export type FormAvailability = Form['availability'];
 export const formSchema = z.object({
   title: z.string().min(1, 'Title is required').max(255, 'Title is too long'),
   description: z
@@ -132,4 +133,21 @@ export const formSchema = z.object({
     .max(500, 'Location is too long'),
   coverImage: fileSchema,
   theme: themeSchema,
+  availability: z.union([
+    z.literal('always'),
+    z.literal('dates'),
+    z.literal('responses'),
+  ]),
+  maxResponses: z.number().max(1000000),
+  startDate: z.string().refine(refineDate, {
+    message: 'Invalid start date',
+  }),
+  endDate: z.string().refine(refineDate, {
+    message: 'Invalid end date',
+  }),
 });
+
+function refineDate(date: string) {
+  const timestamp = new Date(date).getTime();
+  return !isNaN(timestamp);
+}

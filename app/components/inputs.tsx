@@ -13,7 +13,7 @@ interface ControlledComponentProps {
 export function ControlledInput(
   props: ControlledComponentProps & React.ComponentProps<'input'>,
 ) {
-  const { name, label, ...rest } = props;
+  const { name, label, className, ...rest } = props;
 
   const controller = useController({ name });
 

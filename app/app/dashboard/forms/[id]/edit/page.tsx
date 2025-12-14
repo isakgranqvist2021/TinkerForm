@@ -7,7 +7,7 @@ import React from 'react';
 import { getFormById } from 'services/api/forms';
 import { getSectionsByFormId, sectionMapper } from 'services/api/section';
 import { PageProps } from 'types/page';
-import { getMetadata } from 'utils';
+import { formatDateInput, getMetadata } from 'utils';
 import { EditForm } from './form';
 
 export const metadata = getMetadata({
@@ -58,6 +58,10 @@ export default async function Page(props: PageProps<{ id: string }>) {
           location: form.location,
           coverImage: new File([], ''),
           theme: form.theme ?? defaultTheme,
+          availability: form.availability,
+          maxResponses: form.maxResponses,
+          startDate: formatDateInput(form.startDate),
+          endDate: formatDateInput(form.endDate),
           sections: mappedSections
             .map((section) => {
               if (section.type === 'multiple-choice') {

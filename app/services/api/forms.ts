@@ -1,5 +1,5 @@
 import { env } from 'config';
-import { Form } from 'models/form';
+import { Form, FormAvailability } from 'models/form';
 import { SectionDto } from './section';
 import { AnswerDto } from './answer';
 import { Theme } from 'config/theme';
@@ -19,7 +19,7 @@ export interface FormDto {
 
   theme: Theme | null;
 
-  availability: 'always' | 'dates' | 'responses';
+  availability: FormAvailability;
   startDate: string;
   endDate: string;
   maxResponses: number;

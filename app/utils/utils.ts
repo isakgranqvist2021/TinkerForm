@@ -17,6 +17,10 @@ export function formatDate(date: Dayjs.ConfigType) {
   return Dayjs(date).format('MMM DD YYYY HH:mm');
 }
 
+export function formatDateInput(date: Dayjs.ConfigType) {
+  return Dayjs(date).format('YYYY-MM-DDTHH:mm');
+}
+
 export function calculateDuration(
   createdAt: dayjs.ConfigType,
   completedAt: dayjs.ConfigType,
