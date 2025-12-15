@@ -119,6 +119,14 @@ namespace api.Controllers
             return Ok(stats);
         }
 
+        [HttpGet("{id}/response-count")]
+        public ActionResult<int> GetResponseCount(Guid id)
+        {
+            var response_count = _modelService.formService.GetResponseCount(id);
+            return Ok(response_count);
+        }
+
+
         [HttpGet("{id}/answers")]
         [Authorize]
         public ActionResult GetAnswersByFormId(Guid id)

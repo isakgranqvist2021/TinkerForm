@@ -175,6 +175,15 @@ export async function getFormWithAnswers(
   }
 }
 
-export async function getResponseCount(formId: string) {
-  return 0;
+export async function getResponseCount(formId: string): Promise<number> {
+  try {
+    const res = await fetch(`${env.API_URL}/form/${formId}/response-count`);
+
+    const data = await res.json();
+
+    return data;
+  } catch (err) {
+    console.error(err);
+    return 0;
+  }
 }

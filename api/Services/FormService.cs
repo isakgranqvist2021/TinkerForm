@@ -26,23 +26,26 @@ namespace api.Services
         {
             return
                 _context.form
-                .Where(f => f.email == email.ToString())
-                .Select(f => new FormModel
+                .Where(form => form.email == email.ToString())
+                .Select(form => new FormModel
                 {
-                    id = f.id,
-                    email = f.email,
-                    title = f.title,
-                    description = f.description,
-                    location = f.location,
-                    created_at = f.created_at,
-                    updated_at = f.updated_at,
-                    cover_image = f.cover_image,
-                    availability = f.availability,
-                    start_date = f.start_date,
-                    end_date = f.end_date,
-                    max_responses = f.max_responses,
-                    theme = f.theme,
-                    response_count = _context.response.Count(r => r.fk_form_id == f.id && r.completed_at != null),
+                    id = form.id,
+                    email = form.email,
+                    title = form.title,
+                    description = form.description,
+                    location = form.location,
+                    created_at = form.created_at,
+                    updated_at = form.updated_at,
+                    paused_at = form.paused_at,
+                    cover_image = form.cover_image,
+                    availability = form.availability,
+                    start_date = form.start_date,
+                    end_date = form.end_date,
+                    max_responses = form.max_responses,
+                    theme = form.theme,
+                    response_count = _context.response.Count(
+                        response => response.fk_form_id == form.id && response.completed_at != null
+                    ),
                 })
                 .ToList();
         }
@@ -51,23 +54,26 @@ namespace api.Services
         {
             return
                 _context.form
-                .Where(f => f.id == id)
-                .Select(f => new FormModel
+                .Where(form => form.id == id)
+                .Select(form => new FormModel
                 {
-                    id = f.id,
-                    email = f.email,
-                    title = f.title,
-                    description = f.description,
-                    location = f.location,
-                    created_at = f.created_at,
-                    updated_at = f.updated_at,
-                    cover_image = f.cover_image,
-                    theme = f.theme,
-                    availability = f.availability,
-                    start_date = f.start_date,
-                    end_date = f.end_date,
-                    max_responses = f.max_responses,
-                    response_count = _context.response.Count(r => r.fk_form_id == f.id && r.completed_at != null),
+                    id = form.id,
+                    email = form.email,
+                    title = form.title,
+                    description = form.description,
+                    location = form.location,
+                    created_at = form.created_at,
+                    updated_at = form.updated_at,
+                    cover_image = form.cover_image,
+                    theme = form.theme,
+                    paused_at = form.paused_at,
+                    availability = form.availability,
+                    start_date = form.start_date,
+                    end_date = form.end_date,
+                    max_responses = form.max_responses,
+                    response_count = _context.response.Count(
+                        response => response.fk_form_id == form.id && response.completed_at != null
+                    ),
                 })
                 .FirstOrDefault();
         }
@@ -82,6 +88,7 @@ namespace api.Services
                 location = form.location,
                 cover_image = form.cover_image,
                 theme = form.theme,
+                paused_at = null,
                 availability = form.availability,
                 max_responses = form.max_responses,
                 start_date = form.start_date.ToUniversalTime(),
@@ -219,6 +226,13 @@ namespace api.Services
             };
 
             return formWithAnswers;
+        }
+
+        public int GetResponseCount(Guid formId)
+        {
+            return _context.response.Where(
+                response => response.completed_at != null && response.fk_form_id == formId
+            ).Count();
         }
     }
 }

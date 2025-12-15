@@ -24,6 +24,9 @@ namespace api.Models
         [Required]
         public string availability { get; set; } = "always";
 
+        [JsonPropertyName("pausedAt")]
+        public DateTime? paused_at { get; set; } = null;
+
         [Required]
         [JsonPropertyName("startDate")]
         public DateTime start_date { get; set; } = DateTime.UtcNow;
