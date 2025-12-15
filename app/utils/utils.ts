@@ -175,8 +175,6 @@ export function parseFormFormData(formData: FormData) {
     }
   });
 
-  console.log(values);
-
   return values;
 }
 
