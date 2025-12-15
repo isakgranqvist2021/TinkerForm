@@ -17,6 +17,8 @@ export interface FormDto {
   location: string;
   coverImage: string;
 
+  pausedAt: string | null;
+
   theme: Theme | null;
 
   availability: FormAvailability;
