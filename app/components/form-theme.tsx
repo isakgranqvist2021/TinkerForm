@@ -24,7 +24,10 @@ export function FormTheme() {
               className="radio radio-sm"
               checked={value === theme}
               onClick={() => {
-                formContext.setValue('theme', theme);
+                formContext.setValue('theme', theme, {
+                  shouldDirty: true,
+                  shouldValidate: formContext.formState.isSubmitted,
+                });
                 changeTheme(theme);
               }}
             />
