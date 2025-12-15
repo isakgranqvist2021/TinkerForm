@@ -136,7 +136,12 @@ export function UploadCoverImage() {
 
         {coverImage.size > 0 && (
           <button
-            onClick={() => formContext.setValue('coverImage', new File([], ''))}
+            onClick={() =>
+              formContext.setValue('coverImage', new File([], ''), {
+                shouldDirty: true,
+                shouldValidate: formContext.formState.isSubmitted,
+              })
+            }
             className="link ml-auto"
           >
             Remove image
