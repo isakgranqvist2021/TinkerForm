@@ -15,13 +15,19 @@ interface FormLinkProps {
   viewFormHref: string;
 }
 
-interface FormActionsProps extends FormIdProps, FormLinkProps {}
+interface PauseFormProps extends FormIdProps {
+  pausedAt: string | null;
+}
+
+interface FormActionsProps extends FormIdProps, FormLinkProps, PauseFormProps {}
 
 export function FormActions(props: FormActionsProps) {
   return (
     <React.Fragment>
       <div className="flex gap-4 hidden md:flex">
         <ViewFormButton viewFormHref={props.viewFormHref} />
+
+        <PauseFormButton formId={props.formId} pausedAt={props.pausedAt} />
 
         <CopyFormLink viewFormHref={props.viewFormHref} />
 
@@ -80,6 +86,7 @@ export function DeleteFormModal(props: FormIdProps) {
 function FormActionsMenu(props: FormActionsProps) {
   const exportData = useExportData({ formId: props.formId });
   const copyToClipboard = useCopyFormLink({ viewFormHref: props.viewFormHref });
+  const pauseForm = usePauseForm({ formId: props.formId });
 
   return (
     <React.Fragment>
@@ -105,6 +112,17 @@ function FormActionsMenu(props: FormActionsProps) {
       >
         <li>
           <a href={props.viewFormHref}>View form</a>
+        </li>
+        <li>
+          <div className="flex justify-between items-center">
+            <a onClick={pauseForm.pauseForm}>
+              {props.pausedAt ? 'Resume form' : 'Pause form'}
+            </a>
+
+            {pauseForm.isLoading && (
+              <span className="loading loading-spinner loading-xs"></span>
+            )}
+          </div>
         </li>
         <li>
           <a onClick={copyToClipboard}>Copy form link</a>
@@ -344,6 +362,102 @@ function EditFormButton(props: FormIdProps) {
       </Link>
     </div>
   );
+}
+
+function PauseFormButton(props: PauseFormProps) {
+  const { pauseForm, isLoading } = usePauseForm(props);
+
+  if (props.pausedAt) {
+    return (
+      <div className="tooltip" data-tip="Resume">
+        <button
+          disabled={isLoading}
+          className="btn btn-circle"
+          onClick={pauseForm}
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            strokeWidth={1.5}
+            stroke="currentColor"
+            className="size-6"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M5.25 5.653c0-.856.917-1.398 1.667-.986l11.54 6.347a1.125 1.125 0 0 1 0 1.972l-11.54 6.347a1.125 1.125 0 0 1-1.667-.986V5.653Z"
+            />
+          </svg>
+        </button>
+      </div>
+    );
+  }
+
+  return (
+    <div className="tooltip" data-tip="Pause">
+      <button
+        disabled={isLoading}
+        className="btn btn-circle"
+        onClick={pauseForm}
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          strokeWidth={1.5}
+          stroke="currentColor"
+          className="size-6"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            d="M15.75 5.25v13.5m-7.5-13.5v13.5"
+          />
+        </svg>
+      </button>
+    </div>
+  );
+}
+
+function usePauseForm(props: FormIdProps) {
+  const { mutate } = useSWRConfig();
+  const router = useRouter();
+
+  const mutation = useMutation(
+    `/api/proxy/form/${props.formId}/pause`,
+    async (url): Promise<string> => {
+      const res = await fetch(url, { method: 'PATCH' });
+
+      if (!res.ok) {
+        throw new Error('Could not pause form');
+      }
+
+      const data = await res.text();
+
+      return data;
+    },
+    {
+      onError: () => {
+        toast.error('Error pausing form');
+      },
+      onSuccess: (pausedAt) => {
+        mutate('/api/proxy/form');
+        router.refresh();
+
+        if (pausedAt) {
+          toast.success('Form paused successfully');
+        } else {
+          toast.success('Form resumed successfully');
+        }
+      },
+    },
+  );
+
+  return {
+    isLoading: mutation.isMutating,
+    pauseForm: () => mutation.trigger(),
+  };
 }
 
 const modalName = 'delete-form-modal';

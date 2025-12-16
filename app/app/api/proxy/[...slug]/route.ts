@@ -5,6 +5,7 @@ import { NextRequest } from 'next/server';
 export const GET = proxy;
 export const DELETE = proxy;
 export const POST = proxy;
+export const PATCH = proxy;
 
 /**
  * Handles incoming requests to the proxy endpoint and forwards them to the .NET backend.

@@ -34,6 +34,13 @@ test('Something', () => {
 
           responseCount: 10,
           theme: Theme.autumn,
+
+          pausedAt: null,
+
+          availability: 'always',
+          startDate: new Date().toISOString(),
+          endDate: new Date().toISOString(),
+          maxResponses: 100,
         }}
         sections={[]}
       />,

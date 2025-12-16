@@ -140,6 +140,7 @@ namespace api.Controllers
         }
 
         [HttpPatch("{id}/pause")]
+        [Authorize]
         public ActionResult ToggleIsPaused(Guid id)
         {
             var email = HttpContext.Items["Email"]?.ToString();

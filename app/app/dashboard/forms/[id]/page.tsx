@@ -74,6 +74,7 @@ export default async function Page(props: PageProps<{ id: string }>) {
           <FormActions
             viewFormHref={`${process.env.APP_BASE_URL}/form/${form.id}`}
             formId={form.id}
+            pausedAt={form.pausedAt}
           />
         </div>
 

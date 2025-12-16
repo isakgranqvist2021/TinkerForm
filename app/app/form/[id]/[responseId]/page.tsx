@@ -35,6 +35,15 @@ export default async function Page(
 
   const theme = form.theme ?? defaultTheme;
 
+  if (form.pausedAt) {
+    return (
+      <FormContainer data-theme={theme}>
+        <PageTitle>Form is paused</PageTitle>
+        <p>The form is paused.</p>
+      </FormContainer>
+    );
+  }
+
   if (form.availability === 'dates') {
     const now = Date.now();
     const startDate = new Date(form.startDate).getTime();
