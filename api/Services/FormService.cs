@@ -234,6 +234,28 @@ namespace api.Services
                 response => response.completed_at != null && response.fk_form_id == formId
             ).Count();
         }
+
+        public DateTime? ToggleIsPaused(Guid formId, string email)
+        {
+            var form = _context.form.FirstOrDefault(f => f.id == formId && f.email == email);
+            if (form == null)
+            {
+                throw new UnauthorizedAccessException("You do not have permission to modify this form.");
+            }
+
+            if (form.paused_at == null)
+            {
+                form.paused_at = DateTime.UtcNow;
+            }
+            else
+            {
+                form.paused_at = null;
+            }
+
+            _context.SaveChanges();
+
+            return form.paused_at;
+        }
     }
 }
 

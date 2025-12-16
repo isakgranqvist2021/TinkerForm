@@ -126,7 +126,6 @@ namespace api.Controllers
             return Ok(response_count);
         }
 
-
         [HttpGet("{id}/answers")]
         [Authorize]
         public ActionResult GetAnswersByFormId(Guid id)
@@ -138,6 +137,21 @@ namespace api.Controllers
             }
 
             return Ok(answers);
+        }
+
+        [HttpPatch("{id}/pause")]
+        public ActionResult ToggleIsPaused(Guid id)
+        {
+            var email = HttpContext.Items["Email"]?.ToString();
+            if (email == null)
+            {
+                _logger.LogWarning("Unauthorized access attempt.");
+                return Unauthorized();
+            }
+
+            var isPaused = _modelService.formService.ToggleIsPaused(id, email);
+
+            return Ok(isPaused);
         }
 
         [HttpGet("{id}/with-answers")]
