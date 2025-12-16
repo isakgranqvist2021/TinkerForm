@@ -3,7 +3,11 @@
 import { EmptyState } from 'components/empty-state';
 import Link from 'next/link';
 import { type FormDto } from 'services/api/forms';
-import { DeleteFormIconButton, DeleteFormModal } from './[id]/actions';
+import {
+  DeleteFormIconButton,
+  DeleteFormModal,
+  PauseFormButton,
+} from './[id]/actions';
 import useSWR from 'swr';
 import React from 'react';
 
@@ -123,6 +127,8 @@ function renderFormListItem(form: FormDto) {
       </Link>
 
       <div className="flex p-4">
+        <PauseFormButton formId={form.id} pausedAt={form.pausedAt} />
+
         <div className="tooltip" data-tip="Edit">
           <Link
             className="btn btn-square btn-ghost"
@@ -144,6 +150,7 @@ function renderFormListItem(form: FormDto) {
             </svg>
           </Link>
         </div>
+
         <DeleteFormIconButton formId={form.id} />
         <DeleteFormModal formId={form.id} />
       </div>

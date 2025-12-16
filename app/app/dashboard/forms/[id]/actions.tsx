@@ -27,7 +27,11 @@ export function FormActions(props: FormActionsProps) {
       <div className="flex gap-4 hidden md:flex">
         <ViewFormButton viewFormHref={props.viewFormHref} />
 
-        <PauseFormButton formId={props.formId} pausedAt={props.pausedAt} />
+        <PauseFormButton
+          className="btn btn-circle"
+          formId={props.formId}
+          pausedAt={props.pausedAt}
+        />
 
         <CopyFormLink viewFormHref={props.viewFormHref} />
 
@@ -364,31 +368,42 @@ function EditFormButton(props: FormIdProps) {
   );
 }
 
-function PauseFormButton(props: PauseFormProps) {
-  const { pauseForm, isLoading } = usePauseForm(props);
+interface PauseFormButtonProps
+  extends PauseFormProps,
+    React.ComponentProps<'button'> {}
 
-  if (props.pausedAt) {
+export function PauseFormButton(props: PauseFormButtonProps) {
+  const { pausedAt, formId, ...rest } = props;
+
+  const { pauseForm, isLoading } = usePauseForm({ formId });
+
+  if (pausedAt) {
     return (
       <div className="tooltip" data-tip="Resume">
         <button
           disabled={isLoading}
-          className="btn btn-circle"
+          className="btn btn-square btn-ghost"
           onClick={pauseForm}
+          {...rest}
         >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            strokeWidth={1.5}
-            stroke="currentColor"
-            className="size-6"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M5.25 5.653c0-.856.917-1.398 1.667-.986l11.54 6.347a1.125 1.125 0 0 1 0 1.972l-11.54 6.347a1.125 1.125 0 0 1-1.667-.986V5.653Z"
-            />
-          </svg>
+          {isLoading ? (
+            <span className="loading loading-dots loading-sm"></span>
+          ) : (
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              strokeWidth={1.5}
+              stroke="currentColor"
+              className="size-6"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M5.25 5.653c0-.856.917-1.398 1.667-.986l11.54 6.347a1.125 1.125 0 0 1 0 1.972l-11.54 6.347a1.125 1.125 0 0 1-1.667-.986V5.653Z"
+              />
+            </svg>
+          )}
         </button>
       </div>
     );
@@ -398,8 +413,9 @@ function PauseFormButton(props: PauseFormProps) {
     <div className="tooltip" data-tip="Pause">
       <button
         disabled={isLoading}
-        className="btn btn-circle"
+        className="btn btn-square btn-ghost"
         onClick={pauseForm}
+        {...rest}
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
