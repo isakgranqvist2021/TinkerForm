@@ -7,6 +7,7 @@ import { toast } from 'sonner';
 import getStripe from 'services/stripe';
 import Link from 'next/link';
 import { useUser } from '@auth0/nextjs-auth0';
+import { CheckIcon } from '@heroicons/react/24/outline';
 
 interface PackageCardsProps extends React.ComponentProps<'div'> {
   activePackageId?: PackageId | null;
@@ -54,20 +55,7 @@ function PricingCard(props: PricingCardProps) {
             if (feature.available) {
               return (
                 <li key={index}>
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="size-4 me-2 inline-block text-success"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M5 13l4 4L19 7"
-                    />
-                  </svg>
+                  <CheckIcon className="size-4 me-2 inline-block text-success" />
                   <span>{feature.name}</span>
                 </li>
               );
@@ -75,20 +63,7 @@ function PricingCard(props: PricingCardProps) {
 
             return (
               <li className="opacity-50" key={index}>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="size-4 me-2 inline-block text-base-content/50"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M5 13l4 4L19 7"
-                  />
-                </svg>
+                <CheckIcon className="size-4 me-2 inline-block text-base-content/50" />
                 <span className="line-through">{feature.name}</span>
               </li>
             );

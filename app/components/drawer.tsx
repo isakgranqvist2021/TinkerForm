@@ -3,6 +3,8 @@ import React from 'react';
 import { auth0 } from 'lib/auth0';
 import { Footer } from './footer';
 import { PickThemeMenu } from './pick-theme-menu-item';
+import { Bars3Icon } from '@heroicons/react/24/outline';
+import { XCircleIcon } from '@heroicons/react/24/solid';
 
 const id = 'main-drawer';
 
@@ -37,20 +39,7 @@ export async function Drawer(props: React.PropsWithChildren) {
                 role="button"
                 aria-label="Open drawer"
               >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  strokeWidth={1.5}
-                  stroke="currentColor"
-                  className="size-6"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"
-                  />
-                </svg>
+                <Bars3Icon className="size-6" />
               </label>
 
               <Link className="btn btn-ghost text-xl" href="/">
@@ -109,18 +98,7 @@ export async function Drawer(props: React.PropsWithChildren) {
             className="btn btn-circle absolute bottom-4 right-4"
             aria-label="Close drawer"
           >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 24 24"
-              fill="currentColor"
-              className="size-6"
-            >
-              <path
-                fillRule="evenodd"
-                d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25Zm-1.72 6.97a.75.75 0 1 0-1.06 1.06L10.94 12l-1.72 1.72a.75.75 0 1 0 1.06 1.06L12 13.06l1.72 1.72a.75.75 0 1 0 1.06-1.06L13.06 12l1.72-1.72a.75.75 0 1 0-1.06-1.06L12 10.94l-1.72-1.72Z"
-                clipRule="evenodd"
-              />
-            </svg>
+            <XCircleIcon className="size-6" />
           </label>
         </ul>
       </div>
