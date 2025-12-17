@@ -27,7 +27,7 @@ export const packages: Record<PackageId, Package> = {
         available: true,
       },
       {
-        name: 'Up to 100 responses per month',
+        name: 'Unlimited responses',
         available: true,
       },
       {
@@ -55,11 +55,7 @@ export const packages: Record<PackageId, Package> = {
         available: true,
       },
       {
-        name: 'Up to 10,000 responses per month',
-        available: true,
-      },
-      {
-        name: 'Export to CSV',
+        name: 'Unlimited responses',
         available: true,
       },
       {
@@ -69,6 +65,10 @@ export const packages: Record<PackageId, Package> = {
       {
         name: 'Score responses with AI',
         available: true,
+      },
+      {
+        name: 'Export to CSV',
+        available: false,
       },
     ],
   },
@@ -86,15 +86,15 @@ export const packages: Record<PackageId, Package> = {
         available: true,
       },
       {
-        name: 'Export to CSV',
-        available: true,
-      },
-      {
         name: 'Choose form theme',
         available: true,
       },
       {
         name: 'Score responses with AI',
+        available: true,
+      },
+      {
+        name: 'Export to CSV',
         available: true,
       },
     ],

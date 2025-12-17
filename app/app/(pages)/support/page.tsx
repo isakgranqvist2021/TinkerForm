@@ -12,7 +12,7 @@ export default function Page() {
   return (
     <Drawer>
       <Container>
-        <PageTitle className="mb-4">Support &amp; FAQ</PageTitle>
+        <PageTitle className="mt-4 mb-6">Support &amp; FAQ</PageTitle>
 
         <div className="mb-8">
           <div className="collapse collapse-arrow bg-base-200 mb-2">

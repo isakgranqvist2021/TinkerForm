@@ -65,33 +65,6 @@ export default function Page() {
             </div>
           </div>
         </div>
-        <div className="collapse collapse-arrow bg-base-200 mb-4">
-          <input type="checkbox" />
-          <div className="collapse-title text-xl font-medium">
-            Who is TinkerForm for?
-          </div>
-          <div className="collapse-content">
-            <ul className="list-disc ml-6">
-              <li>Businesses collecting customer feedback</li>
-              <li>Educators creating quizzes and surveys</li>
-              <li>Event organizers managing registrations</li>
-              <li>Developers needing quick form solutions</li>
-            </ul>
-          </div>
-        </div>
-        <div className="collapse collapse-arrow bg-base-200">
-          <input type="checkbox" />
-          <div className="collapse-title text-xl font-medium">
-            Why choose TinkerForm?
-          </div>
-          <div className="collapse-content">
-            <ul className="list-disc ml-6">
-              <li>Fast, user-friendly form creation</li>
-              <li>Secure authentication and data storage</li>
-              <li>Responsive dashboard for managing everything in one place</li>
-            </ul>
-          </div>
-        </div>
       </Container>
     </Drawer>
   );

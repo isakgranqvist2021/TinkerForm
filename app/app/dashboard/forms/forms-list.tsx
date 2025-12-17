@@ -3,13 +3,10 @@
 import { EmptyState } from 'components/empty-state';
 import Link from 'next/link';
 import { type FormDto } from 'services/api/forms';
-import {
-  DeleteFormIconButton,
-  DeleteFormModal,
-  PauseFormButton,
-} from './[id]/actions';
+import { DeleteFormButton, PauseFormButton } from './[id]/actions';
 import useSWR from 'swr';
 import React from 'react';
+import { DeleteFormModal } from 'hooks/use-delete-form';
 
 export function FormsList() {
   const { isLoading, data } = useForms();
@@ -151,7 +148,7 @@ function renderFormListItem(form: FormDto) {
           </Link>
         </div>
 
-        <DeleteFormIconButton formId={form.id} />
+        <DeleteFormButton formId={form.id} />
         <DeleteFormModal formId={form.id} />
       </div>
     </li>

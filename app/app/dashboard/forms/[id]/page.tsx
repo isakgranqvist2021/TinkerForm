@@ -14,9 +14,10 @@ import {
 } from 'utils';
 import { getFormById, getFormStats } from 'services/api/forms';
 import { getResponsesByFormId } from 'services/api/response';
-import { DeleteFormModal, FormActions } from './actions';
+import { FormActions } from './actions';
 import { getSubscription } from 'services/api/subscription';
 import { ResponsesTable } from './responses-table';
+import { DeleteFormModal } from 'hooks/use-delete-form';
 
 export const generateMetadata = async (props: PageProps<{ id: string }>) => {
   const params = await props.params;

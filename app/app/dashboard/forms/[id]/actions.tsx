@@ -1,11 +1,11 @@
 'use client';
 
+import { useClipboard } from 'hooks/use-clipboard';
+import { openDeleteFormModal } from 'hooks/use-delete-form';
+import { useExportData } from 'hooks/use-export-responses';
+import { usePauseForm } from 'hooks/use-pause-form';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
 import React from 'react';
-import { toast } from 'sonner';
-import { useSWRConfig } from 'swr';
-import useMutation from 'swr/mutation';
 
 interface FormIdProps {
   formId: string;
@@ -24,76 +24,42 @@ interface FormActionsProps extends FormIdProps, FormLinkProps, PauseFormProps {}
 export function FormActions(props: FormActionsProps) {
   return (
     <React.Fragment>
-      <div className="flex gap-4 hidden md:flex">
-        <ViewFormButton viewFormHref={props.viewFormHref} />
+      <FormActionsButtons {...props} />
 
-        <PauseFormButton
-          className="btn btn-circle"
-          formId={props.formId}
-          pausedAt={props.pausedAt}
-        />
-
-        <CopyFormLink viewFormHref={props.viewFormHref} />
-
-        <DeleteFormIconButton
-          className="btn btn-circle"
-          formId={props.formId}
-        />
-
-        <ExportDataButton formId={props.formId} />
-
-        <EditFormButton formId={props.formId} />
-      </div>
-
-      <div className="dropdown dropdown-end flex md:hidden">
-        <FormActionsMenu {...props} />
-      </div>
+      <FormActionsMenu {...props} />
     </React.Fragment>
   );
 }
 
-export function DeleteFormModal(props: FormIdProps) {
-  const { isLoading, deleteForm } = useDeleteForm({ formId: props.formId });
-
+function FormActionsButtons(props: FormActionsProps) {
   return (
-    <dialog id={modalName} className="modal">
-      <div className="modal-box">
-        <h3 className="font-bold text-lg">Delete Form</h3>
-        <p className="py-4">
-          Are you sure you want to delete this form? This action cannot be
-          undone.
-        </p>
+    <div className="flex gap-4 hidden md:flex">
+      <ViewFormButton viewFormHref={props.viewFormHref} />
 
-        <div className="modal-action">
-          <button className="btn">
-            <span onClick={closeDeleteFormModal}>Cancel</span>
-          </button>
-          <button className="btn btn-error">
-            <span onClick={deleteForm}>
-              {isLoading ? (
-                <span className="loading loading-dots loading-sm"></span>
-              ) : (
-                'Delete'
-              )}
-            </span>
-          </button>
-        </div>
-      </div>
+      <PauseFormButton
+        className="btn btn-circle"
+        formId={props.formId}
+        pausedAt={props.pausedAt}
+      />
 
-      <form method="dialog" className="modal-backdrop">
-        <button>close</button>
-      </form>
-    </dialog>
+      <CopyFormLink viewFormHref={props.viewFormHref} />
+
+      <DeleteFormButton className="btn btn-circle" formId={props.formId} />
+
+      <ExportDataButton formId={props.formId} />
+
+      <EditFormButton formId={props.formId} />
+    </div>
   );
 }
 
 function FormActionsMenu(props: FormActionsProps) {
-  const exportData = useExportData({ formId: props.formId });
-  const copyToClipboard = useCopyFormLink({ viewFormHref: props.viewFormHref });
-  const pauseForm = usePauseForm({ formId: props.formId });
+  const exportData = useExportData(props.formId);
+  const copyToClipboard = useClipboard(props.viewFormHref);
+  const pauseForm = usePauseForm(props.formId);
 
   return (
-    <React.Fragment>
+    <div className="dropdown dropdown-end flex md:hidden">
       <div tabIndex={0} role="button" className="btn btn-circle m-1">
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -141,43 +107,12 @@ function FormActionsMenu(props: FormActionsProps) {
           <a>Delete form</a>
         </li>
       </ul>
-    </React.Fragment>
-  );
-}
-
-function useExportData(props: FormIdProps) {
-  return useMutation(
-    `/api/forms/${props.formId}/export`,
-    async (url) => {
-      const res = await fetch(url);
-      if (!res.ok) {
-        throw new Error('Could not load data');
-      }
-
-      return res;
-    },
-    {
-      onSuccess: (res) => {
-        res.blob().then((blob) => {
-          const url = window.URL.createObjectURL(blob);
-          const a = document.createElement('a');
-          a.href = url;
-          a.download = `${props.formId}.csv`;
-          document.body.appendChild(a);
-          a.click();
-          a.remove();
-          window.URL.revokeObjectURL(url);
-        });
-      },
-      onError: () => {
-        toast.error("Couldn't export form data. Please try again.");
-      },
-    },
+    </div>
   );
 }
 
 function ExportDataButton(props: FormIdProps) {
-  const { isMutating, trigger } = useExportData(props);
+  const { isMutating, trigger } = useExportData(props.formId);
 
   return (
     <div className="tooltip" data-tip="Download responses as CSV">
@@ -205,46 +140,11 @@ function ExportDataButton(props: FormIdProps) {
   );
 }
 
-function useDeleteForm(props: FormIdProps) {
-  const { mutate } = useSWRConfig();
-  const router = useRouter();
-
-  const mutation = useMutation(
-    `/api/proxy/form/${props.formId}`,
-    async (url) => {
-      const res = await fetch(url, { method: 'DELETE' });
-
-      if (!res.ok) {
-        throw new Error('Could not delete form');
-      }
-    },
-    {
-      onError: () => {
-        toast.error('Error deleting form');
-      },
-
-      onSuccess: () => {
-        mutate('/api/proxy/form');
-        router.refresh();
-
-        toast.success('Form deleted successfully');
-
-        closeDeleteFormModal();
-      },
-    },
-  );
-
-  return {
-    isLoading: mutation.isMutating,
-    deleteForm: () => mutation.trigger(),
-  };
-}
-
 interface DeleteFormButtonProps
   extends React.ComponentProps<'button'>,
     FormIdProps {}
 
-export function DeleteFormIconButton(props: DeleteFormButtonProps) {
+export function DeleteFormButton(props: DeleteFormButtonProps) {
   const { formId, ...rest } = props;
 
   return (
@@ -273,19 +173,8 @@ export function DeleteFormIconButton(props: DeleteFormButtonProps) {
   );
 }
 
-function useCopyFormLink(props: FormLinkProps) {
-  return async () => {
-    try {
-      await navigator.clipboard.writeText(props.viewFormHref);
-      toast.success('Link copied to clipboard!');
-    } catch (err) {
-      console.error('Failed to copy: ', err);
-    }
-  };
-}
-
 export function CopyFormLink(props: FormLinkProps) {
-  const copyToClipboard = useCopyFormLink(props);
+  const copyToClipboard = useClipboard(props.viewFormHref);
 
   return (
     <div className="tooltip" data-tip="Copy Link">
@@ -375,7 +264,7 @@ interface PauseFormButtonProps
 export function PauseFormButton(props: PauseFormButtonProps) {
   const { pausedAt, formId, ...rest } = props;
 
-  const { pauseForm, isLoading } = usePauseForm({ formId });
+  const { pauseForm, isLoading } = usePauseForm(formId);
 
   if (pausedAt) {
     return (
@@ -417,71 +306,25 @@ export function PauseFormButton(props: PauseFormButtonProps) {
         onClick={pauseForm}
         {...rest}
       >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 24 24"
-          strokeWidth={1.5}
-          stroke="currentColor"
-          className="size-6"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            d="M15.75 5.25v13.5m-7.5-13.5v13.5"
-          />
-        </svg>
+        {isLoading ? (
+          <span className="loading loading-dots loading-sm"></span>
+        ) : (
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            strokeWidth={1.5}
+            stroke="currentColor"
+            className="size-6"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M15.75 5.25v13.5m-7.5-13.5v13.5"
+            />
+          </svg>
+        )}
       </button>
     </div>
   );
 }
-
-function usePauseForm(props: FormIdProps) {
-  const { mutate } = useSWRConfig();
-  const router = useRouter();
-
-  const mutation = useMutation(
-    `/api/proxy/form/${props.formId}/pause`,
-    async (url): Promise<string> => {
-      const res = await fetch(url, { method: 'PATCH' });
-
-      if (!res.ok) {
-        throw new Error('Could not pause form');
-      }
-
-      const data = await res.text();
-
-      return data;
-    },
-    {
-      onError: () => {
-        toast.error('Error pausing form');
-      },
-      onSuccess: (pausedAt) => {
-        mutate('/api/proxy/form');
-        router.refresh();
-
-        if (pausedAt) {
-          toast.success('Form paused successfully');
-        } else {
-          toast.success('Form resumed successfully');
-        }
-      },
-    },
-  );
-
-  return {
-    isLoading: mutation.isMutating,
-    pauseForm: () => mutation.trigger(),
-  };
-}
-
-const modalName = 'delete-form-modal';
-
-const closeDeleteFormModal = () =>
-  // @ts-expect-error
-  document.getElementById(modalName).close();
-
-const openDeleteFormModal = () =>
-  // @ts-expect-error
-  document.getElementById(modalName).showModal();
