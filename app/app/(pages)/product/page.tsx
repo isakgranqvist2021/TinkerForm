@@ -4,7 +4,7 @@ import { Container } from 'containers/main-container';
 import { getMetadata } from 'utils';
 
 export const metadata = getMetadata({
-  title: 'Product Page',
+  title: 'Product',
   description: 'Discover our product offerings.',
 });
 
