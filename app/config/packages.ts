@@ -1,4 +1,4 @@
-export type PackageId = 'starter' | 'pro' | 'enterprise';
+export type PackageId = 'starter' | 'plus' | 'pro';
 
 export interface Package {
   id: PackageId;
@@ -44,10 +44,10 @@ export const packages: Record<PackageId, Package> = {
       },
     ],
   },
-  pro: {
-    id: 'pro',
-    name: 'Pro',
-    price: 2900,
+  plus: {
+    id: 'plus',
+    name: 'Plus',
+    price: 1999,
     badge: 'Most popular',
     features: [
       {
@@ -72,10 +72,10 @@ export const packages: Record<PackageId, Package> = {
       },
     ],
   },
-  enterprise: {
-    id: 'enterprise',
-    name: 'Enterprise',
-    price: 99900,
+  pro: {
+    id: 'pro',
+    name: 'Pro',
+    price: 7999,
     features: [
       {
         name: 'Cancel anytime',
