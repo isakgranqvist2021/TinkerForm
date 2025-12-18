@@ -2,14 +2,13 @@
 
 import { Package, PackageId, packages } from 'config/packages';
 import { cn, formatCurrency } from 'utils';
-import useMutation from 'swr/mutation';
-import { toast } from 'sonner';
-import getStripe from 'services/stripe';
 import { useUser } from '@auth0/nextjs-auth0';
 import { CheckIcon } from '@heroicons/react/24/outline';
 import React from 'react';
 import { useRouter } from 'next/navigation';
 import { HoverCard } from './hover-card';
+import { useCancelSubscription } from 'hooks/use-cancel-subscription';
+import { useStartCheckout } from 'hooks/use-start-checkout';
 
 interface PackageCardsProps extends React.ComponentProps<'div'> {
   activePackageId?: PackageId | null;
@@ -127,47 +126,5 @@ function usePricingCard(props: PricingCardProps) {
     className: 'btn-primary',
     text: 'Subscribe',
     disabled: false,
-  };
-}
-
-function useCancelSubscription() {
-  const { isMutating, trigger } = useMutation(
-    '/api/subscription',
-    async (url) => {
-      const res = await fetch(url, { method: 'PATCH' });
-
-      if (!res.ok) {
-        throw new Error('Could not cancel subscription');
-      }
-    },
-    {
-      onSuccess: () => window.location.reload(),
-      onError: () => {
-        toast.error("Couldn't cancel subscription. Please try again.");
-      },
-    },
-  );
-
-  return { isMutating, trigger };
-}
-
-function useStartCheckout(id: PackageId) {
-  return async () => {
-    const stripe = await getStripe();
-    if (!stripe) {
-      console.error(`Stripe is ${stripe}`);
-      return;
-    }
-
-    const body = JSON.stringify({
-      id,
-    });
-
-    const res = await fetch('/api/cart/checkout', {
-      body,
-      method: 'POST',
-    }).then((res) => res.json());
-
-    await stripe.redirectToCheckout({ sessionId: res.sessionId });
   };
 }
