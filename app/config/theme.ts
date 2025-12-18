@@ -30,7 +30,7 @@ export enum Theme {
   winter = 'winter',
   // dim = 'dim',
   // nord = 'nord',
-  // sunset = 'sunset',
+  sunset = 'sunset',
   // caramellatte = 'caramellatte',
   // abyss = 'abyss',
   // silk = 'silk',
