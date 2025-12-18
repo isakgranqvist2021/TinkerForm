@@ -1,4 +1,5 @@
 import { Drawer } from 'components/drawer';
+import { FeatureCards } from 'components/feature-cards';
 import { PackageCards } from 'components/package-cards';
 import Link from 'next/link';
 import React from 'react';
@@ -15,13 +16,31 @@ export default async function Page() {
       <Hero />
 
       <Pricing />
+
+      <Features />
     </Drawer>
+  );
+}
+
+function Features() {
+  return (
+    <div className="px-4 py-6 md:px-4 md:py-12 lg:px-4 lg:py-12 flex flex-col gap-4 bg-base-200">
+      <h2 className="text-center text-3xl font-bold mb-4">
+        Why Choose TinkerForm?
+      </h2>
+
+      <FeatureCards className="flex flex-wrap gap-6 justify-center mx-auto max-w-7xl" />
+
+      <Link href="/contact" className="text-center link mt-4">
+        Missing a feature? Contact us!
+      </Link>
+    </div>
   );
 }
 
 function Pricing() {
   return (
-    <div className="px-4 py-6 md:px-4 md:py-12 lg:px-4 lg:py-12 flex flex-col gap-4">
+    <div className="px-4 py-6 md:px-4 md:py-12 lg:px-4 lg:py-12 flex flex-col gap-4 bg-base-100">
       <h2 className="text-center text-3xl font-bold">Our Packages</h2>
 
       <div className="flex flex-col gap-8">
