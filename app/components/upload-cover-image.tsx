@@ -56,7 +56,7 @@ export function UploadCoverImage() {
 
   return (
     <React.Fragment>
-      <div ref={dropzoneRef} className="relative">
+      <div ref={dropzoneRef} className="relative border border-primary rounded">
         <div
           className={cn(
             'absolute w-full h-full flex items-center justify-center rounded transition-all ease-in duration-200',
