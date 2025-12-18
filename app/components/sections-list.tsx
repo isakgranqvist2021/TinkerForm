@@ -50,6 +50,7 @@ import {
   ControlledTextarea,
 } from './inputs';
 import z from 'zod';
+import { PlusIcon } from '@heroicons/react/24/outline';
 
 type FormMode = 'edit' | 'add';
 const SectionFormContext = React.createContext<{
@@ -164,6 +165,8 @@ export function SectionsList() {
                   }}
                 >
                   {exampleSection.title}
+
+                  <PlusIcon className="size-4" />
                 </div>
               </div>
             );
