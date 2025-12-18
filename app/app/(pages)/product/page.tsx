@@ -1,6 +1,11 @@
+import {
+  CurrencyEuroIcon,
+  WrenchScrewdriverIcon,
+} from '@heroicons/react/24/outline';
+import { AdjustmentsHorizontalIcon } from '@heroicons/react/24/solid';
 import { Drawer } from 'components/drawer';
-import { PageTitle } from 'components/page-title';
 import { Container } from 'containers/main-container';
+import Link from 'next/link';
 import { getMetadata } from 'utils';
 
 export const metadata = getMetadata({
@@ -11,61 +16,75 @@ export const metadata = getMetadata({
 export default function Page() {
   return (
     <Drawer>
-      <Container>
-        <PageTitle className="mb-4">What is TinkerForm?</PageTitle>
+      <div className="flex flex-col flex-grow">
+        <div className="bg-base-200 py-6 sm:py-12">
+          <Container>
+            <div className="flex flex-col gap-4 items-center text-center">
+              <WrenchScrewdriverIcon className="size-12 text-primary" />
 
-        <div className="mb-6">
-          <div className="alert alert-info mb-4">
-            <span>
-              TinkerForm is a modern platform for building, sharing, and
-              managing forms online. Whether you need feedback, surveys,
-              registrations, or quizzes, TinkerForm makes it fast and easy.
-            </span>
-          </div>
+              <h2 className="text-3xl font-bold text-primary">
+                What is TinkerForm?
+              </h2>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="card bg-base-200">
-              <div className="card-body">
-                <h2 className="card-title">Drag-and-Drop Form Builder</h2>
-                <p>
-                  Create beautiful forms in minutes with our intuitive
-                  drag-and-drop interface. No coding required!
-                </p>
-              </div>
+              <p className="max-w-prose">
+                TinkerForm is a powerful and user-friendly form builder that
+                allows you to create custom forms for various purposes,
+                including surveys, feedback collection, event registrations, and
+                more.
+              </p>
+
+              <Link href="/features" className="link link-primary">
+                Explore Features
+              </Link>
             </div>
-            <div className="card bg-base-200">
-              <div className="card-body">
-                <h2 className="card-title">Secure &amp; Private</h2>
-                <p>
-                  Your data is protected with industry-standard security and
-                  authentication measures, ensuring peace of mind for you and
-                  your users.
-                </p>
-              </div>
-            </div>
-            <div className="card bg-base-200">
-              <div className="card-body">
-                <h2 className="card-title">Real-Time Response Management</h2>
-                <p>
-                  View, filter, and analyze responses instantly from your
-                  dashboard. Easily keep track of submissions and activity.
-                </p>
-              </div>
-            </div>
-            <div className="card bg-base-200">
-              <div className="card-body">
-                <h2 className="card-title">AI Powered Response Scoring</h2>
-                <p>
-                  Automatically evaluate and score form responses using advanced
-                  AI algorithms. Gain insights into the quality and relevance of
-                  submissions, helping you make informed decisions quickly and
-                  efficiently.
-                </p>
-              </div>
-            </div>
-          </div>
+          </Container>
         </div>
-      </Container>
+
+        <div className="bg-base-100 py-6 sm:py-12">
+          <Container>
+            <div className="flex flex-col gap-4 items-center text-center">
+              <CurrencyEuroIcon className="size-12 text-secondary" />
+
+              <h2 className="text-3xl font-bold text-secondary">
+                What are the pricing plans?
+              </h2>
+
+              <p className="max-w-prose">
+                TinkerForm offers a free plan with essential features to get you
+                started. For more advanced functionalities, we provide premium
+                packages that include additional features such as advanced
+              </p>
+
+              <Link href="/pricing" className="link link-secondary">
+                See pricing options
+              </Link>
+            </div>
+          </Container>
+        </div>
+
+        <div className="bg-base-200 py-6 sm:py-12">
+          <Container>
+            <div className="flex flex-col gap-4 items-center text-center">
+              <AdjustmentsHorizontalIcon className="size-12 text-primary" />
+
+              <h2 className="text-3xl font-bold text-primary">
+                We value customization
+              </h2>
+
+              <p className="max-w-prose">
+                TinkerForm allows you to customize your forms to match your
+                branding and style preferences. Choose from various themes,
+                colors, and layouts to create a unique form experience for your
+                users.
+              </p>
+
+              <Link href="/dashboard/forms/new" className="link link-primary">
+                Create your first form
+              </Link>
+            </div>
+          </Container>
+        </div>
+      </div>
     </Drawer>
   );
 }

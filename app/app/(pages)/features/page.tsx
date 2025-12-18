@@ -13,9 +13,11 @@ export default function Page() {
   return (
     <Drawer>
       <Container>
-        <PageTitle className="mt-4 mb-6">Why Choose TinkerForm?</PageTitle>
+        <PageTitle className="mt-12 mb-12 text-center">
+          Why Choose TinkerForm?
+        </PageTitle>
 
-        <FeatureCards />
+        <FeatureCards className="flex gap-6 flex-wrap justify-center" />
       </Container>
     </Drawer>
   );

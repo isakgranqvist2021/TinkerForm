@@ -39,7 +39,7 @@ export const packages: Record<PackageId, Package> = {
         available: false,
       },
       {
-        name: 'Score responses with AI',
+        name: 'Analyze responses with AI',
         available: false,
       },
     ],
@@ -63,7 +63,7 @@ export const packages: Record<PackageId, Package> = {
         available: true,
       },
       {
-        name: 'Score responses with AI',
+        name: 'Analyze responses with AI',
         available: true,
       },
       {
@@ -90,7 +90,7 @@ export const packages: Record<PackageId, Package> = {
         available: true,
       },
       {
-        name: 'Score responses with AI',
+        name: 'Analyze responses with AI',
         available: true,
       },
       {
