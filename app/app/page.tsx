@@ -38,9 +38,9 @@ function Pricing() {
 function Hero() {
   return (
     <div className="hero bg-base-200 pb-4 flex-grow">
-      <div className="hero-content flex-col px-6 py-10 md:p-16 lg:p-12 lg:flex-row max-w-7xl gap-12">
+      <div className="hero-content flex-col px-6 py-10 md:p-16 lg:p-12 sm:flex-row max-w-7xl gap-12">
         <div>
-          <h1 className="text-5xl font-bold max-w-[18ch]">
+          <h1 className="text-4xl lg:text-5xl font-bold max-w-[18ch]">
             Build beautiful forms, fast and easily.
           </h1>
           <p className="py-6 max-w-prose">
@@ -63,7 +63,7 @@ function Hero() {
 function Art() {
   return (
     <svg
-      className="w-sm text-primary max-h-96 max-w-full lg:block hidden"
+      className="text-primary max-h-96 sm:block hidden w-full lg:w-sm lg:max-w-full"
       xmlns="http://www.w3.org/2000/svg"
       width="800.003"
       height="618.866"
