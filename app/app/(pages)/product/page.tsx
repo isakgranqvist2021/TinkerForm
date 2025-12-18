@@ -17,7 +17,7 @@ export default function Page() {
   return (
     <Drawer>
       <div className="flex flex-col flex-grow">
-        <div className="bg-base-200 py-6 sm:py-12">
+        <div className="bg-base-200 py-6 sm:py-16">
           <Container>
             <div className="flex flex-col gap-4 items-center text-center">
               <WrenchScrewdriverIcon className="size-12 text-primary" />
@@ -40,7 +40,7 @@ export default function Page() {
           </Container>
         </div>
 
-        <div className="bg-base-100 py-6 sm:py-12">
+        <div className="bg-base-100 py-6 sm:py-16">
           <Container>
             <div className="flex flex-col gap-4 items-center text-center">
               <CurrencyEuroIcon className="size-12 text-secondary" />
@@ -62,7 +62,7 @@ export default function Page() {
           </Container>
         </div>
 
-        <div className="bg-base-200 py-6 sm:py-12">
+        <div className="bg-base-200 py-6 sm:py-16">
           <Container>
             <div className="flex flex-col gap-4 items-center text-center">
               <AdjustmentsHorizontalIcon className="size-12 text-primary" />
