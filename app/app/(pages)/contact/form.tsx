@@ -51,9 +51,25 @@ export function ContactForm() {
       <form className="max-w-xl mx-auto py-4 lg:py-12" onSubmit={handleSubmit}>
         <PageTitle className="mb-4">Contact Us</PageTitle>
 
-        <ControlledInput name="name" label="Name" required />
-        <ControlledInput name="email" label="Email" type="email" required />
-        <ControlledTextarea name="message" label="Message" required />
+        <ControlledInput
+          placeholder="John Doe"
+          name="name"
+          label="Name"
+          required
+        />
+        <ControlledInput
+          placeholder="john-doe@gmail.com"
+          name="email"
+          label="Email"
+          type="email"
+          required
+        />
+        <ControlledTextarea
+          placeholder="Hello There"
+          name="message"
+          label="Message"
+          required
+        />
 
         <button
           className="btn btn-primary mt-4"
