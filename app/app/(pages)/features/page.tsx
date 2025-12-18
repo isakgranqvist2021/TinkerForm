@@ -1,7 +1,9 @@
+import { ArrowRightCircleIcon } from '@heroicons/react/24/solid';
 import { Drawer } from 'components/drawer';
 import { FeatureCards } from 'components/feature-cards';
 import { PageTitle } from 'components/page-title';
 import { Container } from 'containers/main-container';
+import Link from 'next/link';
 import { getMetadata } from 'utils';
 
 export const metadata = getMetadata({
@@ -18,6 +20,16 @@ export default function Page() {
         </PageTitle>
 
         <FeatureCards className="flex gap-6 flex-wrap justify-center" />
+
+        <div className="flex justify-center my-12">
+          <Link
+            href="/dashboard/forms"
+            className="btn btn-primary mx-auto w-fit"
+          >
+            Get Started
+            <ArrowRightCircleIcon className="size-6" />
+          </Link>
+        </div>
       </Container>
     </Drawer>
   );

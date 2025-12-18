@@ -60,8 +60,18 @@ function Hero() {
       <div className="hero-content flex-col px-6 py-10 md:p-16 lg:p-12 sm:flex-row max-w-7xl gap-12">
         <div>
           <h1 className="text-4xl lg:text-5xl font-bold max-w-[18ch]">
-            Build beautiful forms, fast and easily.
+            Build beautiful forms,
+            <span className="text-rotate duration-10000">
+              <span>
+                <span className="text-primary">fast and easily.</span>
+                <span className="text-secondary">without hassle.</span>
+                <span className="text-primary underline">
+                  in minutes, hours.
+                </span>
+              </span>
+            </span>
           </h1>
+
           <p className="py-6 max-w-prose">
             TinkerForm lets you quickly create, share, and track forms for any
             purpose—all from a simple, user-friendly dashboard.

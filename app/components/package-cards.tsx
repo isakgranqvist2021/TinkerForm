@@ -5,10 +5,11 @@ import { cn, formatCurrency } from 'utils';
 import useMutation from 'swr/mutation';
 import { toast } from 'sonner';
 import getStripe from 'services/stripe';
-import Link from 'next/link';
 import { useUser } from '@auth0/nextjs-auth0';
 import { CheckIcon } from '@heroicons/react/24/outline';
 import React from 'react';
+import { useRouter } from 'next/navigation';
+import { HoverCard } from './hover-card';
 
 interface PackageCardsProps extends React.ComponentProps<'div'> {
   activePackageId?: PackageId | null;
@@ -36,95 +37,100 @@ interface PricingCardProps {
   activePackageId?: PackageId | null;
 }
 function PricingCard(props: PricingCardProps) {
-  return (
-    <div className="card bg-base-100 shadow-sm w-96">
-      <div className="card-body flex flex-col justify-between">
-        {props.pkg.badge && (
-          <span className="badge badge-xs badge-warning">
-            {props.pkg.badge}
-          </span>
-        )}
+  const { onClick, className, text, disabled } = usePricingCard(props);
 
-        <div className="flex justify-between">
-          <h2 className="text-3xl font-bold">{props.pkg.name}</h2>
-          <span className="text-xl">
-            {!props.pkg.price ? 'Free' : formatCurrency(props.pkg.price)}
-          </span>
-        </div>
-        <ul className="mt-6 flex flex-col gap-2 text-xs">
-          {props.pkg.features.map((feature, index) => {
-            if (feature.available) {
+  return (
+    <HoverCard className={onClick ? 'cursor-pointer' : ''} onClick={onClick}>
+      <div className="card bg-base-100 shadow-sm w-96">
+        <div className="card-body flex flex-col justify-between">
+          {props.pkg.badge && (
+            <span className="badge badge-xs badge-warning">
+              {props.pkg.badge}
+            </span>
+          )}
+
+          <div className="flex justify-between">
+            <h2 className="text-3xl font-bold">{props.pkg.name}</h2>
+            <span className="text-xl">
+              {!props.pkg.price ? 'Free' : formatCurrency(props.pkg.price)}
+            </span>
+          </div>
+          <ul className="mt-6 flex flex-col gap-2 text-xs">
+            {props.pkg.features.map((feature, index) => {
+              if (feature.available) {
+                return (
+                  <li key={index}>
+                    <CheckIcon className="size-4 me-2 inline-block text-success" />
+                    <span>{feature.name}</span>
+                  </li>
+                );
+              }
+
               return (
-                <li key={index}>
-                  <CheckIcon className="size-4 me-2 inline-block text-success" />
-                  <span>{feature.name}</span>
+                <li className="opacity-50" key={index}>
+                  <CheckIcon className="size-4 me-2 inline-block text-base-content/50" />
+                  <span className="line-through">{feature.name}</span>
                 </li>
               );
-            }
-
-            return (
-              <li className="opacity-50" key={index}>
-                <CheckIcon className="size-4 me-2 inline-block text-base-content/50" />
-                <span className="line-through">{feature.name}</span>
-              </li>
-            );
-          })}
-        </ul>
-        <div className="mt-6">
-          <PricingCardActionButton {...props} />
+            })}
+          </ul>
+          <div className="mt-6">
+            <button
+              disabled={disabled}
+              className={cn('btn btn-block', className)}
+            >
+              {text}
+            </button>
+          </div>
         </div>
       </div>
-    </div>
+    </HoverCard>
   );
 }
 
-function PricingCardActionButton(props: PricingCardProps) {
+function usePricingCard(props: PricingCardProps) {
   const { user, isLoading } = useUser();
+
+  const cancelSubscription = useCancelSubscription();
+  const startCheckout = useStartCheckout(props.pkg.id);
+  const router = useRouter();
 
   if (props.pkg.price === 0) {
     if (user || isLoading) {
-      return (
-        <button className="btn btn-primary btn-block" disabled>
-          Subscribe
-        </button>
-      );
+      return {
+        onClick: undefined,
+        text: 'Subscribe',
+        className: 'btn-primary',
+        disabled: true,
+      };
     }
 
-    return (
-      <Link className="btn btn-primary btn-block" href="/dashboard/forms">
-        Subscribe
-      </Link>
-    );
+    return {
+      onClick: () => router.push('/dashboard/forms'),
+      className: 'btn-primary',
+      text: 'Subscribe',
+      disabled: false,
+    };
   }
 
   if (props.activePackageId === props.pkg.id) {
-    return (
-      <CancelSubscriptionButton className="btn btn-neutral btn-block">
-        Cancel Subscription
-      </CancelSubscriptionButton>
-    );
+    return {
+      onClick: () => cancelSubscription.trigger(),
+      className: 'btn-neutral',
+      text: 'Cancel Subscription',
+      disabled: false,
+    };
   }
 
-  return (
-    <SubscribeButton id={props.pkg.id} className="btn btn-primary btn-block">
-      Subscribe
-    </SubscribeButton>
-  );
+  return {
+    onClick: startCheckout,
+    className: 'btn-primary',
+    text: 'Subscribe',
+    disabled: false,
+  };
 }
 
-interface SubscribeButtonProps extends React.ComponentProps<'button'> {
-  id: PackageId;
-}
-
-function SubscribeButton(props: SubscribeButtonProps) {
-  const { id, ...rest } = props;
-
-  const buyNow = useStartCheckout(id);
-
-  return <button onClick={buyNow} {...rest} />;
-}
-
-function CancelSubscriptionButton(props: React.ComponentProps<'button'>) {
+function useCancelSubscription() {
   const { isMutating, trigger } = useMutation(
     '/api/subscription',
     async (url) => {
@@ -142,10 +148,10 @@ function CancelSubscriptionButton(props: React.ComponentProps<'button'>) {
     },
   );
 
-  return <button {...props} disabled={isMutating} onClick={() => trigger()} />;
+  return { isMutating, trigger };
 }
 
-export function useStartCheckout(id: PackageId) {
+function useStartCheckout(id: PackageId) {
   return async () => {
     const stripe = await getStripe();
     if (!stripe) {
