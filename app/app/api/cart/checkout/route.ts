@@ -6,10 +6,10 @@ import { stripe } from 'services/payment';
 import Stripe from 'stripe';
 
 function getStripeCheckoutParams(
-  id: PackageId,
+  packageId: PackageId,
   options: { email?: string; url?: string },
 ) {
-  const pkg = packages[id];
+  const pkg = packages[packageId];
   if (!pkg) {
     throw new Error('Invalid package ID');
   }
@@ -38,7 +38,7 @@ function getStripeCheckoutParams(
     },
     success_url: `${options.url}/payment/accepted?checkoutSessionId={CHECKOUT_SESSION_ID}`,
     cancel_url: `${options.url}/payment/rejected`,
-    metadata: { id },
+    metadata: { id: pkg.id },
   };
 
   return params;

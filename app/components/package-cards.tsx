@@ -8,6 +8,7 @@ import getStripe from 'services/stripe';
 import Link from 'next/link';
 import { useUser } from '@auth0/nextjs-auth0';
 import { CheckIcon } from '@heroicons/react/24/outline';
+import React from 'react';
 
 interface PackageCardsProps extends React.ComponentProps<'div'> {
   activePackageId?: PackageId | null;

@@ -16,20 +16,15 @@ import {
   ShareIcon,
   TrashIcon,
 } from '@heroicons/react/24/outline';
+import { PackageId } from 'config/packages';
 
-interface FormIdProps {
-  formId: string;
-}
-
-interface FormLinkProps {
-  viewFormHref: string;
-}
-
-interface PauseFormProps extends FormIdProps {
-  pausedAt: string | null;
-}
-
-interface FormActionsProps extends FormIdProps, FormLinkProps, PauseFormProps {}
+interface FormActionsProps
+  extends ViewFormButtonProps,
+    PauseFormButtonProps,
+    CopyFormLinkProps,
+    DeleteFormButtonProps,
+    ExportDataButtonProps,
+    EditFormButtonProps {}
 
 export function FormActions(props: FormActionsProps) {
   return (
@@ -56,7 +51,7 @@ function FormActionsButtons(props: FormActionsProps) {
 
       <DeleteFormButton className="btn btn-circle" formId={props.formId} />
 
-      <ExportDataButton formId={props.formId} />
+      <ExportDataButton formId={props.formId} packageId={props.packageId} />
 
       <EditFormButton formId={props.formId} />
     </div>
@@ -108,8 +103,22 @@ function FormActionsMenu(props: FormActionsProps) {
   );
 }
 
-function ExportDataButton(props: FormIdProps) {
+interface ExportDataButtonProps {
+  packageId?: PackageId;
+  formId: string;
+}
+function ExportDataButton(props: ExportDataButtonProps) {
   const { isMutating, trigger } = useExportData(props.formId);
+
+  if (props.packageId !== 'pro') {
+    return (
+      <div className="tooltip" data-tip="Upgrade to Pro to export responses">
+        <button className="btn btn-circle" disabled>
+          <ArrowDownTrayIcon className="size-6" />
+        </button>
+      </div>
+    );
+  }
 
   return (
     <div className="tooltip" data-tip="Download responses as CSV">
@@ -124,10 +133,9 @@ function ExportDataButton(props: FormIdProps) {
   );
 }
 
-interface DeleteFormButtonProps
-  extends React.ComponentProps<'button'>,
-    FormIdProps {}
-
+interface DeleteFormButtonProps extends React.ComponentProps<'button'> {
+  formId: string;
+}
 export function DeleteFormButton(props: DeleteFormButtonProps) {
   const { formId, ...rest } = props;
 
@@ -144,7 +152,10 @@ export function DeleteFormButton(props: DeleteFormButtonProps) {
   );
 }
 
-export function CopyFormLink(props: FormLinkProps) {
+interface CopyFormLinkProps {
+  viewFormHref: string;
+}
+export function CopyFormLink(props: CopyFormLinkProps) {
   const copyToClipboard = useClipboard(props.viewFormHref);
 
   return (
@@ -156,7 +167,10 @@ export function CopyFormLink(props: FormLinkProps) {
   );
 }
 
-function ViewFormButton(props: FormLinkProps) {
+interface ViewFormButtonProps {
+  viewFormHref: string;
+}
+function ViewFormButton(props: ViewFormButtonProps) {
   return (
     <div className="tooltip" data-tip="Visit form">
       <a
@@ -171,7 +185,10 @@ function ViewFormButton(props: FormLinkProps) {
   );
 }
 
-function EditFormButton(props: FormIdProps) {
+interface EditFormButtonProps {
+  formId: string;
+}
+function EditFormButton(props: EditFormButtonProps) {
   return (
     <div className="tooltip" data-tip="Edit">
       <Link
@@ -184,36 +201,17 @@ function EditFormButton(props: FormIdProps) {
   );
 }
 
-interface PauseFormButtonProps
-  extends PauseFormProps,
-    React.ComponentProps<'button'> {}
-
+interface PauseFormButtonProps extends React.ComponentProps<'button'> {
+  pausedAt: string | null;
+  formId: string;
+}
 export function PauseFormButton(props: PauseFormButtonProps) {
   const { pausedAt, formId, ...rest } = props;
 
   const { pauseForm, isLoading } = usePauseForm(formId);
 
-  if (pausedAt) {
-    return (
-      <div className="tooltip" data-tip="Resume">
-        <button
-          disabled={isLoading}
-          className="btn btn-square btn-ghost"
-          onClick={pauseForm}
-          {...rest}
-        >
-          {isLoading ? (
-            <span className="loading loading-dots loading-sm"></span>
-          ) : (
-            <PlayIcon className="size-6" />
-          )}
-        </button>
-      </div>
-    );
-  }
-
   return (
-    <div className="tooltip" data-tip="Pause">
+    <div className="tooltip" data-tip={pausedAt ? 'Resume' : 'Pause'}>
       <button
         disabled={isLoading}
         className="btn btn-square btn-ghost"
@@ -222,6 +220,8 @@ export function PauseFormButton(props: PauseFormButtonProps) {
       >
         {isLoading ? (
           <span className="loading loading-dots loading-sm"></span>
+        ) : pausedAt ? (
+          <PlayIcon className="size-6" />
         ) : (
           <PauseIcon className="size-6" />
         )}

@@ -111,7 +111,7 @@ export const fileSchema = z
   .refine(
     (file) => file && file.size > 0 && file.size <= COVER_IMAGE_MAX_SIZE,
     {
-      message: 'File must not be empty and must be ≤ 5MB',
+      message: 'File must not be empty and must be less than 5MB',
     },
   )
   .refine((value) => value instanceof File || typeof value === 'string', {
