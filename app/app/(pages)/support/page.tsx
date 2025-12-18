@@ -72,8 +72,8 @@ export default function Page() {
             </div>
             <div className="collapse-content">
               <p>
-                Please contact our support team for information about trial
-                periods and special offers.
+                We offer a free plan with basic features so you can try out
+                TinkerForm before committing to a paid package.
               </p>
             </div>
           </div>
