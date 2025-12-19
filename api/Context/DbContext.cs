@@ -12,6 +12,7 @@ namespace api.Context
         public DbSet<Models.AnswerModel> answer { get; set; }
         public DbSet<Models.SubscriptionModel> subscription { get; set; }
         public DbSet<Models.ContactModel> contact { get; set; }
+        public DbSet<Models.EmailSettingsModel> email_settings { get; set; }
     }
 
 }
