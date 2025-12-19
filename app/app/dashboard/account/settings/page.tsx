@@ -1,3 +1,4 @@
+import { EmailSettings } from 'components/email-settings';
 import { PageTitle } from 'components/page-title';
 import { MainContainer } from 'containers/main-container';
 import { auth0 } from 'lib/auth0';
@@ -20,7 +21,9 @@ export default async function Page() {
     <MainContainer>
       <PageTitle>Account Settings</PageTitle>
 
-      <p>Email: {session.user.email}</p>
+      <div className="badge badge-primary">{session.user.email}</div>
+
+      <EmailSettings />
     </MainContainer>
   );
 }

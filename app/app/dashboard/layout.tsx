@@ -1,4 +1,3 @@
-import { User } from '@auth0/nextjs-auth0/types';
 import { UserCircleIcon } from '@heroicons/react/24/outline';
 import { Footer } from 'components/footer';
 import { PickThemeMenu } from 'components/pick-theme-menu-item';
