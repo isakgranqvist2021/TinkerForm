@@ -2,4 +2,10 @@ https://peerpush.net/
 https://peerpush.net/p/submitwell
 https://peerpush.net/p/pond
 
-webhooks
+allow same email to apply twice setting in section with type email,
+allow same phone number to apply twice setting in section with type phone,
+webhooks,
+notifications:
+    new submission, 
+    form reached max form submissions, 
+    form will end in some duration
