@@ -71,7 +71,7 @@ export function AddNewForm() {
 
         <button
           disabled={form.formState.isSubmitting}
-          className="btn btn-primary ml-auto"
+          className="btn btn-primary ml-auto sm:mr-6"
           onClick={submitForm}
         >
           Create Form
