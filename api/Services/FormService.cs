@@ -51,6 +51,34 @@ namespace api.Services
                 .ToList();
         }
 
+        public List<FormModel> GetActiveFormsByEmail(string email)
+        {
+            return
+                _context.form
+                .Where(form => form.email == email.ToString() && form.paused_at != null)
+                .Select(form => new FormModel
+                {
+                    id = form.id,
+                    email = form.email,
+                    title = form.title,
+                    description = form.description,
+                    location = form.location,
+                    created_at = form.created_at,
+                    updated_at = form.updated_at,
+                    paused_at = form.paused_at,
+                    cover_image = form.cover_image,
+                    availability = form.availability,
+                    start_date = form.start_date,
+                    end_date = form.end_date,
+                    max_responses = form.max_responses,
+                    theme = form.theme,
+                    response_count = _context.response.Count(
+                        response => response.fk_form_id == form.id && response.completed_at != null
+                    ),
+                })
+                .ToList();
+        }
+
         public FormModel? GetById(Guid id)
         {
             return

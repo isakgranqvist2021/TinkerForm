@@ -30,5 +30,11 @@ namespace api.Services
 
             return true;
         }
+
+
+        public TeamModel? GetById(Guid id)
+        {
+            return _context.team.FirstOrDefault(team => team.id == id);
+        }
     }
 }

@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using api.Services;
 using Microsoft.AspNetCore.Authorization;
+using api.Models;
 
 namespace api.Controllers
 {
@@ -35,6 +36,20 @@ namespace api.Controllers
             }
 
             return BadRequest();
+        }
+
+        [HttpGet("{id}/forms")]
+        public ActionResult<List<FormModel>> GetByTeamId(Guid id)
+        {
+            var team = _modelService.teamService.GetById(id);
+            if (team == null)
+            {
+                return BadRequest();
+            }
+
+            var forms = _modelService.formService.GetActiveFormsByEmail(team.email);
+
+            return Ok(forms);
         }
     }
 }
