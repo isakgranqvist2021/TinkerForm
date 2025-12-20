@@ -11,3 +11,5 @@ notifications:
     form will end in some duration
 
 Create board where you can see all forms by a certain account
+
+translation to different languages
