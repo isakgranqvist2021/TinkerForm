@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using api.Models;
 using api.Services;
 using Microsoft.AspNetCore.Authorization;
+using api.Dto;
 
 namespace api.Controllers
 {
@@ -20,7 +21,7 @@ namespace api.Controllers
 
         [HttpPost]
         [Authorize]
-        public ActionResult UpdateEmailSettings([FromBody] UpdateEmailSettingsModel updateEmailSettingsModel)
+        public ActionResult UpdateEmailSettings([FromBody] UpdateEmailSettingsDto updateEmailSettingsDto)
         {
             var email = HttpContext.Items["Email"]?.ToString();
             if (email == null)
@@ -29,7 +30,7 @@ namespace api.Controllers
                 return Unauthorized();
             }
 
-            _modelService.emailSettingsService.UpdateSettings(updateEmailSettingsModel, email);
+            _modelService.emailSettingsService.UpdateSettings(updateEmailSettingsDto, email);
 
             return Ok();
         }

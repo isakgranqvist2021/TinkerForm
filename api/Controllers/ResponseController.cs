@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using api.Models;
 using api.Services;
+using api.Dto;
 
 namespace api.Controllers
 {
@@ -84,7 +85,7 @@ namespace api.Controllers
 
         [HttpPut("score")]
         [Authorize]
-        public ActionResult UpdateScoreAndReasoning([FromBody] List<UpdateScoreAndReasoningModel> updateModels)
+        public ActionResult UpdateScoreAndReasoning([FromBody] List<UpdateScoreAndReasoningDto> updateModels)
         {
             var email = HttpContext.Items["Email"]?.ToString();
             if (email == null)

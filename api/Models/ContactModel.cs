@@ -5,7 +5,6 @@ namespace api.Models
 {
     public class ContactModel : BaseModel
     {
-
         [Required]
         [JsonPropertyName("message")]
         public string message { get; set; } = string.Empty;

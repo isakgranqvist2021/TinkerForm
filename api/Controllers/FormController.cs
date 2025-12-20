@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using api.Models;
 using api.Services;
+using api.Dto;
 
 namespace api.Controllers
 {
@@ -64,7 +65,7 @@ namespace api.Controllers
 
         [HttpPost]
         [Authorize]
-        public ActionResult<FormModel> Create(CreateFormModel form)
+        public ActionResult<FormModel> Create(CreateFormDto form)
         {
             var email = HttpContext.Items["Email"]?.ToString();
             if (email == null)
@@ -84,7 +85,7 @@ namespace api.Controllers
 
         [HttpPut("{id}")]
         [Authorize]
-        public ActionResult Update(Guid id, [FromBody] UpdateFormModel form)
+        public ActionResult Update(Guid id, [FromBody] UpdateFormDto form)
         {
             var email = HttpContext.Items["Email"]?.ToString();
             if (email == null)
@@ -106,7 +107,7 @@ namespace api.Controllers
 
         [HttpGet("{id}/stats")]
         [Authorize]
-        public ActionResult<FormStatsModel> GetFormStats(Guid id)
+        public ActionResult<FormStatsDto> GetFormStats(Guid id)
         {
             var email = HttpContext.Items["Email"]?.ToString();
             if (email == null)
@@ -157,7 +158,7 @@ namespace api.Controllers
 
         [HttpGet("{id}/with-answers")]
         [Authorize]
-        public ActionResult<FormWithAnswersModel> GetFormWithAnswers(Guid id)
+        public ActionResult<FormWithAnswersDto> GetFormWithAnswers(Guid id)
         {
             var email = HttpContext.Items["Email"]?.ToString();
             if (email == null)

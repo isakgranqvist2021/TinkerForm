@@ -1,4 +1,5 @@
 using api.Context;
+using api.Dto;
 using api.Models;
 
 namespace api.Services
@@ -78,7 +79,7 @@ namespace api.Services
                 .FirstOrDefault();
         }
 
-        public FormModel InsertOne(CreateFormModel form, string email)
+        public FormModel InsertOne(CreateFormDto form, string email)
         {
             var newForm = new FormModel
             {
@@ -101,7 +102,7 @@ namespace api.Services
             return newForm;
         }
 
-        public void UpdateOne(UpdateFormModel form, Guid id, string email)
+        public void UpdateOne(UpdateFormDto form, Guid id, string email)
         {
             var existingForm = _context.form.FirstOrDefault(f => f.id == id && f.email == email);
             if (existingForm != null)
@@ -121,7 +122,7 @@ namespace api.Services
             }
         }
 
-        public FormStatsModel GetFormStats(Guid formId, string email)
+        public FormStatsDto GetFormStats(Guid formId, string email)
         {
             var form = _context.form.FirstOrDefault(f => f.id == formId && f.email == email);
             if (form == null)
@@ -132,7 +133,7 @@ namespace api.Services
             var totalResponses = _context.response.Count(r => r.fk_form_id == formId);
             var completedResponses = _context.response.Count(r => r.fk_form_id == formId && r.completed_at != null);
 
-            return new FormStatsModel
+            return new FormStatsDto
             {
                 total_responses = totalResponses,
                 completed_responses = completedResponses
@@ -165,7 +166,7 @@ namespace api.Services
             };
         }
 
-        public FormWithAnswersModel? GetFormWithAnswers(Guid formId, string email)
+        public FormWithAnswersDto? GetFormWithAnswers(Guid formId, string email)
         {
             var form = _context.form.FirstOrDefault(f => f.id == formId && f.email == email);
             if (form == null)
@@ -196,12 +197,12 @@ namespace api.Services
                 .GroupBy(x => x.response.id)
                 .ToList();
 
-            var responses = new List<ResponseWithAnswersModel>();
+            var responses = new List<ResponseWithAnswersDto>();
 
             foreach (var groupedAnswers in responseAnswerData)
             {
                 var responseAnswers = groupedAnswers
-                    .Select(x => new QuestionAnswerModel
+                    .Select(x => new QuestionAnswerDto
                     {
                         metadata = x.metadata,
                         question = x.question,
@@ -209,14 +210,14 @@ namespace api.Services
                     })
                     .ToList();
 
-                responses.Add(new ResponseWithAnswersModel
+                responses.Add(new ResponseWithAnswersDto
                 {
                     response_id = groupedAnswers.Key,
                     answers = responseAnswers
                 });
             }
 
-            var formWithAnswers = new FormWithAnswersModel
+            var formWithAnswers = new FormWithAnswersDto
             {
                 id = form.id,
                 title = form.title,

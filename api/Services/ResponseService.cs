@@ -1,4 +1,5 @@
 using api.Context;
+using api.Dto;
 using api.Models;
 
 namespace api.Services
@@ -61,7 +62,7 @@ namespace api.Services
             }
         }
 
-        public void UpdateScoreAndReasoning(List<UpdateScoreAndReasoningModel> updateModels, string email)
+        public void UpdateScoreAndReasoning(List<UpdateScoreAndReasoningDto> updateModels, string email)
         {
             foreach (var updateModel in updateModels)
             {
