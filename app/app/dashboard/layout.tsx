@@ -5,12 +5,15 @@ import { auth0 } from 'lib/auth0';
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
 import React from 'react';
+import { createTeam } from 'services/api/team';
 
 export default async function DashboardLayout(props: React.PropsWithChildren) {
   const session = await auth0.getSession();
   if (!session) {
     return redirect('/auth/login');
   }
+
+  await createTeam(session);
 
   return (
     <div className="min-h-screen flex flex-col">
