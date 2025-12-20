@@ -10,5 +10,4 @@ notifications:
     form reached max form submissions, 
     form will end in some duration
 
-
 Create board where you can see all forms by a certain account
