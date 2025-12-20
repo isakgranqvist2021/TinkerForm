@@ -12,6 +12,7 @@ namespace api.Services
         public readonly StatsService statsService;
         public readonly ContactService contactService;
         public readonly EmailSettingsService emailSettingsService;
+        public readonly TeamService teamService;
 
         public ModelService(AppDbContext context)
         {
@@ -23,6 +24,7 @@ namespace api.Services
             statsService = new StatsService(context);
             contactService = new ContactService(context);
             emailSettingsService = new EmailSettingsService(context);
+            teamService = new TeamService(context);
         }
     }
 }
