@@ -15,7 +15,7 @@ namespace api.Services
 
         public void DeleteForm(Guid id, string email)
         {
-            var form = _context.form.FirstOrDefault(f => f.id == id && f.email == email.ToString());
+            var form = _context.form.FirstOrDefault(f => f.id == id && f.email == email);
             if (form != null)
             {
                 _context.form.Remove(form);
@@ -27,7 +27,7 @@ namespace api.Services
         {
             return
                 _context.form
-                .Where(form => form.email == email.ToString())
+                .Where(form => form.email == email)
                 .Select(form => new FormModel
                 {
                     id = form.id,
@@ -55,7 +55,7 @@ namespace api.Services
         {
             return
                 _context.form
-                .Where(form => form.email == email.ToString() && form.paused_at != null)
+                .Where(form => form.email == email && form.paused_at == null)
                 .Select(form => new FormModel
                 {
                     id = form.id,

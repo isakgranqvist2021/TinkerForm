@@ -51,6 +51,18 @@ namespace api.Controllers
 
             return Ok(forms);
         }
+
+        [HttpGet("{id}")]
+        public ActionResult<List<FormModel>> GetTeam(Guid id)
+        {
+            var team = _modelService.teamService.GetById(id);
+            if (team == null)
+            {
+                return BadRequest();
+            }
+
+            return Ok(team);
+        }
     }
 }
 
