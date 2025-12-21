@@ -47,7 +47,7 @@ export const packages: Record<PackageId, Package> = {
   plus: {
     id: 'plus',
     name: 'Plus',
-    price: 1999,
+    price: 2999,
     badge: 'Most popular',
     features: [
       {
