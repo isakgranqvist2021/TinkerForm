@@ -40,23 +40,10 @@ export async function getActiveFormsByTeamId(id: string): Promise<FormDto[]> {
   }
 }
 
-export async function getTeam(id: string): Promise<TeamDto | null> {
-  try {
-    const res = await fetch(`${env.API_URL}/team/${id}`);
-
-    const result = await res.json();
-    return result;
-  } catch (err) {
-    console.error(err);
-    return null;
-  }
-}
-
 export async function getMyTeam(session: SessionData): Promise<TeamDto | null> {
   try {
     const res = await fetch(`${env.API_URL}/team`, {
       headers: {
-        'Content-Type': 'application/json',
         Authorization: `Bearer ${session.tokenSet.accessToken}`,
       },
     });

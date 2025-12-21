@@ -46,10 +46,15 @@ async function proxy(
 
     const backendResponse = await fetch(targetUrl, fetchOptions);
 
+    const responseHeaders = new Headers(backendResponse.headers);
+    responseHeaders.delete('content-encoding');
+    responseHeaders.delete('content-length');
+    responseHeaders.delete('transfer-encoding');
+
     return new Response(backendResponse.body, {
       status: backendResponse.status,
       statusText: backendResponse.statusText,
-      headers: backendResponse.headers,
+      headers: responseHeaders,
     });
   } catch (error) {
     console.error('Proxy Error:', error);

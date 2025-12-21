@@ -48,13 +48,13 @@ export function FormStats() {
         </div>
         <div className="stat-title">Total Views</div>
         <div className="stat-value text-primary">
-          {formatNumber(formStats.data?.currentMonth.totalResponses)}
+          {formatNumber(formStats.data?.currentMonth?.totalResponses || 0)}
         </div>
         <div className="stat-desc">
           {formatMonthlyChange(
             percentageChange(
-              formStats.data?.currentMonth.totalResponses || 0,
-              formStats.data?.previousMonth.totalResponses || 0,
+              formStats.data?.currentMonth?.totalResponses || 0,
+              formStats.data?.previousMonth?.totalResponses || 0,
             ),
           )}
         </div>
@@ -66,13 +66,13 @@ export function FormStats() {
         </div>
         <div className="stat-title">Total Responses</div>
         <div className="stat-value text-secondary">
-          {formatNumber(formStats.data?.currentMonth.completedResponses)}
+          {formatNumber(formStats.data?.currentMonth?.completedResponses || 0)}
         </div>
         <div className="stat-desc">
           {formatMonthlyChange(
             percentageChange(
-              formStats.data?.currentMonth.completedResponses || 0,
-              formStats.data?.previousMonth.completedResponses || 0,
+              formStats.data?.currentMonth?.completedResponses || 0,
+              formStats.data?.previousMonth?.completedResponses || 0,
             ),
           )}
         </div>
