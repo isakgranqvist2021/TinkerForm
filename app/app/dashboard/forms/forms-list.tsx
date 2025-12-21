@@ -86,7 +86,11 @@ function renderFormListItem(form: FormDto) {
   return (
     <li key={form.id} className="list-row">
       <div>
-        <img className="size-10 rounded-box" src={form.coverImage} />
+        <img
+          className="size-10 rounded-box"
+          src={form.coverImage}
+          alt="Form cover image"
+        />
       </div>
 
       <Link href={`/dashboard/forms/${form.id}`} className="hover:underline">
