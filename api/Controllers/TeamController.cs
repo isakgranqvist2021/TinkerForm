@@ -10,9 +10,9 @@ namespace api.Controllers
     public class TeamController : ControllerBase
     {
         private readonly ModelService _modelService;
-        private readonly ILogger<SubscriptionController> _logger;
+        private readonly ILogger<TeamController> _logger;
 
-        public TeamController(ModelService modelServices, ILogger<SubscriptionController> logger)
+        public TeamController(ModelService modelServices, ILogger<TeamController> logger)
         {
             _modelService = modelServices;
             _logger = logger;
