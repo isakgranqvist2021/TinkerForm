@@ -10,31 +10,22 @@ export function TeamFormsButton() {
 
   if (team.isLoading || !team.data) {
     return (
-      <button className="btn btn-ghost" disabled>
+      <button className="btn btn-neutral" disabled>
         <span className="loading loading-dots loading-sm absolute"></span>
         Team Page
+        <ArrowRightCircleIcon className="size-6" />
       </button>
     );
   }
 
   return (
-    <React.Fragment>
-      <Link
-        href={`/forms/${team.data.id}`}
-        className="btn btn-neutral hidden sm:flex"
-        target="_blank"
-      >
-        Team Page
-        <ArrowRightCircleIcon className="size-6" />
-      </Link>
-
-      <Link
-        href={`/forms/${team.data.id}`}
-        className="btn btn-neutral btn-circle sm:hidden"
-        target="_blank"
-      >
-        <ArrowRightCircleIcon className="size-6" />
-      </Link>
-    </React.Fragment>
+    <Link
+      href={`/forms/${team.data.id}`}
+      className="btn btn-neutral btn-sm sm:btn-md"
+      target="_blank"
+    >
+      Team Page
+      <ArrowRightCircleIcon className="size-6" />
+    </Link>
   );
 }
