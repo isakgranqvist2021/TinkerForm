@@ -1,4 +1,5 @@
 import {
+  BuildingStorefrontIcon,
   CurrencyEuroIcon,
   WrenchScrewdriverIcon,
 } from '@heroicons/react/24/outline';
@@ -43,20 +44,21 @@ export default function Page() {
         <div className="bg-base-100 py-6 sm:py-16">
           <Container>
             <div className="flex flex-col gap-4 items-center text-center">
-              <CurrencyEuroIcon className="size-12 text-secondary" />
+              <BuildingStorefrontIcon className="size-12 text-secondary" />
 
               <h2 className="text-3xl font-bold text-secondary">
-                What are the pricing plans?
+                Home page for your forms
               </h2>
 
               <p className="max-w-prose">
-                TinkerForm offers a free plan with essential features to get you
-                started. For more advanced functionalities, we provide premium
-                packages that include additional features such as advanced
+                Automatically generate a professional landing page to showcase
+                all your active forms in one place. Whether you're listing job
+                openings or service requests, provide a centralized career-style
+                hub for your applicants.
               </p>
 
-              <Link href="/pricing" className="link link-secondary">
-                See pricing options
+              <Link href="/dashboard/forms/new" className="link link-secondary">
+                Create your first form
               </Link>
             </div>
           </Container>
@@ -80,6 +82,28 @@ export default function Page() {
 
               <Link href="/dashboard/forms/new" className="link link-primary">
                 Create your first form
+              </Link>
+            </div>
+          </Container>
+        </div>
+
+        <div className="bg-base-100 py-6 sm:py-16">
+          <Container>
+            <div className="flex flex-col gap-4 items-center text-center">
+              <CurrencyEuroIcon className="size-12 text-secondary" />
+
+              <h2 className="text-3xl font-bold text-secondary">
+                What are the pricing plans?
+              </h2>
+
+              <p className="max-w-prose">
+                TinkerForm offers a free plan with essential features to get you
+                started. For more advanced functionalities, we provide premium
+                packages that include additional features such as advanced
+              </p>
+
+              <Link href="/pricing" className="link link-secondary">
+                See pricing options
               </Link>
             </div>
           </Container>
