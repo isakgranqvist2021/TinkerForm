@@ -2,6 +2,7 @@ https://peerpush.net/
 https://peerpush.net/p/submitwell
 https://peerpush.net/p/pond
 
+option to enable automated emails when someone applies if section type is email
 allow same email to apply twice setting in section with type email,
 allow same phone number to apply twice setting in section with type phone,
 webhooks,

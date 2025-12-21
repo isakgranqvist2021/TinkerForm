@@ -24,6 +24,7 @@ import {
   EyeIcon,
   PercentBadgeIcon,
 } from '@heroicons/react/24/outline';
+import { getMyTeam } from 'services/api/team';
 
 export const generateMetadata = async (props: PageProps<{ id: string }>) => {
   const params = await props.params;
@@ -53,6 +54,7 @@ export default async function Page(props: PageProps<{ id: string }>) {
   const responses = await getResponsesByFormId(params.id, session);
   const formStats = await getFormStats(params.id, session);
   const subscription = await getSubscription(session);
+  const team = await getMyTeam(session);
 
   const durations = getDurations(responses);
   const averageCompletionTime = calculateAverageCompletionTime(durations);
@@ -60,6 +62,8 @@ export default async function Page(props: PageProps<{ id: string }>) {
     formStats.completedResponses,
     formStats.totalResponses,
   );
+
+  const viewFormHref = `${process.env.APP_BASE_URL}/forms/${team?.id}/${form.id}`;
 
   return (
     <ResponseProvider>
@@ -79,7 +83,7 @@ export default async function Page(props: PageProps<{ id: string }>) {
           </div>
 
           <FormActions
-            viewFormHref={`${process.env.APP_BASE_URL}/forms/${form.id}`}
+            viewFormHref={viewFormHref}
             formId={form.id}
             pausedAt={form.pausedAt}
             packageId={subscription?.packageId}
