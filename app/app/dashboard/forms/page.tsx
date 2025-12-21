@@ -5,9 +5,10 @@ import { MainContainer } from 'containers/main-container';
 import { redirect } from 'next/navigation';
 import { getMetadata } from 'utils';
 
-import { FormsList, NewFormButton } from './forms-list';
+import { FormsList } from './forms-list';
 import { FormStats } from './form-stats';
 import { TeamFormsButton } from 'components/team-forms-button';
+import { EditTeamSettingsButton } from 'components/edit-team-setings-button';
 
 export const metadata = getMetadata({
   title: 'My Forms',
@@ -35,7 +36,6 @@ export default async function Page() {
 
         <div className="flex gap-4">
           <TeamFormsButton />
-          <NewFormButton />
         </div>
       </div>
 

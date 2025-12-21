@@ -39,7 +39,10 @@ export function FormsList() {
 
   return (
     <ul className="list bg-base-100 rounded-box shadow-md">
-      <li className="p-4 pb-2 text-xs opacity-60 tracking-wide">My forms</li>
+      <li className="p-4 pb-2 text-xs opacity-60 tracking-wide flex justify-between">
+        My forms
+        <NewFormButton />
+      </li>
 
       {data.map(renderFormListItem)}
     </ul>
@@ -70,22 +73,10 @@ export function NewFormButton() {
   }
 
   return (
-    <React.Fragment>
-      <Link
-        href="/dashboard/forms/new"
-        className="btn btn-primary hidden sm:flex"
-      >
-        New Form
-        <PlusCircleIcon className="size-6" />
-      </Link>
-
-      <Link
-        href="/dashboard/forms/new"
-        className="btn btn-primary btn-circle sm:hidden"
-      >
-        <PlusCircleIcon className="size-6" />
-      </Link>
-    </React.Fragment>
+    <Link href="/dashboard/forms/new" className="btn btn-primary btn-sm w-fit">
+      New Form
+      <PlusCircleIcon className="size-6" />
+    </Link>
   );
 }
 

@@ -12,7 +12,7 @@ export function TeamFormsButton() {
     return (
       <button className="btn btn-ghost" disabled>
         <span className="loading loading-dots loading-sm absolute"></span>
-        Team forms
+        Team Page
       </button>
     );
   }
@@ -24,7 +24,7 @@ export function TeamFormsButton() {
         className="btn btn-neutral hidden sm:flex"
         target="_blank"
       >
-        Team forms
+        Team Page
         <ArrowRightCircleIcon className="size-6" />
       </Link>
 
