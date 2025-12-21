@@ -7,6 +7,9 @@ export interface TeamDto {
   email: string;
   createdAt: string;
   updatedAt: string;
+
+  title: string | null;
+  description: string | null;
 }
 
 export async function createTeam(session: SessionData) {

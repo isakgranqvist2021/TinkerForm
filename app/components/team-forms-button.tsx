@@ -1,6 +1,6 @@
 'use client';
 
-import { BuildingStorefrontIcon } from '@heroicons/react/24/outline';
+import { ArrowRightCircleIcon } from '@heroicons/react/24/solid';
 import { useTeam } from 'hooks/use-team';
 import Link from 'next/link';
 
@@ -9,23 +9,21 @@ export function TeamFormsButton() {
 
   if (team.isLoading || !team.data) {
     return (
-      <div className="tooltip" data-tip="View team forms">
-        <button className="btn btn-circle btn-ghost" disabled>
-          <span className="loading loading-dots loading-sm"></span>
-        </button>
-      </div>
+      <button className="btn btn-ghost" disabled>
+        <span className="loading loading-dots loading-sm absolute"></span>
+        Team forms
+      </button>
     );
   }
 
   return (
-    <div className="tooltip" data-tip="View team forms">
-      <Link
-        className="btn btn-circle btn-ghost"
-        href={`/forms/${team.data.id}`}
-        target="_blank"
-      >
-        <BuildingStorefrontIcon className="size-6" />
-      </Link>
-    </div>
+    <Link
+      className="btn btn-ghost"
+      href={`/forms/${team.data.id}`}
+      target="_blank"
+    >
+      Team forms
+      <ArrowRightCircleIcon className="size-6" />
+    </Link>
   );
 }

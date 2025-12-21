@@ -6,5 +6,9 @@ namespace api.Models
     {
         [Required]
         public string email { get; set; } = string.Empty;
+
+        public string? title { get; set; } = null;
+
+        public string? description { get; set; } = null;
     }
 }
