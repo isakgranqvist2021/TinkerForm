@@ -36,5 +36,10 @@ namespace api.Services
         {
             return _context.team.FirstOrDefault(team => team.id == id);
         }
+
+        public TeamModel? GetByEmail(string email)
+        {
+            return _context.team.FirstOrDefault(team => team.email == email);
+        }
     }
 }

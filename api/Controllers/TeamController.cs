@@ -53,9 +53,29 @@ namespace api.Controllers
         }
 
         [HttpGet("{id}")]
-        public ActionResult<List<FormModel>> GetTeam(Guid id)
+        public ActionResult<List<FormModel>> GetTeamById(Guid id)
         {
             var team = _modelService.teamService.GetById(id);
+            if (team == null)
+            {
+                return BadRequest();
+            }
+
+            return Ok(team);
+        }
+
+        [HttpGet]
+        [Authorize]
+        public ActionResult<List<FormModel>> GetTeam()
+        {
+            var email = HttpContext.Items["Email"]?.ToString();
+            if (email == null)
+            {
+                _logger.LogWarning("Unauthorized access attempt.");
+                return Unauthorized();
+            }
+
+            var team = _modelService.teamService.GetByEmail(email);
             if (team == null)
             {
                 return BadRequest();
