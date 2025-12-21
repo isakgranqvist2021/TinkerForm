@@ -1,8 +1,9 @@
 'use client';
 
-import { ArrowRightCircleIcon } from '@heroicons/react/24/solid';
+import { ArrowRightCircleIcon } from '@heroicons/react/24/outline';
 import { useTeam } from 'hooks/use-team';
 import Link from 'next/link';
+import React from 'react';
 
 export function TeamFormsButton() {
   const team = useTeam();
@@ -17,13 +18,23 @@ export function TeamFormsButton() {
   }
 
   return (
-    <Link
-      className="btn btn-ghost"
-      href={`/forms/${team.data.id}`}
-      target="_blank"
-    >
-      Team forms
-      <ArrowRightCircleIcon className="size-6" />
-    </Link>
+    <React.Fragment>
+      <Link
+        href={`/forms/${team.data.id}`}
+        className="btn btn-neutral hidden sm:flex"
+        target="_blank"
+      >
+        Team forms
+        <ArrowRightCircleIcon className="size-6" />
+      </Link>
+
+      <Link
+        href={`/forms/${team.data.id}`}
+        className="btn btn-neutral btn-circle sm:hidden"
+        target="_blank"
+      >
+        <ArrowRightCircleIcon className="size-6" />
+      </Link>
+    </React.Fragment>
   );
 }

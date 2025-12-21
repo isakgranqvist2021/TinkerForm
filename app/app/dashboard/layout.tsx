@@ -17,64 +17,62 @@ export default async function DashboardLayout(props: React.PropsWithChildren) {
 
   return (
     <div className="min-h-screen flex flex-col">
-      <Nav />
+      <div className="navbar bg-base-100 shadow-sm">
+        <div className="flex justify-between items-center mx-auto max-w-7xl mx-auto flex justify-between w-full">
+          <div className="flex-1 gap-2 flex">
+            <Link href="/" className="btn btn-ghost text-xl">
+              TinkerForm
+            </Link>
+          </div>
+          <ul className="menu menu-horizontal px-1 flex items-center gap-2">
+            <li>
+              <Link href="/dashboard/forms">My Forms</Link>
+            </li>
+
+            <div className="dropdown dropdown-end">
+              <div
+                tabIndex={0}
+                role="button"
+                className="btn btn-ghost btn-circle avatar"
+              >
+                {session.user.picture ? (
+                  <div className="w-8 rounded-full">
+                    <img alt="Avatar" src={session.user.picture} />
+                  </div>
+                ) : (
+                  <div className="avatar avatar-placeholder">
+                    <div className="bg-neutral text-neutral-content w-8 rounded-full">
+                      {session.user.name?.charAt(0).toUpperCase()}
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              <ul
+                tabIndex={0}
+                className="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow"
+              >
+                <li>
+                  <Link href="/dashboard/account/settings">Settings</Link>
+                </li>
+                <li>
+                  <Link href="/dashboard/account/billing">Billing</Link>
+                </li>
+
+                <PickThemeMenu />
+
+                <li>
+                  <Link href="/auth/logout">Logout</Link>
+                </li>
+              </ul>
+            </div>
+          </ul>
+        </div>
+      </div>
 
       <div className="max-w-7xl mx-auto w-full flex-grow">{props.children}</div>
 
       <Footer />
-    </div>
-  );
-}
-
-function Nav() {
-  return (
-    <div className="navbar bg-base-100 shadow-sm">
-      <div className="flex justify-between items-center mx-auto max-w-7xl mx-auto flex justify-between w-full">
-        <div className="flex-1 gap-2 flex">
-          <Link href="/" className="btn btn-ghost text-xl">
-            TinkerForm
-          </Link>
-        </div>
-        <ul className="menu menu-horizontal px-1 flex items-center gap-2">
-          <li>
-            <Link href="/dashboard/forms">My Forms</Link>
-          </li>
-
-          <NavDropdown />
-        </ul>
-      </div>
-    </div>
-  );
-}
-
-function NavDropdown() {
-  return (
-    <div className="dropdown dropdown-end">
-      <div
-        tabIndex={0}
-        role="button"
-        className="btn btn-ghost btn-circle avatar"
-      >
-        <UserCircleIcon className="size-6" />
-      </div>
-
-      <ul
-        tabIndex={0}
-        className="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow"
-      >
-        <li>
-          <Link href="/dashboard/account/settings">Settings</Link>
-        </li>
-        <li>
-          <Link href="/dashboard/account/billing">Billing</Link>
-        </li>
-
-        <PickThemeMenu />
-
-        <li>
-          <Link href="/auth/logout">Logout</Link>
-        </li>
-      </ul>
     </div>
   );
 }

@@ -70,10 +70,22 @@ export function NewFormButton() {
   }
 
   return (
-    <Link href="/dashboard/forms/new" className="btn btn-primary">
-      New Form
-      <PlusCircleIcon className="size-6" />
-    </Link>
+    <React.Fragment>
+      <Link
+        href="/dashboard/forms/new"
+        className="btn btn-primary hidden sm:flex"
+      >
+        New Form
+        <PlusCircleIcon className="size-6" />
+      </Link>
+
+      <Link
+        href="/dashboard/forms/new"
+        className="btn btn-primary btn-circle sm:hidden"
+      >
+        <PlusCircleIcon className="size-6" />
+      </Link>
+    </React.Fragment>
   );
 }
 
@@ -81,24 +93,23 @@ function renderFormListItem(form: FormDto) {
   const responseCount = Number(form.responseCount ?? 0);
 
   return (
-    <li key={form.id} className="list-row justify-between flex w-full p-0">
-      <Link
-        href={`/dashboard/forms/${form.id}`}
-        className="flex-grow p-4 hover:underline"
-      >
-        <div>
-          <div>{form.title}</div>
-          <div className="text-xs uppercase font-semibold opacity-60">
-            {responseCount === 0
-              ? 'No responses'
-              : responseCount === 1
-                ? '1 response'
-                : `${responseCount} responses`}
-          </div>
+    <li key={form.id} className="list-row">
+      <div>
+        <img className="size-10 rounded-box" src={form.coverImage} />
+      </div>
+
+      <Link href={`/dashboard/forms/${form.id}`} className="hover:underline">
+        <div>{form.title}</div>
+        <div className="text-xs uppercase font-semibold opacity-60">
+          {responseCount === 0
+            ? 'No responses'
+            : responseCount === 1
+              ? '1 response'
+              : `${responseCount} responses`}
         </div>
       </Link>
 
-      <div className="flex p-4">
+      <div className="flex">
         <PauseFormButton formId={form.id} pausedAt={form.pausedAt} />
 
         <div className="tooltip" data-tip="Edit">
