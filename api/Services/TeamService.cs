@@ -1,4 +1,5 @@
 using api.Context;
+using api.Dto;
 using api.Models;
 
 namespace api.Services
@@ -40,6 +41,25 @@ namespace api.Services
         public TeamModel? GetByEmail(string email)
         {
             return _context.team.FirstOrDefault(team => team.email == email);
+        }
+
+        public TeamModel? UpdateSettings(UpdateTeamSettingsDto updateTeamSettingsDto, string email)
+        {
+            var team = _context.team.FirstOrDefault(team => team.email == email);
+            if (team == null)
+            {
+                return null;
+            }
+
+            team.updated_at = DateTime.UtcNow;
+            team.title = updateTeamSettingsDto.title;
+            team.description = updateTeamSettingsDto.description;
+            team.cover_image = updateTeamSettingsDto.cover_image;
+            team.logo = updateTeamSettingsDto.logo;
+
+            _context.SaveChanges();
+
+            return team;
         }
     }
 }

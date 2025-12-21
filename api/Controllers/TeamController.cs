@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using api.Services;
 using Microsoft.AspNetCore.Authorization;
 using api.Models;
+using api.Dto;
 
 namespace api.Controllers
 {
@@ -76,6 +77,31 @@ namespace api.Controllers
             }
 
             var team = _modelService.teamService.GetByEmail(email);
+            if (team == null)
+            {
+                return BadRequest();
+            }
+
+            return Ok(team);
+        }
+
+        [HttpPatch]
+        [Authorize]
+        public ActionResult<TeamModel> UpdateTeamSettings([FromBody] UpdateTeamSettingsDto updateTeamSettingsDto)
+        {
+            var email = HttpContext.Items["Email"]?.ToString();
+            if (email == null)
+            {
+                _logger.LogWarning("Unauthorized access attempt.");
+                return Unauthorized();
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var team = _modelService.teamService.UpdateSettings(updateTeamSettingsDto, email);
             if (team == null)
             {
                 return BadRequest();
