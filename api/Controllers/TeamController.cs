@@ -53,7 +53,7 @@ namespace api.Controllers
         }
 
         [HttpGet("{id}")]
-        public ActionResult<List<FormModel>> GetTeamById(Guid id)
+        public ActionResult<TeamModel> GetTeamById(Guid id)
         {
             var team = _modelService.teamService.GetById(id);
             if (team == null)
@@ -66,7 +66,7 @@ namespace api.Controllers
 
         [HttpGet]
         [Authorize]
-        public ActionResult<List<FormModel>> GetTeam()
+        public ActionResult<TeamModel> GetTeam()
         {
             var email = HttpContext.Items["Email"]?.ToString();
             if (email == null)
