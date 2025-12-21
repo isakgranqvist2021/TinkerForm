@@ -1,5 +1,13 @@
 import { SessionData } from '@auth0/nextjs-auth0/types';
 import { env } from 'config';
+import { FormDto } from './forms';
+
+export interface TeamDto {
+  id: string;
+  email: string;
+  createdAt: string;
+  updatedAt: string;
+}
 
 export async function createTeam(session: SessionData) {
   try {
@@ -14,5 +22,29 @@ export async function createTeam(session: SessionData) {
   } catch (err) {
     console.error(err);
     return false;
+  }
+}
+
+export async function getActiveFormsByTeamId(id: string): Promise<FormDto[]> {
+  try {
+    const res = await fetch(`${env.API_URL}/team/${id}/forms`);
+
+    const result = await res.json();
+    return result;
+  } catch (err) {
+    console.error(err);
+    return [];
+  }
+}
+
+export async function getTeam(id: string): Promise<TeamDto | null> {
+  try {
+    const res = await fetch(`${env.API_URL}/team/${id}`);
+
+    const result = await res.json();
+    return result;
+  } catch (err) {
+    console.error(err);
+    return null;
   }
 }

@@ -4,7 +4,9 @@ import { getFormById } from 'services/api/forms';
 import { createResponse } from 'services/api/response';
 import { PageProps } from 'types/page';
 
-export default async function Page(props: PageProps<{ id: string }>) {
+export default async function Page(
+  props: PageProps<{ id: string; teamId: string }>,
+) {
   const params = await props.params;
 
   const form = await getFormById(params.id);
@@ -17,5 +19,5 @@ export default async function Page(props: PageProps<{ id: string }>) {
     return <MainContainer>Failed to create response</MainContainer>;
   }
 
-  return redirect(`/form/${form.id}/${response.id}`);
+  return redirect(`/forms/${params.teamId}/${form.id}/${response.id}`);
 }
