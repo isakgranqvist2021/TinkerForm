@@ -35,7 +35,7 @@ export function EmailSettings() {
       marketing: emailSettings.data?.marketing ?? true,
       productUpdates: emailSettings.data?.productUpdates ?? true,
     });
-  }, [emailSettings.data]);
+  }, [emailSettings.data, form]);
 
   if (emailSettings.isLoading) {
     return (
