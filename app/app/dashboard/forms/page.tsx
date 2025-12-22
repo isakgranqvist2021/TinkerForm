@@ -1,7 +1,7 @@
 import { auth0 } from 'lib/auth0';
 import Link from 'next/link';
 import React from 'react';
-import { MainContainer } from 'containers/main-container';
+import { ContentContainer } from 'containers/main-container';
 import { redirect } from 'next/navigation';
 import { getMetadata } from 'utils';
 
@@ -22,7 +22,7 @@ export default async function Page() {
   }
 
   return (
-    <MainContainer>
+    <ContentContainer>
       <div className="flex gap-4 justify-between">
         <div className="flex justify-between">
           <div className="breadcrumbs text-sm">
@@ -42,6 +42,6 @@ export default async function Page() {
       <FormStats />
 
       <FormsList />
-    </MainContainer>
+    </ContentContainer>
   );
 }

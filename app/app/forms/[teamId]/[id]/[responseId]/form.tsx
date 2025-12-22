@@ -20,7 +20,7 @@ import { toast } from 'sonner';
 import React from 'react';
 import { type FormDto } from 'services/api/forms';
 import { ResponseDto } from 'services/api/response';
-import { MainContainer } from 'containers/main-container';
+import { ContentContainer } from 'containers/main-container';
 import useMutation from 'swr/mutation';
 
 interface AnswerFormProps {
@@ -40,7 +40,7 @@ export function AnswerForm(props: AnswerFormProps) {
         />
       )}
 
-      <MainContainer>
+      <ContentContainer>
         <div className="w-[760px] mx-auto max-w-full gap-8 flex-col flex">
           <div>
             <div className="flex justify-between">
@@ -90,7 +90,7 @@ export function AnswerForm(props: AnswerFormProps) {
             isCompleted={props.response.completedAt !== null}
           />
         </div>
-      </MainContainer>
+      </ContentContainer>
     </div>
   );
 }

@@ -1,4 +1,4 @@
-import { MainContainer } from 'containers/main-container';
+import { ContentContainer } from 'containers/main-container';
 import { redirect } from 'next/navigation';
 import { getFormById } from 'services/api/forms';
 import { createResponse } from 'services/api/response';
@@ -11,12 +11,12 @@ export default async function Page(
 
   const form = await getFormById(params.id);
   if (!form) {
-    return <MainContainer>Form not found</MainContainer>;
+    return <ContentContainer>Form not found</ContentContainer>;
   }
 
   const response = await createResponse(form.id);
   if (!response) {
-    return <MainContainer>Failed to create response</MainContainer>;
+    return <ContentContainer>Failed to create response</ContentContainer>;
   }
 
   return redirect(`/forms/${params.teamId}/${form.id}/${response.id}`);

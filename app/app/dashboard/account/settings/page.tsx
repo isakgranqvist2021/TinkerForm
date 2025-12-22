@@ -1,6 +1,6 @@
 import { EmailSettings } from 'components/email-settings';
 import { PageTitle } from 'components/page-title';
-import { MainContainer } from 'containers/main-container';
+import { ContentContainer } from 'containers/main-container';
 import { auth0 } from 'lib/auth0';
 import { redirect } from 'next/navigation';
 import React from 'react';
@@ -18,12 +18,12 @@ export default async function Page() {
   }
 
   return (
-    <MainContainer>
+    <ContentContainer>
       <PageTitle>Account Settings</PageTitle>
 
       <div className="badge badge-primary">{session.user.email}</div>
 
       <EmailSettings />
-    </MainContainer>
+    </ContentContainer>
   );
 }

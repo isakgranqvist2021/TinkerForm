@@ -1,6 +1,6 @@
 import { MapPinIcon } from '@heroicons/react/24/solid';
 import { EmptyState } from 'components/empty-state';
-import { MainContainer } from 'containers/main-container';
+import { ContentContainer } from 'containers/main-container';
 import Link from 'next/link';
 import { getActiveFormsByTeamId } from 'services/api/team';
 import { PageProps } from 'types/page';
@@ -19,17 +19,17 @@ export default async function Page(props: PageProps<{ teamId: string }>) {
 
   if (!forms.length) {
     return (
-      <MainContainer>
+      <ContentContainer>
         <EmptyState
           title="No active forms"
           subtitle="This team does not have any active forms at the moment, check back later."
         />
-      </MainContainer>
+      </ContentContainer>
     );
   }
 
   return (
-    <MainContainer>
+    <ContentContainer>
       <div className="flex gap-6 justify-center flex-wrap">
         {forms.map((form) => (
           <Link
@@ -78,6 +78,6 @@ export default async function Page(props: PageProps<{ teamId: string }>) {
           </Link>
         ))}
       </div>
-    </MainContainer>
+    </ContentContainer>
   );
 }

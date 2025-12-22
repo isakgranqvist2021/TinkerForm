@@ -1,5 +1,5 @@
 import { defaultTheme } from 'config/theme';
-import { MainContainer } from 'containers/main-container';
+import { ContentContainer } from 'containers/main-container';
 import { auth0 } from 'lib/auth0';
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
@@ -34,7 +34,7 @@ export default async function Page(props: PageProps<{ id: string }>) {
   const mappedSections = sections.map(sectionMapper);
 
   return (
-    <MainContainer>
+    <ContentContainer>
       <div className="breadcrumbs text-sm">
         <ul>
           <li>
@@ -78,6 +78,6 @@ export default async function Page(props: PageProps<{ id: string }>) {
             .sort((a, b) => a.index - b.index),
         }}
       />
-    </MainContainer>
+    </ContentContainer>
   );
 }

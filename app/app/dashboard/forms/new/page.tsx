@@ -1,4 +1,4 @@
-import { MainContainer } from 'containers/main-container';
+import { ContentContainer } from 'containers/main-container';
 import { auth0 } from 'lib/auth0';
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
@@ -18,7 +18,7 @@ export default async function Page() {
   }
 
   return (
-    <MainContainer>
+    <ContentContainer>
       <div className="breadcrumbs text-sm">
         <ul>
           <li>
@@ -31,6 +31,6 @@ export default async function Page() {
       </div>
 
       <AddNewForm />
-    </MainContainer>
+    </ContentContainer>
   );
 }
