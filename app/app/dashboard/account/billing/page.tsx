@@ -1,5 +1,6 @@
 import { PackageCards } from 'components/package-cards';
 import { PageTitle } from 'components/page-title';
+import { MainContainer } from 'containers/containers';
 import dayjs from 'dayjs';
 import { auth0 } from 'lib/auth0';
 import Link from 'next/link';
@@ -31,7 +32,7 @@ export default async function Page() {
   }
 
   return (
-    <div className="max-w-7xl mx-auto w-full px-4 py-12 flex flex-col gap-10 flex-grow">
+    <MainContainer className="px-4 py-12 flex flex-col gap-10">
       <div className="mb-4">
         <PageTitle className="text-center mb-2">{title}</PageTitle>
         <p className="text-center">{subtitle}</p>
@@ -44,6 +45,6 @@ export default async function Page() {
           Contact Support
         </Link>
       </div>
-    </div>
+    </MainContainer>
   );
 }

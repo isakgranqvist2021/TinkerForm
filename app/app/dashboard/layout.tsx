@@ -70,7 +70,7 @@ export default async function DashboardLayout(props: React.PropsWithChildren) {
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto w-full flex-grow">{props.children}</div>
+      {props.children}
 
       <Footer />
     </div>

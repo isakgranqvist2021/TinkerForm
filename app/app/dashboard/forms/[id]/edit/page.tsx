@@ -1,5 +1,5 @@
 import { defaultTheme } from 'config/theme';
-import { ContentContainer } from 'containers/main-container';
+import { ContentContainer, MainContainer } from 'containers/containers';
 import { auth0 } from 'lib/auth0';
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
@@ -34,50 +34,52 @@ export default async function Page(props: PageProps<{ id: string }>) {
   const mappedSections = sections.map(sectionMapper);
 
   return (
-    <ContentContainer>
-      <div className="breadcrumbs text-sm">
-        <ul>
-          <li>
-            <Link href="/dashboard/forms">Forms</Link>
-          </li>
-          <li>
-            <Link href={`/dashboard/forms/${params.id}`}>{form.title}</Link>
-          </li>
-          <li>
-            <Link href={`/dashboard/forms/${params.id}/edit`}>Edit</Link>
-          </li>
-        </ul>
-      </div>
+    <MainContainer>
+      <ContentContainer>
+        <div className="breadcrumbs text-sm">
+          <ul>
+            <li>
+              <Link href="/dashboard/forms">Forms</Link>
+            </li>
+            <li>
+              <Link href={`/dashboard/forms/${params.id}`}>{form.title}</Link>
+            </li>
+            <li>
+              <Link href={`/dashboard/forms/${params.id}/edit`}>Edit</Link>
+            </li>
+          </ul>
+        </div>
 
-      <EditForm
-        coverImageUrl={form.coverImage}
-        formId={params.id}
-        defaultValues={{
-          title: form.title,
-          description: form.description,
-          location: form.location,
-          coverImage: new File([], ''),
-          theme: form.theme ?? defaultTheme,
-          availability: form.availability,
-          maxResponses: form.maxResponses,
-          startDate: formatDateInput(form.startDate),
-          endDate: formatDateInput(form.endDate),
-          sections: mappedSections
-            .map((section) => {
-              if (section.type === 'multiple-choice') {
-                return {
-                  ...section,
-                  options: section.options.map((option) => ({
-                    text: option.text,
-                  })),
-                };
-              }
+        <EditForm
+          coverImageUrl={form.coverImage}
+          formId={params.id}
+          defaultValues={{
+            title: form.title,
+            description: form.description,
+            location: form.location,
+            coverImage: new File([], ''),
+            theme: form.theme ?? defaultTheme,
+            availability: form.availability,
+            maxResponses: form.maxResponses,
+            startDate: formatDateInput(form.startDate),
+            endDate: formatDateInput(form.endDate),
+            sections: mappedSections
+              .map((section) => {
+                if (section.type === 'multiple-choice') {
+                  return {
+                    ...section,
+                    options: section.options.map((option) => ({
+                      text: option.text,
+                    })),
+                  };
+                }
 
-              return section;
-            })
-            .sort((a, b) => a.index - b.index),
-        }}
-      />
-    </ContentContainer>
+                return section;
+              })
+              .sort((a, b) => a.index - b.index),
+          }}
+        />
+      </ContentContainer>
+    </MainContainer>
   );
 }

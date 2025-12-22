@@ -1,6 +1,6 @@
 import { MapPinIcon } from '@heroicons/react/24/solid';
 import { EmptyState } from 'components/empty-state';
-import { ContentContainer } from 'containers/main-container';
+import { ContentContainer } from 'containers/containers';
 import Link from 'next/link';
 import { getActiveFormsByTeamId } from 'services/api/team';
 import { PageProps } from 'types/page';

@@ -1,7 +1,7 @@
 import { auth0 } from 'lib/auth0';
 import Link from 'next/link';
 import React from 'react';
-import { ContentContainer } from 'containers/main-container';
+import { ContentContainer, MainContainer } from 'containers/containers';
 import { redirect } from 'next/navigation';
 import { getMetadata } from 'utils';
 
@@ -22,26 +22,28 @@ export default async function Page() {
   }
 
   return (
-    <ContentContainer>
-      <div className="flex gap-4 justify-between">
-        <div className="flex justify-between">
-          <div className="breadcrumbs text-sm">
-            <ul>
-              <li>
-                <Link href="/dashboard/forms">Forms</Link>
-              </li>
-            </ul>
+    <MainContainer>
+      <ContentContainer>
+        <div className="flex gap-4 justify-between">
+          <div className="flex justify-between">
+            <div className="breadcrumbs text-sm">
+              <ul>
+                <li>
+                  <Link href="/dashboard/forms">Forms</Link>
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          <div className="flex gap-4">
+            <TeamFormsButton />
           </div>
         </div>
 
-        <div className="flex gap-4">
-          <TeamFormsButton />
-        </div>
-      </div>
+        <FormStats />
 
-      <FormStats />
-
-      <FormsList />
-    </ContentContainer>
+        <FormsList />
+      </ContentContainer>
+    </MainContainer>
   );
 }

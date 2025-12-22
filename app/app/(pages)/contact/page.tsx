@@ -1,6 +1,6 @@
 import { ContactForm } from './form';
 import { Drawer } from 'components/drawer';
-import { Container } from 'containers/main-container';
+import { Container } from 'containers/containers';
 import { getMetadata } from 'utils';
 
 export const metadata = getMetadata({

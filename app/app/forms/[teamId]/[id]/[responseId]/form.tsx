@@ -20,7 +20,7 @@ import { toast } from 'sonner';
 import React from 'react';
 import { type FormDto } from 'services/api/forms';
 import { ResponseDto } from 'services/api/response';
-import { ContentContainer } from 'containers/main-container';
+import { ContentContainer } from 'containers/containers';
 import useMutation from 'swr/mutation';
 
 interface AnswerFormProps {

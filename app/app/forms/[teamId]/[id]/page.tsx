@@ -1,4 +1,4 @@
-import { ContentContainer } from 'containers/main-container';
+import { ContentContainer } from 'containers/containers';
 import { redirect } from 'next/navigation';
 import { getFormById } from 'services/api/forms';
 import { createResponse } from 'services/api/response';

@@ -1,4 +1,4 @@
-import { ContentContainer } from 'containers/main-container';
+import { ContentContainer, MainContainer } from 'containers/containers';
 import { auth0 } from 'lib/auth0';
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
@@ -18,19 +18,21 @@ export default async function Page() {
   }
 
   return (
-    <ContentContainer>
-      <div className="breadcrumbs text-sm">
-        <ul>
-          <li>
-            <Link href="/dashboard/forms">Forms</Link>
-          </li>
-          <li>
-            <Link href="/dashboard/forms/new">New</Link>
-          </li>
-        </ul>
-      </div>
+    <MainContainer>
+      <ContentContainer>
+        <div className="breadcrumbs text-sm">
+          <ul>
+            <li>
+              <Link href="/dashboard/forms">Forms</Link>
+            </li>
+            <li>
+              <Link href="/dashboard/forms/new">New</Link>
+            </li>
+          </ul>
+        </div>
 
-      <AddNewForm />
-    </ContentContainer>
+        <AddNewForm />
+      </ContentContainer>
+    </MainContainer>
   );
 }

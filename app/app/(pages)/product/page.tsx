@@ -6,7 +6,7 @@ import {
 } from '@heroicons/react/24/outline';
 import { AdjustmentsHorizontalIcon } from '@heroicons/react/24/solid';
 import { Drawer } from 'components/drawer';
-import { Container } from 'containers/main-container';
+import { Container } from 'containers/containers';
 import Link from 'next/link';
 import React from 'react';
 import { cn, getMetadata } from 'utils';

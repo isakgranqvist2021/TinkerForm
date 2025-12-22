@@ -1,5 +1,5 @@
 import { ResponseProvider } from './response-modal';
-import { ContentContainer } from 'containers/main-container';
+import { ContentContainer, MainContainer } from 'containers/containers';
 import { auth0 } from 'lib/auth0';
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
@@ -66,76 +66,80 @@ export default async function Page(props: PageProps<{ id: string }>) {
   const viewFormHref = `${process.env.APP_BASE_URL}/forms/${team?.id}/${form.id}`;
 
   return (
-    <ResponseProvider>
-      <DeleteFormModal formId={form.id} />
+    <MainContainer>
+      <ResponseProvider>
+        <DeleteFormModal formId={form.id} />
 
-      <ContentContainer>
-        <div className="flex justify-between">
-          <div className="breadcrumbs text-sm">
-            <ul>
-              <li>
-                <Link href="/dashboard/forms">Forms</Link>
-              </li>
-              <li>
-                <Link href={`/dashboard/forms/${params.id}`}>{form.title}</Link>
-              </li>
-            </ul>
+        <ContentContainer>
+          <div className="flex justify-between">
+            <div className="breadcrumbs text-sm">
+              <ul>
+                <li>
+                  <Link href="/dashboard/forms">Forms</Link>
+                </li>
+                <li>
+                  <Link href={`/dashboard/forms/${params.id}`}>
+                    {form.title}
+                  </Link>
+                </li>
+              </ul>
+            </div>
+
+            <FormActions
+              viewFormHref={viewFormHref}
+              formId={form.id}
+              pausedAt={form.pausedAt}
+              packageId={subscription?.packageId}
+            />
           </div>
 
-          <FormActions
-            viewFormHref={viewFormHref}
+          <div className="stats shadow">
+            <div className="stat">
+              <div className="stat-figure text-primary">
+                <EyeIcon className="inline-block h-8 w-8 stroke-current" />
+              </div>
+              <div className="stat-title">Total Views</div>
+              <div className="stat-value text-primary">
+                {formatNumber(formStats.totalResponses)}
+              </div>
+            </div>
+
+            <div className="stat">
+              <div className="stat-figure text-secondary">
+                <CheckCircleIcon className="inline-block h-8 w-8 stroke-current" />
+              </div>
+              <div className="stat-title">Total Responses</div>
+              <div className="stat-value text-secondary">
+                {formatNumber(formStats.completedResponses)}
+              </div>
+            </div>
+
+            <div className="stat">
+              <div className="stat-figure text-secondary">
+                <ClockIcon className="inline-block h-8 w-8 stroke-current" />
+              </div>
+              <div className="stat-title">Average Completion Time</div>
+              <div className="stat-value text-secondary">
+                {averageCompletionTime ?? 'N/A'}
+              </div>
+            </div>
+
+            <div className="stat">
+              <div className="stat-figure text-secondary">
+                <PercentBadgeIcon className="inline-block h-8 w-8 stroke-current" />
+              </div>
+              <div className="stat-title">Completion Rate</div>
+              <div className="stat-value">{completionRate}%</div>
+            </div>
+          </div>
+
+          <ResponsesTable
+            subscription={subscription}
             formId={form.id}
-            pausedAt={form.pausedAt}
-            packageId={subscription?.packageId}
+            responses={responses}
           />
-        </div>
-
-        <div className="stats shadow">
-          <div className="stat">
-            <div className="stat-figure text-primary">
-              <EyeIcon className="inline-block h-8 w-8 stroke-current" />
-            </div>
-            <div className="stat-title">Total Views</div>
-            <div className="stat-value text-primary">
-              {formatNumber(formStats.totalResponses)}
-            </div>
-          </div>
-
-          <div className="stat">
-            <div className="stat-figure text-secondary">
-              <CheckCircleIcon className="inline-block h-8 w-8 stroke-current" />
-            </div>
-            <div className="stat-title">Total Responses</div>
-            <div className="stat-value text-secondary">
-              {formatNumber(formStats.completedResponses)}
-            </div>
-          </div>
-
-          <div className="stat">
-            <div className="stat-figure text-secondary">
-              <ClockIcon className="inline-block h-8 w-8 stroke-current" />
-            </div>
-            <div className="stat-title">Average Completion Time</div>
-            <div className="stat-value text-secondary">
-              {averageCompletionTime ?? 'N/A'}
-            </div>
-          </div>
-
-          <div className="stat">
-            <div className="stat-figure text-secondary">
-              <PercentBadgeIcon className="inline-block h-8 w-8 stroke-current" />
-            </div>
-            <div className="stat-title">Completion Rate</div>
-            <div className="stat-value">{completionRate}%</div>
-          </div>
-        </div>
-
-        <ResponsesTable
-          subscription={subscription}
-          formId={form.id}
-          responses={responses}
-        />
-      </ContentContainer>
-    </ResponseProvider>
+        </ContentContainer>
+      </ResponseProvider>
+    </MainContainer>
   );
 }

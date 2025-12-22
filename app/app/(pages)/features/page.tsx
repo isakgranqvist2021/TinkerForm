@@ -2,7 +2,7 @@ import { ArrowRightCircleIcon } from '@heroicons/react/24/solid';
 import { Drawer } from 'components/drawer';
 import { FeatureCards } from 'components/feature-cards';
 import { PageTitle } from 'components/page-title';
-import { Container } from 'containers/main-container';
+import { Container } from 'containers/containers';
 import Link from 'next/link';
 import { getMetadata } from 'utils';
 
