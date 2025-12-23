@@ -39,8 +39,8 @@ export function FormsList() {
 
   return (
     <ul className="list bg-base-100 rounded-box shadow-md">
-      <li className="p-4 pb-2 text-xs opacity-60 tracking-wide flex justify-between">
-        My forms
+      <li className="p-4 pb-2 flex justify-between">
+        <span className="text-xs opacity-60 tracking-wide">My forms</span>
         <NewFormButton />
       </li>
 
