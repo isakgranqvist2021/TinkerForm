@@ -1,7 +1,7 @@
 import z from 'zod';
 import { themeSchema } from './theme';
+import { fileSchema } from './file';
 
-export type SectionType = (typeof sectionTypes)[number];
 export const sectionTypes = [
   'text',
   'link',
@@ -12,8 +12,8 @@ export const sectionTypes = [
   'boolean',
   'multiple-choice',
 ] satisfies Section['type'][];
+export type SectionType = (typeof sectionTypes)[number];
 
-export type BaseSection = z.infer<typeof baseSectionSchema>;
 export const baseSectionSchema = z.object({
   id: z.string(),
   index: z.number(),
@@ -24,8 +24,8 @@ export const baseSectionSchema = z.object({
     .max(1000, 'Description is too long'),
   required: z.boolean(),
 });
+export type BaseSection = z.infer<typeof baseSectionSchema>;
 
-export type TextSection = z.infer<typeof textSectionSchema>;
 export const textSectionSchema = baseSectionSchema
   .extend({
     min: z.number().min(1),
@@ -36,29 +36,29 @@ export const textSectionSchema = baseSectionSchema
     message: 'max must be greater than min',
     path: ['max'],
   });
+export type TextSection = z.infer<typeof textSectionSchema>;
 
-export type LinkSection = z.infer<typeof linkSectionSchema>;
 export const linkSectionSchema = baseSectionSchema.extend({
   type: z.literal('link'),
 });
+export type LinkSection = z.infer<typeof linkSectionSchema>;
 
-export type EmailSection = z.infer<typeof emailSectionSchema>;
 export const emailSectionSchema = baseSectionSchema.extend({
   type: z.literal('email'),
 });
+export type EmailSection = z.infer<typeof emailSectionSchema>;
 
-export type PhoneSection = z.infer<typeof phoneSectionSchema>;
 export const phoneSectionSchema = baseSectionSchema.extend({
   type: z.literal('phone'),
 });
+export type PhoneSection = z.infer<typeof phoneSectionSchema>;
 
-export type FileSection = z.infer<typeof fileSectionSchema>;
 export const fileSectionSchema = baseSectionSchema.extend({
   type: z.literal('file'),
   acceptedFileTypes: z.string().nullable(),
 });
+export type FileSection = z.infer<typeof fileSectionSchema>;
 
-export type RangeSection = z.infer<typeof rangeSectionSchema>;
 export const rangeSectionSchema = baseSectionSchema
   .extend({
     type: z.literal('range'),
@@ -69,23 +69,25 @@ export const rangeSectionSchema = baseSectionSchema
     message: 'max must be greater than min',
     path: ['max'],
   });
+export type RangeSection = z.infer<typeof rangeSectionSchema>;
 
-export type BooleanSection = z.infer<typeof booleanSectionSchema>;
 export const booleanSectionSchema = baseSectionSchema.extend({
   type: z.literal('boolean'),
 });
+export type BooleanSection = z.infer<typeof booleanSectionSchema>;
 
-export type MultipleChoiceOption = z.infer<typeof multipleChoiceOptionSchema>;
 export const multipleChoiceOptionSchema = z.object({
   text: z.string().min(1, 'Option text is required'),
 });
-export type MultipleChoiceSection = z.infer<typeof multipleChoiceSectionSchema>;
+export type MultipleChoiceOption = z.infer<typeof multipleChoiceOptionSchema>;
+
 export const multipleChoiceSectionSchema = baseSectionSchema.extend({
   type: z.literal('multiple-choice'),
   options: z
     .array(multipleChoiceOptionSchema)
     .min(2, 'At least two options are required'),
 });
+export type MultipleChoiceSection = z.infer<typeof multipleChoiceSectionSchema>;
 
 export const sectionSchema = z.discriminatedUnion('type', [
   textSectionSchema,
@@ -99,24 +101,6 @@ export const sectionSchema = z.discriminatedUnion('type', [
 ]);
 export type Section = z.infer<typeof sectionSchema>;
 
-export const IMAGE_FILE_TYPES = [
-  'image/png',
-  'image/jpg',
-  'image/jpeg',
-  'image/webp',
-];
-export const IMAGE_MAX_SIZE = 5000000; // 5MB
-export const fileSchema = z
-  .instanceof(File, { message: 'File is required' })
-  .refine((file) => file && file.size > 0 && file.size <= IMAGE_MAX_SIZE, {
-    message: 'File must not be empty and must be less than 5MB',
-  })
-  .refine((value) => value instanceof File || typeof value === 'string', {
-    message: 'File is required',
-  });
-
-export type Form = z.infer<typeof formSchema>;
-export type FormAvailability = Form['availability'];
 export const formSchema = z.object({
   title: z.string().min(1, 'Title is required').max(255, 'Title is too long'),
   description: z
@@ -143,6 +127,8 @@ export const formSchema = z.object({
     message: 'Invalid end date',
   }),
 });
+export type Form = z.infer<typeof formSchema>;
+export type FormAvailability = Form['availability'];
 
 function refineDate(date: string) {
   const timestamp = new Date(date).getTime();

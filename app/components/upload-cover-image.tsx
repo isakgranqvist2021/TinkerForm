@@ -16,6 +16,8 @@ interface UploadImageProps {
   label: string;
 
   className?: React.ComponentProps<'div'>['className'];
+
+  isLoading?: boolean;
 }
 
 export function UploadImage(props: UploadImageProps) {
@@ -35,6 +37,19 @@ export function UploadImage(props: UploadImageProps) {
   const removeImage = () => props.onChange(null);
 
   const upload = useUpload(props.onChange);
+
+  if (props.isLoading) {
+    return (
+      <div
+        className={cn(
+          'relative group overflow-hidden rounded h-72 w-full flex items-center justify-center',
+          props.className,
+        )}
+      >
+        <span className="loading loading-ring loading-lg"></span>
+      </div>
+    );
+  }
 
   return (
     <React.Fragment>

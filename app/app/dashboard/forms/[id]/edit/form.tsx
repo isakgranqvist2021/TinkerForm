@@ -1,15 +1,15 @@
 'use client';
 
 import { Form, formSchema } from 'models/form';
-import { FormProvider, useForm, UseFormSetValue } from 'react-hook-form';
+import { FormProvider, useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { formatFormValues, urlToFile } from 'utils';
-import { getDownloadUrl } from '@vercel/blob';
+import { formatFormValues } from 'utils';
 import React from 'react';
 import { SectionFormProvider } from 'components/sections-list';
 import useMutation from 'swr/mutation';
 import { FormSections } from 'components/form-sections';
+import { useDownloadImage } from 'hooks/use-download-image';
 
 interface EditFormProps {
   defaultValues: Form;
@@ -23,7 +23,9 @@ export function EditForm(props: EditFormProps) {
     resolver: zodResolver(formSchema),
   });
 
-  useInjectCoverImage(props.coverImageUrl, form.setValue);
+  useDownloadImage(props.coverImageUrl, (file) => {
+    form.setValue('coverImage', file);
+  });
 
   const mutation = useMutation(
     `/api/forms/${props.formId}`,
@@ -79,17 +81,4 @@ export function EditForm(props: EditFormProps) {
       </SectionFormProvider>
     </FormProvider>
   );
-}
-
-function useInjectCoverImage(url: string, setValue: UseFormSetValue<Form>) {
-  const injectFile = React.useCallback(async () => {
-    const downloadUrl = getDownloadUrl(url);
-    const file = await urlToFile(downloadUrl, 'cover-image');
-
-    setValue('coverImage', file);
-  }, [url, setValue]);
-
-  React.useEffect(() => {
-    injectFile();
-  }, [injectFile]);
 }

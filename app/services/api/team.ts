@@ -10,6 +10,13 @@ export interface TeamDto {
 
   title: string | null;
   description: string | null;
+
+  coverImage: string | null;
+  logo: string | null;
+}
+
+export interface UpdateTeamDto {
+  coverImage?: string | null;
 }
 
 export async function createTeam(session: SessionData) {
@@ -53,5 +60,37 @@ export async function getMyTeam(session: SessionData): Promise<TeamDto | null> {
   } catch (err) {
     console.error(err);
     return null;
+  }
+}
+
+export async function getTeam(id: string): Promise<TeamDto | null> {
+  try {
+    const res = await fetch(`${env.API_URL}/team/${id}`);
+
+    const result = await res.json();
+    return result;
+  } catch (err) {
+    console.error(err);
+    return null;
+  }
+}
+
+export async function updateTeam(session: SessionData, dto: UpdateTeamDto) {
+  try {
+    const res = await fetch(`${env.API_URL}/team`, {
+      method: 'PATCH',
+      body: JSON.stringify(dto),
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${session.tokenSet.accessToken}`,
+      },
+    });
+
+    console.log(res);
+
+    return res.ok;
+  } catch (err) {
+    console.error(err);
+    return false;
   }
 }

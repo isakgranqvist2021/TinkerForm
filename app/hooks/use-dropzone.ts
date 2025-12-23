@@ -1,4 +1,4 @@
-import { IMAGE_FILE_TYPES, IMAGE_MAX_SIZE } from 'models/form';
+import { IMAGE_FILE_TYPES, IMAGE_MAX_SIZE } from 'models/file';
 import React from 'react';
 import { toast } from 'sonner';
 

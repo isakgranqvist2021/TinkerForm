@@ -8,7 +8,7 @@ import { getMetadata } from 'utils';
 import { FormsList } from './forms-list';
 import { FormStats } from './form-stats';
 import { TeamFormsButton } from 'components/team-forms-button';
-import { EditTeamSettingsButton } from 'components/edit-team-setings-button';
+import { EditTeamSettingsCoverImage } from 'components/edit-team-setings';
 
 export const metadata = getMetadata({
   title: 'My Forms',
@@ -22,28 +22,32 @@ export default async function Page() {
   }
 
   return (
-    <MainContainer>
-      <ContentContainer>
-        <div className="flex gap-4 justify-between">
-          <div className="flex justify-between">
-            <div className="breadcrumbs text-sm">
-              <ul>
-                <li>
-                  <Link href="/dashboard/forms">Forms</Link>
-                </li>
-              </ul>
+    <React.Fragment>
+      <EditTeamSettingsCoverImage />
+
+      <MainContainer>
+        <ContentContainer>
+          <div className="flex gap-4 justify-between">
+            <div className="flex justify-between">
+              <div className="breadcrumbs text-sm">
+                <ul>
+                  <li>
+                    <Link href="/dashboard/forms">Forms</Link>
+                  </li>
+                </ul>
+              </div>
+            </div>
+
+            <div className="flex gap-4">
+              <TeamFormsButton />
             </div>
           </div>
 
-          <div className="flex gap-4">
-            <TeamFormsButton />
-          </div>
-        </div>
+          <FormStats />
 
-        <FormStats />
-
-        <FormsList />
-      </ContentContainer>
-    </MainContainer>
+          <FormsList />
+        </ContentContainer>
+      </MainContainer>
+    </React.Fragment>
   );
 }
