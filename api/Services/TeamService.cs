@@ -52,10 +52,7 @@ namespace api.Services
             }
 
             team.updated_at = DateTime.UtcNow;
-            team.title = updateTeamSettingsDto.title;
-            team.description = updateTeamSettingsDto.description;
             team.cover_image = updateTeamSettingsDto.cover_image;
-            team.logo = updateTeamSettingsDto.logo;
 
             _context.SaveChanges();
 
