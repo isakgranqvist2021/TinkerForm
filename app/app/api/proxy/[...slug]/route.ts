@@ -47,6 +47,11 @@ async function proxy(
     const backendResponse = await fetch(targetUrl, fetchOptions);
 
     const responseHeaders = new Headers(backendResponse.headers);
+
+    /**
+     * These headers mess up the gzip encoding
+     * Data will be decoded twice if these are present
+     */
     responseHeaders.delete('content-encoding');
     responseHeaders.delete('content-length');
     responseHeaders.delete('transfer-encoding');
