@@ -43,7 +43,7 @@ namespace api.Services
             return _context.team.FirstOrDefault(team => team.email == email);
         }
 
-        public TeamModel? UpdateSettings(UpdateTeamSettingsDto updateTeamSettingsDto, string email)
+        public TeamModel? UpdateLogo(UpdateUrlDto updateUrlDto, string email)
         {
             var team = _context.team.FirstOrDefault(team => team.email == email);
             if (team == null)
@@ -52,7 +52,23 @@ namespace api.Services
             }
 
             team.updated_at = DateTime.UtcNow;
-            team.cover_image = updateTeamSettingsDto.cover_image;
+            team.logo = updateUrlDto.url;
+
+            _context.SaveChanges();
+
+            return team;
+        }
+
+        public TeamModel? UpdateCoverImage(UpdateUrlDto updateUrlDto, string email)
+        {
+            var team = _context.team.FirstOrDefault(team => team.email == email);
+            if (team == null)
+            {
+                return null;
+            }
+
+            team.updated_at = DateTime.UtcNow;
+            team.cover_image = updateUrlDto.url;
 
             _context.SaveChanges();
 

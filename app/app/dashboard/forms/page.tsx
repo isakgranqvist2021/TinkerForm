@@ -9,6 +9,7 @@ import { FormsList } from './forms-list';
 import { FormStats } from './form-stats';
 import { TeamFormsButton } from 'components/team-forms-button';
 import { EditTeamSettingsCoverImage } from 'components/edit-team-setings';
+import { getMyTeam } from 'services/api/team';
 
 export const metadata = getMetadata({
   title: 'My Forms',
@@ -21,9 +22,11 @@ export default async function Page() {
     return redirect('/auth/login');
   }
 
+  const team = await getMyTeam(session);
+
   return (
     <React.Fragment>
-      <EditTeamSettingsCoverImage />
+      <EditTeamSettingsCoverImage coverImage={team?.coverImage} />
 
       <MainContainer>
         <ContentContainer>

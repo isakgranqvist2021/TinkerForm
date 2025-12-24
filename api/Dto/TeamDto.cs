@@ -1,10 +1,8 @@
-using System.Text.Json.Serialization;
 
 namespace api.Dto
 {
-    public class UpdateTeamSettingsDto
+    public class UpdateUrlDto
     {
-        [JsonPropertyName("coverImage")]
-        public string? cover_image { get; set; } = null;
+        public string? url { get; set; } = null;
     }
 }

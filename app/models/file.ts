@@ -15,3 +15,7 @@ export const fileSchema = z
   .refine((value) => value instanceof File || typeof value === 'string', {
     message: 'File is required',
   });
+
+export const uploadSchema = z.object({
+  file: fileSchema,
+});

@@ -85,9 +85,9 @@ namespace api.Controllers
             return Ok(team);
         }
 
-        [HttpPatch]
+        [HttpPatch("logo")]
         [Authorize]
-        public ActionResult<TeamModel> UpdateTeamSettings([FromBody] UpdateTeamSettingsDto updateTeamSettingsDto)
+        public ActionResult<TeamModel> UpdateLogo([FromBody] UpdateUrlDto updateUrlDto)
         {
             var email = HttpContext.Items["Email"]?.ToString();
             if (email == null)
@@ -101,7 +101,33 @@ namespace api.Controllers
                 return BadRequest(ModelState);
             }
 
-            var team = _modelService.teamService.UpdateSettings(updateTeamSettingsDto, email);
+            var team = _modelService.teamService.UpdateLogo(updateUrlDto, email);
+            if (team == null)
+            {
+                return BadRequest();
+            }
+
+            return Ok(team);
+        }
+
+
+        [HttpPatch("cover-image")]
+        [Authorize]
+        public ActionResult<TeamModel> UpdateCoverImage([FromBody] UpdateUrlDto updateUrlDto)
+        {
+            var email = HttpContext.Items["Email"]?.ToString();
+            if (email == null)
+            {
+                _logger.LogWarning("Unauthorized access attempt.");
+                return Unauthorized();
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var team = _modelService.teamService.UpdateCoverImage(updateUrlDto, email);
             if (team == null)
             {
                 return BadRequest();

@@ -15,8 +15,8 @@ export interface TeamDto {
   logo: string | null;
 }
 
-export interface UpdateTeamDto {
-  coverImage?: string | null;
+export interface UpdateUrlDto {
+  url: string | null;
 }
 
 export async function createTeam(session: SessionData) {
@@ -72,25 +72,5 @@ export async function getTeam(id: string): Promise<TeamDto | null> {
   } catch (err) {
     console.error(err);
     return null;
-  }
-}
-
-export async function updateTeam(session: SessionData, dto: UpdateTeamDto) {
-  try {
-    const res = await fetch(`${env.API_URL}/team`, {
-      method: 'PATCH',
-      body: JSON.stringify(dto),
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${session.tokenSet.accessToken}`,
-      },
-    });
-
-    console.log(res);
-
-    return res.ok;
-  } catch (err) {
-    console.error(err);
-    return false;
   }
 }

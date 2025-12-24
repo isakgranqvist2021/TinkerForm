@@ -12,8 +12,8 @@ export function TeamFormsButton() {
     return (
       <button className="btn btn-neutral" disabled>
         <span className="loading loading-dots loading-sm absolute"></span>
-        Team Page
-        <ArrowRightCircleIcon className="size-6" />
+        <span className="opacity-0">Team Page</span>
+        <ArrowRightCircleIcon className="size-6 opacity-0" />
       </button>
     );
   }

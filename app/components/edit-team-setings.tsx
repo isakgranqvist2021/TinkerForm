@@ -2,34 +2,30 @@
 
 import React from 'react';
 import { UploadImage } from './upload-cover-image';
-import { useTeam, useUpdateTeam } from 'hooks/use-team';
-import { useDownloadImage } from 'hooks/use-download-image';
 import { toast } from 'sonner';
+import { useFileMutation } from 'hooks/use-upload';
 
-export function EditTeamSettingsCoverImage() {
-  const teamSettings = useTeam();
+interface EditTeamSettingsCoverImageProps {
+  coverImage: string | null | undefined;
+}
 
-  const [file, setFile] = React.useState<File | null>(null);
-
-  const { updateTeam, isLoading } = useUpdateTeam();
-
-  useDownloadImage(teamSettings.data?.coverImage, setFile);
+export function EditTeamSettingsCoverImage(
+  props: EditTeamSettingsCoverImageProps,
+) {
+  const teamCoverImage = useFileMutation({
+    getUrl: props.coverImage,
+    postUrl: '/api/proxy/team/cover-image',
+    onError: () => toast.error('Cover image not saved'),
+    onSuccess: () => toast.success('Cover image updated'),
+  });
 
   return (
     <UploadImage
-      isLoading={teamSettings.isLoading || isLoading}
+      className="rounded-none"
+      isLoading={teamCoverImage.isLoading}
       label="Cover Image"
-      file={file}
-      onChange={async (file) => {
-        const ok = await updateTeam({ coverImage: file });
-
-        if (ok) {
-          setFile(file);
-          toast.success('Cover image updated');
-        } else {
-          toast.error('Cover image not saved');
-        }
-      }}
+      file={teamCoverImage.file}
+      onChange={teamCoverImage.trigger}
     />
   );
 }

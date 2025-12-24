@@ -21,22 +21,14 @@ interface UploadImageProps {
 }
 
 export function UploadImage(props: UploadImageProps) {
-  const imgRef = React.useRef<HTMLImageElement>(null);
   const uploadRef = React.useRef<HTMLInputElement>(null);
-
-  React.useEffect(() => {
-    if (!imgRef.current || !props.file?.size) return;
-
-    const url = URL.createObjectURL(props.file);
-    imgRef.current.src = url;
-
-    return () => URL.revokeObjectURL(url);
-  }, [props.file, imgRef.current]);
 
   const openFileInput = () => uploadRef.current?.click();
   const removeImage = () => props.onChange(null);
 
   const upload = useUpload(props.onChange);
+
+  const src = props.file?.size ? URL.createObjectURL(props.file) : undefined;
 
   if (props.isLoading) {
     return (
@@ -75,8 +67,8 @@ export function UploadImage(props: UploadImageProps) {
           <div className="relative h-full w-full">
             <img
               className="h-full w-full object-cover rounded-[inherit]"
-              ref={imgRef}
               alt={props.label}
+              src={src}
             />
 
             <div className="absolute inset-0 bg-black/60 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-200">
