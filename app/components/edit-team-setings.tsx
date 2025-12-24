@@ -15,7 +15,7 @@ export function EditTeamSettingsCoverImage(
   const teamCoverImage = useFileMutation({
     getUrl: props.coverImage,
     postUrl: '/api/proxy/team/cover-image',
-    onError: () => toast.error('Cover image not saved'),
+    onError: () => toast.error('Cover image not saved.'),
     onSuccess: () => toast.success('Cover image updated'),
   });
 
