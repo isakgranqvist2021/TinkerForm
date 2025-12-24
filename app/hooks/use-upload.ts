@@ -78,8 +78,6 @@ export function useFileMutation(props: {
 
   const isLoading = mutation.isMutating || downloadImage.isLoading;
 
-  console.log(downloadImage.isLoading, file);
-
   return {
     file,
     isLoading,
