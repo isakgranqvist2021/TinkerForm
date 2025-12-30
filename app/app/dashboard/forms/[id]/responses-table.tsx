@@ -129,7 +129,7 @@ export function ResponsesTable(props: ResponsesTableProps) {
         </div>
       </div>
 
-      <div className="overflow-x-auto rounded-box border border-base-content/5 bg-base-100">
+      <div className="overflow-x-auto">
         <table className="table">
           <thead>
             <tr>
