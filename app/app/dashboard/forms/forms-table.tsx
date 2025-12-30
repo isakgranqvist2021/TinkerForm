@@ -117,12 +117,14 @@ function renderFormTableRow(formDto: FormDto) {
 
         <DeleteFormButton formId={formDto.id} />
 
-        <Link
-          href={`/dashboard/forms/${formDto.id}`}
-          className="btn btn-square btn-ghost"
-        >
-          <ArrowRightCircleIcon className="size-6" />
-        </Link>
+        <div className="tooltip tooltip-left" data-tip="Form Details">
+          <Link
+            href={`/dashboard/forms/${formDto.id}`}
+            className="btn btn-square btn-ghost"
+          >
+            <ArrowRightCircleIcon className="size-6" />
+          </Link>
+        </div>
       </th>
     </tr>
   );
