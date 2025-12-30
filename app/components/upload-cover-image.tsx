@@ -10,8 +10,8 @@ import React from 'react';
 import { cn } from 'utils';
 
 interface UploadImageProps {
-  onChange: (file: File | null) => void;
-  file: File | null;
+  onChange: (url: File | null) => void;
+  src: string | null;
 
   label: string;
 
@@ -27,8 +27,6 @@ export function UploadImage(props: UploadImageProps) {
   const removeImage = () => props.onChange(null);
 
   const upload = useUpload(props.onChange);
-
-  const src = props.file?.size ? URL.createObjectURL(props.file) : undefined;
 
   if (props.isLoading) {
     return (
@@ -63,12 +61,12 @@ export function UploadImage(props: UploadImageProps) {
           )}
         </div>
 
-        {props.file?.size ? (
+        {props.src && props.src.length > 0 ? (
           <div className="relative h-full w-full">
             <img
               className="h-full w-full object-cover rounded-[inherit]"
               alt={props.label}
-              src={src}
+              src={props.src}
             />
 
             <div className="absolute inset-0 bg-black/60 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-200">

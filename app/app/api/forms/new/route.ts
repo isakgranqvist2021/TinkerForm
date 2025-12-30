@@ -1,10 +1,9 @@
 import { created, internalServerError, unauthorized } from 'app/api/utils';
 import { auth0 } from 'lib/auth0';
 import { formSchema } from 'models/form';
-import { createForm, CreateFormDto } from 'services/api/forms';
+import { createForm } from 'services/api/forms';
 import { createSections } from 'services/api/section';
 import { parseFormFormData } from 'utils';
-import { uploadFile } from 'utils/utils.server';
 
 export async function POST(req: Request) {
   try {
@@ -15,11 +14,8 @@ export async function POST(req: Request) {
 
     const formData = await req.formData();
     const form = formSchema.parse(parseFormFormData(formData));
-    const createFormDto: CreateFormDto = { ...form, coverImage: '' };
 
-    createFormDto.coverImage = await uploadFile(form.coverImage);
-
-    const res = await createForm(createFormDto, session);
+    const res = await createForm(form, session);
     if (!res) {
       throw new Error('Failed to create form');
     }

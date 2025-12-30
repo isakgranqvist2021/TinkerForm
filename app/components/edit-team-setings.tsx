@@ -2,8 +2,8 @@
 
 import React from 'react';
 import { UploadImage } from './upload-cover-image';
-import { toast } from 'sonner';
-import { useFileMutation } from 'hooks/use-upload';
+import { useUpdateTeamCoverImage, useUploadFile } from 'hooks/use-upload';
+import { useRouter } from 'next/navigation';
 
 interface EditTeamSettingsCoverImageProps {
   coverImage: string | null | undefined;
@@ -12,20 +12,31 @@ interface EditTeamSettingsCoverImageProps {
 export function EditTeamSettingsCoverImage(
   props: EditTeamSettingsCoverImageProps,
 ) {
-  const teamCoverImage = useFileMutation({
-    getUrl: props.coverImage,
-    postUrl: '/api/proxy/team/cover-image',
-    onError: () => toast.error('Cover image not saved'),
-    onSuccess: () => toast.success('Cover image updated'),
-  });
+  const updateTeamCoverImage = useUpdateTeamCoverImage();
+  const uploadFile = useUploadFile();
+
+  const router = useRouter();
+
+  const handleChange = async (file: File | null) => {
+    const url = await uploadFile.upload({
+      file,
+      url: props.coverImage,
+    });
+
+    await updateTeamCoverImage.update(url);
+
+    router.refresh();
+  };
+
+  const isLoading = updateTeamCoverImage.isLoading || uploadFile.isLoading;
 
   return (
     <UploadImage
       className="rounded-none"
-      isLoading={teamCoverImage.isLoading}
+      isLoading={isLoading}
       label="Cover Image"
-      file={teamCoverImage.file}
-      onChange={teamCoverImage.trigger}
+      src={props.coverImage ?? null}
+      onChange={handleChange}
     />
   );
 }

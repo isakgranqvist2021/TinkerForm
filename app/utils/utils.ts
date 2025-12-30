@@ -158,6 +158,7 @@ export function parseFormFormData(formData: FormData) {
       case 'endDate':
       case 'startDate':
       case 'location':
+      case 'coverImage':
         values[key] = value;
         break;
 

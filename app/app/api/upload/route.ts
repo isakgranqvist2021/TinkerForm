@@ -3,6 +3,7 @@ import { badRequest, internalServerError, ok, unauthorized } from '../utils';
 import { auth0 } from 'lib/auth0';
 import { uploadSchema } from 'models/file';
 import { uploadFile } from 'utils/utils.server';
+import { del } from '@vercel/blob';
 
 export async function POST(req: NextRequest, ctx: RouteContext<'/api/upload'>) {
   try {
@@ -14,12 +15,22 @@ export async function POST(req: NextRequest, ctx: RouteContext<'/api/upload'>) {
 
     const result = uploadSchema.safeParse({
       file: formData.get('file'),
+      url: formData.get('url'),
     });
     if (result.error) {
       return badRequest();
     }
 
-    const url = await uploadFile(result.data.file);
+    let url: string | null = null;
+    if (result.data.file) {
+      console.log('Uploading', result.data.file);
+      url = await uploadFile(result.data.file);
+    }
+
+    if (result.data.url) {
+      console.log('Deleting', result.data.url);
+      await del(result.data.url);
+    }
 
     return ok({ url });
   } catch (err) {

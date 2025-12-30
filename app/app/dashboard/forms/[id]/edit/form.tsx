@@ -9,7 +9,6 @@ import React from 'react';
 import { SectionFormProvider } from 'components/sections-list';
 import useMutation from 'swr/mutation';
 import { FormSections } from 'components/form-sections';
-import { useDownloadImage } from 'hooks/use-download-image';
 
 interface EditFormProps {
   defaultValues: Form;
@@ -18,16 +17,9 @@ interface EditFormProps {
 }
 
 export function EditForm(props: EditFormProps) {
-  const [hasDownloaded, setHasDownloaded] = React.useState(false);
-
   const form = useForm<Form>({
     defaultValues: props.defaultValues,
     resolver: zodResolver(formSchema),
-  });
-
-  useDownloadImage(hasDownloaded ? null : props.coverImageUrl, (file) => {
-    setHasDownloaded(true);
-    form.setValue('coverImage', file);
   });
 
   const mutation = useMutation(

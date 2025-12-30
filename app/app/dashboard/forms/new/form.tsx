@@ -13,7 +13,7 @@ import useMutation from 'swr/mutation';
 import { FormSections } from 'components/form-sections';
 
 const defaultValues: Form = {
-  coverImage: new File([], ''),
+  coverImage: '',
   title: '',
   description: '',
   location: '',

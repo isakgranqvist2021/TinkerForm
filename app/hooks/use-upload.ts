@@ -1,14 +1,19 @@
+import { UploadParams } from 'models/file';
 import useMutation from 'swr/mutation';
-import { toast } from 'sonner';
-import { useDownloadImage } from './use-download-image';
-import React from 'react';
 
-function useUploadFile() {
+export function useUploadFile() {
   const mutation = useMutation(
     '/api/upload',
-    async (url, { arg }: { arg: File }): Promise<string> => {
+    async (url, { arg }: { arg: UploadParams }): Promise<string | null> => {
       const formData = new FormData();
-      formData.set('file', arg);
+
+      if (arg.file) {
+        formData.set('file', arg.file);
+      }
+
+      if (arg.url) {
+        formData.set('url', arg.url);
+      }
 
       const res = await fetch(url, {
         method: 'POST',
@@ -23,11 +28,6 @@ function useUploadFile() {
 
       return data.url;
     },
-    {
-      onError: () => {
-        toast.error('Error uploading file');
-      },
-    },
   );
 
   return {
@@ -36,51 +36,30 @@ function useUploadFile() {
   };
 }
 
-export function useFileMutation(props: {
-  getUrl: string | null | undefined;
-  postUrl: string;
-  onError?: () => void;
-  onSuccess?: () => void;
-}) {
-  const uploadFile = useUploadFile();
-
-  const [file, setFile] = React.useState<File | null>(null);
-
-  const downloadImage = useDownloadImage(props.getUrl, setFile);
-
+export function useUpdateTeamCoverImage() {
   const mutation = useMutation(
-    props.postUrl,
-    async (url, { arg }: { arg: File | null }) => {
-      const fileUrl = arg ? await uploadFile.upload(arg) : null;
-
+    '/api/proxy/team/cover-image',
+    async (url, { arg }: { arg: string | null }): Promise<string> => {
       const res = await fetch(url, {
         method: 'PATCH',
-        body: JSON.stringify({
-          url: fileUrl,
-        }),
-        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ url: arg }),
+        headers: {
+          'Content-Type': 'application/json',
+        },
       });
 
       if (!res.ok) {
-        throw new Error('Could update team');
+        throw new Error('Could not delete file');
       }
 
-      return arg;
-    },
-    {
-      onError: props.onError,
-      onSuccess: (file) => {
-        setFile(file);
-        props.onSuccess?.();
-      },
+      const data = await res.json();
+
+      return data.url;
     },
   );
 
-  const isLoading = mutation.isMutating || downloadImage.isLoading;
-
   return {
-    file,
-    isLoading,
-    trigger: mutation.trigger,
+    isLoading: mutation.isMutating,
+    update: mutation.trigger,
   };
 }

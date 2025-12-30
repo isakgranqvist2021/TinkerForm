@@ -1,10 +1,14 @@
 import { del } from '@vercel/blob';
-import { internalServerError, ok, unauthorized } from 'app/api/utils';
+import {
+  badRequest,
+  internalServerError,
+  ok,
+  unauthorized,
+} from 'app/api/utils';
 import { auth0 } from 'lib/auth0';
 import { formSchema } from 'models/form';
-import { getFormById, updateForm, UpdateFormDto } from 'services/api/forms';
+import { getFormById, updateForm } from 'services/api/forms';
 import { parseFormFormData } from 'utils';
-import { uploadFile } from 'utils/utils.server';
 
 export async function PATCH(
   req: Request,
@@ -19,18 +23,16 @@ export async function PATCH(
     }
 
     const currentForm = await getFormById(id);
-    if (currentForm?.coverImage) {
-      await del(currentForm?.coverImage);
+    if (!currentForm) {
+      return badRequest();
     }
+
+    await del(currentForm.coverImage);
 
     const formData = await req.formData();
     const form = formSchema.parse(parseFormFormData(formData));
 
-    const updateFormDto: UpdateFormDto = { ...form, coverImage: '' };
-
-    updateFormDto.coverImage = await uploadFile(form.coverImage);
-
-    await updateForm(id, updateFormDto, session);
+    await updateForm(id, form, session);
 
     return ok();
   } catch (err) {

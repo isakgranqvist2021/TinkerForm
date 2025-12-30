@@ -57,7 +57,7 @@ export default async function Page(props: PageProps<{ id: string }>) {
             title: form.title,
             description: form.description,
             location: form.location,
-            coverImage: new File([], ''),
+            coverImage: form.coverImage,
             theme: form.theme ?? defaultTheme,
             availability: form.availability,
             maxResponses: form.maxResponses,

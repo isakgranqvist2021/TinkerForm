@@ -6,6 +6,7 @@ import { UploadImage } from './upload-cover-image';
 import { FormAvailability } from './form-availability';
 import { useFormContext } from 'react-hook-form';
 import { Form } from 'models/form';
+import { useUploadFile } from 'hooks/use-upload';
 
 export function FormSections() {
   return (
@@ -73,8 +74,14 @@ function UploadCoverImage() {
 
   const coverImage = formContext.watch('coverImage');
 
-  const handleImageChange = (file: File | null) => {
-    formContext.setValue('coverImage', file ?? new File([], ''), {
+  const uploadFile = useUploadFile();
+
+  const handleImageChange = async (file: File | null) => {
+    const url = await uploadFile.upload({
+      file,
+    });
+
+    formContext.setValue('coverImage', url ?? '', {
       shouldValidate: formContext.formState.isSubmitted,
       shouldDirty: true,
     });
@@ -84,8 +91,9 @@ function UploadCoverImage() {
     <React.Fragment>
       <UploadImage
         label="Cover image"
-        file={coverImage}
+        src={coverImage}
         onChange={handleImageChange}
+        isLoading={uploadFile.isLoading}
       />
 
       <div className="mt-2">

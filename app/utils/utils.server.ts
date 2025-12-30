@@ -41,6 +41,7 @@ export async function uploadFile(file: File) {
   const { url } = await put(`files/${file.name}`, file, {
     access: 'public',
     addRandomSuffix: true,
+    onUploadProgress: console.log,
   });
 
   return url;
