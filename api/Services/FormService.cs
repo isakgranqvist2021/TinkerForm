@@ -275,6 +275,8 @@ namespace api.Services
                 throw new UnauthorizedAccessException("You do not have permission to modify this form.");
             }
 
+            form.updated_at = DateTime.UtcNow;
+
             if (form.paused_at == null)
             {
                 form.paused_at = DateTime.UtcNow;
