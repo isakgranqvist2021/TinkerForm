@@ -18,12 +18,15 @@ interface EditFormProps {
 }
 
 export function EditForm(props: EditFormProps) {
+  const [hasDownloaded, setHasDownloaded] = React.useState(false);
+
   const form = useForm<Form>({
     defaultValues: props.defaultValues,
     resolver: zodResolver(formSchema),
   });
 
-  useDownloadImage(props.coverImageUrl, (file) => {
+  useDownloadImage(hasDownloaded ? null : props.coverImageUrl, (file) => {
+    setHasDownloaded(true);
     form.setValue('coverImage', file);
   });
 
