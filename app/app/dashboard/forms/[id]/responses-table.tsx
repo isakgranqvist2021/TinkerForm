@@ -269,26 +269,26 @@ function useResponsesTableSorting() {
   };
 
   const sorter = (a: ResponseDto, b: ResponseDto) => {
+    const modifier = sortOrder === 'asc' ? 1 : -1;
+
     switch (sortBy) {
-      case 'score': {
-        const scoreA = a.score ?? -1;
-        const scoreB = b.score ?? -1;
-        return sortOrder === 'asc' ? scoreA - scoreB : scoreB - scoreA;
-      }
+      case 'score':
+        return ((a.score ?? -1) - (b.score ?? -1)) * modifier;
 
       case 'createdAt':
-        const aTime = new Date(a.createdAt).getTime();
-        const bTime = new Date(b.createdAt).getTime();
+        return (
+          (new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()) *
+          modifier
+        );
 
-        return sortOrder === 'asc' ? aTime - bTime : bTime - aTime;
-
-      case 'completionTime':
+      case 'completionTime': {
         const durationA = calculateDuration(a.createdAt, a.completedAt) ?? -1;
         const durationB = calculateDuration(b.createdAt, b.completedAt) ?? -1;
+        return (durationA - durationB) * modifier;
+      }
 
-        return sortOrder === 'asc'
-          ? durationA - durationB
-          : durationB - durationA;
+      default:
+        return 0;
     }
   };
 

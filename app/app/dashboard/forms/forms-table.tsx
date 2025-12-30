@@ -60,20 +60,49 @@ export function FormsTable() {
     );
   }
 
+  return <FormsTableContent data={data} />;
+}
+
+interface FormsTableContentProps {
+  data: FormDto[];
+}
+function FormsTableContent(props: FormsTableContentProps) {
+  const { sorter, sort } = useFormsTableSorting();
+
   return (
     <DeleteFormContextProvider>
       <div className="overflow-x-auto">
         <table className="table">
           <thead>
             <tr>
-              <th>Title</th>
-              <th>Last updated</th>
-              <th>Views</th>
-              <th>Responses</th>
+              <th
+                className="cursor-pointer hover:text-primary"
+                onClick={() => sort('title')}
+              >
+                Title
+              </th>
+              <th
+                className="cursor-pointer hover:text-primary"
+                onClick={() => sort('updatedAt')}
+              >
+                Last updated
+              </th>
+              <th
+                className="cursor-pointer hover:text-primary"
+                onClick={() => sort('totalResponses')}
+              >
+                Views
+              </th>
+              <th
+                className="cursor-pointer hover:text-primary"
+                onClick={() => sort('completedResponses')}
+              >
+                Responses
+              </th>
               <th></th>
             </tr>
           </thead>
-          <tbody>{data.map(renderFormTableRow)}</tbody>
+          <tbody>{props.data.sort(sorter).map(renderFormTableRow)}</tbody>
         </table>
       </div>
     </DeleteFormContextProvider>
@@ -192,4 +221,46 @@ function useForms() {
       return [];
     }
   });
+}
+
+type SortKey = 'title' | 'updatedAt' | 'totalResponses' | 'completedResponses';
+type SortOrder = 'asc' | 'desc';
+
+function useFormsTableSorting() {
+  const [sortBy, setSortBy] = React.useState<SortKey>('title');
+  const [sortOrder, setSortOrder] = React.useState<SortOrder>('asc');
+
+  const sort = (key: SortKey) => {
+    if (sortBy === key) {
+      setSortOrder((sortOrder) => (sortOrder === 'asc' ? 'desc' : 'asc'));
+    } else {
+      setSortBy(key);
+      setSortOrder('asc');
+    }
+  };
+
+  const sorter = (a: FormDto, b: FormDto) => {
+    const modifier = sortOrder === 'asc' ? 1 : -1; // Apply the order here!
+
+    let result = 0;
+    switch (sortBy) {
+      case 'title':
+        result = a.title.localeCompare(b.title);
+        break;
+      case 'updatedAt':
+        result =
+          new Date(a.updatedAt).getTime() - new Date(b.updatedAt).getTime();
+        break;
+      case 'totalResponses':
+        result = (a.totalResponses ?? 0) - (b.totalResponses ?? 0);
+        break;
+      case 'completedResponses':
+        result = (a.completedResponses ?? 0) - (b.completedResponses ?? 0);
+        break;
+    }
+
+    return result * modifier;
+  };
+
+  return { sort, sorter, sortBy, sortOrder };
 }
