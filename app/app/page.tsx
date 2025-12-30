@@ -1,3 +1,4 @@
+import { ArrowRightCircleIcon } from '@heroicons/react/24/solid';
 import { Drawer } from 'components/drawer';
 import { FeatureCards } from 'components/feature-cards';
 import { PackageCards } from 'components/package-cards';
@@ -76,9 +77,13 @@ function Hero() {
             TinkerForm lets you quickly create, share, and track forms for any
             purpose—all from a simple, user-friendly dashboard.
           </p>
-          <div className="flex gap-6 flex-wrap">
-            <Link href="/dashboard/forms" className="btn btn-secondary">
+          <div className="flex gap-4 flex-wrap">
+            <Link href="/pricing" className="btn btn-secondary">
+              Pricing
+            </Link>
+            <Link href="/dashboard/forms" className="btn btn-primary">
               Try For Free
+              <ArrowRightCircleIcon className="size-6" />
             </Link>
           </div>
         </div>
