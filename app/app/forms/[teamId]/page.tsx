@@ -56,7 +56,7 @@ export default async function Page(props: PageProps<{ teamId: string }>) {
                     <img
                       src={form.coverImage}
                       alt={`${form.title} cover image`}
-                      className="rounded"
+                      className="rounded h-48 w-full object-cover"
                     />
                   </figure>
 

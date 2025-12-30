@@ -5,7 +5,7 @@ import { ContentContainer, MainContainer } from 'containers/containers';
 import { redirect } from 'next/navigation';
 import { getMetadata } from 'utils';
 
-import { FormsTable, NewFormButton } from './forms-table';
+import { FormsTable } from './forms-table';
 import { FormStats } from './form-stats';
 import { TeamFormsButton } from 'components/team-forms-button';
 import { EditTeamSettingsCoverImage } from 'components/edit-team-setings';
@@ -26,9 +26,9 @@ export default async function Page() {
 
   return (
     <React.Fragment>
-      <EditTeamSettingsCoverImage coverImage={team?.coverImage} />
-
       <MainContainer>
+        <EditTeamSettingsCoverImage coverImage={team?.coverImage} />
+
         <ContentContainer>
           <div className="flex gap-4 justify-between">
             <div className="flex justify-between">
@@ -42,8 +42,11 @@ export default async function Page() {
             </div>
 
             <div className="flex gap-4">
-              <NewFormButton />
               <TeamFormsButton />
+
+              <Link href="/dashboard/forms/new" className="link">
+                New Form
+              </Link>
             </div>
           </div>
 

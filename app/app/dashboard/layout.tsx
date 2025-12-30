@@ -71,8 +71,6 @@ export default async function DashboardLayout(props: React.PropsWithChildren) {
       </div>
 
       {props.children}
-
-      <Footer />
     </div>
   );
 }

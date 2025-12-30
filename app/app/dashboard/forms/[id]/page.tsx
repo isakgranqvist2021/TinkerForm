@@ -66,6 +66,12 @@ export default async function Page(props: PageProps<{ id: string }>) {
 
   return (
     <MainContainer>
+      <img
+        src={form.coverImage}
+        className="w-full h-72 object-cover"
+        alt="Cover image"
+      />
+
       <ResponseProvider>
         <ContentContainer>
           <div className="flex justify-between">

@@ -190,24 +190,6 @@ function FormSkeletonTableRow() {
   );
 }
 
-export function NewFormButton() {
-  const { data } = useForms();
-
-  if (!Boolean(data?.length)) {
-    return null;
-  }
-
-  return (
-    <Link
-      href="/dashboard/forms/new"
-      className="btn btn-primary btn-sm sm:btn-md"
-    >
-      New Form
-      <PlusCircleIcon className="size-6" />
-    </Link>
-  );
-}
-
 function useForms() {
   return useSWR('/api/proxy/form', async (url): Promise<FormDto[]> => {
     try {
