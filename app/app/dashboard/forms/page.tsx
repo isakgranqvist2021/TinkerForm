@@ -5,7 +5,7 @@ import { ContentContainer, MainContainer } from 'containers/containers';
 import { redirect } from 'next/navigation';
 import { getMetadata } from 'utils';
 
-import { FormsList, NewFormButton } from './forms-list';
+import { FormsTable, NewFormButton } from './forms-table';
 import { FormStats } from './form-stats';
 import { TeamFormsButton } from 'components/team-forms-button';
 import { EditTeamSettingsCoverImage } from 'components/edit-team-setings';
@@ -49,7 +49,7 @@ export default async function Page() {
 
           <FormStats />
 
-          <FormsList />
+          <FormsTable />
         </ContentContainer>
       </MainContainer>
     </React.Fragment>

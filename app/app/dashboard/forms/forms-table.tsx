@@ -11,7 +11,7 @@ import { formatDate } from 'utils';
 import { ArrowRightCircleIcon } from '@heroicons/react/24/outline';
 import { DeleteFormContextProvider } from 'hooks/use-delete-form';
 
-export function FormsList() {
+export function FormsTable() {
   const { isLoading, data } = useForms();
 
   if (isLoading) {
