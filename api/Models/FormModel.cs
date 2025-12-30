@@ -14,8 +14,12 @@ namespace api.Models
         public DateTime? paused_at { get; set; } = null;
 
         [NotMapped]
-        [JsonPropertyName("responseCount")]
-        public int? response_count { get; set; } = null;
+        [JsonPropertyName("totalResponses")]
+        public int? total_responses { get; set; } = null;
+
+        [NotMapped]
+        [JsonPropertyName("completedResponses")]
+        public int? completed_responses { get; set; } = null;
 
         [Required]
         public string title { get; set; } = string.Empty;

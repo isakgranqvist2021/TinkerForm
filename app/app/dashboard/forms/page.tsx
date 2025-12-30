@@ -5,7 +5,7 @@ import { ContentContainer, MainContainer } from 'containers/containers';
 import { redirect } from 'next/navigation';
 import { getMetadata } from 'utils';
 
-import { FormsList } from './forms-list';
+import { FormsList, NewFormButton } from './forms-list';
 import { FormStats } from './form-stats';
 import { TeamFormsButton } from 'components/team-forms-button';
 import { EditTeamSettingsCoverImage } from 'components/edit-team-setings';
@@ -42,6 +42,7 @@ export default async function Page() {
             </div>
 
             <div className="flex gap-4">
+              <NewFormButton />
               <TeamFormsButton />
             </div>
           </div>

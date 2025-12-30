@@ -3,8 +3,46 @@
 import useMutation from 'swr/mutation';
 import { toast } from 'sonner';
 import { useRouter } from 'next/navigation';
+import { useSWRConfig } from 'swr';
+import React from 'react';
 
-export function DeleteFormModal(props: { formId: string }) {
+const DeleteFormContext = React.createContext<{
+  value: string | null;
+  openModal: (formId: string) => void;
+  closeModal: () => void;
+}>({
+  value: null,
+  openModal: () => {},
+  closeModal: () => {},
+});
+
+export function useDeleteFormContext() {
+  return React.useContext(DeleteFormContext);
+}
+
+export function DeleteFormContextProvider(props: React.PropsWithChildren) {
+  const [value, setValue] = React.useState<string | null>(null);
+
+  const openModal = (value: string) => {
+    setValue(value);
+    openDeleteFormModal();
+  };
+
+  const closeModal = () => {
+    setValue(null);
+    closeDeleteFormModal();
+  };
+
+  return (
+    <DeleteFormContext.Provider value={{ value, openModal, closeModal }}>
+      <DeleteFormModal formId={value} />
+
+      {props.children}
+    </DeleteFormContext.Provider>
+  );
+}
+
+function DeleteFormModal(props: { formId: string | null }) {
   const { isLoading, deleteForm } = useDeleteForm(props.formId);
 
   return (
@@ -20,7 +58,7 @@ export function DeleteFormModal(props: { formId: string }) {
           <button className="btn">
             <span onClick={closeDeleteFormModal}>Cancel</span>
           </button>
-          <button className="btn btn-error">
+          <button className="btn btn-error" disabled={!props.formId}>
             <span onClick={deleteForm}>
               {isLoading ? (
                 <span className="loading loading-dots loading-sm"></span>
@@ -39,8 +77,9 @@ export function DeleteFormModal(props: { formId: string }) {
   );
 }
 
-function useDeleteForm(formId: string) {
+function useDeleteForm(formId: string | null) {
   const router = useRouter();
+  const { mutate } = useSWRConfig();
 
   const mutation = useMutation(
     `/api/proxy/form/${formId}`,
@@ -59,6 +98,7 @@ function useDeleteForm(formId: string) {
       onSuccess: () => {
         router.replace('/dashboard/forms');
         router.refresh();
+        mutate('/api/proxy/form');
 
         toast.success('Form deleted successfully');
 
@@ -73,12 +113,12 @@ function useDeleteForm(formId: string) {
   };
 }
 
-export const DELETE_FORM_MODAL_NAME = 'delete-form-modal';
+const DELETE_FORM_MODAL_NAME = 'delete-form-modal';
 
-export const closeDeleteFormModal = () =>
+const closeDeleteFormModal = () =>
   // @ts-expect-error
   document.getElementById(DELETE_FORM_MODAL_NAME).close();
 
-export const openDeleteFormModal = () =>
+const openDeleteFormModal = () =>
   // @ts-expect-error
   document.getElementById(DELETE_FORM_MODAL_NAME).showModal();

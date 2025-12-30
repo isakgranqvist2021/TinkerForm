@@ -17,7 +17,6 @@ import { getResponsesByFormId } from 'services/api/response';
 import { FormActions } from './actions';
 import { getSubscription } from 'services/api/subscription';
 import { ResponsesTable } from './responses-table';
-import { DeleteFormModal } from 'hooks/use-delete-form';
 import {
   CheckCircleIcon,
   ClockIcon,
@@ -68,8 +67,6 @@ export default async function Page(props: PageProps<{ id: string }>) {
   return (
     <MainContainer>
       <ResponseProvider>
-        <DeleteFormModal formId={form.id} />
-
         <ContentContainer>
           <div className="flex justify-between">
             <div className="breadcrumbs text-sm">

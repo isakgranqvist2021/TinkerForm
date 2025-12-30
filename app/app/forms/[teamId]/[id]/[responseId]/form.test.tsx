@@ -32,7 +32,8 @@ test('Something', () => {
           email: '',
           location: '',
 
-          responseCount: 10,
+          completedResponses: 10,
+          totalResponses: 10,
           theme: Theme.autumn,
 
           pausedAt: null,

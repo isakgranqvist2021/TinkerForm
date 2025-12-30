@@ -41,7 +41,7 @@ import {
 } from 'react-hook-form';
 import { EmptyState } from './empty-state';
 import countries from 'config/countries.json';
-import { cn } from 'utils';
+import { cn, formatSectionType } from 'utils';
 import React from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import {
@@ -541,7 +541,7 @@ function SectionFormModal(props: SectionFormModalProps) {
             <option disabled={true}>Section type</option>
             {sectionTypes.map((type) => (
               <option key={type} value={type}>
-                {formatType(type)}
+                {formatSectionType(type)}
               </option>
             ))}
           </select>
@@ -834,34 +834,6 @@ function SectionFormModalFooter() {
       </button>
     </div>
   );
-}
-
-function formatType(type: SectionType) {
-  switch (type) {
-    case 'boolean':
-      return 'True / False';
-
-    case 'multiple-choice':
-      return 'Multiple Choice';
-
-    case 'email':
-      return 'Email';
-
-    case 'file':
-      return 'File';
-
-    case 'link':
-      return 'Link';
-
-    case 'phone':
-      return 'Phone Number';
-
-    case 'range':
-      return 'Range (Number)';
-
-    case 'text':
-      return 'Text';
-  }
 }
 
 function getSectionDefaultValues(type: SectionType): Section {

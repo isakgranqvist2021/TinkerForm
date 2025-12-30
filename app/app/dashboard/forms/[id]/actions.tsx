@@ -1,7 +1,10 @@
 'use client';
 
 import { useClipboard } from 'hooks/use-clipboard';
-import { openDeleteFormModal } from 'hooks/use-delete-form';
+import {
+  DeleteFormContextProvider,
+  useDeleteFormContext,
+} from 'hooks/use-delete-form';
 import { useExportData } from 'hooks/use-export-responses';
 import { usePauseForm } from 'hooks/use-pause-form';
 import Link from 'next/link';
@@ -28,11 +31,11 @@ interface FormActionsProps
 
 export function FormActions(props: FormActionsProps) {
   return (
-    <React.Fragment>
+    <DeleteFormContextProvider>
       <FormActionsButtons {...props} />
 
       <FormActionsMenu {...props} />
-    </React.Fragment>
+    </DeleteFormContextProvider>
   );
 }
 
@@ -62,6 +65,7 @@ function FormActionsMenu(props: FormActionsProps) {
   const exportData = useExportData(props.formId);
   const copyToClipboard = useClipboard(props.viewFormHref);
   const pauseForm = usePauseForm(props.formId);
+  const deleteFormContext = useDeleteFormContext();
 
   return (
     <div className="dropdown dropdown-end flex md:hidden">
@@ -95,7 +99,7 @@ function FormActionsMenu(props: FormActionsProps) {
         <li>
           <Link href={`/dashboard/forms/${props.formId}/edit`}>Edit Form</Link>
         </li>
-        <li onClick={openDeleteFormModal}>
+        <li onClick={() => deleteFormContext.openModal(props.formId)}>
           <a>Delete form</a>
         </li>
       </ul>
@@ -139,11 +143,13 @@ interface DeleteFormButtonProps extends React.ComponentProps<'button'> {
 export function DeleteFormButton(props: DeleteFormButtonProps) {
   const { formId, ...rest } = props;
 
+  const deleteFormContext = useDeleteFormContext();
+
   return (
     <div className="tooltip" data-tip="Delete">
       <button
         className="btn btn-square btn-ghost"
-        onClick={openDeleteFormModal}
+        onClick={() => deleteFormContext.openModal(formId)}
         {...rest}
       >
         <TrashIcon className="size-6" />

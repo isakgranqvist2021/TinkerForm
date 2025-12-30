@@ -6,19 +6,42 @@ import { type FormDto } from 'services/api/forms';
 import { DeleteFormButton, PauseFormButton } from './[id]/actions';
 import useSWR from 'swr';
 import React from 'react';
-import { DeleteFormModal } from 'hooks/use-delete-form';
 import { PencilSquareIcon, PlusCircleIcon } from '@heroicons/react/24/outline';
+import { formatDate } from 'utils';
+import { ArrowRightCircleIcon } from '@heroicons/react/24/outline';
+import { DeleteFormContextProvider } from 'hooks/use-delete-form';
 
 export function FormsList() {
   const { isLoading, data } = useForms();
 
   if (isLoading) {
     return (
-      <ul className="list bg-base-100 rounded-box shadow-md">
-        {Array.from({ length: 5 }).map((_, i) => (
-          <FormListSkeletonItem key={i} />
-        ))}
-      </ul>
+      <div className="overflow-x-auto">
+        <table className="table">
+          <thead>
+            <tr>
+              <th>
+                <div className="skeleton w-16 h-4"></div>
+              </th>
+              <th>
+                <div className="skeleton w-16 h-4"></div>
+              </th>
+              <th>
+                <div className="skeleton w-16 h-4"></div>
+              </th>
+              <th>
+                <div className="skeleton w-16 h-4"></div>
+              </th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            {Array.from({ length: 5 }).map((_, i) => (
+              <FormSkeletonTableRow key={i} />
+            ))}
+          </tbody>
+        </table>
+      </div>
     );
   }
 
@@ -38,30 +61,101 @@ export function FormsList() {
   }
 
   return (
-    <ul className="list bg-base-100 rounded-box shadow-md">
-      <li className="p-4 pb-2 flex justify-between">
-        <span className="text-xs opacity-60 tracking-wide">My forms</span>
-        <NewFormButton />
-      </li>
-
-      {data.map(renderFormListItem)}
-    </ul>
+    <DeleteFormContextProvider>
+      <div className="overflow-x-auto">
+        <table className="table">
+          <thead>
+            <tr>
+              <th>Title</th>
+              <th>Last updated</th>
+              <th>Views</th>
+              <th>Responses</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>{data.map(renderFormTableRow)}</tbody>
+        </table>
+      </div>
+    </DeleteFormContextProvider>
   );
 }
 
-function FormListSkeletonItem() {
+function renderFormTableRow(formDto: FormDto) {
   return (
-    <li className="flex justify-between items-center list-row">
-      <div className="flex gap-2 flex-col">
-        <div className="skeleton h-4 w-72"></div>
-        <div className="skeleton h-4 w-28"></div>
-      </div>
+    <tr key={formDto.id}>
+      <td>
+        <div className="flex items-center gap-3">
+          <div className="avatar">
+            <div className="mask mask-squircle h-12 w-12">
+              <img src={formDto.coverImage} alt="Form cover image" />
+            </div>
+          </div>
+          <div>
+            <div className="font-bold max-w-[24ch] whitespace-nowrap overflow-hidden text-ellipsis">
+              {formDto.title}
+            </div>
+            <div className="text-sm opacity-50 max-w-[18ch] whitespace-nowrap overflow-hidden text-ellipsis">
+              {formDto.location}
+            </div>
+          </div>
+        </div>
+      </td>
+      <td className="whitespace-nowrap">{formatDate(formDto.updatedAt)}</td>
+      <td>{formDto.totalResponses ?? 0}</td>
+      <td>{formDto.completedResponses ?? 0}</td>
+      <th className="text-right whitespace-nowrap">
+        <PauseFormButton formId={formDto.id} pausedAt={formDto.pausedAt} />
 
-      <div className="flex gap-2">
-        <div className="skeleton h-8 w-8"></div>
-        <div className="skeleton h-8 w-8"></div>
-      </div>
-    </li>
+        <div className="tooltip" data-tip="Edit">
+          <Link
+            className="btn btn-square btn-ghost"
+            href={`/dashboard/forms/${formDto.id}/edit`}
+          >
+            <PencilSquareIcon className="size-6" />
+          </Link>
+        </div>
+
+        <DeleteFormButton formId={formDto.id} />
+
+        <Link
+          href={`/dashboard/forms/${formDto.id}`}
+          className="btn btn-square btn-ghost"
+        >
+          <ArrowRightCircleIcon className="size-6" />
+        </Link>
+      </th>
+    </tr>
+  );
+}
+
+function FormSkeletonTableRow() {
+  return (
+    <tr>
+      <td>
+        <div className="flex items-center gap-3">
+          <div className="skeleton h-12 w-12 avatar"></div>
+          <div>
+            <div className="skeleton w-24 h-4"></div>
+            <div className="skeleton w-12 h-4 mt-2"></div>
+          </div>
+        </div>
+      </td>
+      <td>
+        <div className="skeleton w-24 h-4"></div>
+      </td>
+      <td>
+        <div className="skeleton w-24 h-4"></div>
+      </td>
+      <td>
+        <div className="skeleton w-24 h-4"></div>
+      </td>
+      <th className="text-right whitespace-nowrap">
+        <div className="skeleton w-6 h-6 square inline-block"></div>
+        <div className="skeleton w-6 h-6 square inline-block ml-2"></div>
+        <div className="skeleton w-6 h-6 square inline-block ml-2"></div>
+        <div className="skeleton w-6 h-6 square inline-block ml-2"></div>
+      </th>
+    </tr>
   );
 }
 
@@ -73,53 +167,13 @@ export function NewFormButton() {
   }
 
   return (
-    <Link href="/dashboard/forms/new" className="btn btn-primary btn-sm w-fit">
+    <Link
+      href="/dashboard/forms/new"
+      className="btn btn-primary btn-sm sm:btn-md"
+    >
       New Form
       <PlusCircleIcon className="size-6" />
     </Link>
-  );
-}
-
-function renderFormListItem(form: FormDto) {
-  const responseCount = Number(form.responseCount ?? 0);
-
-  return (
-    <li key={form.id} className="list-row">
-      <div>
-        <img
-          className="size-10 rounded-box"
-          src={form.coverImage}
-          alt="Form cover image"
-        />
-      </div>
-
-      <Link href={`/dashboard/forms/${form.id}`} className="hover:underline">
-        <div>{form.title}</div>
-        <div className="text-xs uppercase font-semibold opacity-60">
-          {responseCount === 0
-            ? 'No responses'
-            : responseCount === 1
-              ? '1 response'
-              : `${responseCount} responses`}
-        </div>
-      </Link>
-
-      <div className="flex">
-        <PauseFormButton formId={form.id} pausedAt={form.pausedAt} />
-
-        <div className="tooltip" data-tip="Edit">
-          <Link
-            className="btn btn-square btn-ghost"
-            href={`/dashboard/forms/${form.id}/edit`}
-          >
-            <PencilSquareIcon className="size-6" />
-          </Link>
-        </div>
-
-        <DeleteFormButton formId={form.id} />
-        <DeleteFormModal formId={form.id} />
-      </div>
-    </li>
   );
 }
 

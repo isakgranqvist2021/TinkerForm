@@ -1,7 +1,7 @@
 import currency from 'currency.js';
 import dayjs from 'dayjs';
 import Dayjs from 'dayjs';
-import { Form } from 'models/form';
+import { Form, SectionType } from 'models/form';
 import { Metadata } from 'next';
 import { AnswerDto } from 'services/api/answer';
 import { AnswersByFormDto } from 'services/api/forms';
@@ -234,3 +234,31 @@ export function formatScore(score: number) {
 export const cn = (...inputs: ClassValue[]) => {
   return twMerge(clsx(inputs));
 };
+
+export function formatSectionType(type: SectionType) {
+  switch (type) {
+    case 'boolean':
+      return 'True / False';
+
+    case 'multiple-choice':
+      return 'Multiple Choice';
+
+    case 'email':
+      return 'Email';
+
+    case 'file':
+      return 'File';
+
+    case 'link':
+      return 'Link';
+
+    case 'phone':
+      return 'Phone Number';
+
+    case 'range':
+      return 'Range (Number)';
+
+    case 'text':
+      return 'Text';
+  }
+}

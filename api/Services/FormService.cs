@@ -44,7 +44,10 @@ namespace api.Services
                     end_date = form.end_date,
                     max_responses = form.max_responses,
                     theme = form.theme,
-                    response_count = _context.response.Count(
+                    total_responses = _context.response.Count(
+                        response => response.fk_form_id == form.id
+                    ),
+                    completed_responses = _context.response.Count(
                         response => response.fk_form_id == form.id && response.completed_at != null
                     ),
                 })
@@ -72,7 +75,7 @@ namespace api.Services
                     end_date = form.end_date,
                     max_responses = form.max_responses,
                     theme = form.theme,
-                    response_count = _context.response.Count(
+                    completed_responses = _context.response.Count(
                         response => response.fk_form_id == form.id && response.completed_at != null
                     ),
                 })
@@ -100,7 +103,7 @@ namespace api.Services
                     start_date = form.start_date,
                     end_date = form.end_date,
                     max_responses = form.max_responses,
-                    response_count = _context.response.Count(
+                    completed_responses = _context.response.Count(
                         response => response.fk_form_id == form.id && response.completed_at != null
                     ),
                 })

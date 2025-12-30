@@ -13,7 +13,8 @@ export interface FormDto {
   email: string;
   title: string;
   description: string;
-  responseCount: number | null;
+  totalResponses: number | null;
+  completedResponses: number | null;
   location: string;
   coverImage: string;
 
