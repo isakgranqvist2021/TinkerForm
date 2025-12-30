@@ -32,7 +32,7 @@ export function EditTeamSettingsCoverImage(
 
   return (
     <UploadImage
-      className="sm:rounded-b-md"
+      className="rounded-md mt-4"
       isLoading={isLoading}
       label="Cover Image"
       src={props.coverImage ?? null}

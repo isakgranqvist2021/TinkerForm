@@ -68,7 +68,7 @@ export default async function Page(props: PageProps<{ id: string }>) {
     <MainContainer>
       <img
         src={form.coverImage}
-        className="w-full h-72 object-cover sm:rounded-b-md"
+        className="mt-4 w-full h-72 object-cover rounded-md"
         alt="Cover image"
       />
 

@@ -31,15 +31,15 @@ export const packages: Record<PackageId, Package> = {
         available: true,
       },
       {
-        name: 'Export to CSV',
-        available: false,
-      },
-      {
         name: 'Choose form theme',
         available: false,
       },
       {
         name: 'Analyze responses with AI',
+        available: false,
+      },
+      {
+        name: 'Export to CSV',
         available: false,
       },
     ],
