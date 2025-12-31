@@ -76,7 +76,7 @@ export function AnswerForm(props: AnswerFormProps) {
             </div>
 
             <p
-              className="m-0 whitespace-pre-wrap"
+              className="m-0 whitespace-pre-wrap break-all"
               dangerouslySetInnerHTML={{ __html: props.form.description }}
             ></p>
           </div>
