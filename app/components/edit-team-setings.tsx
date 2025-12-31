@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { UploadImage } from './upload-cover-image';
+import { UploadImage } from './upload-image';
 import { useUpdateTeamCoverImage, useUploadFile } from 'hooks/use-upload';
 import { useRouter } from 'next/navigation';
 

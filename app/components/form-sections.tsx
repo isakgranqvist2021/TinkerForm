@@ -2,7 +2,7 @@ import React from 'react';
 import { FormDetails } from './form-details';
 import { SectionsList } from './sections-list';
 import { FormTheme } from './form-theme';
-import { UploadImage } from './upload-cover-image';
+import { UploadImage } from './upload-image';
 import { FormAvailability } from './form-availability';
 import { useFormContext } from 'react-hook-form';
 import { Form } from 'models/form';
