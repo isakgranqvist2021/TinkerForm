@@ -83,7 +83,6 @@ namespace api.Controllers
             return Ok(team);
         }
 
-
         [HttpPatch("cover-image")]
         [Authorize]
         public ActionResult<TeamModel> UpdateCoverImage([FromBody] UpdateUrlDto updateUrlDto, [FromEmail] string email)
