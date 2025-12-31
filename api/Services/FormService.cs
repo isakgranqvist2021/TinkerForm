@@ -1,32 +1,28 @@
 using api.Context;
 using api.Dto;
 using api.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace api.Services
 {
-    public class FormService
+    public class FormService(AppDbContext context)
     {
-        private readonly AppDbContext _context;
+        private readonly AppDbContext _context = context;
 
-        public FormService(AppDbContext context)
+        public async Task DeleteForm(Guid id, string email)
         {
-            _context = context;
-        }
-
-        public void DeleteForm(Guid id, string email)
-        {
-            var form = _context.form.FirstOrDefault(f => f.id == id && f.email == email);
+            var form = await _context.form.FirstOrDefaultAsync(f => f.id == id && f.email == email);
             if (form != null)
             {
                 _context.form.Remove(form);
-                _context.SaveChanges();
+                await _context.SaveChangesAsync();
             }
         }
 
-        public List<FormModel> GetFormsByEmail(string email)
+        public async Task<List<FormModel>> GetFormsByEmail(string email)
         {
             return
-                _context.form
+                await _context.form
                 .Where(form => form.email == email)
                 .Select(form => new FormModel
                 {
@@ -51,7 +47,7 @@ namespace api.Services
                         response => response.fk_form_id == form.id && response.completed_at != null
                     ),
                 })
-                .ToList();
+                .ToListAsync();
         }
 
         public List<FormModel> GetActiveFormsByEmail(string email)
@@ -68,13 +64,13 @@ namespace api.Services
                     location = form.location,
                     created_at = form.created_at,
                     updated_at = form.updated_at,
-                    paused_at = form.paused_at,
                     cover_image = form.cover_image,
+                    theme = form.theme,
+                    paused_at = form.paused_at,
                     availability = form.availability,
                     start_date = form.start_date,
                     end_date = form.end_date,
                     max_responses = form.max_responses,
-                    theme = form.theme,
                     completed_responses = _context.response.Count(
                         response => response.fk_form_id == form.id && response.completed_at != null
                     ),
@@ -82,10 +78,10 @@ namespace api.Services
                 .ToList();
         }
 
-        public FormModel? GetById(Guid id)
+        public async Task<FormModel?> GetById(Guid id)
         {
             return
-                _context.form
+                await _context.form
                 .Where(form => form.id == id)
                 .Select(form => new FormModel
                 {
@@ -107,10 +103,10 @@ namespace api.Services
                         response => response.fk_form_id == form.id && response.completed_at != null
                     ),
                 })
-                .FirstOrDefault();
+                .FirstOrDefaultAsync();
         }
 
-        public FormModel InsertOne(CreateFormDto form, string email)
+        public async Task<FormModel> InsertOne(CreateFormDto form, string email)
         {
             var newForm = new FormModel
             {
@@ -127,15 +123,15 @@ namespace api.Services
                 end_date = form.end_date.ToUniversalTime(),
             };
 
-            _context.form.Add(newForm);
-            _context.SaveChanges();
+            await _context.form.AddAsync(newForm);
+            await _context.SaveChangesAsync();
 
             return newForm;
         }
 
-        public void UpdateOne(UpdateFormDto form, Guid id, string email)
+        public async Task UpdateOne(UpdateFormDto form, Guid id, string email)
         {
-            var existingForm = _context.form.FirstOrDefault(f => f.id == id && f.email == email);
+            var existingForm = await _context.form.FirstOrDefaultAsync(f => f.id == id && f.email == email);
             if (existingForm != null)
             {
                 existingForm.title = form.title;
@@ -149,7 +145,7 @@ namespace api.Services
                 existingForm.start_date = form.start_date.ToUniversalTime();
                 existingForm.end_date = form.end_date.ToUniversalTime();
 
-                _context.SaveChanges();
+                await _context.SaveChangesAsync();
             }
         }
 

@@ -11,14 +11,15 @@ namespace api.Controllers
         private readonly ModelService _modelService = modelServices;
 
         [HttpPost]
-        public ActionResult CreateAnswers([FromBody] List<AnswerModel> answers)
+        public async Task<ActionResult> CreateAnswers([FromBody] List<AnswerModel> answers)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            _modelService.answerService.SaveAnswers(answers);
+            await _modelService.answerService.SaveAnswers(answers);
+
             return Created();
         }
     }

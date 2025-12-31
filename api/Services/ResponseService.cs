@@ -4,14 +4,9 @@ using api.Models;
 
 namespace api.Services
 {
-    public class ResponseService
+    public class ResponseService(AppDbContext context)
     {
-        private readonly AppDbContext _context;
-
-        public ResponseService(AppDbContext context)
-        {
-            _context = context;
-        }
+        private readonly AppDbContext _context = context;
 
         public IEnumerable<object> GetAnswers(Guid id)
         {

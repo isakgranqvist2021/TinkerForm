@@ -15,16 +15,17 @@ namespace api.Controllers
 
         [HttpGet]
         [Authorize]
-        public ActionResult<List<FormModel>> Get([FromEmail] string email)
+        public async Task<ActionResult<List<FormModel>>> Get([FromEmail] string email)
         {
-            var forms = _modelService.formService.GetFormsByEmail(email);
+            var forms = await _modelService.formService.GetFormsByEmail(email);
+
             return Ok(forms);
         }
 
         [HttpGet("{id}")]
-        public ActionResult<FormModel> GetById(Guid id)
+        public async Task<ActionResult<FormModel>> GetById(Guid id)
         {
-            var form = _modelService.formService.GetById(id);
+            var form = await _modelService.formService.GetById(id);
             if (form == null)
             {
                 return NotFound();
@@ -35,37 +36,37 @@ namespace api.Controllers
 
         [HttpDelete("{id}")]
         [Authorize]
-        public ActionResult Delete(Guid id, [FromEmail] string email)
+        public async Task<ActionResult> Delete(Guid id, [FromEmail] string email)
         {
-            _modelService.formService.DeleteForm(id, email);
+            await _modelService.formService.DeleteForm(id, email);
 
             return NoContent();
         }
 
         [HttpPost]
         [Authorize]
-        public ActionResult<FormModel> Create(CreateFormDto form, [FromEmail] string email)
+        public async Task<ActionResult<FormModel>> Create(CreateFormDto form, [FromEmail] string email)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            var createdForm = _modelService.formService.InsertOne(form, email);
+            var createdForm = await _modelService.formService.InsertOne(form, email);
             return CreatedAtAction(nameof(GetById), new { createdForm.id }, createdForm);
         }
 
         [HttpPut("{id}")]
         [Authorize]
-        public ActionResult Update(Guid id, [FromBody] UpdateFormDto form, [FromEmail] string email)
+        public async Task<ActionResult> Update(Guid id, [FromBody] UpdateFormDto form, [FromEmail] string email)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            _modelService.formService.UpdateOne(form, id, email);
-            _modelService.sectionService.UpsertSections(form.sections, id, email);
+            await _modelService.formService.UpdateOne(form, id, email);
+            await _modelService.sectionService.UpsertSections(form.sections, id, email);
 
             return NoContent();
         }

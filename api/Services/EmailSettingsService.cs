@@ -4,14 +4,9 @@ using api.Models;
 
 namespace api.Services
 {
-    public class EmailSettingsService
+    public class EmailSettingsService(AppDbContext context)
     {
-        private readonly AppDbContext _context;
-
-        public EmailSettingsService(AppDbContext context)
-        {
-            _context = context;
-        }
+        private readonly AppDbContext _context = context;
 
         public void UpdateSettings(UpdateEmailSettingsDto updateEmailSettingsDto, string email)
         {

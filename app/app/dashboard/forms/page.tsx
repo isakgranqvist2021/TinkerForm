@@ -27,8 +27,6 @@ export default async function Page() {
   return (
     <React.Fragment>
       <MainContainer>
-        <EditTeamSettingsCoverImage coverImage={team?.coverImage} />
-
         <ContentContainer>
           <div className="flex gap-4 justify-between">
             <div className="flex justify-between">
@@ -49,6 +47,8 @@ export default async function Page() {
               </Link>
             </div>
           </div>
+
+          <EditTeamSettingsCoverImage coverImage={team?.coverImage} />
 
           <FormStats />
 
