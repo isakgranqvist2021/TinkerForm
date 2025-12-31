@@ -8,6 +8,7 @@ import {
 } from '@heroicons/react/24/outline';
 import { StatsSkeleton, StatsSkeletonItem } from 'components/stats-skeleton';
 import { useFormStats } from 'hooks/use-form-stats';
+import { useResponses } from 'hooks/use-responses';
 import React from 'react';
 import {
   calculateAverageCompletionTime,
@@ -18,14 +19,14 @@ import {
 
 interface FormStatsProps {
   formId: string;
-
-  durations: number[];
 }
 
 export function FormStats(props: FormStatsProps) {
   const formStats = useFormStats(props.formId);
+  const responses = useResponses(props.formId);
 
-  const averageCompletionTime = calculateAverageCompletionTime(props.durations);
+  const durations = getDurations(responses.data ?? []);
+  const averageCompletionTime = calculateAverageCompletionTime(durations);
   const completionRate = getCompletionRate(
     formStats.data?.completedResponses ?? 0,
     formStats.data?.totalResponses ?? 0,

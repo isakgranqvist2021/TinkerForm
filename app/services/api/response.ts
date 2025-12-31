@@ -57,26 +57,6 @@ export async function createResponse(
   }
 }
 
-export async function getResponsesByFormId(
-  formId: string,
-  session: SessionData,
-): Promise<ResponseDto[]> {
-  try {
-    const res = await fetch(`${env.API_URL}/response/form/${formId}`, {
-      headers: {
-        Authorization: `Bearer ${session.tokenSet.accessToken}`,
-      },
-    });
-
-    const data = await res.json();
-
-    return data;
-  } catch (err) {
-    console.error(err);
-    return [];
-  }
-}
-
 export async function completeResponse(responseId: string): Promise<boolean> {
   try {
     const res = await fetch(`${env.API_URL}/response/${responseId}/complete`, {

@@ -17,14 +17,16 @@ import { useRouter } from 'next/navigation';
 import { SubscriptionDetails } from 'services/api/subscription';
 import { canScoreApplications } from 'config/packages';
 import { openResponseModal, ResponseConsumer } from './response-modal';
+import { useResponses } from 'hooks/use-responses';
 
 interface ResponsesTableProps {
   formId: string;
-  responses: ResponseDto[];
   subscription: SubscriptionDetails | null;
 }
 
 export function ResponsesTable(props: ResponsesTableProps) {
+  const responses = useResponses(props.formId);
+
   const [onlyShowCompleted, setOnlyShowCompleted] = React.useState(false);
 
   const { sort, sorter } = useResponsesTableSorting();
@@ -67,8 +69,34 @@ export function ResponsesTable(props: ResponsesTableProps) {
     },
   );
 
-  const isEmpty = Boolean(!props.responses.length);
+  if (responses.isLoading) {
+    return (
+      <div className="overflow-x-auto">
+        <table className="table">
+          <thead>
+            <tr>
+              <th>
+                <div className="skeleton w-16 h-4"></div>
+              </th>
+              <th>
+                <div className="skeleton w-16 h-4"></div>
+              </th>
+              <th>
+                <div className="skeleton w-16 h-4"></div>
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            {Array.from({ length: 5 }).map((_, i) => (
+              <ResponseSkeletonTableRow key={i} />
+            ))}
+          </tbody>
+        </table>
+      </div>
+    );
+  }
 
+  const isEmpty = Boolean(!responses.data?.length);
   if (isEmpty) {
     return (
       <EmptyState
@@ -78,7 +106,7 @@ export function ResponsesTable(props: ResponsesTableProps) {
     );
   }
 
-  const counts = props.responses.reduce(
+  const counts = responses.data?.reduce(
     (acc, curr) => {
       if (curr.completedAt && curr.score === null) {
         acc.withoutScoreCount++;
@@ -89,7 +117,9 @@ export function ResponsesTable(props: ResponsesTableProps) {
     {
       withoutScoreCount: 0,
     },
-  );
+  ) ?? {
+    withoutScoreCount: 0,
+  };
 
   return (
     <React.Fragment>
@@ -154,7 +184,7 @@ export function ResponsesTable(props: ResponsesTableProps) {
             </tr>
           </thead>
           <tbody>
-            {props.responses
+            {(responses?.data ?? [])
               .filter((response) => {
                 if (onlyShowCompleted) {
                   return response.completedAt !== null;
@@ -293,4 +323,20 @@ function useResponsesTableSorting() {
   };
 
   return { sort, sorter, sortBy, sortOrder };
+}
+
+function ResponseSkeletonTableRow() {
+  return (
+    <tr>
+      <td>
+        <div className="skeleton w-24 h-4"></div>
+      </td>
+      <td>
+        <div className="skeleton w-24 h-4"></div>
+      </td>
+      <td>
+        <div className="skeleton w-24 h-4"></div>
+      </td>
+    </tr>
+  );
 }

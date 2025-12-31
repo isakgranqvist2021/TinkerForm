@@ -7,7 +7,6 @@ import React from 'react';
 import { PageProps } from 'types/page';
 import { getDurations, getMetadata } from 'utils';
 import { getFormById } from 'services/api/forms';
-import { getResponsesByFormId } from 'services/api/response';
 import { FormActions } from './actions';
 import { getSubscription } from 'services/api/subscription';
 import { ResponsesTable } from './responses-table';
@@ -39,7 +38,6 @@ export default async function Page(props: PageProps<{ id: string }>) {
     return redirect('/404');
   }
 
-  const responses = await getResponsesByFormId(params.id, session);
   const subscription = await getSubscription(session);
   const team = await getMyTeam(session);
 
@@ -49,7 +47,7 @@ export default async function Page(props: PageProps<{ id: string }>) {
     <MainContainer>
       <ResponseProvider>
         <ContentContainer>
-          <div className="flex justify-between items-center">
+          <div className="flex justify-between">
             <div className="breadcrumbs text-sm">
               <ul>
                 <li>
@@ -77,13 +75,9 @@ export default async function Page(props: PageProps<{ id: string }>) {
             alt="Cover image"
           />
 
-          <FormStats formId={form.id} durations={getDurations(responses)} />
+          <FormStats formId={form.id} />
 
-          <ResponsesTable
-            subscription={subscription}
-            formId={form.id}
-            responses={responses}
-          />
+          <ResponsesTable subscription={subscription} formId={form.id} />
         </ContentContainer>
       </ResponseProvider>
     </MainContainer>
