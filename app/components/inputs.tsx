@@ -75,6 +75,7 @@ export function ControlledTextarea(
           ref={controller.field.ref}
           value={controller.field.value}
           onTextChange={(e) => controller.field.onChange(e.htmlValue || '')}
+          className="overflow-hidden"
           style={{
             height: '320px',
           }}

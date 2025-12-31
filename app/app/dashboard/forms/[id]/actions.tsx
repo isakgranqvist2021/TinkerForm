@@ -64,7 +64,7 @@ function FormActionsButtons(props: FormActionsProps) {
 function FormActionsMenu(props: FormActionsProps) {
   const exportData = useExportData(props.formId);
   const copyToClipboard = useClipboard(props.viewFormHref);
-  const pauseForm = usePauseForm(props.formId);
+  const pauseForm = usePauseForm(props.formId, props.pausedAt);
   const deleteFormContext = useDeleteFormContext();
 
   return (
@@ -82,12 +82,8 @@ function FormActionsMenu(props: FormActionsProps) {
         <li>
           <div className="flex justify-between items-center">
             <a onClick={pauseForm.pauseForm}>
-              {props.pausedAt ? 'Resume form' : 'Pause form'}
+              {pauseForm.isPaused ? 'Resume form' : 'Pause form'}
             </a>
-
-            {pauseForm.isLoading && (
-              <span className="loading loading-spinner loading-xs"></span>
-            )}
           </div>
         </li>
         <li>
@@ -214,19 +210,16 @@ interface PauseFormButtonProps extends React.ComponentProps<'button'> {
 export function PauseFormButton(props: PauseFormButtonProps) {
   const { pausedAt, formId, ...rest } = props;
 
-  const { pauseForm, isLoading } = usePauseForm(formId);
+  const pauseForm = usePauseForm(formId, pausedAt);
 
   return (
-    <div className="tooltip" data-tip={pausedAt ? 'Resume' : 'Pause'}>
+    <div className="tooltip" data-tip={pauseForm.isPaused ? 'Resume' : 'Pause'}>
       <button
-        disabled={isLoading}
         className="btn btn-square btn-ghost"
-        onClick={pauseForm}
+        onClick={pauseForm.pauseForm}
         {...rest}
       >
-        {isLoading ? (
-          <span className="loading loading-dots loading-sm"></span>
-        ) : pausedAt ? (
+        {pauseForm.isPaused ? (
           <PlayIcon className="size-6" />
         ) : (
           <PauseIcon className="size-6" />
