@@ -3,7 +3,6 @@
 import { ResponseDto } from 'services/api/response';
 import { EmptyState } from 'components/empty-state';
 import React from 'react';
-import useMutation from 'swr/mutation';
 import { ScoreResponse } from 'models/score-response';
 import { toast } from 'sonner';
 import {
@@ -18,6 +17,7 @@ import { SubscriptionDetails } from 'services/api/subscription';
 import { canScoreApplications } from 'config/packages';
 import { openResponseModal, ResponseConsumer } from './response-modal';
 import { useResponses } from 'hooks/use-responses';
+import { useScoreResponses } from 'hooks/use-score-responses';
 
 interface ResponsesTableProps {
   formId: string;
@@ -33,46 +33,24 @@ export function ResponsesTable(props: ResponsesTableProps) {
 
   const router = useRouter();
 
-  const score = useMutation(
-    `/api/forms/${props.formId}/score`,
-    async (url) => {
-      try {
-        toast.loading(
-          'Loading scores, usually takes around 15-30 seconds depending on the number of responses.',
-          { id: 'scoring' },
-        );
+  const scoreResponses = useScoreResponses(props.formId, {
+    onSuccess: () => {
+      toast.dismiss('scoring');
+      sort('score');
 
-        const res = await fetch(url);
-        if (!res.ok) {
-          throw new Error('Failed to score responses');
-        }
-
-        const data = await res.json();
-
-        return data.scores as Record<string, ScoreResponse>;
-      } catch (error) {
-        throw error;
-      }
+      router.refresh();
     },
-    {
-      onSuccess: () => {
-        toast.dismiss('scoring');
-        sort('score');
-
-        router.refresh();
-      },
-      onError: () => {
-        toast.error('Failed to score responses. Please try again.', {
-          id: 'scoring',
-        });
-      },
+    onError: () => {
+      toast.error('Failed to score responses. Please try again.', {
+        id: 'scoring',
+      });
     },
-  );
+  });
 
   if (responses.isLoading) {
     return (
       <div className="overflow-x-auto">
-        <table className="table">
+        <table className="table table-fixed">
           <thead>
             <tr>
               <th>
@@ -144,14 +122,20 @@ export function ResponsesTable(props: ResponsesTableProps) {
         >
           <button
             className="btn btn-primary btn-sm ml-auto"
-            onClick={() => score.trigger()}
+            onClick={() => {
+              toast.loading(
+                'Loading scores, usually takes around 15-30 seconds depending on the number of responses.',
+                { id: 'scoring' },
+              );
+              scoreResponses.trigger();
+            }}
             disabled={
-              score.isMutating ||
+              scoreResponses.isMutating ||
               counts.withoutScoreCount === 0 ||
               !canScoreApplications(props.subscription?.packageId)
             }
           >
-            {score.isMutating && (
+            {scoreResponses.isMutating && (
               <span className="loading loading-spinner loading-xs"></span>
             )}
             Score responses with AI ({counts.withoutScoreCount})
@@ -160,7 +144,7 @@ export function ResponsesTable(props: ResponsesTableProps) {
       </div>
 
       <div className="overflow-x-auto">
-        <table className="table">
+        <table className="table table-fixed">
           <thead>
             <tr>
               <th
@@ -329,13 +313,13 @@ function ResponseSkeletonTableRow() {
   return (
     <tr>
       <td>
-        <div className="skeleton w-24 h-4"></div>
+        <div className="skeleton w-36 h-4"></div>
       </td>
       <td>
-        <div className="skeleton w-24 h-4"></div>
+        <div className="skeleton w-36 h-4"></div>
       </td>
       <td>
-        <div className="skeleton w-24 h-4"></div>
+        <div className="skeleton w-36 h-4"></div>
       </td>
     </tr>
   );
