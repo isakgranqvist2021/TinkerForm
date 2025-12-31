@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using api.Models;
 using api.Services;
 using api.Dto;
+using api.ModelBinders;
 
 namespace api.Controllers
 {
@@ -11,12 +12,10 @@ namespace api.Controllers
     public class ResponseController : ControllerBase
     {
         private readonly ModelService _modelService;
-        private readonly ILogger<ResponseController> _logger;
 
-        public ResponseController(ModelService modelServices, ILogger<ResponseController> logger)
+        public ResponseController(ModelService modelServices)
         {
             _modelService = modelServices;
-            _logger = logger;
         }
 
         [HttpGet("{id}/answers")]
@@ -58,15 +57,8 @@ namespace api.Controllers
 
         [HttpGet("form/{formId}")]
         [Authorize]
-        public ActionResult<IEnumerable<ResponseModel>> ListByFormId(Guid formId)
+        public ActionResult<IEnumerable<ResponseModel>> ListByFormId(Guid formId, [FromEmail] string email)
         {
-            var email = HttpContext.Items["Email"]?.ToString();
-            if (email == null)
-            {
-                _logger.LogWarning("Unauthorized access attempt.");
-                return Unauthorized();
-            }
-
             var responses = _modelService.responseService.ListByFormId(formId, email);
             if (responses == null)
             {
@@ -85,15 +77,8 @@ namespace api.Controllers
 
         [HttpPut("score")]
         [Authorize]
-        public ActionResult UpdateScoreAndReasoning([FromBody] List<UpdateScoreAndReasoningDto> updateModels)
+        public ActionResult UpdateScoreAndReasoning([FromBody] List<UpdateScoreAndReasoningDto> updateModels, [FromEmail] string email)
         {
-            var email = HttpContext.Items["Email"]?.ToString();
-            if (email == null)
-            {
-                _logger.LogWarning("Unauthorized access attempt.");
-                return Unauthorized();
-            }
-
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);

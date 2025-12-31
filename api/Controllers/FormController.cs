@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using api.Models;
 using api.Services;
 using api.Dto;
+using api.ModelBinders;
 
 namespace api.Controllers
 {
@@ -11,25 +12,16 @@ namespace api.Controllers
     public class FormController : ControllerBase
     {
         private readonly ModelService _modelService;
-        private readonly ILogger<FormController> _logger;
 
-        public FormController(ModelService modelServices, ILogger<FormController> logger)
+        public FormController(ModelService modelServices)
         {
             _modelService = modelServices;
-            _logger = logger;
         }
 
         [HttpGet]
         [Authorize]
-        public ActionResult<List<FormModel>> Get()
+        public ActionResult<List<FormModel>> Get([FromEmail] string email)
         {
-            var email = HttpContext.Items["Email"]?.ToString();
-            if (email == null)
-            {
-                _logger.LogWarning("Unauthorized access attempt.");
-                return Unauthorized();
-            }
-
             var forms = _modelService.formService.GetFormsByEmail(email);
             return Ok(forms);
         }
@@ -48,15 +40,8 @@ namespace api.Controllers
 
         [HttpDelete("{id}")]
         [Authorize]
-        public ActionResult Delete(Guid id)
+        public ActionResult Delete(Guid id, [FromEmail] string email)
         {
-            var email = HttpContext.Items["Email"]?.ToString();
-            if (email == null)
-            {
-                _logger.LogWarning("Unauthorized access attempt.");
-                return Unauthorized();
-            }
-
             _modelService.formService.DeleteForm(id, email);
 
             return NoContent();
@@ -64,35 +49,21 @@ namespace api.Controllers
 
         [HttpPost]
         [Authorize]
-        public ActionResult<FormModel> Create(CreateFormDto form)
+        public ActionResult<FormModel> Create(CreateFormDto form, [FromEmail] string email)
         {
-            var email = HttpContext.Items["Email"]?.ToString();
-            if (email == null)
-            {
-                _logger.LogWarning("Unauthorized access attempt.");
-                return Unauthorized();
-            }
-
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
             var createdForm = _modelService.formService.InsertOne(form, email);
-            return CreatedAtAction(nameof(GetById), new { id = createdForm.id }, createdForm);
+            return CreatedAtAction(nameof(GetById), new { createdForm.id }, createdForm);
         }
 
         [HttpPut("{id}")]
         [Authorize]
-        public ActionResult Update(Guid id, [FromBody] UpdateFormDto form)
+        public ActionResult Update(Guid id, [FromBody] UpdateFormDto form, [FromEmail] string email)
         {
-            var email = HttpContext.Items["Email"]?.ToString();
-            if (email == null)
-            {
-                _logger.LogWarning("Unauthorized access attempt.");
-                return Unauthorized();
-            }
-
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
@@ -106,15 +77,8 @@ namespace api.Controllers
 
         [HttpGet("{id}/stats")]
         [Authorize]
-        public ActionResult<FormStatsDto> GetFormStats(Guid id)
+        public ActionResult<FormStatsDto> GetFormStats(Guid id, [FromEmail] string email)
         {
-            var email = HttpContext.Items["Email"]?.ToString();
-            if (email == null)
-            {
-                _logger.LogWarning("Unauthorized access attempt.");
-                return Unauthorized();
-            }
-
             var stats = _modelService.formService.GetFormStats(id, email);
             return Ok(stats);
         }
@@ -141,15 +105,8 @@ namespace api.Controllers
 
         [HttpPatch("{id}/pause")]
         [Authorize]
-        public ActionResult ToggleIsPaused(Guid id)
+        public ActionResult ToggleIsPaused(Guid id, [FromEmail] string email)
         {
-            var email = HttpContext.Items["Email"]?.ToString();
-            if (email == null)
-            {
-                _logger.LogWarning("Unauthorized access attempt.");
-                return Unauthorized();
-            }
-
             var isPaused = _modelService.formService.ToggleIsPaused(id, email);
 
             return Ok(isPaused);
@@ -157,15 +114,8 @@ namespace api.Controllers
 
         [HttpGet("{id}/with-answers")]
         [Authorize]
-        public ActionResult<FormWithAnswersDto> GetFormWithAnswers(Guid id)
+        public ActionResult<FormWithAnswersDto> GetFormWithAnswers(Guid id, [FromEmail] string email)
         {
-            var email = HttpContext.Items["Email"]?.ToString();
-            if (email == null)
-            {
-                _logger.LogWarning("Unauthorized access attempt.");
-                return Unauthorized();
-            }
-
             var formWithAnswers = _modelService.formService.GetFormWithAnswers(id, email);
             if (formWithAnswers == null)
             {

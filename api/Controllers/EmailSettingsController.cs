@@ -1,8 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
-using api.Models;
 using api.Services;
 using Microsoft.AspNetCore.Authorization;
 using api.Dto;
+using api.ModelBinders;
 
 namespace api.Controllers
 {
@@ -11,25 +11,16 @@ namespace api.Controllers
     public class EmailSettingsController : ControllerBase
     {
         private readonly ModelService _modelService;
-        private readonly ILogger<ResponseController> _logger;
 
-        public EmailSettingsController(ModelService modelServices, ILogger<ResponseController> logger)
+        public EmailSettingsController(ModelService modelServices)
         {
             _modelService = modelServices;
-            _logger = logger;
         }
 
         [HttpPost]
         [Authorize]
-        public ActionResult UpdateEmailSettings([FromBody] UpdateEmailSettingsDto updateEmailSettingsDto)
+        public ActionResult UpdateEmailSettings([FromBody] UpdateEmailSettingsDto updateEmailSettingsDto, [FromEmail] string email)
         {
-            var email = HttpContext.Items["Email"]?.ToString();
-            if (email == null)
-            {
-                _logger.LogWarning("Unauthorized access attempt.");
-                return Unauthorized();
-            }
-
             _modelService.emailSettingsService.UpdateSettings(updateEmailSettingsDto, email);
 
             return Ok();
@@ -37,15 +28,8 @@ namespace api.Controllers
 
         [HttpGet]
         [Authorize]
-        public ActionResult GetEmailSettings()
+        public ActionResult GetEmailSettings([FromEmail] string email)
         {
-            var email = HttpContext.Items["Email"]?.ToString();
-            if (email == null)
-            {
-                _logger.LogWarning("Unauthorized access attempt.");
-                return Unauthorized();
-            }
-
             var settings = _modelService.emailSettingsService.GetSettings(email);
 
             return Ok(settings);
