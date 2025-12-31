@@ -11,14 +11,14 @@ namespace api.Controllers
         private readonly ModelService _modelService = modelServices;
 
         [HttpPost]
-        public ActionResult GetAnswersByResponseId([FromBody] ContactModel contact)
+        public async Task<ActionResult> GetAnswersByResponseId([FromBody] ContactModel contact)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            _modelService.contactService.AddContact(contact);
+            await _modelService.contactService.AddContact(contact);
             return Created();
         }
     }

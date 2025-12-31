@@ -14,18 +14,18 @@ namespace api.Controllers
 
         [HttpPost]
         [Authorize]
-        public ActionResult UpdateEmailSettings([FromBody] UpdateEmailSettingsDto updateEmailSettingsDto, [FromEmail] string email)
+        public async Task<ActionResult> UpdateEmailSettings([FromBody] UpdateEmailSettingsDto updateEmailSettingsDto, [FromEmail] string email)
         {
-            _modelService.emailSettingsService.UpdateSettings(updateEmailSettingsDto, email);
+            await _modelService.emailSettingsService.UpdateSettings(updateEmailSettingsDto, email);
 
             return Ok();
         }
 
         [HttpGet]
         [Authorize]
-        public ActionResult GetEmailSettings([FromEmail] string email)
+        public async Task<ActionResult> GetEmailSettings([FromEmail] string email)
         {
-            var settings = _modelService.emailSettingsService.GetSettings(email);
+            var settings = await _modelService.emailSettingsService.GetSettings(email);
 
             return Ok(settings);
         }

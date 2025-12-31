@@ -1,6 +1,7 @@
 using api.Context;
 using api.Dto;
 using api.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace api.Services
 {
@@ -8,9 +9,9 @@ namespace api.Services
     {
         private readonly AppDbContext _context = context;
 
-        public void UpdateSettings(UpdateEmailSettingsDto updateEmailSettingsDto, string email)
+        public async Task UpdateSettings(UpdateEmailSettingsDto updateEmailSettingsDto, string email)
         {
-            var settings = _context.email_settings.FirstOrDefault(settings => settings.email == email);
+            var settings = await _context.email_settings.FirstOrDefaultAsync(settings => settings.email == email);
             if (settings != null)
             {
                 settings.updated_at = DateTime.UtcNow;
@@ -19,7 +20,7 @@ namespace api.Services
             }
             else
             {
-                _context.email_settings.Add(new EmailSettingsModel
+                await _context.email_settings.AddAsync(new EmailSettingsModel
                 {
                     email = email,
                     created_at = DateTime.UtcNow,
@@ -29,13 +30,13 @@ namespace api.Services
                 });
             }
 
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
         }
 
 
-        public EmailSettingsModel? GetSettings(string email)
+        public async Task<EmailSettingsModel?> GetSettings(string email)
         {
-            return _context.email_settings.FirstOrDefault(settings => settings.email == email);
+            return await _context.email_settings.FirstOrDefaultAsync(settings => settings.email == email);
         }
     }
 }

@@ -7,10 +7,10 @@ namespace api.Services
     {
         private readonly AppDbContext _context = context;
 
-        public void AddContact(ContactModel contact)
+        public async Task AddContact(ContactModel contact)
         {
-            _context.contact.Add(contact);
-            _context.SaveChanges();
+            await _context.contact.AddAsync(contact);
+            await _context.SaveChangesAsync();
         }
     }
 }
