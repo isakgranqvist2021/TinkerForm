@@ -2,29 +2,16 @@ using api.Context;
 
 namespace api.Services
 {
-    public class ModelService
+    public class ModelService(AppDbContext context)
     {
-        public readonly FormService formService;
-        public readonly ResponseService responseService;
-        public readonly AnswerService answerService;
-        public readonly SectionService sectionService;
-        public readonly SubscriptionService subscriptionService;
-        public readonly StatsService statsService;
-        public readonly ContactService contactService;
-        public readonly EmailSettingsService emailSettingsService;
-        public readonly TeamService teamService;
-
-        public ModelService(AppDbContext context)
-        {
-            formService = new FormService(context);
-            responseService = new ResponseService(context);
-            answerService = new AnswerService(context);
-            sectionService = new SectionService(context);
-            subscriptionService = new SubscriptionService(context);
-            statsService = new StatsService(context);
-            contactService = new ContactService(context);
-            emailSettingsService = new EmailSettingsService(context);
-            teamService = new TeamService(context);
-        }
+        public readonly FormService formService = new(context);
+        public readonly ResponseService responseService = new(context);
+        public readonly AnswerService answerService = new(context);
+        public readonly SectionService sectionService = new(context);
+        public readonly SubscriptionService subscriptionService = new(context);
+        public readonly StatsService statsService = new(context);
+        public readonly ContactService contactService = new(context);
+        public readonly EmailSettingsService emailSettingsService = new(context);
+        public readonly TeamService teamService = new(context);
     }
 }

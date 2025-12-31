@@ -3,14 +3,9 @@ using api.Models;
 
 namespace api.Services
 {
-    public class ContactService
+    public class ContactService(AppDbContext context)
     {
-        private readonly AppDbContext _context;
-
-        public ContactService(AppDbContext context)
-        {
-            _context = context;
-        }
+        private readonly AppDbContext _context = context;
 
         public void AddContact(ContactModel contact)
         {

@@ -4,14 +4,9 @@ using api.Models;
 
 namespace api.Services
 {
-    public class StatsService
+    public class StatsService(AppDbContext context)
     {
-        private readonly AppDbContext _context;
-
-        public StatsService(AppDbContext context)
-        {
-            _context = context;
-        }
+        private readonly AppDbContext _context = context;
 
         public StatsDto GetFormStats(string email)
         {

@@ -3,14 +3,9 @@ using api.Models;
 
 namespace api.Services
 {
-    public class SubscriptionService
+    public class SubscriptionService(AppDbContext context)
     {
-        private readonly AppDbContext _context;
-
-        public SubscriptionService(AppDbContext context)
-        {
-            _context = context;
-        }
+        private readonly AppDbContext _context = context;
 
         public SubscriptionModel Create(SubscriptionModel subscription)
         {

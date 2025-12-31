@@ -1,21 +1,17 @@
 using api.Context;
 using api.Models;
 
+
 namespace api.Services
 {
-    public class AnswerService
+    public class AnswerService(AppDbContext context)
     {
-        private readonly AppDbContext _context;
+        private readonly AppDbContext _context = context;
 
-        public AnswerService(AppDbContext context)
+        public async Task SaveAnswers(List<AnswerModel> answers)
         {
-            _context = context;
-        }
-
-        public void SaveAnswers(List<AnswerModel> answers)
-        {
-            _context.answer.AddRange(answers);
-            _context.SaveChanges();
+            await _context.answer.AddRangeAsync(answers);
+            await _context.SaveChangesAsync();
         }
     }
 }

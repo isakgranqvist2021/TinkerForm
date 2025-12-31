@@ -4,14 +4,9 @@ using api.Models;
 
 namespace api.Services
 {
-    public class TeamService
+    public class TeamService(AppDbContext context)
     {
-        private readonly AppDbContext _context;
-
-        public TeamService(AppDbContext context)
-        {
-            _context = context;
-        }
+        private readonly AppDbContext _context = context;
 
         public bool CreateTeam(string email)
         {
