@@ -25,9 +25,15 @@ export function usePauseForm(formId: string, pausedAt: string | null) {
         toast.error('Error pausing form');
       },
       onSuccess: (pausedAt) => {
-        toast.success(
-          pausedAt ? 'Form paused successfully' : 'Form resumed successfully',
-        );
+        if (pausedAt) {
+          toast.success('Form paused', {
+            description: 'Users will no longer be able to answer this form',
+          });
+        } else {
+          toast.success('Form resumed', {
+            description: 'Users can now answer this form',
+          });
+        }
       },
     },
   );
