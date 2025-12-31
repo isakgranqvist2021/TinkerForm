@@ -14,7 +14,7 @@ export function FeatureCards(props: React.ComponentProps<'div'>) {
   return (
     <div className="flex gap-6 flex-wrap" {...props}>
       <HoverCard>
-        <div className="w-96 card bg-base-100 shadow-sm">
+        <div className="max-w-full w-full sm:w-96 w-96 card bg-base-100 shadow-sm">
           <div className="card-body items-center text-center">
             <WrenchIcon className="size-12 text-primary mb-2" />
 
@@ -27,7 +27,7 @@ export function FeatureCards(props: React.ComponentProps<'div'>) {
       </HoverCard>
 
       <HoverCard>
-        <div className="w-96 card bg-base-100 shadow-sm">
+        <div className="max-w-full w-full sm:w-96 w-96 card bg-base-100 shadow-sm">
           <div className="card-body items-center text-center">
             <AdjustmentsHorizontalIcon className="size-12 text-primary mb-2" />
 
@@ -40,7 +40,7 @@ export function FeatureCards(props: React.ComponentProps<'div'>) {
       </HoverCard>
 
       <HoverCard>
-        <div className="w-96 card bg-base-100 shadow-sm">
+        <div className="max-w-full w-full sm:w-96 w-96 card bg-base-100 shadow-sm">
           <div className="card-body items-center text-center">
             <SunIcon className="size-12 text-primary mb-2" />
 
@@ -53,7 +53,7 @@ export function FeatureCards(props: React.ComponentProps<'div'>) {
       </HoverCard>
 
       <HoverCard>
-        <div className="w-96 card bg-base-100 shadow-sm">
+        <div className="max-w-full w-full sm:w-96 w-96 card bg-base-100 shadow-sm">
           <div className="card-body items-center text-center">
             <ChartBarSquareIcon className="size-12 text-primary mb-2" />
 
@@ -66,7 +66,7 @@ export function FeatureCards(props: React.ComponentProps<'div'>) {
       </HoverCard>
 
       <HoverCard>
-        <div className="w-96 card bg-base-100 shadow-sm">
+        <div className="max-w-full w-full sm:w-96 w-96 card bg-base-100 shadow-sm">
           <div className="card-body items-center text-center">
             <ArrowDownTrayIcon className="size-12 text-primary mb-2" />
 
@@ -78,7 +78,7 @@ export function FeatureCards(props: React.ComponentProps<'div'>) {
       </HoverCard>
 
       <HoverCard>
-        <div className="w-96 card bg-base-100 shadow-sm">
+        <div className="max-w-full w-full sm:w-96 card bg-base-100 shadow-sm">
           <div className="card-body items-center text-center">
             <InformationCircleIcon className="size-12 text-primary mb-2" />
             <p>
