@@ -2,21 +2,15 @@ using Microsoft.AspNetCore.Mvc;
 using api.Models;
 using api.Services;
 using Microsoft.AspNetCore.Authorization;
+using api.ModelBinders;
 
 namespace api.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class SectionController : ControllerBase
+    public class SectionController(ModelService modelServices) : ControllerBase
     {
-        private readonly ModelService _modelService;
-        private readonly ILogger<SectionController> _logger;
-
-        public SectionController(ModelService modelServices, ILogger<SectionController> logger)
-        {
-            _modelService = modelServices;
-            _logger = logger;
-        }
+        private readonly ModelService _modelService = modelServices;
 
         [HttpGet("form/{formId}")]
         public ActionResult<IEnumerable<SectionModel>> GetByFormId(Guid formId)
@@ -32,15 +26,8 @@ namespace api.Controllers
 
         [HttpPost]
         [Authorize]
-        public ActionResult Create([FromBody] List<SectionModel> sections)
+        public ActionResult Create([FromBody] List<SectionModel> sections, [FromEmail] string email)
         {
-            var email = HttpContext.Items["Email"]?.ToString();
-            if (email == null)
-            {
-                _logger.LogWarning("Unauthorized access attempt.");
-                return Unauthorized();
-            }
-
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);

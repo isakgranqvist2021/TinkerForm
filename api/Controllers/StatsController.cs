@@ -1,5 +1,5 @@
 using api.Dto;
-using api.Models;
+using api.ModelBinders;
 using api.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -8,30 +8,15 @@ namespace api.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class StatsController : ControllerBase
+    public class StatsController(ModelService modelService) : ControllerBase
     {
-        private readonly ModelService _modelService;
-        private readonly ILogger<StatsController> _logger;
-
-        public StatsController(ModelService modelService, ILogger<StatsController> logger)
-        {
-            _modelService = modelService;
-            _logger = logger;
-        }
+        private readonly ModelService _modelService = modelService;
 
         [HttpGet("forms")]
         [Authorize]
-        public ActionResult<StatsDto> GetStats()
+        public ActionResult<StatsDto> GetStats([FromEmail] string email)
         {
-            var email = HttpContext.Items["Email"]?.ToString();
-            if (email == null)
-            {
-                _logger.LogWarning("Unauthorized access attempt.");
-                return Unauthorized();
-            }
-
             var dto = _modelService.statsService.GetFormStats(email);
-
             return Ok(dto);
         }
     }

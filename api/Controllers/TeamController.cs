@@ -3,33 +3,20 @@ using api.Services;
 using Microsoft.AspNetCore.Authorization;
 using api.Models;
 using api.Dto;
+using api.ModelBinders;
 
 namespace api.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class TeamController : ControllerBase
+    public class TeamController(ModelService modelServices) : ControllerBase
     {
-        private readonly ModelService _modelService;
-        private readonly ILogger<TeamController> _logger;
-
-        public TeamController(ModelService modelServices, ILogger<TeamController> logger)
-        {
-            _modelService = modelServices;
-            _logger = logger;
-        }
+        private readonly ModelService _modelService = modelServices;
 
         [HttpPost]
         [Authorize]
-        public ActionResult CreateTeam()
+        public ActionResult CreateTeam([FromEmail] string email)
         {
-            var email = HttpContext.Items["Email"]?.ToString();
-            if (email == null)
-            {
-                _logger.LogWarning("Unauthorized access attempt.");
-                return Unauthorized();
-            }
-
             var ok = _modelService.teamService.CreateTeam(email);
             if (ok)
             {
@@ -67,15 +54,8 @@ namespace api.Controllers
 
         [HttpGet]
         [Authorize]
-        public ActionResult<TeamModel> GetTeam()
+        public ActionResult<TeamModel> GetTeam([FromEmail] string email)
         {
-            var email = HttpContext.Items["Email"]?.ToString();
-            if (email == null)
-            {
-                _logger.LogWarning("Unauthorized access attempt.");
-                return Unauthorized();
-            }
-
             var team = _modelService.teamService.GetByEmail(email);
             if (team == null)
             {
@@ -87,15 +67,8 @@ namespace api.Controllers
 
         [HttpPatch("logo")]
         [Authorize]
-        public ActionResult<TeamModel> UpdateLogo([FromBody] UpdateUrlDto updateUrlDto)
+        public ActionResult<TeamModel> UpdateLogo([FromBody] UpdateUrlDto updateUrlDto, [FromEmail] string email)
         {
-            var email = HttpContext.Items["Email"]?.ToString();
-            if (email == null)
-            {
-                _logger.LogWarning("Unauthorized access attempt.");
-                return Unauthorized();
-            }
-
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
@@ -113,15 +86,8 @@ namespace api.Controllers
 
         [HttpPatch("cover-image")]
         [Authorize]
-        public ActionResult<TeamModel> UpdateCoverImage([FromBody] UpdateUrlDto updateUrlDto)
+        public ActionResult<TeamModel> UpdateCoverImage([FromBody] UpdateUrlDto updateUrlDto, [FromEmail] string email)
         {
-            var email = HttpContext.Items["Email"]?.ToString();
-            if (email == null)
-            {
-                _logger.LogWarning("Unauthorized access attempt.");
-                return Unauthorized();
-            }
-
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);

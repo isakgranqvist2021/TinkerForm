@@ -2,21 +2,15 @@ using Microsoft.AspNetCore.Mvc;
 using api.Models;
 using api.Services;
 using Microsoft.AspNetCore.Authorization;
+using api.ModelBinders;
 
 namespace api.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class SubscriptionController : ControllerBase
+    public class SubscriptionController(ModelService modelServices) : ControllerBase
     {
-        private readonly ModelService _modelService;
-        private readonly ILogger<SubscriptionController> _logger;
-
-        public SubscriptionController(ModelService modelServices, ILogger<SubscriptionController> logger)
-        {
-            _modelService = modelServices;
-            _logger = logger;
-        }
+        private readonly ModelService _modelService = modelServices;
 
         [HttpPost]
         public ActionResult Create([FromBody] SubscriptionModel subscription)
@@ -32,15 +26,8 @@ namespace api.Controllers
 
         [HttpGet]
         [Authorize]
-        public ActionResult GetByEmail()
+        public ActionResult GetByEmail([FromEmail] string email)
         {
-            var email = HttpContext.Items["Email"]?.ToString();
-            if (email == null)
-            {
-                _logger.LogWarning("Unauthorized access attempt.");
-                return Unauthorized();
-            }
-
             var subscription = _modelService.subscriptionService.GetByEmail(email);
             if (subscription == null)
             {
@@ -52,15 +39,8 @@ namespace api.Controllers
 
         [HttpDelete]
         [Authorize]
-        public ActionResult Delete()
+        public ActionResult Delete([FromEmail] string email)
         {
-            var email = HttpContext.Items["Email"]?.ToString();
-            if (email == null)
-            {
-                _logger.LogWarning("Unauthorized access attempt.");
-                return Unauthorized();
-            }
-
             var success = _modelService.subscriptionService.Delete(email);
             if (!success)
             {

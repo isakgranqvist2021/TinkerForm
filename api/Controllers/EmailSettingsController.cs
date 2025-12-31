@@ -8,14 +8,9 @@ namespace api.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class EmailSettingsController : ControllerBase
+    public class EmailSettingsController(ModelService modelServices) : ControllerBase
     {
-        private readonly ModelService _modelService;
-
-        public EmailSettingsController(ModelService modelServices)
-        {
-            _modelService = modelServices;
-        }
+        private readonly ModelService _modelService = modelServices;
 
         [HttpPost]
         [Authorize]

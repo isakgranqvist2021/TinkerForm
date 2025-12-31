@@ -6,14 +6,9 @@ namespace api.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class ContactController : ControllerBase
+    public class ContactController(ModelService modelServices) : ControllerBase
     {
-        private readonly ModelService _modelService;
-
-        public ContactController(ModelService modelServices)
-        {
-            _modelService = modelServices;
-        }
+        private readonly ModelService _modelService = modelServices;
 
         [HttpPost]
         public ActionResult GetAnswersByResponseId([FromBody] ContactModel contact)

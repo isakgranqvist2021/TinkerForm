@@ -6,14 +6,9 @@ namespace api.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class AnswerController : ControllerBase
+    public class AnswerController(ModelService modelServices) : ControllerBase
     {
-        private readonly ModelService _modelService;
-
-        public AnswerController(ModelService modelServices)
-        {
-            _modelService = modelServices;
-        }
+        private readonly ModelService _modelService = modelServices;
 
         [HttpPost]
         public ActionResult CreateAnswers([FromBody] List<AnswerModel> answers)

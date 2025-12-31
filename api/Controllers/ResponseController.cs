@@ -9,14 +9,9 @@ namespace api.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class ResponseController : ControllerBase
+    public class ResponseController(ModelService modelServices) : ControllerBase
     {
-        private readonly ModelService _modelService;
-
-        public ResponseController(ModelService modelServices)
-        {
-            _modelService = modelServices;
-        }
+        private readonly ModelService _modelService = modelServices;
 
         [HttpGet("{id}/answers")]
         [Authorize]

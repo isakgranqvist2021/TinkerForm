@@ -9,14 +9,9 @@ namespace api.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class FormController : ControllerBase
+    public class FormController(ModelService modelServices) : ControllerBase
     {
-        private readonly ModelService _modelService;
-
-        public FormController(ModelService modelServices)
-        {
-            _modelService = modelServices;
-        }
+        private readonly ModelService _modelService = modelServices;
 
         [HttpGet]
         [Authorize]
