@@ -7,9 +7,12 @@ import { getMetadata } from 'utils';
 
 import { FormsTable } from './forms-table';
 import { FormStats } from './form-stats';
-import { TeamFormsButton } from 'components/team-forms-button';
 import { EditTeamSettingsCoverImage } from 'components/edit-team-setings';
 import { getMyTeam } from 'services/api/team';
+import {
+  ArrowRightCircleIcon,
+  PlusCircleIcon,
+} from '@heroicons/react/24/outline';
 
 export const metadata = getMetadata({
   title: 'My Forms',
@@ -40,10 +43,21 @@ export default async function Page() {
             </div>
 
             <div className="flex gap-4">
-              <TeamFormsButton />
+              <Link
+                href={`/forms/${team?.id}`}
+                className="btn btn-neutral btn-sm sm:btn-md"
+                target="_blank"
+              >
+                Team Page
+                <ArrowRightCircleIcon className="size-6" />
+              </Link>
 
-              <Link href="/dashboard/forms/new" className="link">
+              <Link
+                href="/dashboard/forms/new"
+                className="btn btn-primary btn-sm sm:btn-md"
+              >
                 New Form
+                <PlusCircleIcon className="size-6" />
               </Link>
             </div>
           </div>

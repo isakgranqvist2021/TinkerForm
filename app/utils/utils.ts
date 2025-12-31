@@ -22,12 +22,10 @@ export function formatDateInput(date: Dayjs.ConfigType) {
 }
 
 export function calculateDuration(
-  createdAt: dayjs.ConfigType,
-  completedAt: dayjs.ConfigType,
+  start: dayjs.ConfigType,
+  end: dayjs.ConfigType,
 ) {
-  return completedAt
-    ? dayjs(completedAt).diff(dayjs(createdAt), 'second')
-    : null;
+  return end ? dayjs(end).diff(dayjs(start), 'second') : null;
 }
 
 export function formatDuration(totalSeconds: number) {

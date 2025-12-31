@@ -5,25 +5,14 @@ import Link from 'next/link';
 import { redirect } from 'next/navigation';
 import React from 'react';
 import { PageProps } from 'types/page';
-import {
-  calculateAverageCompletionTime,
-  formatNumber,
-  getCompletionRate,
-  getDurations,
-  getMetadata,
-} from 'utils';
-import { getFormById, getFormStats } from 'services/api/forms';
+import { getDurations, getMetadata } from 'utils';
+import { getFormById } from 'services/api/forms';
 import { getResponsesByFormId } from 'services/api/response';
 import { FormActions } from './actions';
 import { getSubscription } from 'services/api/subscription';
 import { ResponsesTable } from './responses-table';
-import {
-  CheckCircleIcon,
-  ClockIcon,
-  EyeIcon,
-  PercentBadgeIcon,
-} from '@heroicons/react/24/outline';
 import { getMyTeam } from 'services/api/team';
+import { FormStats } from './form-stats';
 
 export const generateMetadata = async (props: PageProps<{ id: string }>) => {
   const params = await props.params;
@@ -51,16 +40,8 @@ export default async function Page(props: PageProps<{ id: string }>) {
   }
 
   const responses = await getResponsesByFormId(params.id, session);
-  const formStats = await getFormStats(params.id, session);
   const subscription = await getSubscription(session);
   const team = await getMyTeam(session);
-
-  const durations = getDurations(responses);
-  const averageCompletionTime = calculateAverageCompletionTime(durations);
-  const completionRate = getCompletionRate(
-    formStats.completedResponses,
-    formStats.totalResponses,
-  );
 
   const viewFormHref = `${process.env.APP_BASE_URL}/forms/${team?.id}/${form.id}`;
 
@@ -96,45 +77,7 @@ export default async function Page(props: PageProps<{ id: string }>) {
             alt="Cover image"
           />
 
-          <div className="stats shadow">
-            <div className="stat">
-              <div className="stat-figure text-primary">
-                <EyeIcon className="inline-block h-8 w-8 stroke-current" />
-              </div>
-              <div className="stat-title">Total Views</div>
-              <div className="stat-value text-primary">
-                {formatNumber(formStats.totalResponses)}
-              </div>
-            </div>
-
-            <div className="stat">
-              <div className="stat-figure text-secondary">
-                <CheckCircleIcon className="inline-block h-8 w-8 stroke-current" />
-              </div>
-              <div className="stat-title">Total Responses</div>
-              <div className="stat-value text-secondary">
-                {formatNumber(formStats.completedResponses)}
-              </div>
-            </div>
-
-            <div className="stat">
-              <div className="stat-figure text-secondary">
-                <ClockIcon className="inline-block h-8 w-8 stroke-current" />
-              </div>
-              <div className="stat-title">Average Completion Time</div>
-              <div className="stat-value text-secondary">
-                {averageCompletionTime ?? 'N/A'}
-              </div>
-            </div>
-
-            <div className="stat">
-              <div className="stat-figure text-secondary">
-                <PercentBadgeIcon className="inline-block h-8 w-8 stroke-current" />
-              </div>
-              <div className="stat-title">Completion Rate</div>
-              <div className="stat-value">{completionRate}%</div>
-            </div>
-          </div>
+          <FormStats formId={form.id} durations={getDurations(responses)} />
 
           <ResponsesTable
             subscription={subscription}

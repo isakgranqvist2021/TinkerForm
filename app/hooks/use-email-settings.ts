@@ -1,8 +1,18 @@
 import { UpdateEmailSettings } from 'models/email-settings';
-import { EmailSettingsDto } from 'services/api/email-settings';
 import { toast } from 'sonner';
 import useSWR from 'swr';
 import useMutation from 'swr/mutation';
+
+export interface EmailSettingsDto {
+  id: string;
+  email: string;
+
+  createdAt: string;
+  updatedAt: string;
+
+  productUpdates: boolean;
+  marketing: boolean;
+}
 
 export function useUpdateEmailSettings() {
   const mutation = useMutation(

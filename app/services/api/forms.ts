@@ -43,11 +43,6 @@ export interface FormWithAnswersDto {
   }[];
 }
 
-interface FormStats {
-  totalResponses: number;
-  completedResponses: number;
-}
-
 export interface AnswersByFormDto {
   sections: SectionDto[];
   answers: AnswerDto[];
@@ -114,28 +109,6 @@ export async function updateForm(
   } catch (err) {
     console.error(err);
     return false;
-  }
-}
-
-export async function getFormStats(
-  formId: string,
-  session: SessionData,
-): Promise<FormStats> {
-  try {
-    const res = await fetch(`${env.API_URL}/form/${formId}/stats`, {
-      headers: {
-        Authorization: `Bearer ${session.tokenSet.accessToken}`,
-      },
-    });
-
-    const data = await res.json();
-    return data;
-  } catch (err) {
-    console.error(err);
-    return {
-      completedResponses: 0,
-      totalResponses: 0,
-    };
   }
 }
 

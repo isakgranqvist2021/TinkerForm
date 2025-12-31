@@ -1,6 +1,7 @@
 'use client';
 
 import { CheckCircleIcon, EyeIcon } from '@heroicons/react/24/outline';
+import { StatsSkeleton, StatsSkeletonItem } from 'components/stats-skeleton';
 import React from 'react';
 import { StatsDto } from 'services/api/stats';
 import useSWR from 'swr';
@@ -17,26 +18,10 @@ export function FormStats() {
 
   if (formStats.isLoading) {
     return (
-      <div className="stats shadow h-[116px]">
-        <div className="stat flex justify-between items-center">
-          <div>
-            <div className="skeleton h-4 w-20 mb-2"></div>
-            <div className="skeleton h-4 w-12 mb-2"></div>
-            <div className="skeleton h-4 w-40"></div>
-          </div>
-
-          <div className="skeleton h-6 w-6 shrink-0 rounded-full"></div>
-        </div>
-        <div className="stat flex justify-between items-center">
-          <div>
-            <div className="skeleton h-4 w-20 mb-2"></div>
-            <div className="skeleton h-4 w-12 mb-2"></div>
-            <div className="skeleton h-4 w-40"></div>
-          </div>
-
-          <div className="skeleton h-6 w-6 shrink-0 rounded-full"></div>
-        </div>
-      </div>
+      <StatsSkeleton>
+        <StatsSkeletonItem />
+        <StatsSkeletonItem />
+      </StatsSkeleton>
     );
   }
 
