@@ -73,24 +73,24 @@ namespace api.Controllers
 
         [HttpGet("{id}/stats")]
         [Authorize]
-        public ActionResult<FormStatsDto> GetFormStats(Guid id, [FromEmail] string email)
+        public async Task<ActionResult<FormStatsDto>> GetFormStats(Guid id, [FromEmail] string email)
         {
-            var stats = _modelService.formService.GetFormStats(id, email);
+            var stats = await _modelService.formService.GetFormStats(id, email);
             return Ok(stats);
         }
 
         [HttpGet("{id}/response-count")]
-        public ActionResult<int> GetResponseCount(Guid id)
+        public async Task<ActionResult<int>> GetResponseCount(Guid id)
         {
-            var response_count = _modelService.formService.GetResponseCount(id);
+            var response_count = await _modelService.formService.GetResponseCount(id);
             return Ok(response_count);
         }
 
         [HttpGet("{id}/answers")]
         [Authorize]
-        public ActionResult GetAnswersByFormId(Guid id)
+        public async Task<ActionResult> GetAnswersByFormId(Guid id)
         {
-            var answers = _modelService.formService.GetAnswers(id);
+            var answers = await _modelService.formService.GetAnswers(id);
             if (answers == null)
             {
                 return NotFound();
@@ -101,18 +101,18 @@ namespace api.Controllers
 
         [HttpPatch("{id}/pause")]
         [Authorize]
-        public ActionResult ToggleIsPaused(Guid id, [FromEmail] string email)
+        public async Task<ActionResult> ToggleIsPaused(Guid id, [FromEmail] string email)
         {
-            var isPaused = _modelService.formService.ToggleIsPaused(id, email);
+            var isPaused = await _modelService.formService.ToggleIsPaused(id, email);
 
             return Ok(isPaused);
         }
 
         [HttpGet("{id}/with-answers")]
         [Authorize]
-        public ActionResult<FormWithAnswersDto> GetFormWithAnswers(Guid id, [FromEmail] string email)
+        public async Task<ActionResult<FormWithAnswersDto>> GetFormWithAnswers(Guid id, [FromEmail] string email)
         {
-            var formWithAnswers = _modelService.formService.GetFormWithAnswers(id, email);
+            var formWithAnswers = await _modelService.formService.GetFormWithAnswers(id, email);
             if (formWithAnswers == null)
             {
                 return NotFound();

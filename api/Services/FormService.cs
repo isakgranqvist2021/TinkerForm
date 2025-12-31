@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using api.Context;
 using api.Dto;
 using api.Models;
@@ -149,16 +150,11 @@ namespace api.Services
             }
         }
 
-        public FormStatsDto GetFormStats(Guid formId, string email)
+        public async Task<FormStatsDto> GetFormStats(Guid formId, string email)
         {
-            var form = _context.form.FirstOrDefault(f => f.id == formId && f.email == email);
-            if (form == null)
-            {
-                throw new UnauthorizedAccessException("You do not have permission to view stats for this form.");
-            }
-
-            var totalResponses = _context.response.Count(r => r.fk_form_id == formId);
-            var completedResponses = _context.response.Count(r => r.fk_form_id == formId && r.completed_at != null);
+            var form = await _context.form.FirstOrDefaultAsync(f => f.id == formId && f.email == email) ?? throw new UnauthorizedAccessException("You do not have permission to view stats for this form.");
+            var totalResponses = await _context.response.CountAsync(r => r.fk_form_id == formId);
+            var completedResponses = await _context.response.CountAsync(r => r.fk_form_id == formId && r.completed_at != null);
 
             return new FormStatsDto
             {
@@ -167,10 +163,10 @@ namespace api.Services
             };
         }
 
-        public object GetAnswers(Guid formId)
+        public async Task<object> GetAnswers(Guid formId)
         {
-            var sections = _context.section.Where(s => s.fk_form_id == formId).ToList();
-            var answers = _context.answer
+            var sections = await _context.section.Where(s => s.fk_form_id == formId).ToListAsync();
+            var answers = await _context.answer
                 .Where(a => a.fk_form_id == formId)
                 .Select(a => new
                 {
@@ -184,7 +180,7 @@ namespace api.Services
                     createdAt = a.created_at,
                     updatedAt = a.updated_at
                 })
-                .ToList();
+                .ToListAsync();
 
             return new
             {
@@ -193,15 +189,15 @@ namespace api.Services
             };
         }
 
-        public FormWithAnswersDto? GetFormWithAnswers(Guid formId, string email)
+        public async Task<FormWithAnswersDto?> GetFormWithAnswers(Guid formId, string email)
         {
-            var form = _context.form.FirstOrDefault(f => f.id == formId && f.email == email);
+            var form = await _context.form.FirstOrDefaultAsync(f => f.id == formId && f.email == email);
             if (form == null)
             {
                 return null;
             }
 
-            var responseAnswerData = _context.answer
+            var responseAnswerData = await _context.answer
                 .Where(answer => answer.fk_form_id == formId)
                 .Join(
                     _context.response.Where(r => r.fk_form_id == formId && r.score == null),
@@ -222,7 +218,7 @@ namespace api.Services
                     }
                 )
                 .GroupBy(x => x.response.id)
-                .ToList();
+                .ToListAsync();
 
             var responses = new List<ResponseWithAnswersDto>();
 
@@ -256,21 +252,16 @@ namespace api.Services
             return formWithAnswers;
         }
 
-        public int GetResponseCount(Guid formId)
+        public async Task<int> GetResponseCount(Guid formId)
         {
-            return _context.response.Where(
+            return await _context.response.Where(
                 response => response.completed_at != null && response.fk_form_id == formId
-            ).Count();
+            ).CountAsync();
         }
 
-        public DateTime? ToggleIsPaused(Guid formId, string email)
+        public async Task<DateTime?> ToggleIsPaused(Guid formId, string email)
         {
-            var form = _context.form.FirstOrDefault(f => f.id == formId && f.email == email);
-            if (form == null)
-            {
-                throw new UnauthorizedAccessException("You do not have permission to modify this form.");
-            }
-
+            var form = await _context.form.FirstOrDefaultAsync(f => f.id == formId && f.email == email) ?? throw new UnauthorizedAccessException("You do not have permission to modify this form.");
             form.updated_at = DateTime.UtcNow;
 
             if (form.paused_at == null)
@@ -282,7 +273,7 @@ namespace api.Services
                 form.paused_at = null;
             }
 
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
 
             return form.paused_at;
         }
