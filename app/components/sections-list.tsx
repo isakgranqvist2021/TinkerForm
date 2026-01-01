@@ -50,7 +50,7 @@ import {
   ControlledTextarea,
 } from './inputs';
 import z from 'zod';
-import { PlusIcon } from '@heroicons/react/24/outline';
+import { XCircleIcon } from '@heroicons/react/24/solid';
 
 type FormMode = 'edit' | 'add';
 const SectionFormContext = React.createContext<{
@@ -400,6 +400,13 @@ function SectionFormModal(props: SectionFormModalProps) {
   return (
     <dialog id={modalName} className="modal">
       <div className="modal-box flex flex-col w-8/12 max-w-7xl">
+        <button
+          onClick={closeAddSectionModal}
+          className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2"
+        >
+          <XCircleIcon className="size-6" />
+        </button>
+
         <h3 className="font-bold text-lg">
           {addSectionContext.mode === 'add'
             ? 'Add new section'

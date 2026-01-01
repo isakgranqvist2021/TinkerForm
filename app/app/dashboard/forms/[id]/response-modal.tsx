@@ -11,6 +11,7 @@ import useSWR from 'swr';
 import { SectionType } from 'models/form';
 import Link from 'next/link';
 import { AnswersByResponseIdDto, ResponseDto } from 'services/api/response';
+import { XCircleIcon } from '@heroicons/react/24/solid';
 
 function ResponseModal() {
   const responseContext = useResponseContext();
@@ -58,6 +59,13 @@ function ResponseModalContent(props: ResponseModalContentProps) {
   return (
     <React.Fragment>
       <div className="modal-box">
+        <button
+          onClick={closeResponseModal}
+          className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2"
+        >
+          <XCircleIcon className="size-6" />
+        </button>
+
         <div className="flex flex-col gap-2">
           {!hasAnswers && !isLoading && (
             <div role="alert" className="alert alert-warning">
