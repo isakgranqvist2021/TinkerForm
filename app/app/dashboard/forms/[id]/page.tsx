@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { redirect } from 'next/navigation';
 import React from 'react';
 import { PageProps } from 'types/page';
-import { getDurations, getMetadata } from 'utils';
+import { getMetadata } from 'utils';
 import { getFormById } from 'services/api/forms';
 import { FormActions } from './actions';
 import { getSubscription } from 'services/api/subscription';

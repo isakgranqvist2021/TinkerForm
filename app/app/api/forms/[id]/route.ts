@@ -1,4 +1,3 @@
-import { del } from '@vercel/blob';
 import {
   badRequest,
   internalServerError,
@@ -26,8 +25,6 @@ export async function PATCH(
     if (!currentForm) {
       return badRequest();
     }
-
-    await del(currentForm.coverImage);
 
     const formData = await req.formData();
     const form = formSchema.parse(parseFormFormData(formData));

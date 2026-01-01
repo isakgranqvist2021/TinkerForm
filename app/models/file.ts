@@ -17,10 +17,6 @@ export const fileSchema = z
   });
 
 export const uploadSchema = z.object({
-  // File to upload
   file: fileSchema.nullable(),
-
-  // Previous URL to delete
-  url: z.string().nullable().optional(),
 });
 export type UploadParams = z.infer<typeof uploadSchema>;

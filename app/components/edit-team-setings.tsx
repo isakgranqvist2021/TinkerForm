@@ -18,10 +18,7 @@ export function EditTeamSettingsCoverImage(
   const router = useRouter();
 
   const handleChange = async (file: File | null) => {
-    const url = await uploadFile.upload({
-      file,
-      url: props.coverImage,
-    });
+    const url = await uploadFile.upload({ file });
 
     await updateTeamCoverImage.update(url);
 

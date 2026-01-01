@@ -77,9 +77,7 @@ function UploadCoverImage() {
   const uploadFile = useUploadFile();
 
   const handleImageChange = async (file: File | null) => {
-    const url = await uploadFile.upload({
-      file,
-    });
+    const url = await uploadFile.upload({ file });
 
     formContext.setValue('coverImage', url ?? '', {
       shouldValidate: formContext.formState.isSubmitted,

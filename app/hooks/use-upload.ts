@@ -11,10 +11,6 @@ export function useUploadFile() {
         formData.set('file', arg.file);
       }
 
-      if (arg.url) {
-        formData.set('url', arg.url);
-      }
-
       const res = await fetch(url, {
         method: 'POST',
         body: formData,

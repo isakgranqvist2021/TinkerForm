@@ -57,9 +57,9 @@ function Pricing() {
 
 function Hero() {
   return (
-    <div className="hero bg-base-200 py-12 md:py-18 lg:py-24 flex-grow">
+    <div className="hero bg-base-200 py-12 md:py-18 lg:py-36 flex-grow">
       <div className="hero-content flex flex-col items-center text-center">
-        <h1 className="flex flex-col text-4xl sm:text-6xl lg:text-7xl font-bold max-w-[18ch]">
+        <h1 className="flex flex-col text-5xl sm:text-6xl lg:text-7xl font-bold max-w-[18ch]">
           <span>Build beautiful forms</span>
           <span className="text-secondary">without hassle.</span>
         </h1>
