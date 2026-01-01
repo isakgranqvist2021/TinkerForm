@@ -148,9 +148,10 @@ export function SectionsList() {
           <div className="tooltip" data-tip="Add Section">
             <button
               disabled={formContext.formState.isSubmitting}
-              className="btn btn-circle btn-accent"
+              className="btn btn-accent"
               onClick={openAddSectionModalAndSetValues}
             >
+              Add section
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
@@ -397,9 +398,52 @@ interface SectionFormModalProps {
 function SectionFormModal(props: SectionFormModalProps) {
   const addSectionContext = React.useContext(SectionFormContext);
 
+  const [step, setStep] = React.useState(0);
+
+  const resetStep = () => {
+    window.setTimeout(() => {
+      setStep(0);
+    }, 250);
+  };
+
+  if (step === 0 && addSectionContext.mode === 'add') {
+    return (
+      <dialog id={modalName} className="modal" onClose={resetStep}>
+        <div className="modal-box flex flex-col w-[90%] md:w-6/12 lg:w-5/12 max-w-7xl">
+          <button
+            onClick={closeAddSectionModal}
+            className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2"
+          >
+            <XCircleIcon className="size-6" />
+          </button>
+
+          <h3 className="font-bold text-2xl mb-6 text-center">
+            Pick Section Type
+          </h3>
+
+          <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
+            {sectionTypes.map((sectionType) => (
+              <button
+                className="btn btn-neutral"
+                onClick={() => {
+                  setStep(1);
+                  addSectionContext.setDefaultValues(
+                    getSectionDefaultValues(sectionType),
+                  );
+                }}
+              >
+                {formatSectionType(sectionType)}
+              </button>
+            ))}
+          </div>
+        </div>
+      </dialog>
+    );
+  }
+
   return (
-    <dialog id={modalName} className="modal">
-      <div className="modal-box flex flex-col w-8/12 max-w-7xl">
+    <dialog id={modalName} className="modal" onClose={resetStep}>
+      <div className="modal-box flex flex-col w-[90%] md:w-6/12 lg:w-5/12 max-w-7xl">
         <button
           onClick={closeAddSectionModal}
           className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2"
@@ -407,39 +451,7 @@ function SectionFormModal(props: SectionFormModalProps) {
           <XCircleIcon className="size-6" />
         </button>
 
-        <h3 className="font-bold text-lg">
-          {addSectionContext.mode === 'add'
-            ? 'Add new section'
-            : 'Edit section'}
-        </h3>
-
-        <fieldset className="fieldset w-full">
-          <legend className="fieldset-legend">Section type</legend>
-
-          <select
-            value={addSectionContext.defaultValues.type}
-            className="select w-full"
-            onChange={(e) =>
-              addSectionContext.setDefaultValues(
-                getSectionDefaultValues(e.target.value as SectionType),
-              )
-            }
-          >
-            <option disabled={true}>Section type</option>
-            {sectionTypes.map((type) => (
-              <option key={type} value={type}>
-                {formatSectionType(type)}
-              </option>
-            ))}
-          </select>
-
-          <p className="label">
-            When someone fills out your form, the answer they provide will be in
-            this format.
-          </p>
-        </fieldset>
-
-        <Forms onSubmit={props.onSubmit} />
+        <Forms {...props} />
       </div>
     </dialog>
   );
