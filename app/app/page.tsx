@@ -65,8 +65,8 @@ function Hero() {
         </h1>
 
         <p className="max-w-[48ch] text-base sm:text-xl mt-4">
-          TinkerForm lets you quickly create, share, and track forms for any
-          purpose—all from a simple, user-friendly dashboard.
+          Create, share, and track forms for any purpose—all from a simple,
+          user-friendly dashboard with AI powered analysis.
         </p>
 
         <Link href="/dashboard/forms" className="btn btn-primary btn-lg mt-4">
