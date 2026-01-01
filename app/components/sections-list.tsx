@@ -144,35 +144,6 @@ export function SectionsList() {
       <SectionFormModal onSubmit={handleSubmit} />
 
       <div className="flex justify-between">
-        <div className="flex flex-wrap gap-2 mt-2 mb-4">
-          {exampleSections.map((exampleSection) => {
-            return (
-              <div
-                key={exampleSection.id}
-                className="tooltip"
-                data-tip={exampleSection.description}
-              >
-                <div
-                  className="badge badge-primary hover:badge-outline cursor-pointer"
-                  onClick={() => {
-                    if (formContext.formState.isSubmitting) return;
-
-                    fieldArray.append({
-                      ...exampleSection,
-                      id: crypto.randomUUID(),
-                      index: fieldArray.fields.length,
-                    });
-                  }}
-                >
-                  {exampleSection.title}
-
-                  <PlusIcon className="size-4" />
-                </div>
-              </div>
-            );
-          })}
-        </div>
-
         {sections.length > 0 && (
           <div className="tooltip" data-tip="Add Section">
             <button
@@ -418,97 +389,6 @@ function ListItem(props: ListItemProps) {
     </li>
   );
 }
-
-const exampleSections: Section[] = [
-  {
-    id: crypto.randomUUID(),
-    type: 'text',
-    index: 0,
-    description: 'Please enter your legal name.',
-    title: 'Your name',
-    required: true,
-    min: 1,
-    max: 100,
-  },
-  {
-    id: crypto.randomUUID(),
-    type: 'email',
-    index: 1,
-    description: 'Please enter your personal email address.',
-    title: 'Your email',
-    required: true,
-  },
-  {
-    id: crypto.randomUUID(),
-    type: 'phone',
-    index: 2,
-    description: 'Please enter your phone number.',
-    title: 'Your phone number',
-    required: false,
-  },
-  {
-    id: crypto.randomUUID(),
-    type: 'link',
-    index: 3,
-    description: 'Please enter the link to your LinkedIn profile.',
-    title: 'LinkedIn profile',
-    required: true,
-  },
-  {
-    id: crypto.randomUUID(),
-    type: 'file',
-    index: 4,
-    description: 'Please upload your resume/CV.',
-    title: 'Resume/CV',
-    required: true,
-    acceptedFileTypes: null,
-  },
-  {
-    id: crypto.randomUUID(),
-    type: 'text',
-    index: 5,
-    min: 50,
-    max: 1000,
-    required: false,
-    title: 'Cover letter',
-    description:
-      'Please provide a brief cover letter explaining your interest in this position.',
-  },
-  {
-    id: crypto.randomUUID(),
-    type: 'multiple-choice',
-    index: 6,
-    description: 'When would you be available to start?',
-    title: 'Start date',
-    required: true,
-    options: [
-      { text: 'Immediately' },
-      { text: 'Within 2 weeks' },
-      { text: 'Within a month' },
-      { text: 'More than a month' },
-    ],
-  },
-  {
-    id: crypto.randomUUID(),
-    type: 'boolean',
-    index: 7,
-    description:
-      'Are you legally authorized to work in the country where this job is located?',
-    title: 'Work authorization',
-    required: true,
-  },
-  {
-    id: crypto.randomUUID(),
-    type: 'multiple-choice',
-    index: 8,
-    description: 'Select your country of residence.',
-    title: 'Country of Residence',
-    required: true,
-    options: countries.map((country) => ({
-      text: `${country.emoji} ${country.name}`,
-    })),
-  },
-];
 
 interface SectionFormModalProps {
   onSubmit: (data: Section) => void;
