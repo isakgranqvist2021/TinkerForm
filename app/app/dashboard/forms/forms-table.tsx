@@ -99,19 +99,24 @@ function FormsTableContent(props: FormsTableContentProps) {
               >
                 Responses
               </th>
+              <th>Status</th>
               <th></th>
             </tr>
           </thead>
-          <tbody>{props.data.sort(sorter).map(renderFormTableRow)}</tbody>
+          <tbody>
+            {props.data.sort(sorter).map((formDto) => (
+              <FormTableRow key={formDto.id} {...formDto} />
+            ))}
+          </tbody>
         </table>
       </div>
     </DeleteFormContextProvider>
   );
 }
 
-function renderFormTableRow(formDto: FormDto) {
+function FormTableRow(formDto: FormDto) {
   return (
-    <tr key={formDto.id}>
+    <tr>
       <td>
         <div className="flex items-center gap-3">
           <div className="avatar">
@@ -132,6 +137,13 @@ function renderFormTableRow(formDto: FormDto) {
       <td className="whitespace-nowrap">{formatDate(formDto.updatedAt)}</td>
       <td>{formDto.totalResponses ?? 0}</td>
       <td>{formDto.completedResponses ?? 0}</td>
+      <td>
+        {formDto.pausedAt ? (
+          <div className="badge badge-error">Paused</div>
+        ) : (
+          <div className="badge badge-success">Active</div>
+        )}
+      </td>
       <th className="text-right whitespace-nowrap">
         <PauseFormButton formId={formDto.id} pausedAt={formDto.pausedAt} />
 
