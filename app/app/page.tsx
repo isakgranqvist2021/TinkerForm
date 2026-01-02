@@ -17,9 +17,9 @@ export default async function Page() {
 
       <HowItWorks />
 
-      <Pricing />
-
       <Features />
+
+      <Pricing />
     </Drawer>
   );
 }
@@ -127,9 +127,27 @@ function HowItWorks() {
   );
 }
 
+function Features() {
+  return (
+    <div className="overflow-hidden w-full py-20 px-4 flex flex-col gap-4 bg-base-200">
+      <div className="text-center mb-16">
+        <h2 className="text-4xl md:text-5xl font-extrabold mb-4 tracking-tight">
+          Why Choose TinkerForm?
+        </h2>
+        <p className="text-lg opacity-80 max-w-2xl mx-auto leading-relaxed">
+          Powerful tools to help you collect, manage, and analyze responses at
+          scale.
+        </p>
+      </div>
+
+      <FeatureCards className="w-full flex flex-wrap gap-6 justify-center mx-auto max-w-7xl" />
+    </div>
+  );
+}
+
 function Pricing() {
   return (
-    <div className="py-20 px-4 flex flex-col gap-4 bg-base-200">
+    <div className="py-20 px-4 flex flex-col gap-4 bg-base-200/50">
       <div className="text-center mb-16">
         <h2 className="text-4xl md:text-5xl font-extrabold mb-4 tracking-tight">
           Our Packages
@@ -147,28 +165,6 @@ function Pricing() {
           Contact Support
         </Link>
       </div>
-    </div>
-  );
-}
-
-function Features() {
-  return (
-    <div className="overflow-hidden w-full py-20 px-4 flex flex-col gap-4 bg-base-200/50">
-      <div className="text-center mb-16">
-        <h2 className="text-4xl md:text-5xl font-extrabold mb-4 tracking-tight">
-          Why Choose TinkerForm?
-        </h2>
-        <p className="text-lg opacity-80 max-w-2xl mx-auto leading-relaxed">
-          Powerful tools to help you collect, manage, and analyze responses at
-          scale.
-        </p>
-      </div>
-
-      <FeatureCards className="w-full flex flex-wrap gap-6 justify-center mx-auto max-w-7xl" />
-
-      <Link href="/contact" className="text-center link mt-4">
-        Missing a feature? Contact us!
-      </Link>
     </div>
   );
 }
