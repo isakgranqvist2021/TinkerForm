@@ -578,6 +578,11 @@ function SectionForm(props: FormSectionProps) {
   return (
     <FormProvider {...form}>
       <form onSubmit={handleSubmit}>
+        <ControlledCheckbox
+          name="required"
+          label="This question must be answered"
+        />
+
         <ControlledInput
           name="title"
           label="Section Title"
@@ -590,11 +595,6 @@ function SectionForm(props: FormSectionProps) {
         />
 
         <ExtraFields type={props.defaultValues.type as SectionType} />
-
-        <ControlledCheckbox
-          name="required"
-          label="This question must be answered"
-        />
 
         <SectionFormModalFooter />
       </form>
