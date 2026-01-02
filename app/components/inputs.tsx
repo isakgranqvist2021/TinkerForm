@@ -4,7 +4,7 @@ import { Editor } from 'primereact/editor';
 import { cn } from 'utils';
 
 interface ControlledComponentProps {
-  label: string;
+  label?: string;
   placeholder?: string;
   name: string;
   description?: string;
@@ -21,7 +21,9 @@ export function ControlledInput(
 
   return (
     <fieldset className="fieldset w-full">
-      <legend className="fieldset-legend">{props.label}</legend>
+      {props.label && (
+        <legend className="fieldset-legend">{props.label}</legend>
+      )}
 
       <input
         type="text"
