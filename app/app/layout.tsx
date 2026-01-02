@@ -6,12 +6,13 @@ import { getThemeFromCookie } from 'utils/utils.server';
 import { env } from 'config';
 import { CookieBanner } from 'components/cookie-banner';
 import { cookies } from 'next/headers';
+import { ACCEPT_COOKIES_KEY } from 'constants/cookies';
 
 export default async function RootLayout(props: React.PropsWithChildren) {
   const theme = await getThemeFromCookie();
 
   const c = await cookies();
-  const hasAcceptedCookies = Boolean(c.get('accept-cookies')?.value);
+  const hasAcceptedCookies = Boolean(c.get(ACCEPT_COOKIES_KEY)?.value);
 
   return (
     <html data-theme={theme} lang="en">

@@ -1,6 +1,6 @@
 import { Drawer } from 'components/drawer';
-import { FeatureCards } from 'components/feature-cards';
 import { PackageCards } from 'components/package-cards';
+import { features } from 'constants/features';
 import { sectionTypes } from 'models/form';
 import Link from 'next/link';
 import React from 'react';
@@ -194,7 +194,30 @@ function Features() {
         </p>
       </div>
 
-      <FeatureCards className="w-full flex flex-wrap gap-6 justify-center mx-auto max-w-7xl" />
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mx-auto max-w-7xl">
+        {features.map((feature, i) => (
+          <div
+            key={i}
+            className="group card bg-base-100 border border-base-300 hover:shadow-xl hover:-translate-y-1 transition-all duration-300"
+          >
+            <div className="card-body p-8">
+              <div
+                className={`w-12 h-12 rounded-xl ${feature.color} flex items-center justify-center mb-4 group-hover:scale-110 transition-transform`}
+              >
+                <feature.icon className="size-6" />
+              </div>
+
+              <h3 className="text-xl font-bold mb-2 group-hover:text-primary transition-colors">
+                {feature.title}
+              </h3>
+
+              <p className="text-base-content/70 leading-relaxed text-sm">
+                {feature.desc}
+              </p>
+            </div>
+          </div>
+        ))}
+      </div>
     </div>
   );
 }
