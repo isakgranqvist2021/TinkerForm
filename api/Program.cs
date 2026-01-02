@@ -42,6 +42,9 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseExceptionHandler("/error");
+app.Map("/error", (HttpContext context) => Results.Problem("An unexpected error occurred."));
+
 app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseMiddleware<Auth0UserInfoMiddleware>();
