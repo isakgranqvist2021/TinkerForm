@@ -106,10 +106,7 @@ export const formSchema = z.object({
     .string()
     .min(1, 'Description is required')
     .max(10000, 'Description is too long'),
-  location: z
-    .string()
-    .min(1, 'Location is required')
-    .max(500, 'Location is too long'),
+  location: z.string().max(500, 'Location is too long'),
   coverImage: z.string().min(1, 'Cover image is required'),
   theme: themeSchema,
   availability: z.union([

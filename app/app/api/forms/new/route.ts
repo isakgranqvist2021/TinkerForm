@@ -15,14 +15,15 @@ export async function POST(req: Request) {
     const formData = await req.formData();
     const form = formSchema.parse(parseFormFormData(formData));
 
-    const res = await createForm(form, session);
-    if (!res) {
+    const formDto = await createForm(form, session);
+
+    if (!formDto) {
       throw new Error('Failed to create form');
     }
 
-    await createSections(form.sections, res.id, session);
+    await createSections(form.sections, formDto.id, session);
 
-    return created(res);
+    return created(formDto);
   } catch (err) {
     console.log(err);
     return internalServerError();
