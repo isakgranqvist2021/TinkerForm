@@ -1,7 +1,7 @@
 import { cookies } from 'next/headers';
 import { internalServerError, ok } from '../utils';
 
-export async function POST(request: Request) {
+export async function POST() {
   try {
     const cookieStore = await cookies();
     cookieStore.set('accept-cookies', 'true', { path: '/' });
