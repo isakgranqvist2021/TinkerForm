@@ -58,7 +58,7 @@ export async function Drawer(props: React.PropsWithChildren) {
                 </Link>
               ) : (
                 <a href="/auth/login" className="btn btn-primary mr-4">
-                  Login
+                  Login / Sign Up
                 </a>
               )}
             </div>
@@ -83,7 +83,7 @@ export async function Drawer(props: React.PropsWithChildren) {
           ) : (
             <li>
               <a className="btn btn-primary mb-4" href="/auth/login">
-                Login
+                Login / Sign Up
               </a>
             </li>
           )}
