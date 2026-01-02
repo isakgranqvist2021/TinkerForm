@@ -25,7 +25,7 @@ export function Footer() {
             Contact
           </Link>
           <Link href="/support" className="link link-hover">
-            Support
+            FAQ
           </Link>
         </nav>
         <nav>
