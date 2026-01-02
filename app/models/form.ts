@@ -1,6 +1,5 @@
 import z from 'zod';
 import { themeSchema } from './theme';
-import { fileSchema } from './file';
 
 export const sectionTypes = [
   'text',
@@ -107,7 +106,6 @@ export const formSchema = z.object({
     .string()
     .min(1, 'Description is required')
     .max(10000, 'Description is too long'),
-  sections: sectionSchema.array().min(1, 'At least one section is required'),
   location: z
     .string()
     .min(1, 'Location is required')
@@ -126,6 +124,7 @@ export const formSchema = z.object({
   endDate: z.string().refine(refineDate, {
     message: 'Invalid end date',
   }),
+  sections: sectionSchema.array().min(1, 'At least one section is required'),
 });
 export type Form = z.infer<typeof formSchema>;
 export type FormAvailability = Form['availability'];

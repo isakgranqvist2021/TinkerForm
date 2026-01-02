@@ -14,3 +14,11 @@ notifications:
 Create board where you can see all forms by a certain account
 
 translation to different languages
+
+You're landing page lacks many sections in it:
+    Where's the demo?
+    Where are the visual representations of the features?
+    Where's the how it works?
+    Where's the FAQ?
+    Where's the about us? (Yes, SaaS also needs an about us section)
+
