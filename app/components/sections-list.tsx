@@ -280,7 +280,12 @@ function ListItem(props: ListItemProps) {
       <div>
         <div>
           {props.index + 1}. {props.section.title}
-          <span className="ml-1 text-secondary">
+          <span
+            className={cn(
+              'ml-1',
+              props.section.required ? 'text-primary' : 'text-secondary',
+            )}
+          >
             ({props.section.required ? 'Required' : 'Optional'})
           </span>
         </div>
