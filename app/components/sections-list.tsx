@@ -41,7 +41,7 @@ import {
 } from 'react-hook-form';
 import { EmptyState } from './empty-state';
 import countries from 'config/countries.json';
-import { cn, formatSectionType } from 'utils';
+import { cn, formatSectionType, modalMethods } from 'utils';
 import React from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import {
@@ -755,11 +755,7 @@ function getSectionDefaultValues(type: SectionType): Section {
 }
 
 const modalName = 'add-section-modal';
-
-const closeAddSectionModal = () =>
-  // @ts-expect-error
-  document.getElementById(modalName).close();
-
-const openAddSectionModal = () =>
-  // @ts-expect-error
-  document.getElementById(modalName).showModal();
+export const {
+  closeModal: closeAddSectionModal,
+  showModal: openAddSectionModal,
+} = modalMethods(modalName);

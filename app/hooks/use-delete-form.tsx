@@ -5,6 +5,7 @@ import { toast } from 'sonner';
 import { useRouter } from 'next/navigation';
 import { useSWRConfig } from 'swr';
 import React from 'react';
+import { modalMethods } from 'utils';
 
 const DeleteFormContext = React.createContext<{
   value: string | null;
@@ -46,7 +47,7 @@ function DeleteFormModal(props: { formId: string | null }) {
   const { isLoading, deleteForm } = useDeleteForm(props.formId);
 
   return (
-    <dialog id={DELETE_FORM_MODAL_NAME} className="modal">
+    <dialog id={modalName} className="modal">
       <div className="modal-box">
         <h3 className="font-bold text-lg">Delete Form</h3>
         <p className="py-4">
@@ -113,12 +114,8 @@ function useDeleteForm(formId: string | null) {
   };
 }
 
-const DELETE_FORM_MODAL_NAME = 'delete-form-modal';
-
-const closeDeleteFormModal = () =>
-  // @ts-expect-error
-  document.getElementById(DELETE_FORM_MODAL_NAME).close();
-
-const openDeleteFormModal = () =>
-  // @ts-expect-error
-  document.getElementById(DELETE_FORM_MODAL_NAME).showModal();
+const modalName = 'delete-form-modal';
+export const {
+  closeModal: closeDeleteFormModal,
+  showModal: openDeleteFormModal,
+} = modalMethods(modalName);

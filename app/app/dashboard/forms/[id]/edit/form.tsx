@@ -9,6 +9,10 @@ import React from 'react';
 import { SectionFormProvider } from 'components/sections-list';
 import useMutation from 'swr/mutation';
 import { FormSections } from 'components/form-sections';
+import {
+  openPreviewFormModal,
+  PreviewFormModal,
+} from 'components/preview-form';
 
 interface EditFormProps {
   defaultValues: Form;
@@ -63,16 +67,24 @@ export function EditForm(props: EditFormProps) {
 
   return (
     <FormProvider {...form}>
+      <PreviewFormModal />
+
       <SectionFormProvider>
         <FormSections />
 
-        <button
-          disabled={form.formState.isSubmitting}
-          className="btn btn-primary ml-auto sm:mr-6"
-          onClick={submitForm}
-        >
-          Save Form
-        </button>
+        <div className="flex gap-4 justify-end sm:mr-6 pb-6">
+          <button className="btn btn-neutral" onClick={openPreviewFormModal}>
+            Preview Form
+          </button>
+
+          <button
+            disabled={form.formState.isSubmitting}
+            className="btn btn-primary"
+            onClick={submitForm}
+          >
+            Save Form
+          </button>
+        </div>
       </SectionFormProvider>
     </FormProvider>
   );

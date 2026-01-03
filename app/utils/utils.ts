@@ -261,3 +261,17 @@ export function formatSectionType(type: SectionType) {
       return 'Text';
   }
 }
+
+export const modalMethods = (modalName: string) => {
+  const closeModal = () => {
+    const element = document.getElementById(modalName) as HTMLDialogElement;
+    element.close();
+  };
+
+  const showModal = () => {
+    const element = document.getElementById(modalName) as HTMLDialogElement;
+    element.showModal();
+  };
+
+  return { closeModal, showModal };
+};

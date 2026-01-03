@@ -6,6 +6,7 @@ import {
   formatDate,
   formatDuration,
   formatScore,
+  modalMethods,
 } from 'utils';
 import useSWR from 'swr';
 import { SectionType } from 'models/form';
@@ -264,11 +265,5 @@ export function useResponseContext() {
 }
 
 const modalName = 'response-modal';
-
-export const closeResponseModal = () =>
-  // @ts-expect-error
-  document.getElementById(modalName).close();
-
-export const openResponseModal = () =>
-  // @ts-expect-error
-  document.getElementById(modalName).showModal();
+export const { closeModal: closeResponseModal, showModal: openResponseModal } =
+  modalMethods(modalName);
