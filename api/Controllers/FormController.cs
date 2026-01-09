@@ -47,11 +47,6 @@ namespace api.Controllers
         [Authorize]
         public async Task<ActionResult<FormModel>> Create(CreateFormDto form, [FromEmail] string email)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
             var createdForm = await _modelService.formService.InsertOne(form, email);
             return CreatedAtAction(nameof(GetById), new { createdForm.id }, createdForm);
         }
@@ -60,11 +55,6 @@ namespace api.Controllers
         [Authorize]
         public async Task<ActionResult> Update(Guid id, [FromBody] UpdateFormDto form, [FromEmail] string email)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
             await _modelService.formService.UpdateOne(form, id, email);
             await _modelService.sectionService.UpsertSections(form.sections, id, email);
 

@@ -15,11 +15,6 @@ namespace api.Controllers
         [HttpPost]
         public ActionResult Create([FromBody] SubscriptionModel subscription)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
             _modelService.subscriptionService.Create(subscription);
             return Created();
         }

@@ -26,13 +26,8 @@ namespace api.Controllers
 
         [HttpPost]
         [Authorize]
-        public ActionResult Create([FromBody] List<SectionModel> sections, [FromEmail] string email)
+        public ActionResult Create([FromBody] List<SectionModel>? sections, [FromEmail] string email)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
             if (sections == null)
             {
                 return BadRequest();

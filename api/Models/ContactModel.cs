@@ -12,5 +12,10 @@ namespace api.Models
         [Required]
         [JsonPropertyName("name")]
         public string? name { get; set; } = string.Empty;
+
+        [Required]
+        [JsonPropertyName("email")]
+        [EmailAddress]
+        public string email { get; set; } = string.Empty;
     }
 }

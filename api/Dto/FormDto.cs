@@ -53,6 +53,7 @@ namespace api.Dto
         [Required]
         public string theme { get; set; } = string.Empty;
 
+        [Required(AllowEmptyStrings = true)]
         public string location { get; set; } = string.Empty;
 
         [Required]
@@ -86,6 +87,7 @@ namespace api.Dto
         [Required]
         public string theme { get; set; } = string.Empty;
 
+        [Required(AllowEmptyStrings = true)]
         public string location { get; set; } = string.Empty;
 
         [Required]

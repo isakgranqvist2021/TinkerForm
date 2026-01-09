@@ -41,11 +41,6 @@ namespace api.Controllers
         [HttpPost]
         public ActionResult CreateResponse([FromBody] ResponseModel response)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
             _modelService.responseService.InsertOne(response);
             return CreatedAtAction(nameof(GetById), new { id = response.id }, response);
         }
@@ -74,11 +69,6 @@ namespace api.Controllers
         [Authorize]
         public ActionResult UpdateScoreAndReasoning([FromBody] List<UpdateScoreAndReasoningDto> updateModels, [FromEmail] string email)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
             _modelService.responseService.UpdateScoreAndReasoning(updateModels, email);
             return NoContent();
         }

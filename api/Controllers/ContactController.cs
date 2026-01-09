@@ -13,11 +13,6 @@ namespace api.Controllers
         [HttpPost]
         public async Task<ActionResult> GetAnswersByResponseId([FromBody] ContactModel contact)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
             await _modelService.contactService.AddContact(contact);
             return Created();
         }

@@ -69,11 +69,6 @@ namespace api.Controllers
         [Authorize]
         public ActionResult<TeamModel> UpdateLogo([FromBody] UpdateUrlDto updateUrlDto, [FromEmail] string email)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
             var team = _modelService.teamService.UpdateLogo(updateUrlDto, email);
             if (team == null)
             {
@@ -87,11 +82,6 @@ namespace api.Controllers
         [Authorize]
         public ActionResult<TeamModel> UpdateCoverImage([FromBody] UpdateUrlDto updateUrlDto, [FromEmail] string email)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
             var team = _modelService.teamService.UpdateCoverImage(updateUrlDto, email);
             if (team == null)
             {

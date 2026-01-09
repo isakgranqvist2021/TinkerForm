@@ -13,11 +13,6 @@ namespace api.Controllers
         [HttpPost]
         public async Task<ActionResult> CreateAnswers([FromBody] List<AnswerModel> answers)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
             await _modelService.answerService.SaveAnswers(answers);
 
             return Created();
